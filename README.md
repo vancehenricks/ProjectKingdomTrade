@@ -1,2 +1,2 @@
 # ProjectKingdomTrade
- Tile-based 4x game inspired by Dwarf Fotress and Stellaris
+ Tile-based 4x game inspired by Dwarf Fotress and Stellaris.

@@ -1,4 +1,4 @@
-﻿/* Copyright (C) 2019 by Vance Henricks Patual - All Rights Reserved
+﻿/* Copyright 2019 by Vance Henricks Patual - All Rights Reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
  * Written by Vance Henricks Patual <vpatual@gmail.com>, November 2019
