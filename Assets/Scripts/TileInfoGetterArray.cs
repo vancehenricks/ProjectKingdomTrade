@@ -35,7 +35,7 @@ public class TileInfoGetterArray : MonoBehaviour
 
         foreach (TileInfo tile in baseTiles)
         {
-            if (tile.tileType == temp.tileType && tileInfos.Count < (maxHits-1))
+            if (tile.tileType == temp.tileType && tileInfos.Count < (maxHits - 1))
             {
                 tileInfos.Add(temp);
                 break;
@@ -46,7 +46,7 @@ public class TileInfoGetterArray : MonoBehaviour
                 tileInfos.Add(temp);
                 //overflowCount = tileInfos.Count;
                 boxCollider2D.enabled = false;
-                break; 
+                break;
             }
         }
     }

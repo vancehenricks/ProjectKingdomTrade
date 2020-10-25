@@ -13,15 +13,15 @@ using UnityEngine.EventSystems;
 public class ZoomingWindow : MonoBehaviour, IScrollHandler
 {
 
-	public Camera cm;
-	public RectTransform grid;
-	public float divideWidth;
-	public float defaultWidth;
-	public float defaultSpeed;
-	public float speed;
-	public float scale;
-	public float maxScale;
-	public float minScale;
+    public Camera cm;
+    public RectTransform grid;
+    public float divideWidth;
+    public float defaultWidth;
+    public float defaultSpeed;
+    public float speed;
+    public float scale;
+    public float maxScale;
+    public float minScale;
     public bool isScrolling;
     public float threshold;
     public Vector2 offset;
@@ -50,22 +50,22 @@ public class ZoomingWindow : MonoBehaviour, IScrollHandler
 
         if (grid.rect.width > defaultWidth)
         {
-			speed = (defaultSpeed + (grid.rect.width/divideWidth));
-		}
+            speed = (defaultSpeed + (grid.rect.width / divideWidth));
+        }
 
-		scale = cm.transform.position.z;
+        scale = cm.transform.position.z;
 
-		if (InputOverride.GetAxis("Mouse ScrollWheel") > 0 && scale<=maxScale)
+        if (InputOverride.GetAxis("Mouse ScrollWheel") > 0 && scale <= maxScale)
         {
             isScrolling = true;
             scale = cm.transform.position.z + speed;
-		}
+        }
 
-		if (InputOverride.GetAxis("Mouse ScrollWheel") < 0 && scale>=minScale)
+        if (InputOverride.GetAxis("Mouse ScrollWheel") < 0 && scale >= minScale)
         {
             isScrolling = true;
             scale = cm.transform.position.z - speed;
-		}
+        }
 
         //UnityEditor only isssue where escape button looses focus
         if (isScrolling)
@@ -80,5 +80,5 @@ public class ZoomingWindow : MonoBehaviour, IScrollHandler
 
         //StartCoroutine(DelayStop());
     }
-		
+
 }

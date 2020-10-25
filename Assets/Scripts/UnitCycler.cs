@@ -27,7 +27,7 @@ public class UnitCycler : MonoBehaviour
         while (true)
         {
             //reset:
-            for (int i = 0; i < unitInfos.Count;i++)
+            for (int i = 0; i < unitInfos.Count; i++)
             {
                 /*if (unitInfos[i] == null)
                 {
@@ -59,7 +59,7 @@ public class UnitCycler : MonoBehaviour
             //Debug.Log("Cycling...");
 
             yield return new WaitForSeconds(2);
-        }  
+        }
     }
 
     public void StartCycle(UnitInfo unit)

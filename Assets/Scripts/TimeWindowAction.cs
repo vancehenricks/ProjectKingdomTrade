@@ -11,75 +11,77 @@ using UnityEngine;
 public class TimeWindowAction : MonoBehaviour
 {
 
-	public int speed;
-	public int maxSpeed;
-	public int minSpeed;
-	public KeyCode pauseKey;
-	public KeyCode forwardKey;
-	public KeyCode backwardKey;
+    public int speed;
+    public int maxSpeed;
+    public int minSpeed;
+    public KeyCode pauseKey;
+    public KeyCode forwardKey;
+    public KeyCode backwardKey;
 
-	private int savedSpeed;
-	private bool isPaused;
+    private int savedSpeed;
+    private bool isPaused;
 
-	private void Update ()
+    private void Update()
     {
 
-		if(InputOverride.GetKeyUp(pauseKey))
+        if (InputOverride.GetKeyUp(pauseKey))
         {
-			PauseAction();
-		}
+            PauseAction();
+        }
 
-		if(InputOverride.GetKeyUp(forwardKey))
+        if (InputOverride.GetKeyUp(forwardKey))
         {
-			ForwardAction();
-		}
+            ForwardAction();
+        }
 
-		if(InputOverride.GetKeyUp(backwardKey))
+        if (InputOverride.GetKeyUp(backwardKey))
         {
-			BackwardAction();
-		}
-	}
+            BackwardAction();
+        }
+    }
 
-	public void PauseAction () {
+    public void PauseAction()
+    {
 
-		if(isPaused)
+        if (isPaused)
         {
-			isPaused = false;
-			Tick.speed = savedSpeed;
-				
-		}
+            isPaused = false;
+            Tick.speed = savedSpeed;
+
+        }
         else
         {
-			
-			if(Tick.speed <= minSpeed)
+
+            if (Tick.speed <= minSpeed)
             {
-				Tick.speed = 1;
-			}
+                Tick.speed = 1;
+            }
             else
             {
-				savedSpeed = Tick.speed;
-				Tick.speed = minSpeed;
-				isPaused = true;
-			}
-		}
-	}
+                savedSpeed = Tick.speed;
+                Tick.speed = minSpeed;
+                isPaused = true;
+            }
+        }
+    }
 
-	public void ForwardAction ()
+    public void ForwardAction()
     {
-		
-		if(Tick.speed+speed <= maxSpeed)
+
+        if (Tick.speed + speed <= maxSpeed)
         {
             Tick.speed += speed;
             isPaused = false;
         }
-	}
+    }
 
-	public void BackwardAction () {
-		
-		if(Tick.speed-speed >= minSpeed)
+    public void BackwardAction()
+    {
+
+        if (Tick.speed - speed >= minSpeed)
         {
             Tick.speed -= speed;
             isPaused = false;
         }
-	}
+    }
 }

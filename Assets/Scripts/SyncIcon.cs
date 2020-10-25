@@ -24,7 +24,7 @@ public class SyncIcon : MonoBehaviour
 
     private bool start;
 
-    public void Initialize(TileInfo tile, float xPadding = 0f, float yPadding = 0f,  float zLevelFlag = 0f)
+    public void Initialize(TileInfo tile, float xPadding = 0f, float yPadding = 0f, float zLevelFlag = 0f)
     {
         image = tile.tileCaller.image;
         _zLevelFlag = zLevelFlag;
@@ -41,7 +41,7 @@ public class SyncIcon : MonoBehaviour
 
         try
         {
-            gameObject.transform.position = new Vector3(_tile.transform.position.x+_xPadding, _tile.transform.position.y+_yPadding, _zLevelFlag);
+            gameObject.transform.position = new Vector3(_tile.transform.position.x + _xPadding, _tile.transform.position.y + _yPadding, _zLevelFlag);
 
             foreach (GameObject obj in genericObjectHolder.objects)
             {
@@ -53,5 +53,5 @@ public class SyncIcon : MonoBehaviour
             //start = false;
             Destroy(gameObject);
         }
-	}
+    }
 }

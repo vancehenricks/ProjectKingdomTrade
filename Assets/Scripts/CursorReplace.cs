@@ -58,7 +58,7 @@ public class CursorReplace : MonoBehaviour
         }
     }
 
-    private void Awake ()
+    private void Awake()
     {
         cursorArray = _cursorArray;
         cursorMode = _cursorMode;

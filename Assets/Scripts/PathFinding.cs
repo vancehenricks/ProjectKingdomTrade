@@ -233,10 +233,10 @@ public class PathFinding : MonoBehaviour
                 tempCache = generatedWayPoints;
                 Debug.Log("Re-doing");
                 generatedWayPoints = new List<TileInfo>();
-                goto REDO; 
+                goto REDO;
             }
 
-            Debug.Log("yield break currentPoint.cache.Count="+ currentPoint.cache.Count + " currentPoint.cache[key].Count=" 
+            Debug.Log("yield break currentPoint.cache.Count=" + currentPoint.cache.Count + " currentPoint.cache[key].Count="
                 + currentPoint.cache[key].Count + " generatedWayPoints.Count=" + generatedWayPoints.Count);
             yield break;
 
@@ -251,10 +251,10 @@ public class PathFinding : MonoBehaviour
             Debug.Log("Found global cache re-using it tempCache.Count " + tempCache.Count);
         }
 
-        REDO:
+    REDO:
 
-        Dictionary<Vector2,Node> open = new Dictionary<Vector2,Node>();
-        Dictionary<Vector2,Node> closed = new Dictionary<Vector2,Node>();
+        Dictionary<Vector2, Node> open = new Dictionary<Vector2, Node>();
+        Dictionary<Vector2, Node> closed = new Dictionary<Vector2, Node>();
 
         open.Add(currentPoint.tileLocation, new Node(currentPoint, currentPoint, finalPoint, closed, true));
 

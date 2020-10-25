@@ -9,14 +9,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class OptionGenerator : MonoBehaviour {
+public class OptionGenerator : MonoBehaviour
+{
 
     public Image image;
     public List<GameObject> options;
     private Dictionary<string, GameObject> optionDictionary;
     //public static bool blockDisplay;
 
-    public void Initialize ()
+    public void Initialize()
     {
         if (optionDictionary != null) return;
 
@@ -28,7 +29,7 @@ public class OptionGenerator : MonoBehaviour {
             //image.enabled = false;
             optionDictionary.Add(option.name, option);
         }
-	}
+    }
 
     public void Display(TileInfo tileInfo)
     {

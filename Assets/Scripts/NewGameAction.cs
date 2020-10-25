@@ -13,79 +13,79 @@ using UnityEngine.EventSystems;
 public class NewGameAction : MonoBehaviour
 {
 
-	public Text kingdomName;
-	public Text width;
-	public Text height;
-	public RectTransform grid;
-	public ResetCenter resetCenter;
-	public ShowMessage message;
-	public ShowMessage confirmationMessage;
-	public OpenWindow openWindow;
-	public CloseWindow closeWindow;
-	/*public CloudCycle cloudCycle;*/
-	public CloudCycle cloudCycle2;
-	public CelestialCycle celestialCycle;
-	public Tick tick;
+    public Text kingdomName;
+    public Text width;
+    public Text height;
+    public RectTransform grid;
+    public ResetCenter resetCenter;
+    public ShowMessage message;
+    public ShowMessage confirmationMessage;
+    public OpenWindow openWindow;
+    public CloseWindow closeWindow;
+    /*public CloudCycle cloudCycle;*/
+    public CloudCycle cloudCycle2;
+    public CelestialCycle celestialCycle;
+    public Tick tick;
 
-	private int w;
-	private int h;
+    private int w;
+    private int h;
 
-	public void DoAction ()
+    public void DoAction()
     {
 
-		bool wResult = int.TryParse(width.text, out w);
-		bool hResult = int.TryParse(height.text, out h);
+        bool wResult = int.TryParse(width.text, out w);
+        bool hResult = int.TryParse(height.text, out h);
 
-		grid.sizeDelta = new Vector2(500f, 500f);
+        grid.sizeDelta = new Vector2(500f, 500f);
 
-		if(wResult && hResult || width.text == "" && height.text == "")
+        if (wResult && hResult || width.text == "" && height.text == "")
         {
 
-			if(width.text == "" && height.text == "")
+            if (width.text == "" && height.text == "")
             {
-				w = h = 500;
-			}
+                w = h = 500;
+            }
 
-			if(w > 1000 && h > 1000)
+            if (w > 1000 && h > 1000)
             {
-				ShowMessage show = confirmationMessage.SetMessage("Warning", 
-                    "Map size might be too big could cause the game to be unresponsive. Would you like to continue?", 
+                ShowMessage show = confirmationMessage.SetMessage("Warning",
+                    "Map size might be too big could cause the game to be unresponsive. Would you like to continue?",
                     "Yes", "No", null, CallbackYes);
 
-				if(!show.response)
+                if (!show.response)
                 {
-					return;
-				}
-			}
-			DoNewGameLogic();
+                    return;
+                }
+            }
+            DoNewGameLogic();
 
-		}
+        }
         else
         {
-			message.SetMessage("Invalid Input", "Decimal values only in map size", "OK", null, null);
-		}
-			
-	}
+            message.SetMessage("Invalid Input", "Decimal values only in map size", "OK", null, null);
+        }
 
-	private void CallbackYes (bool response)
+    }
+
+    private void CallbackYes(bool response)
     {
-		if(response)
+        if (response)
         {
-			DoNewGameLogic();
-		}
-	}
-		
-	private void DoNewGameLogic()
+            DoNewGameLogic();
+        }
+    }
+
+    private void DoNewGameLogic()
     {
-		grid.sizeDelta = new Vector2(w, h);
-		closeWindow.DoClose();
-		openWindow.DoOpen();
-		SyncSize.doSync();
-		resetCenter.DoAction();
-		MapGenerator.init.Initialize();
-		//cloudCycle.Initialize();
-		cloudCycle2.Initialize();
-		celestialCycle.Initialize();
-		tick.Initialize();
-	}
+        grid.sizeDelta = new Vector2(w, h);
+        closeWindow.DoClose();
+        openWindow.DoOpen();
+        SyncSize.doSync();
+        resetCenter.DoAction();
+        MapGenerator.init.Initialize();
+        //cloudCycle.Initialize();
+        cloudCycle2.Initialize();
+        celestialCycle.Initialize();
+        tick.Initialize();
+    }
 }

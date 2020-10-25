@@ -44,11 +44,11 @@ public class MoveUnit : MonoBehaviour
 
         if (Input.GetButtonDown("Fire1") && !MultiSelect.shiftPressed)
         {
-            Debug.Log("Creating one waypoint... unitInfos.Count="+ unitInfos.Count);
+            Debug.Log("Creating one waypoint... unitInfos.Count=" + unitInfos.Count);
             TileInfo tileInfo = tileInfoRaycaster.GetTileInfoFromPos(Input.mousePosition);
             ClearAllWaypoints();
             AssignsToList(tileInfo, waypointsList);
-        } 
+        }
 
         if (Input.GetButtonDown("Fire2"))
         {
@@ -72,7 +72,7 @@ public class MoveUnit : MonoBehaviour
         CursorReplace.SetCurrentCursorAsPrevious();
         waypointsList.Clear();
         targetList.Clear();
-        unitInfos = Tools.Convert<TileInfo,UnitInfo>(MultiSelect.selectedTiles);
+        unitInfos = Tools.Convert<TileInfo, UnitInfo>(MultiSelect.selectedTiles);
         MultiSelect.selectedTiles.Clear();
         MultiSelect.Relay();
         openRightClick.ResetValues();

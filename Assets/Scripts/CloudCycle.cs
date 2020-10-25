@@ -12,7 +12,6 @@ using UnityEngine.EventSystems;
 
 public class CloudCycle : MonoBehaviour
 {
-
     public int counter;
     public List<GameObject> baseCloud;
     //public GameObject spawner;

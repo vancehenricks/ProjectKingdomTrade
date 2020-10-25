@@ -16,7 +16,7 @@ public class FpsShow : MonoBehaviour
     public Text fps;
     public Text ms;
 
-	private void Update ()
+    private void Update()
     {
         string _ms = string.Format("{0:0.##}", Time.deltaTime * 1000.0f);
         string _fps = string.Format("{0:0}", 1.0f / Time.deltaTime);

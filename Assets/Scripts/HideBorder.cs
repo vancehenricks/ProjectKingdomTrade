@@ -8,24 +8,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HideBorder : MonoBehaviour {
+public class HideBorder : MonoBehaviour
+{
 
     public List<TileInfo> tileExceptions;
-	public KeyCode key;
+    public KeyCode key;
 
-	// Update is called once per frame
-	private void Update ()
+    // Update is called once per frame
+    private void Update()
     {
 
-		if(InputOverride.GetKeyUp(key))
+        if (InputOverride.GetKeyUp(key))
         {
 
-			foreach(GameObject tile in MapGenerator.init.generatedTile.Values)
+            foreach (GameObject tile in MapGenerator.init.generatedTile.Values)
             {
-				TileCaller tileCaller = tile.GetComponent<TileCaller>();
+                TileCaller tileCaller = tile.GetComponent<TileCaller>();
                 TileInfo tileInfo = tile.GetComponent<TileInfo>();
 
-                if (tileCaller.shade != null) {
+                if (tileCaller.shade != null)
+                {
 
                     bool isException = false;
 
@@ -43,8 +45,8 @@ public class HideBorder : MonoBehaviour {
                         tileCaller.shade.SetActive(!tileCaller.shade.activeSelf);
                     }
                 }
-			}
-		}
+            }
+        }
 
-	}
+    }
 }

@@ -8,8 +8,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GenericObjectHolder : MonoBehaviour {
-    
+public class GenericObjectHolder : MonoBehaviour
+{
+
     public List<GameObject> objects;
 
     public T GetComponent<T>(int index)

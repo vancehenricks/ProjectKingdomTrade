@@ -8,11 +8,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TileCaller : MonoBehaviour {
+public class TileCaller : MonoBehaviour
+{
 
-	public GameObject border;
-	public GameObject image;
-	public GameObject shade;
+    public GameObject border;
+    public GameObject image;
+    public GameObject shade;
     //public GameObject waypoint;
     //public GameObject selection;
 }

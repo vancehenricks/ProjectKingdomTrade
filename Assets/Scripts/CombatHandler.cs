@@ -20,9 +20,9 @@ public class CombatHandler : MonoBehaviour
 
     //private bool[] stop;
     private int previousTargetCount;
-    private TileInfo firstTarget; 
+    private TileInfo firstTarget;
 
-    private void Start ()
+    private void Start()
     {
         //stop = new bool[6];
         unitInfo.onEnd += OnEnd;
@@ -76,7 +76,7 @@ public class CombatHandler : MonoBehaviour
 
     private void CalculateDamage()
     {
-         Debug.Log(unitInfo.tileId + " -> " + unitInfo.currentTarget.tileId);
+        Debug.Log(unitInfo.tileId + " -> " + unitInfo.currentTarget.tileId);
     }
 
     /* private bool HasSameTargetId(UnitInfo targetUnit, UnitInfo unitInfo)

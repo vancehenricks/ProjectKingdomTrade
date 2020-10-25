@@ -13,7 +13,7 @@ public class FrameRateGoal : MonoBehaviour
     public int vSync;
     public int maxFps;
 
-	private void Start ()
+    private void Start()
     {
         QualitySettings.vSyncCount = vSync;
         Application.targetFrameRate = maxFps;

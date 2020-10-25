@@ -26,7 +26,7 @@ public class Tools : MonoBehaviour
         }
     }
 
-    public static List<T> Convert<B,T>(List<B> tileInfos)
+    public static List<T> Convert<B, T>(List<B> tileInfos)
     {
         List<T> infos = new List<T>();
 

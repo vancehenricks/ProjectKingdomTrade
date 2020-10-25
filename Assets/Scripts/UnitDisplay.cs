@@ -48,7 +48,7 @@ public class UnitDisplay : MonoBehaviour
         instance.gameObject.SetActive(true);
     }
 
-    private void Update ()
+    private void Update()
     {
         if (instance == null || unitTrack == tile.units) return;
 

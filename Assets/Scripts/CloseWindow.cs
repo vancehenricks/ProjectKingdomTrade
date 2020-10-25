@@ -12,18 +12,21 @@ using UnityEngine.EventSystems;
 
 public class CloseWindow : MonoBehaviour
 {
-	
-	public List<GameObject> windowList;
+    public List<GameObject> windowList;
 
-	public void DoClose () {
-		foreach(GameObject window in windowList) {
-			window.SetActive(false);
-		}
-	}
+    public void DoClose()
+    {
+        foreach (GameObject window in windowList)
+        {
+            window.SetActive(false);
+        }
+    }
 
-	public void DoDestroy () {
-		foreach(GameObject window in windowList) {
-			Destroy(window);
-		}
-	}
+    public void DoDestroy()
+    {
+        foreach (GameObject window in windowList)
+        {
+            Destroy(window);
+        }
+    }
 }

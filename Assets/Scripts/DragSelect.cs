@@ -28,8 +28,8 @@ public class DragSelect : MonoBehaviour
     private TileInfoGetterArray tileInfoGetterArray;
 
 
-	// Use this for initialization
-	private void Start ()
+    // Use this for initialization
+    private void Start()
     {
         _selectorObjRect = selectorObj.GetComponent<RectTransform>();
         _selectorObjCollider = selectorObj.GetComponent<BoxCollider2D>();
@@ -70,7 +70,7 @@ public class DragSelect : MonoBehaviour
                 //Debug.Log("LEFT TOP > RIGHT DOWN");
                 _selectorObjRect.pivot = new Vector2(0, 1);
                 _selectorObjRect.sizeDelta = new Vector2(p2.x - p1.x, p1.y - p2.y);
-                _selectorObjCollider.offset = new Vector2(_selectorObjRect.sizeDelta.x * 0.5f, _selectorObjRect.sizeDelta.y *- 0.5f);
+                _selectorObjCollider.offset = new Vector2(_selectorObjRect.sizeDelta.x * 0.5f, _selectorObjRect.sizeDelta.y * -0.5f);
             }
             else if (Input.mousePosition.x < initialMousePos.x && Input.mousePosition.y > initialMousePos.y)
             {

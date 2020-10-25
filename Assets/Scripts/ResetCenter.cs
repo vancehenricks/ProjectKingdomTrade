@@ -8,27 +8,31 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ResetCenter : MonoBehaviour {
+public class ResetCenter : MonoBehaviour
+{
 
-	public Camera cm;
+    public Camera cm;
 
-	public KeyCode key;
+    public KeyCode key;
 
-	private Vector3 originalPos;
+    private Vector3 originalPos;
 
-	private void Start () {
-		originalPos = cm.transform.position;
-	}
-		
-	private void Update () {
+    private void Start()
+    {
+        originalPos = cm.transform.position;
+    }
 
-		if(InputOverride.GetKeyUp(key))
+    private void Update()
+    {
+
+        if (InputOverride.GetKeyUp(key))
         {
-			DoAction();
-		}
-	}
+            DoAction();
+        }
+    }
 
-	public void DoAction() {
-		cm.transform.position = originalPos;
-	}
+    public void DoAction()
+    {
+        cm.transform.position = originalPos;
+    }
 }

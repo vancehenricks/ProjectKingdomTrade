@@ -8,12 +8,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TileInfoGetter : MonoBehaviour {
+public class TileInfoGetter : MonoBehaviour
+{
 
-	public TileInfo tileInfo;
+    public TileInfo tileInfo;
 
-	private void OnTriggerEnter2D (Collider2D col)
+    private void OnTriggerEnter2D(Collider2D col)
     {
-		tileInfo = col.gameObject.GetComponent<TileInfo>();
-	}
+        tileInfo = col.gameObject.GetComponent<TileInfo>();
+    }
 }

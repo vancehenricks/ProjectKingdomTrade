@@ -10,21 +10,24 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class ProfileGenerator : MonoBehaviour {
+public class ProfileGenerator : MonoBehaviour
+{
 
-	public List<Color> colors;
-	public GameObject baseObject;
-	public Image shadeImage;
-	public Transform spawner;
+    public List<Color> colors;
+    public GameObject baseObject;
+    public Image shadeImage;
+    public Transform spawner;
 
-	private void Start () {
+    private void Start()
+    {
 
-		foreach(Color color in colors) {
-			shadeImage.color = color;
-			GameObject obj = Instantiate(baseObject, spawner.position, spawner.rotation, baseObject.transform.parent);
-			obj.SetActive(true);
+        foreach (Color color in colors)
+        {
+            shadeImage.color = color;
+            GameObject obj = Instantiate(baseObject, spawner.position, spawner.rotation, baseObject.transform.parent);
+            obj.SetActive(true);
 
-			spawner.position = new Vector3(spawner.position.x,spawner.position.y,0f);
-		}
-	}
+            spawner.position = new Vector3(spawner.position.x, spawner.position.y, 0f);
+        }
+    }
 }

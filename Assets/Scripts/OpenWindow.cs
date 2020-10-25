@@ -10,16 +10,19 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class OpenWindow : MonoBehaviour {
+public class OpenWindow : MonoBehaviour
+{
 
-	public List<GameObject> windowList;
+    public List<GameObject> windowList;
 
-	public void DoOpen() {
+    public void DoOpen()
+    {
 
-		foreach(GameObject window in windowList) {
-			window.SetActive(!window.activeSelf);
-			window.transform.SetAsLastSibling();
-		}
-	}
+        foreach (GameObject window in windowList)
+        {
+            window.SetActive(!window.activeSelf);
+            window.transform.SetAsLastSibling();
+        }
+    }
 
 }

@@ -59,7 +59,7 @@ public class PathFindingCache : MonoBehaviour
             }
         }
 
-        for (int i = nearestIndex; i < tileInfos.Count;i++)
+        for (int i = nearestIndex; i < tileInfos.Count; i++)
         {
             Debug.Log("Found some");
             final.Add(tileInfos[i]);

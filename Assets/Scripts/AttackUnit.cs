@@ -13,7 +13,6 @@ using System.Linq;
 
 public class AttackUnit : MoveUnit
 {
-
     public List<TileInfo> include;
 
     protected override void Start()
@@ -107,7 +106,7 @@ public class AttackUnit : MoveUnit
             //ClearAllWaypoints();
             //AssignWaypointsToList(tileInfo);
         }
-        
+
     }
 
     private IEnumerator closeCellDelay()

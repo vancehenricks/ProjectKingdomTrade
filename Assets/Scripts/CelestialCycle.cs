@@ -10,43 +10,46 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class CelestialCycle : MonoBehaviour {
+public class CelestialCycle : MonoBehaviour
+{
 
-	public Transform sun;
-	public Transform moon;
+    public Transform sun;
+    public Transform moon;
 
-	public Transform pointA;
-	public Transform pointB;
+    public Transform pointA;
+    public Transform pointB;
 
-	private void Update ()
+    private void Update()
     {
-		
-		if(Tick.speed <= 0)
+        if (Tick.speed <= 0)
         {
-			return;
-		}
+            return;
+        }
 
-		if(NightDay.isNight())
+        if (NightDay.isNight())
         {
-			sun.position = Vector3.Lerp(sun.position, pointB.position, (Tick.speed * 0.2f) * Time.deltaTime);
-			moon.position = Vector3.Lerp(moon.position, pointA.position, (Tick.speed * 0.8f) * Time.deltaTime);
-		} else if (!NightDay.isNight())
+            sun.position = Vector3.Lerp(sun.position, pointB.position, (Tick.speed * 0.2f) * Time.deltaTime);
+            moon.position = Vector3.Lerp(moon.position, pointA.position, (Tick.speed * 0.8f) * Time.deltaTime);
+        }
+        else if (!NightDay.isNight())
         {
-			sun.position = Vector3.Lerp(sun.position, pointA.position, (Tick.speed * 0.8f) * Time.deltaTime);
-			moon.position = Vector3.Lerp(moon.position, pointB.position, (Tick.speed * 0.2f) * Time.deltaTime);
-		}
+            sun.position = Vector3.Lerp(sun.position, pointA.position, (Tick.speed * 0.8f) * Time.deltaTime);
+            moon.position = Vector3.Lerp(moon.position, pointB.position, (Tick.speed * 0.2f) * Time.deltaTime);
+        }
 
-	}
+    }
 
-	public void Initialize()
+    public void Initialize()
     {
-		if(NightDay.isNight())
+        if (NightDay.isNight())
         {
-			sun.position = pointB.position;
-			moon.position = pointA.position;
-		} else if (!NightDay.isNight()) {
-			sun.position = pointA.position;
-			moon.position = pointB.position;
-		}
-	}
+            sun.position = pointB.position;
+            moon.position = pointA.position;
+        }
+        else if (!NightDay.isNight())
+        {
+            sun.position = pointA.position;
+            moon.position = pointB.position;
+        }
+    }
 }

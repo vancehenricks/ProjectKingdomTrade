@@ -56,7 +56,7 @@ public class SpawnUnit : MonoBehaviour
     {
         if (command == "spawn-unit")
         {
-            Dictionary<string,string> subCommands = ConsoleParser.ArgumentsToSubCommands(arguments);
+            Dictionary<string, string> subCommands = ConsoleParser.ArgumentsToSubCommands(arguments);
 
             nMax = 1;
             nCount = 0;
@@ -82,7 +82,7 @@ public class SpawnUnit : MonoBehaviour
                         ColorUtility.TryParseHtmlString(subCommands[subCommand], out color);
                         break;
                     case "attack-distance":
-                         int.TryParse(subCommands[subCommand], out attackDistance);
+                        int.TryParse(subCommands[subCommand], out attackDistance);
                         break;
                     case "cancel":
                         nMax = 0;
@@ -92,7 +92,7 @@ public class SpawnUnit : MonoBehaviour
                 }
             }
 
-            if(notCancel)
+            if (notCancel)
             {
                 ConsoleHandler.init.AddLine("Click a tile to spawn.");
             }

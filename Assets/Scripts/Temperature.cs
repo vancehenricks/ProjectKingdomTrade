@@ -8,35 +8,39 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Temperature : MonoBehaviour {
+public class Temperature : MonoBehaviour
+{
 
-	public static float temperature {get;private set;}
+    public static float temperature { get; private set; }
 
-	public static float minTemp;
-	public static float maxTemp;
+    public static float minTemp;
+    public static float maxTemp;
 
     private void Awake()
     {
         Tick.tickUpdate += TickUpdate;
     }
 
-    private void Start ()
+    private void Start()
     {
-		temperature = 30f;
-		minTemp = 29f;
-		maxTemp = 32f;
-	}
+        temperature = 30f;
+        minTemp = 29f;
+        maxTemp = 32f;
+    }
 
 
-	// Update is called once per frame
-	private void TickUpdate()
+    // Update is called once per frame
+    private void TickUpdate()
     {
-		//Debug.Log("temp:" + temperature);
+        //Debug.Log("temp:" + temperature);
 
-		if(NightDay.isNight() && temperature>=minTemp) {
-			temperature = temperature-1;
-		}else if(!NightDay.isNight() && temperature<=maxTemp) {
-			temperature = temperature+1;
-		}
-	}
+        if (NightDay.isNight() && temperature >= minTemp)
+        {
+            temperature = temperature - 1;
+        }
+        else if (!NightDay.isNight() && temperature <= maxTemp)
+        {
+            temperature = temperature + 1;
+        }
+    }
 }

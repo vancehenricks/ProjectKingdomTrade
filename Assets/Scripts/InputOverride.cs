@@ -69,7 +69,7 @@ public class InputOverride : MonoBehaviour
 
     public static float GetAxis(string axis, GameObject focus = null, bool doNothingIfNull = false)
     {
-        if (CheckFocus(focus,doNothingIfNull))
+        if (CheckFocus(focus, doNothingIfNull))
         {
             return Input.GetAxis(axis);
         }
@@ -79,7 +79,7 @@ public class InputOverride : MonoBehaviour
 
     private static bool CheckFocus(GameObject focus, bool doNothingIfNull)
     {
-        if ((!doNothingIfNull && currentFocus == null) || 
+        if ((!doNothingIfNull && currentFocus == null) ||
             currentFocus != null && focus != null && currentFocus.GetInstanceID() == focus.GetInstanceID())
         {
             return true;

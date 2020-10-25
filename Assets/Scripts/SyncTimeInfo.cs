@@ -10,12 +10,13 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class SyncTimeInfo : MonoBehaviour {
+public class SyncTimeInfo : MonoBehaviour
+{
 
-	public Text temperature;
-	public Text time;
-	public Text date;
-	public Text speed;
+    public Text temperature;
+    public Text time;
+    public Text date;
+    public Text speed;
 
     // Update is called once per frame
     private void Awake()
@@ -23,15 +24,15 @@ public class SyncTimeInfo : MonoBehaviour {
         Tick.tickUpdate += TickUpdate;
     }
 
-    private void Update ()
+    private void Update()
     {
         speed.text = "x" + Tick.speed;
     }
 
-    private void TickUpdate ()
+    private void TickUpdate()
     {
-		time.text = ""+Tick.seconds;
-		temperature.text = ""+(int)Temperature.temperature;
-		date.text = Tick.day+"/"+Tick.month+"/"+Tick.year;
-	}
+        time.text = "" + Tick.seconds;
+        temperature.text = "" + (int)Temperature.temperature;
+        date.text = Tick.day + "/" + Tick.month + "/" + Tick.year;
+    }
 }

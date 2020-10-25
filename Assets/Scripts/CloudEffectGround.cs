@@ -11,8 +11,8 @@ using UnityEngine;
 public class CloudEffectGround : MonoBehaviour
 {
 
-	public TileInfo tileInfo;
-	public TileEffect tileEffect;
+    public TileInfo tileInfo;
+    public TileEffect tileEffect;
     public BackgroundInfo backgroundInfo;
     public CloudAction cloudAction;
 
@@ -41,6 +41,6 @@ public class CloudEffectGround : MonoBehaviour
         {
             cloudAction.markedForDestroy = true;
         }
-	}
+    }
 
 }

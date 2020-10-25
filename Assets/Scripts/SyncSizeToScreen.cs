@@ -23,6 +23,6 @@ public class SyncSizeToScreen : MonoBehaviour
     {
         float distance = Vector3.Distance(window.position, cm.transform.position);
         //Debug.Log("Distance="+distance);
-        window.sizeDelta = new Vector2(Screen.width + distance*2, Screen.height + distance*2);
+        window.sizeDelta = new Vector2(Screen.width + distance * 2, Screen.height + distance * 2);
     }
 }

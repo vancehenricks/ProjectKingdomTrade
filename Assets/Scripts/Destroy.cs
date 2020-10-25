@@ -106,7 +106,7 @@ public class Destroy : MonoBehaviour
                 }
             }
 
-            if(notCancel)
+            if (notCancel)
             {
                 ConsoleHandler.init.AddLine("Click a tile/unit to destroy...");
             }

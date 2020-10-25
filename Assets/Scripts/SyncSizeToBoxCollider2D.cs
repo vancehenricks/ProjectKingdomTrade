@@ -8,7 +8,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SyncSizeToBoxCollider2D : MonoBehaviour {
+public class SyncSizeToBoxCollider2D : MonoBehaviour
+{
 
     public BoxCollider2D boxCollider2D;
     public RectTransform grid;
@@ -21,7 +22,7 @@ public class SyncSizeToBoxCollider2D : MonoBehaviour {
         SyncSize.doSync += DoSync;
     }
 
-    private void DoSync ()
+    private void DoSync()
     {
         Vector2 newSize = boxCollider2D.size;
 

@@ -12,30 +12,30 @@ using UnityEngine.Events;
 public class HideObject : MonoBehaviour
 {
 
-	public GameObject window;
-	public GameObject priorityWindow;
-	public KeyCode key;
+    public GameObject window;
+    public GameObject priorityWindow;
+    public KeyCode key;
     public UnityEvent onClose;
     public UnityEvent onOpen;
 
-	// Update is called once per frame
-	private void Update ()
+    // Update is called once per frame
+    private void Update()
     {
-		if(priorityWindow != null)
+        if (priorityWindow != null)
         {
-			if(InputOverride.GetKeyUp(key) && !priorityWindow.activeSelf)
+            if (InputOverride.GetKeyUp(key) && !priorityWindow.activeSelf)
             {
                 DoAction();
             }
-		}
+        }
         else
         {
-			if(InputOverride.GetKeyUp(key))
+            if (InputOverride.GetKeyUp(key))
             {
                 DoAction();
             }
-		}
-	}
+        }
+    }
 
     private void DoAction()
     {

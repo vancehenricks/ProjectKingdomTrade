@@ -10,20 +10,22 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class SelectedProfile : MonoBehaviour, IPointerClickHandler {
+public class SelectedProfile : MonoBehaviour, IPointerClickHandler
+{
 
-	public GameObject profile;
-	public GameObject selectionIcon;
-	public Image shade;
+    public GameObject profile;
+    public GameObject selectionIcon;
+    public Image shade;
 
 
-	public void OnPointerClick(PointerEventData eventData) {
+    public void OnPointerClick(PointerEventData eventData)
+    {
 
-		//ProfileGenerator.playerColor = shade.color;
+        //ProfileGenerator.playerColor = shade.color;
 
-		selectionIcon.transform.position = this.transform.position;
-		selectionIcon.transform.SetParent(profile.transform);
-		selectionIcon.transform.SetAsLastSibling();
-		selectionIcon.SetActive(true);
-	}
+        selectionIcon.transform.position = this.transform.position;
+        selectionIcon.transform.SetParent(profile.transform);
+        selectionIcon.transform.SetAsLastSibling();
+        selectionIcon.SetActive(true);
+    }
 }

@@ -9,7 +9,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UnitWayPoint : MonoBehaviour {
+public class UnitWayPoint : MonoBehaviour
+{
 
     public UnitInfo unitInfo;
     //public LineRenderer lineRenderer;
@@ -28,7 +29,7 @@ public class UnitWayPoint : MonoBehaviour {
 
     private enum obj
     {
-        Image = 0 , Value
+        Image = 0, Value
     }
 
     private void Start()
@@ -103,7 +104,7 @@ public class UnitWayPoint : MonoBehaviour {
         Text value = objectHolder.GetComponent<Text>((int)obj.Value);
 
         image.color = unitInfo.color;
-        value.text = (flags.Count+1) + "";
+        value.text = (flags.Count + 1) + "";
 
         flag.transform.SetParent(bFlag.transform.parent);
         flag.transform.SetAsFirstSibling();
@@ -115,7 +116,7 @@ public class UnitWayPoint : MonoBehaviour {
     {
         int salt = (int)Random.Range(0f, 1000f);
 
-        if (waypoint != null && flags.ContainsKey(waypoint.tileLocation+"," + salt)) return;
+        if (waypoint != null && flags.ContainsKey(waypoint.tileLocation + "," + salt)) return;
 
         GameObject flag = InitializeFlag(bFlag);
 
@@ -134,7 +135,7 @@ public class UnitWayPoint : MonoBehaviour {
         GameObject flag = InitializeFlag(bFlag);
 
         SyncIcon syncIcon = flag.GetComponent<SyncIcon>();
-        syncIcon.Initialize(waypoint,0,0,zLevelFlag);
+        syncIcon.Initialize(waypoint, 0, 0, zLevelFlag);
         flag.SetActive(true);
 
         flags.Add(waypoint.tileId + "," + unitInfo.tileId, flag);
@@ -153,7 +154,7 @@ public class UnitWayPoint : MonoBehaviour {
             keyFormat = tile.tileId + "," + unitInfo.tileId;
         }
 
-        for (int i = 0;i < flags.Count;i++)
+        for (int i = 0; i < flags.Count; i++)
         {
             if (flags[keys[i]] != null && keys[i].Contains(keyFormat))
             {

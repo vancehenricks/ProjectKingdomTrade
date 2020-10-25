@@ -8,43 +8,47 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Tick : MonoBehaviour {
+public class Tick : MonoBehaviour
+{
 
     public static int speed;
     public static float realSpeed { get; private set; }
-    public static float dayToSecond {get; private set;}
-	public static double realSeconds {get; private set;}
-	public static float seconds {get; private set;}
-	public static int day {get;private set;}
-	public static long realDays {get;private set;}
-	public static int month {get; private set;}
-	public static long realMonths {get;private set;}
-	public static int year {get; private set;}
+    public static float dayToSecond { get; private set; }
+    public static double realSeconds { get; private set; }
+    public static float seconds { get; private set; }
+    public static int day { get; private set; }
+    public static long realDays { get; private set; }
+    public static int month { get; private set; }
+    public static long realMonths { get; private set; }
+    public static int year { get; private set; }
 
     public delegate void TickUpdate();
     public static TickUpdate tickUpdate;
 
-    public void Initialize () {
-		realSeconds = 5f;
-		seconds = 5f;
-		speed = 1;
-		dayToSecond = 24f;
-		day = 24;
-		realDays = 24;
-		month = 8;
-		realMonths = 8;
-		year = 500;
-		StartCoroutine(startTick());
-	}
-	 
-	IEnumerator startTick()
+    public void Initialize()
     {
-			
-		while(true) {
+        realSeconds = 5f;
+        seconds = 5f;
+        speed = 1;
+        dayToSecond = 24f;
+        day = 24;
+        realDays = 24;
+        month = 8;
+        realMonths = 8;
+        year = 500;
+        StartCoroutine(startTick());
+    }
 
-			if(speed != 0) {
-				
-				realSeconds++;
+    IEnumerator startTick()
+    {
+
+        while (true)
+        {
+
+            if (speed != 0)
+            {
+
+                realSeconds++;
 
                 if (Tick.tickUpdate != null)
                 {
@@ -54,26 +58,29 @@ public class Tick : MonoBehaviour {
                 seconds++;
                 realSpeed = 1f / speed;
 
-                if (seconds >= dayToSecond+1) {
+                if (seconds >= dayToSecond + 1)
+                {
                     day++;
-					realDays++;
-					seconds = 1;
-				}
+                    realDays++;
+                    seconds = 1;
+                }
 
-				if(day >= 30) {
-					month++;
-					realMonths++;
-					day = 1;
-				}
+                if (day >= 30)
+                {
+                    month++;
+                    realMonths++;
+                    day = 1;
+                }
 
-				if(month >= 12) {
-					year++;
-					month = 1;
-				}
-			}
+                if (month >= 12)
+                {
+                    year++;
+                    month = 1;
+                }
+            }
 
-			//Debug.Log("Seconds: "+ seconds + " Day:" +day+ " Month:" +month+ " Year:" +year);
-			yield return new WaitForSeconds(realSpeed);
-		}
-	}
+            //Debug.Log("Seconds: "+ seconds + " Day:" +day+ " Month:" +month+ " Year:" +year);
+            yield return new WaitForSeconds(realSpeed);
+        }
+    }
 }

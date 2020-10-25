@@ -8,15 +8,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AssignTerritory : MonoBehaviour {
+public class AssignTerritory : MonoBehaviour
+{
+    public TileInfo baseTileInfo;
+    public TileEffect tileEffect;
 
-	public TileInfo baseTileInfo;
-	public TileEffect tileEffect;
+    private void OnTriggerEnter2D(Collider2D col)
+    {
 
-	private void OnTriggerEnter2D (Collider2D col) {
-
-		if(col.gameObject.layer != this.gameObject.layer) {
-			tileEffect = col.gameObject.GetComponent<TileEffect>();
+        if (col.gameObject.layer != this.gameObject.layer)
+        {
+            tileEffect = col.gameObject.GetComponent<TileEffect>();
 
             if (tileEffect == null)
             {
@@ -28,7 +30,7 @@ public class AssignTerritory : MonoBehaviour {
                 tileEffect.tileInfo.claimants.Add(baseTileInfo);
                 tileEffect.UpdateTerritoryColor();
             }
-		}
+        }
 
-	}
+    }
 }

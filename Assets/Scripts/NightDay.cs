@@ -10,69 +10,82 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class NightDay : MonoBehaviour {
+public class NightDay : MonoBehaviour
+{
 
-	public static int sunrise;
-	public static int sunset;
+    public static int sunrise;
+    public static int sunset;
 
-	public Image image;
-	public float maxAlpha;
-	public float minAlpha;
+    public Image image;
+    public float maxAlpha;
+    public float minAlpha;
 
-	private bool isSummer;
-	private bool isAutumn;
-	private int sunriseSaved;
-	private int sunsetSaved;
+    private bool isSummer;
+    private bool isAutumn;
+    private int sunriseSaved;
+    private int sunsetSaved;
 
-	private void Start () {
-		sunset = 17;
-		sunrise = 5;
-		sunriseSaved = sunrise;
-		sunsetSaved = sunset;
-	}
+    private void Start()
+    {
+        sunset = 17;
+        sunrise = 5;
+        sunriseSaved = sunrise;
+        sunsetSaved = sunset;
+    }
 
-	private void Update () {
+    private void Update()
+    {
 
-		//Debug.Log("Sunset: " + sunset + " Sunrise: " + sunrise);
+        //Debug.Log("Sunset: " + sunset + " Sunrise: " + sunrise);
 
-		if(ClimateControl.isSpring) {
-			sunrise = sunriseSaved;
-			sunset = sunsetSaved;
-			isSummer = false;
-			isAutumn = false;
-		}
+        if (ClimateControl.isSpring)
+        {
+            sunrise = sunriseSaved;
+            sunset = sunsetSaved;
+            isSummer = false;
+            isAutumn = false;
+        }
 
-		if(ClimateControl.isSummer && !isSummer) {
-			sunrise-=3;
-			sunrise+=2;
-			isSummer = true;
-		}
+        if (ClimateControl.isSummer && !isSummer)
+        {
+            sunrise -= 3;
+            sunrise += 2;
+            isSummer = true;
+        }
 
-		if((ClimateControl.isAutumn || ClimateControl.isWinter) && !isAutumn) {
-			sunrise+=3;
-			sunset-=2;
-			isAutumn = true;
-		}
+        if ((ClimateControl.isAutumn || ClimateControl.isWinter) && !isAutumn)
+        {
+            sunrise += 3;
+            sunset -= 2;
+            isAutumn = true;
+        }
 
-		if(isNight()) {
-			Color color = image.color;
-			color.a = Mathf.Lerp(image.color.a, maxAlpha, 0.5f * Time.deltaTime);
-			image.color = color;
-		} else if (!isNight()) {
-			Color color = image.color;
-			color.a = Mathf.Lerp(image.color.a, minAlpha, 0.5f * Time.deltaTime);
-			image.color = color;
-		}
-	}
+        if (isNight())
+        {
+            Color color = image.color;
+            color.a = Mathf.Lerp(image.color.a, maxAlpha, 0.5f * Time.deltaTime);
+            image.color = color;
+        }
+        else if (!isNight())
+        {
+            Color color = image.color;
+            color.a = Mathf.Lerp(image.color.a, minAlpha, 0.5f * Time.deltaTime);
+            image.color = color;
+        }
+    }
 
-	public static bool isNight() {
+    public static bool isNight()
+    {
 
-		if(Tick.seconds >= sunset) {
-			return true;
-		} else if (Tick.seconds >= sunrise) {
-			return false;
-		}
+        if (Tick.seconds >= sunset)
+        {
+            return true;
+        }
+        else if (Tick.seconds >= sunrise)
+        {
+            return false;
+        }
 
-		return true;
-	}
+        return true;
+    }
 }

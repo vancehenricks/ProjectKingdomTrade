@@ -142,7 +142,7 @@ public class MapGenerator : MonoBehaviour
 
     public int GetBaseTileIndex(GameObject obj)
     {
-        TileInfo tileInfo = obj.GetComponent<TileInfo>(); 
+        TileInfo tileInfo = obj.GetComponent<TileInfo>();
 
         for (int i = 0; i < baseTile.Count; i++)
         {

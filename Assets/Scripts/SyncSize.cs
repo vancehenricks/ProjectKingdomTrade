@@ -13,8 +13,8 @@ using UnityEngine.EventSystems;
 public class SyncSize : MonoBehaviour
 {
 
-	public RectTransform basedRect;
-	public List<RectTransform> rectList;
+    public RectTransform basedRect;
+    public List<RectTransform> rectList;
 
     public delegate void DelegateDoSync();
     public static DelegateDoSync doSync;
@@ -26,8 +26,9 @@ public class SyncSize : MonoBehaviour
 
     private void DoSync()
     {
-		foreach(RectTransform rect in rectList) {
-			rect.sizeDelta = new Vector2(basedRect.rect.width, basedRect.rect.height);
-		}
-	}
+        foreach (RectTransform rect in rectList)
+        {
+            rect.sizeDelta = new Vector2(basedRect.rect.width, basedRect.rect.height);
+        }
+    }
 }

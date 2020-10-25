@@ -9,7 +9,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GenerateCells : MonoBehaviour {
+public class GenerateCells : MonoBehaviour
+{
 
     public TileInfoRaycaster tileInfoRaycaster;
     public GridLayoutGroup gridLayoutGroup;
@@ -123,7 +124,7 @@ public class GenerateCells : MonoBehaviour {
         foreach (var cell in cells)
         {
             Image select = cell.GetComponent<CellInfo>().select;
-           select.gameObject.SetActive(false);
+            select.gameObject.SetActive(false);
         }
     }
 

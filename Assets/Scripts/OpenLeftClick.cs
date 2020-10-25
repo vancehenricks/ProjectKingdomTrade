@@ -12,11 +12,11 @@ public class OpenLeftClick : MonoBehaviour
 {
     public TileInfoRaycaster tileInfoRaycaster;
 
-    private void Start ()
+    private void Start()
     {
         ExecuteCommands command = Command;
         CommandPipeline.Add(command, 900);
-	}
+    }
 
     private void Command()
     {
@@ -25,5 +25,5 @@ public class OpenLeftClick : MonoBehaviour
             tileInfoRaycaster.GetTileInfosFromPos(Input.mousePosition);
         }
     }
-	
+
 }

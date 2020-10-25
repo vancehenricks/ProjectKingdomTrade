@@ -40,7 +40,7 @@ public class Pipeline : MonoBehaviour
         {
             if (commandList.ContainsKey(priority))
             {
-                priority+=0.001f;
+                priority += 0.001f;
             }
             else
             {

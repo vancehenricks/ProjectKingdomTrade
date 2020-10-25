@@ -8,11 +8,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NonWalkableTiles : MonoBehaviour {
+public class NonWalkableTiles : MonoBehaviour
+{
 
     public PathFinding pathFinding;
 
-	private void Start ()
+    private void Start()
     {
         pathFinding.isWalkable += isWalkable;
     }

@@ -8,7 +8,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UnitDirection : MonoBehaviour {
+public class UnitDirection : MonoBehaviour
+{
 
     public PathFinding pathfinding;
     public UnitInfo unitInfo;
@@ -24,11 +25,11 @@ public class UnitDirection : MonoBehaviour {
         Tick.tickUpdate -= TickUpdate;
     }
 
-	private void TickUpdate ()
+    private void TickUpdate()
     {
         if (pathfinding.destination.tile == null) return;
         SetDirection(transform.position, pathfinding.destination.tile.transform.position);
-	}
+    }
 
     public void SetDirection(Vector3 currentPosition, Vector3 newPosition)
     {

@@ -10,23 +10,26 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class ScrollRectOverride : ScrollRect {
-	
-	override protected void LateUpdate() {
+public class ScrollRectOverride : ScrollRect
+{
 
-		base.LateUpdate();
+    override protected void LateUpdate()
+    {
+        base.LateUpdate();
 
-		if (this.verticalScrollbar) {
-			this.verticalScrollbar.size=0;
-		}
-	}
+        if (this.verticalScrollbar)
+        {
+            this.verticalScrollbar.size = 0;
+        }
+    }
 
-	override public void Rebuild(CanvasUpdate executing) {
+    override public void Rebuild(CanvasUpdate executing)
+    {
+        base.Rebuild(executing);
 
-		base.Rebuild(executing);
-
-		if (this.verticalScrollbar) {
-			this.verticalScrollbar.size=0;
-		}
-	}
+        if (this.verticalScrollbar)
+        {
+            this.verticalScrollbar.size = 0;
+        }
+    }
 }

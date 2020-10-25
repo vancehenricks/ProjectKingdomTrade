@@ -10,10 +10,11 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class CameraDraggableWindow : MonoBehaviour/*,IDragHandler*/ {
+public class CameraDraggableWindow : MonoBehaviour/*,IDragHandler*/
+{
 
-	public Camera cm;
-	public float keySpeedModifier;
+    public Camera cm;
+    public float keySpeedModifier;
     public float boundary;
     public KeyCode mouseLockKey;
     public bool isMouseLock;
@@ -23,7 +24,7 @@ public class CameraDraggableWindow : MonoBehaviour/*,IDragHandler*/ {
 
     public OpenRightClick openRightClick;
 
-    private void Update ()
+    private void Update()
     {
         keySpeedModifier = defaultSpeed * ((cm.transform.position.z / 1000f) - 1);
         MoveCamera(InputOverride.GetAxis("Horizontal"), InputOverride.GetAxis("Vertical"), keySpeedModifier);
@@ -72,24 +73,27 @@ public class CameraDraggableWindow : MonoBehaviour/*,IDragHandler*/ {
      }*/
 
 
-    private void MoveCamera (float x, float y , float speed) {
+    private void MoveCamera(float x, float y, float speed)
+    {
 
-		float xx = cm.transform.position.x - x * speed;
-		float yy = cm.transform.position.y - y * speed;
+        float xx = cm.transform.position.x - x * speed;
+        float yy = cm.transform.position.y - y * speed;
 
-		cm.transform.position = new Vector3(xx, yy, cm.transform.position.z);
+        cm.transform.position = new Vector3(xx, yy, cm.transform.position.z);
         //openRightClick.ResetValues();
     }
 
-    private void MoveXCamera(float direction) {
+    private void MoveXCamera(float direction)
+    {
 
         float speed = Time.deltaTime * defaultSpeed * mouseSpeedModifier;
 
-        cm.transform.position = new Vector3(direction > 0? (cm.transform.position.x + speed) : (cm.transform.position.x - speed), cm.transform.position.y, cm.transform.position.z);
+        cm.transform.position = new Vector3(direction > 0 ? (cm.transform.position.x + speed) : (cm.transform.position.x - speed), cm.transform.position.y, cm.transform.position.z);
         openRightClick.ResetValues();
     }
 
-    private void MoveYCamera(float direction) {
+    private void MoveYCamera(float direction)
+    {
 
         float speed = Time.deltaTime * defaultSpeed * mouseSpeedModifier;
 

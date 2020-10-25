@@ -9,7 +9,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CellInfo : MonoBehaviour {
+public class CellInfo : MonoBehaviour
+{
 
     public Image image;
     public Image border;
@@ -46,7 +47,7 @@ public class CellInfo : MonoBehaviour {
         else
         {
             Image img = tileInfo.tileCaller.image.GetComponent<Image>();
-            shade = tileInfo.tileCaller.shade.GetComponent <Image>();
+            shade = tileInfo.tileCaller.shade.GetComponent<Image>();
             image.sprite = img.sprite;
         }
 

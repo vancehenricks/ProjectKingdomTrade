@@ -95,7 +95,7 @@ public class ConsoleHandler : MonoBehaviour
 
     private bool OverrideGetKey(KeyCode key)
     {
-        if (InputOverride.GetKey(key,command.gameObject,true) && !runOnce)
+        if (InputOverride.GetKey(key, command.gameObject, true) && !runOnce)
         {
             runOnce = true;
             StartCoroutine(Reset());
@@ -113,7 +113,7 @@ public class ConsoleHandler : MonoBehaviour
 
     private IEnumerator ScrollToZero()
     {
-        for(int i = 0; i < 3;i++)
+        for (int i = 0; i < 3; i++)
         {
             scrollBar.value = 0f;
             yield return null;
@@ -174,13 +174,13 @@ public class ConsoleHandler : MonoBehaviour
     {
         if (remainOnIndex >= 1)
         {
-            index+=increment;
+            index += increment;
             return true;
         }
 
         remainOnIndex++;
         return false;
-        
+
     }
 
     private void DisplayCache()
@@ -196,7 +196,7 @@ public class ConsoleHandler : MonoBehaviour
 
         if (cache.Count > 0 && index < cache.Count)
         {
-            Debug.Log("cache[index]="+ cache[index]+ " index="+index);
+            Debug.Log("cache[index]=" + cache[index] + " index=" + index);
             command.text = cache[index];
         }
 

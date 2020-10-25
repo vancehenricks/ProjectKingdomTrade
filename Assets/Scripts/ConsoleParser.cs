@@ -13,10 +13,10 @@ public class ConsoleParser : MonoBehaviour
     public delegate void OnParsedConsoleEvent(string command, string[] arguments);
     public static OnParsedConsoleEvent onParsedConsoleEvent;
 
-    private void Start ()
+    private void Start()
     {
         ConsoleHandler.onConsoleEvent += OnConsoleEvent;
-	}
+    }
 
     //spawn_unit type:archer amount:1000 loc:mousePosition
 
@@ -30,7 +30,7 @@ public class ConsoleParser : MonoBehaviour
         onParsedConsoleEvent(command, arguments);
     }
 
-    public static Dictionary<string,string> ArgumentsToSubCommands(string[] arguments)
+    public static Dictionary<string, string> ArgumentsToSubCommands(string[] arguments)
     {
         Dictionary<string, string> subCommands = new Dictionary<string, string>();
 
@@ -49,5 +49,5 @@ public class ConsoleParser : MonoBehaviour
 
         return subCommands;
     }
-	
+
 }

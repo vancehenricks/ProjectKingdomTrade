@@ -12,19 +12,19 @@ using UnityEngine;
 public class TileInfo : MonoBehaviour
 {
 
-	public string tileType;
+    public string tileType;
     public long tileId;
     public string tileName;
-	public List<TileInfo> claimants;
+    public List<TileInfo> claimants;
     public TileEffect tileEffect;
     public TileCaller tileCaller;
-	public Color color;
+    public Color color;
     //Tilelocation already has tile size accomodated to it no need for dividing 25 again
     public Vector2 tileLocation;
-	public float localTemp;
+    public float localTemp;
     public float travelTime; //seconds
-	public int minChance;
-	public int maxChance;
+    public int minChance;
+    public int maxChance;
     public List<UnitInfo> unitInfos;
     public TileInfo currentTarget;
     public int attackDistance;
@@ -32,7 +32,7 @@ public class TileInfo : MonoBehaviour
     public float deathChance;
     //public bool isTarget;
     public List<TileInfo> targets;
-    public Dictionary<string, List<TileInfo>> cache; 
+    public Dictionary<string, List<TileInfo>> cache;
 
     //resource
     public int units;
@@ -43,11 +43,11 @@ public class TileInfo : MonoBehaviour
     public delegate void OnEnd();
     public OnEnd onEnd;
 
-    public virtual void Initialize ()
+    public virtual void Initialize()
     {
         cache = new Dictionary<string, List<TileInfo>>();
-		claimants = new List<TileInfo>();
-		localTemp = Temperature.temperature;
+        claimants = new List<TileInfo>();
+        localTemp = Temperature.temperature;
         unitInfos = new List<UnitInfo>();
         targets = new List<TileInfo>();
         tileId = Tools.UniqueId;

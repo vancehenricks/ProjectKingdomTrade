@@ -8,20 +8,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ArrowButtonAction : MonoBehaviour {
+public class ArrowButtonAction : MonoBehaviour
+{
+    public RectTransform content;
+    public float direction;
+    public float duration;
 
-	public RectTransform content;
-	public float direction;
-	public float duration;
+    public void DoAction()
+    {
+        StartCoroutine(DoActionLogic());
+    }
 
-	public void DoAction() {
-		StartCoroutine(DoActionLogic());
-	}
-
-	IEnumerator DoActionLogic() {
-		for(int i = 0; i < duration;i++) {
-			content.position = new Vector2(content.position.x+direction, content.position.y);
-			yield return null;
-		}
-	}
+    IEnumerator DoActionLogic()
+    {
+        for (int i = 0; i < duration; i++)
+        {
+            content.position = new Vector2(content.position.x + direction, content.position.y);
+            yield return null;
+        }
+    }
 }
