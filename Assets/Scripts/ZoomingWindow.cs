@@ -22,31 +22,12 @@ public class ZoomingWindow : MonoBehaviour, IScrollHandler
     public float scale;
     public float maxScale;
     public float minScale;
-    public bool isScrolling;
-    public float threshold;
-    public Vector2 offset;
     public Vector3 position;
-    //public float zoomThreshold;
-    //public float zoomCounter;
-    //public float distance;
 
-    private void Update()
-    {
-        if (!isScrolling)
-        {
-            position = TranslatePosToWorldPoint.pos;
-        }
-        else if (Vector3.Distance(position, TranslatePosToWorldPoint.pos) > threshold)
-        {
-            isScrolling = false;
-            CursorReplace.currentCursor = CursorType.Previous;
-            //zoomCounter = 0;
-        }
-    }
 
     public void OnScroll(PointerEventData eventData)
     {
-        //if (zoomCounter++ <= zoomThreshold) return;
+        position = cm.transform.position;
 
         if (grid.rect.width > defaultWidth)
         {
@@ -57,28 +38,25 @@ public class ZoomingWindow : MonoBehaviour, IScrollHandler
 
         if (InputOverride.GetAxis("Mouse ScrollWheel") > 0 && scale <= maxScale)
         {
-            isScrolling = true;
             scale = cm.transform.position.z + speed;
         }
 
         if (InputOverride.GetAxis("Mouse ScrollWheel") < 0 && scale >= minScale)
         {
-            isScrolling = true;
             scale = cm.transform.position.z - speed;
         }
 
-        //UnityEditor only isssue where escape button looses focus
-        if (isScrolling)
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.lockState = CursorLockMode.None;
-            CursorReplace.currentCursor = CursorType.Zoom;
-            cm.transform.position = new Vector3(position.x + offset.x, position.y + offset.y, scale);
-        }
-        //Cursor.lockState = CursorLockMode.Locked;
-        //Cursor.lockState = CursorLockMode.None;
+        CursorReplace.currentCursor = CursorType.Zoom;
+        cm.transform.position = new Vector3(position.x, position.y, scale);
 
-        //StartCoroutine(DelayStop());
+        StopAllCoroutines();
+        StartCoroutine(DelayStop());
+    }
+
+    IEnumerator DelayStop()
+    {
+        yield return new WaitForSeconds(1f);
+        CursorReplace.currentCursor = CursorType.Previous;
     }
 
 }
