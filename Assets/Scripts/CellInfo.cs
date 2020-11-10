@@ -98,6 +98,7 @@ public class CellInfo : MonoBehaviour
         }
         else
         {
+            MultiSelect.selectedTiles.Clear();
             generateCells.SelectAll(tileInfo);
             MultiSelect.Relay();
             isSelectedTwice = false;

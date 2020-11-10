@@ -39,7 +39,7 @@ public class UnitWayPoint : MonoBehaviour
         pathFinding.wayPointCountChange += WayPointCountChange;
         pathFinding.firstWayPointChange += FirstWayPointChange;
         combatHandler.targetCountChange += TargetCountChange;
-        combatHandler.firstTargetChange += firstTargetChange;
+        combatHandler.firstTargetChange += FirstTargetChange;
         flags = new Dictionary<string, GameObject>();
         unitInfo.onEnd += OnEnd;
     }
@@ -76,7 +76,7 @@ public class UnitWayPoint : MonoBehaviour
         DrawFlag(tileInfo, moveFlag);
     }
 
-    private void firstTargetChange(TileInfo tileInfo)
+    private void FirstTargetChange(TileInfo tileInfo)
     {
         RemoveAllFlag();
         DrawAndSyncFlag(tileInfo, attackFlag);

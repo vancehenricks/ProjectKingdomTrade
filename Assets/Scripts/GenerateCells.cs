@@ -107,7 +107,6 @@ public class GenerateCells : MonoBehaviour
                 MultiSelect.selectedTiles.Add(cellInfo.tileInfo);
             }
         }
-        MultiSelect.Relay();
     }
 
     private void DeleteAllCells()
