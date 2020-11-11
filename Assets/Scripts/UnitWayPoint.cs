@@ -59,6 +59,8 @@ public class UnitWayPoint : MonoBehaviour
 
     private void FirstWayPointChange(TileInfo tileInfo)
     {
+        if (unitInfo.targets.Count > 0) return;
+
         RemoveAllFlag();
         DrawFlag(tileInfo, moveFlag);
     }
@@ -149,7 +151,9 @@ public class UnitWayPoint : MonoBehaviour
 
         string keyFormat = tile.tileLocation + ",";
 
-        if (tile.targets.Count > 0)
+        UnitInfo uInfo = tile as UnitInfo;
+
+        if (uInfo != null && uInfo.targets.Count > 0)
         {
             keyFormat = tile.tileId + "," + unitInfo.tileId;
         }

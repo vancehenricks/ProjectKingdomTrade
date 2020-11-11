@@ -11,11 +11,15 @@ using UnityEngine;
 
 public class UnitInfo : TileInfo
 {
-    public string unitType;
     public Sprite sprite;
     public UnitEffect unitEffect;
     public float travelSpeed;
     public List<TileInfo> waypoints;
+    public List<TileInfo> targets;
+    public TileInfo currentTarget;
+    public int attackDistance;
+    public float killChance;
+    public float deathChance;
 
     public override void Initialize()
     {
@@ -23,6 +27,7 @@ public class UnitInfo : TileInfo
         Image image = tileCaller.image.GetComponent<Image>();
         waypoints = new List<TileInfo>();
 
+        targets = new List<TileInfo>();
         image.sprite = sprite;
         shade.color = new Color(this.color.r, this.color.g, this.color.b, shade.color.a);
         shade.sprite = sprite;
@@ -32,6 +37,7 @@ public class UnitInfo : TileInfo
 
     public override void End()
     {
+        targets.Clear();
         waypoints.Clear();
         base.End();
     }

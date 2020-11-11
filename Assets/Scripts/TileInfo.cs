@@ -13,6 +13,7 @@ public class TileInfo : MonoBehaviour
 {
 
     public string tileType;
+    public string subType;
     public long tileId;
     public string tileName;
     public List<TileInfo> claimants;
@@ -26,12 +27,6 @@ public class TileInfo : MonoBehaviour
     public int minChance;
     public int maxChance;
     public List<UnitInfo> unitInfos;
-    public TileInfo currentTarget;
-    public int attackDistance;
-    public float killChance;
-    public float deathChance;
-    //public bool isTarget;
-    public List<TileInfo> targets;
     public Dictionary<string, List<TileInfo>> cache;
 
     //resource
@@ -49,7 +44,6 @@ public class TileInfo : MonoBehaviour
         claimants = new List<TileInfo>();
         localTemp = Temperature.temperature;
         unitInfos = new List<UnitInfo>();
-        targets = new List<TileInfo>();
         tileId = Tools.UniqueId;
         //obj = this.gameObject;
     }
@@ -61,7 +55,6 @@ public class TileInfo : MonoBehaviour
             onEnd();
             onEnd = null;
         }
-        targets.Clear();
 
         Destroy(this.gameObject);
     }

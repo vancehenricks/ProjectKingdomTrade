@@ -32,23 +32,28 @@ public class Tools : MonoBehaviour
 
         foreach (B tileInfo in tileInfos)
         {
-            try
-            {
-                Debug.Log("Attempting to Downcast");
-                T info = (T)System.Convert.ChangeType(tileInfo, typeof(B));
-                infos.Add(info);
-            }
-            catch
-            {
-                Debug.Log("Conversion error try something else");
-                T info = (T)System.Convert.ChangeType(tileInfo, typeof(T));
-                infos.Add(info);
-            }
+            infos.Add(Convert<B, T>(tileInfo));
         }
 
         //Debug.Log("infos.Count="+infos.Count);
 
         return infos;
+    }
+
+    public static T Convert<B, T>(B tileInfo)
+    {
+        try
+        {
+            Debug.Log("Attempting to Downcast");
+            T info = (T)System.Convert.ChangeType(tileInfo, typeof(B));
+            return info;
+        }
+        catch
+        {
+            Debug.Log("Conversion error try something else");
+            T info = (T)System.Convert.ChangeType(tileInfo, typeof(T));
+            return info;
+        }
     }
 
     public static List<TileInfo> GetNeighbours(TileInfo tile)
@@ -66,13 +71,13 @@ public class Tools : MonoBehaviour
         return tiles;
     }
 
-    public static List<TileInfo> WhiteList(List<TileInfo> _tileInfos, List<TileInfo> include)
+    public static List<T> WhiteList<T>(List<T> _tileInfos, List<T> include) where T : TileInfo
     {
-        List<TileInfo> tileInfos = new List<TileInfo>();
+        List<T> tileInfos = new List<T>();
 
-        foreach (TileInfo tile in _tileInfos)
+        foreach (T tile in _tileInfos)
         {
-            foreach (TileInfo inc in include)
+            foreach (T inc in include)
             {
                 if (inc.tileType == tile.tileType)
                 {
@@ -85,11 +90,11 @@ public class Tools : MonoBehaviour
         return tileInfos;
     }
 
-    public static List<TileInfo> RemoveDuplicates(List<TileInfo> selectedTiles, List<TileInfo> targetList)
+    public static List<T> RemoveDuplicates<T>(List<T> selectedTiles, List<T> targetList) where T : TileInfo
     {
-        List<TileInfo> sanitizeList = new List<TileInfo>();
+        List<T> sanitizeList = new List<T>();
 
-        foreach (TileInfo tile in selectedTiles)
+        foreach (T tile in selectedTiles)
         {
             if (!targetList.Contains(tile))
             {
