@@ -85,10 +85,11 @@ public class TownGenerator : MonoBehaviour
             {
                 Destroy(tile);
                 tile = Instantiate(baseTile[i], placeHolderTile.transform.position, placeHolderTile.transform.rotation, placeHolderTile.transform.parent);
-                TileInfo tileInfo = tile.GetComponent<TileInfo>();
-                tileInfo.tileLocation = location;
+                TownInfo townInfo = tile.GetComponent<TownInfo>();
+                townInfo.tileLocation = location;
+                townInfo.Initialize();
                 generatedTowns.Add(location, tile);
-                Debug.Log("TILENAME: " + tileInfo.tileType);
+                Debug.Log("TILENAME: " + townInfo.tileType);
                 xCounter = 0;
                 nTowns++;
             }

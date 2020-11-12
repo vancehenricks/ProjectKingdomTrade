@@ -235,12 +235,11 @@ public class MapGenerator : MonoBehaviour
                             }
                         }
 
-                        tile = Instantiate(baseTile[index], placeHolderTile.transform.position, placeHolderTile.transform.rotation);
+                        tile = Instantiate(baseTile[index], placeHolderTile.transform.position, placeHolderTile.transform.rotation, placeHolderTile.transform.parent);
                         TileInfo tileInfo = tile.GetComponent<TileInfo>();
                         tileLocation = new Vector2(tileLocationX, tileLocationY);
                         tileInfo.tileLocation = tileLocation;
                         tileInfo.Initialize();
-                        tile.transform.SetParent(placeHolderTile.transform.parent);
 
                         onGenerateTile(ref tile, placeHolderTile, tileLocation, localX, y);
                         //Debug.Log(tileLocation);

@@ -58,11 +58,13 @@ public class SpawnUnit : MonoBehaviour
         {
             Dictionary<string, string> subCommands = ConsoleParser.ArgumentsToSubCommands(arguments);
 
+            UnitInfo unitInfo = baseUnit.GetComponent<UnitInfo>();
+
             nMax = 1;
             nCount = 0;
             autoFocus = true;
             color = Color.white;
-            attackDistance = 0;
+            attackDistance = unitInfo.attackDistance;
 
             bool notCancel = true;
 

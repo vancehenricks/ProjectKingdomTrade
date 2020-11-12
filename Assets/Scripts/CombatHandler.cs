@@ -17,10 +17,11 @@ public class CombatHandler : MonoBehaviour
     public delegate void FirstTargetChange(TileInfo tile);
     public FirstTargetChange firstTargetChange;
     public TileInfoRaycaster tileInfoRaycaster;
+
     private CombatSession _combatSession;
     public CombatSession combatSession 
     {
-        private set
+        set
         {
             _combatSession = value;
         }
@@ -29,29 +30,29 @@ public class CombatHandler : MonoBehaviour
             if (_combatSession == null)
             {
                 _combatSession = new CombatSession();
+                _combatSession.combatants.Add(unitInfo);
             }
 
             return _combatSession;
         }
     }
 
-    //private bool[] stop;
     private int previousTargetCount;
     private TileInfo firstTarget;
 
     private void Start()
     {
-        //stop = new bool[6];
         unitInfo.onEnd += OnEnd;
-        //Tick.tickUpdate += TickUpdate;
+        Tick.tickUpdate += TickUpdate;
         firstTarget = unitInfo;
     }
 
     private void OnEnd()
     {
-        //Tick.tickUpdate -= TickUpdate;
+        Tick.tickUpdate -= TickUpdate;
         targetCountChange = null;
-        combatSession = null;
+        combatSession.OnEnd();
+        RemoveDelegates();
     }
 
     private void Update()
@@ -71,10 +72,12 @@ public class CombatHandler : MonoBehaviour
 
                 //create an instance of CombatSession inside target
                 unitInfo.currentTarget = target;
-                GenerateWaypoint();
+                RegisterDelegates();
                 //Issue with this executing the last target since there is no checking here ideal targetted unit will delete itself in unitInfo.targets
-                //combatSession = target.unitEffect.combatHandler.combatSession;
-                //combatSession.combatants.Add(unitInfo);
+                //This will be catched on target == null
+                combatSession = target.unitEffect.combatHandler.combatSession;
+                combatSession.combatants.Add(unitInfo);
+                GenerateWaypoint();
             }
         }
 
@@ -92,10 +95,30 @@ public class CombatHandler : MonoBehaviour
 
     }
 
-    public void GenerateWaypoint()
+    private void FirstWayPointChange(TileInfo tileInfo)
+    {
+        GenerateWaypoint();
+    }
+
+    private void WayPointCountChange(TileInfo tileInfo)
+    {
+        GenerateWaypoint();
+    }
+
+    private void WayPointReached(TileInfo tileInfo)
+    {
+        GenerateWaypoint();
+    }
+
+    private void TickUpdate()
+    {
+        GenerateWaypoint(true);
+    }
+
+    private void GenerateWaypoint(bool checkEqualDistanceOnly = false)
     {
 
-        if (unitInfo.currentTarget == null)
+        if (unitInfo.currentTarget == null || combatSession == null)
         {
             if (unitInfo.targets.Count > 0)
             {
@@ -106,8 +129,44 @@ public class CombatHandler : MonoBehaviour
         }
 
         UnitInfo targetUnit = unitInfo.currentTarget as UnitInfo;
+        int distance = GetDistance(targetUnit);
+        Debug.Log("120DISTANCE=" + distance);
+
+        if (distance <= unitInfo.attackDistance)
+        {
+            ResetCombatPathing();
+            RemoveDelegates();
+            Debug.Log("NEARBY DISTANCE" + distance);
+        }
+        else if (distance > unitInfo.attackDistance && !checkEqualDistanceOnly)
+        {
+            ResetCombatPathing();
+            unitInfo.waypoints.Add(combatSession.GetPosition());
+        }
+    }
+
+    private void RegisterDelegates()
+    {
+        UnitInfo targetUnit = unitInfo.currentTarget as UnitInfo;
         PathFinding targetPathFinder = targetUnit.unitEffect.pathFinder;
-        CombatHandler targetCombatHandler = targetUnit.unitEffect.combatHandler;
+
+        targetPathFinder.wayPointCountChange += WayPointCountChange;
+        targetPathFinder.firstWayPointChange += FirstWayPointChange;
+        targetPathFinder.wayPointReached += WayPointReached;
+    }
+
+    private void RemoveDelegates()
+    {
+        UnitInfo targetUnit = unitInfo.currentTarget as UnitInfo;
+        PathFinding targetPathFinder = targetUnit.unitEffect.pathFinder;
+
+        targetPathFinder.wayPointCountChange -= WayPointCountChange;
+        targetPathFinder.firstWayPointChange -= FirstWayPointChange;
+        targetPathFinder.wayPointReached -= WayPointReached;
+    }
+
+    private int GetDistance(TileInfo targetUnit)
+    {
         int distance = 0;
 
         try
@@ -119,79 +178,10 @@ public class CombatHandler : MonoBehaviour
             distance = (int)Vector2.Distance(unitInfo.transform.position, targetUnit.transform.position) / 25;
         }
 
-        Debug.Log("120DISTANCE=" + distance);
-
-        if (distance > unitInfo.attackDistance)
-        {
-            ResetCombatPathing();
-            unitInfo.waypoints.Add(targetUnit);
-        }
+        return distance;
     }
 
-    /*private void CalculateDamage()
-    {
-        Debug.Log(unitInfo.tileId + " -> " + unitInfo.currentTarget.tileId);
-    }*/
-
-    /* private bool HasSameTargetId(UnitInfo targetUnit, UnitInfo unitInfo)
-    {
-        if (targetUnit.currentTarget == null) return false;
-
-        if (targetUnit.currentTarget.tileId != unitInfo.tileId) return false;
-
-        return true;
-    }
-
-    private bool HasSameLastWaypoint(List<TileInfo> waypoint1, List<TileInfo> waypoint2)
-    {
-
-        if (waypoint1.Count == 0 || waypoint2.Count == 0) return false;
-
-        int maxIndexA = waypoint1.Count - 1,
-            maxIndexB = waypoint2.Count - 1;
-
-        if (waypoint1[maxIndexA] != waypoint2[maxIndexB]) return false;
-
-        return true;
-    }
-
-    public void SetStop(bool val)
-    {
-        for (int i = 0; i < stop.Length; i++)
-        {
-            stop[i] = val;
-        }
-    }
-
-    public bool IsAllStop(bool value, params int[] exempt)
-    {
-        for (int i = 0; i < stop.Length; i++)
-        {
-            bool skip = false;
-
-            foreach (int index in exempt)
-            {
-                if (index == i)
-                {
-                    if (stop[i] != value)
-                    {
-                        skip = true;
-                        break;
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-            }
-
-            if (!skip && stop[i] != value) return false;
-        }
-
-        return true;
-    }*/
-
-    public void ResetCombatPathing()
+    private void ResetCombatPathing()
     {
         pathFinding.ResetDestination();
         pathFinding.ResetGeneratedWaypoints();
@@ -200,9 +190,71 @@ public class CombatHandler : MonoBehaviour
 
     //NewWaypoint
     //target to null
-
-
 }
+
+/*private void CalculateDamage()
+{
+    Debug.Log(unitInfo.tileId + " -> " + unitInfo.currentTarget.tileId);
+}*/
+
+/* private bool HasSameTargetId(UnitInfo targetUnit, UnitInfo unitInfo)
+{
+    if (targetUnit.currentTarget == null) return false;
+
+    if (targetUnit.currentTarget.tileId != unitInfo.tileId) return false;
+
+    return true;
+}
+
+private bool HasSameLastWaypoint(List<TileInfo> waypoint1, List<TileInfo> waypoint2)
+{
+
+    if (waypoint1.Count == 0 || waypoint2.Count == 0) return false;
+
+    int maxIndexA = waypoint1.Count - 1,
+        maxIndexB = waypoint2.Count - 1;
+
+    if (waypoint1[maxIndexA] != waypoint2[maxIndexB]) return false;
+
+    return true;
+}
+
+public void SetStop(bool val)
+{
+    for (int i = 0; i < stop.Length; i++)
+    {
+        stop[i] = val;
+    }
+}
+
+public bool IsAllStop(bool value, params int[] exempt)
+{
+    for (int i = 0; i < stop.Length; i++)
+    {
+        bool skip = false;
+
+        foreach (int index in exempt)
+        {
+            if (index == i)
+            {
+                if (stop[i] != value)
+                {
+                    skip = true;
+                    break;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+
+        if (!skip && stop[i] != value) return false;
+    }
+
+    return true;
+}*/
+
 
 
 /*

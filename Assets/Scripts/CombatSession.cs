@@ -17,9 +17,35 @@ public class CombatSession
         combatants = new List<TileInfo>();
     }
 
+    public void OnEnd()
+    {
+        foreach (UnitInfo unit in combatants)
+        {
+            CombatHandler unitCombatHandler = unit.unitEffect.combatHandler;
+            unitCombatHandler.combatSession = null;
+        }
+    }
+
     public TileInfo GetPosition()
     {
+        UnitInfo host = combatants[0] as UnitInfo;
+        PathFinding hostPathFinder = host.unitEffect.pathFinder;
+        CombatHandler hostCombatHandler = host.unitEffect.combatHandler;
+        TileInfoRaycaster tileInfoRaycaster = hostCombatHandler.tileInfoRaycaster;
+        Camera cm = tileInfoRaycaster.cm;
+        Vector3 centroid = Vector3.zero;
 
-        return null;
+        foreach (UnitInfo unit in combatants)
+        {
+            centroid += unit.transform.position;
+        }
+
+        centroid /= combatants.Count;
+
+        TileInfo point = tileInfoRaycaster.GetTileInfoFromPos(cm.WorldToScreenPoint(centroid));
+
+        //Debug.Log("POINTS="+point.tileLocation);
+
+        return point;
     }
 }
