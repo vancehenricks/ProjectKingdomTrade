@@ -31,8 +31,10 @@ public class CombatHandler : MonoBehaviour
 
     private void OnEnd()
     {
+        ResetCombatPathing();
         Tick.tickUpdate -= TickUpdate;
         targetCountChange = null;
+        firstTargetChange = null;
         RemoveDelegates();
     }
 
@@ -60,7 +62,7 @@ public class CombatHandler : MonoBehaviour
                 //combatSession.ClearCombantants();
                 combatSession = target.unitEffect.combatHandler.combatSession;
                 combatSession.Add(unitInfo);
-                Relay();
+                combatSession.Relay();
             }
         }
 
@@ -80,28 +82,22 @@ public class CombatHandler : MonoBehaviour
 
     private void FirstWayPointChange(TileInfo tileInfo)
     {
-        Relay();
+        combatSession.Relay();
     }
 
     private void WayPointCountChange(TileInfo tileInfo)
     {
-        Relay();
+        combatSession.Relay();
     }
 
     private void WayPointReached(TileInfo tileInfo)
     {
-        Relay();
+        combatSession.Relay();
     }
 
     private void TickUpdate()
     {
         GenerateWaypoint(null, true);
-    }
-
-    private void Relay()
-    {
-        if (combatSession == null) return;
-        combatSession.Relay();
     }
 
     public void GenerateWaypoint(TileInfo waypoint, bool checkOnlyWithinDistance = false)
@@ -158,7 +154,7 @@ public class CombatHandler : MonoBehaviour
 
     private int GetDistance(TileInfo targetUnit)
     {
-        float distance = 0;
+        int distance = 0;
 
         try
         {
@@ -169,9 +165,7 @@ public class CombatHandler : MonoBehaviour
             distance = (int)Vector2.Distance(unitInfo.transform.position, targetUnit.transform.position) / 25;
         }
 
-        Debug.Log("distance=" + distance);
-
-        return (int)distance;
+        return distance;
     }
 
     private void ResetCombatPathing()
