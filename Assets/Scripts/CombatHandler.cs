@@ -17,25 +17,7 @@ public class CombatHandler : MonoBehaviour
     public delegate void FirstTargetChange(TileInfo tile);
     public FirstTargetChange firstTargetChange;
     public TileInfoRaycaster tileInfoRaycaster;
-
-    private CombatSession _combatSession;
-    public CombatSession combatSession 
-    {
-        set
-        {
-            _combatSession = value;
-        }
-        get
-        {
-            if (_combatSession == null)
-            {
-                _combatSession = new CombatSession();
-                _combatSession.combatants.Add(unitInfo);
-            }
-
-            return _combatSession;
-        }
-    }
+    public CombatSession combatSession;
 
     private int previousTargetCount;
     private TileInfo firstTarget;
@@ -51,7 +33,6 @@ public class CombatHandler : MonoBehaviour
     {
         Tick.tickUpdate -= TickUpdate;
         targetCountChange = null;
-        combatSession.OnEnd();
         RemoveDelegates();
     }
 
@@ -59,6 +40,7 @@ public class CombatHandler : MonoBehaviour
     {
         if (unitInfo.currentTarget == null)
         {
+            //Issue with selecting towns -- to be implemented later for attacking towns
             foreach (UnitInfo target in unitInfo.targets)
             {
                 Debug.Log("41");
@@ -75,9 +57,10 @@ public class CombatHandler : MonoBehaviour
                 RegisterDelegates();
                 //Issue with this executing the last target since there is no checking here ideal targetted unit will delete itself in unitInfo.targets
                 //This will be catched on target == null
+                //combatSession.ClearCombantants();
                 combatSession = target.unitEffect.combatHandler.combatSession;
-                combatSession.combatants.Add(unitInfo);
-                GenerateWaypoint();
+                combatSession.Add(unitInfo);
+                Relay();
             }
         }
 
@@ -97,25 +80,31 @@ public class CombatHandler : MonoBehaviour
 
     private void FirstWayPointChange(TileInfo tileInfo)
     {
-        GenerateWaypoint();
+        Relay();
     }
 
     private void WayPointCountChange(TileInfo tileInfo)
     {
-        GenerateWaypoint();
+        Relay();
     }
 
     private void WayPointReached(TileInfo tileInfo)
     {
-        GenerateWaypoint();
+        Relay();
     }
 
     private void TickUpdate()
     {
-        GenerateWaypoint(true);
+        GenerateWaypoint(null, true);
     }
 
-    private void GenerateWaypoint(bool checkEqualDistanceOnly = false)
+    private void Relay()
+    {
+        if (combatSession == null) return;
+        combatSession.Relay();
+    }
+
+    public void GenerateWaypoint(TileInfo waypoint, bool checkOnlyWithinDistance = false)
     {
 
         if (unitInfo.currentTarget == null || combatSession == null)
@@ -130,18 +119,20 @@ public class CombatHandler : MonoBehaviour
 
         UnitInfo targetUnit = unitInfo.currentTarget as UnitInfo;
         int distance = GetDistance(targetUnit);
+        int attackDistance = unitInfo.attackDistance <= 1 ? 0 : unitInfo.attackDistance;
+
         Debug.Log("120DISTANCE=" + distance);
 
-        if (distance <= unitInfo.attackDistance)
+        if (distance <= attackDistance)
         {
             ResetCombatPathing();
-            RemoveDelegates();
+            //RemoveDelegates(); <-- need to deal with 2 - 3 distance difference
             Debug.Log("NEARBY DISTANCE" + distance);
         }
-        else if (distance > unitInfo.attackDistance && !checkEqualDistanceOnly)
+        else if (distance > unitInfo.attackDistance && !checkOnlyWithinDistance)
         {
             ResetCombatPathing();
-            unitInfo.waypoints.Add(combatSession.GetPosition());
+            unitInfo.waypoints.Add(waypoint);
         }
     }
 
@@ -167,7 +158,7 @@ public class CombatHandler : MonoBehaviour
 
     private int GetDistance(TileInfo targetUnit)
     {
-        int distance = 0;
+        float distance = 0;
 
         try
         {
@@ -178,7 +169,9 @@ public class CombatHandler : MonoBehaviour
             distance = (int)Vector2.Distance(unitInfo.transform.position, targetUnit.transform.position) / 25;
         }
 
-        return distance;
+        Debug.Log("distance=" + distance);
+
+        return (int)distance;
     }
 
     private void ResetCombatPathing()
@@ -187,208 +180,4 @@ public class CombatHandler : MonoBehaviour
         pathFinding.ResetGeneratedWaypoints();
         unitInfo.waypoints.Clear();
     }
-
-    //NewWaypoint
-    //target to null
 }
-
-/*private void CalculateDamage()
-{
-    Debug.Log(unitInfo.tileId + " -> " + unitInfo.currentTarget.tileId);
-}*/
-
-/* private bool HasSameTargetId(UnitInfo targetUnit, UnitInfo unitInfo)
-{
-    if (targetUnit.currentTarget == null) return false;
-
-    if (targetUnit.currentTarget.tileId != unitInfo.tileId) return false;
-
-    return true;
-}
-
-private bool HasSameLastWaypoint(List<TileInfo> waypoint1, List<TileInfo> waypoint2)
-{
-
-    if (waypoint1.Count == 0 || waypoint2.Count == 0) return false;
-
-    int maxIndexA = waypoint1.Count - 1,
-        maxIndexB = waypoint2.Count - 1;
-
-    if (waypoint1[maxIndexA] != waypoint2[maxIndexB]) return false;
-
-    return true;
-}
-
-public void SetStop(bool val)
-{
-    for (int i = 0; i < stop.Length; i++)
-    {
-        stop[i] = val;
-    }
-}
-
-public bool IsAllStop(bool value, params int[] exempt)
-{
-    for (int i = 0; i < stop.Length; i++)
-    {
-        bool skip = false;
-
-        foreach (int index in exempt)
-        {
-            if (index == i)
-            {
-                if (stop[i] != value)
-                {
-                    skip = true;
-                    break;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-        }
-
-        if (!skip && stop[i] != value) return false;
-    }
-
-    return true;
-}*/
-
-
-
-/*
-     
-        //Issue with some situation when both attack and does not land proper tile
-        //Issue with three units attacking 1 unit then decide to retreat
-
-        if (unitInfo.currentTarget == null)
-        {
-            if (unitInfo.targets.Count > 0)
-            {
-                ResetCombatPathing();
-            }
-
-            SetStop(false);
-            return;
-        }
-
-        UnitInfo targetUnit = unitInfo.currentTarget as UnitInfo;
-        PathFinding targetPathFinder = targetUnit.unitEffect.pathFinder;
-        CombatHandler targetCombatHandler = targetUnit.unitEffect.combatHandler;
-        int distance = 0;
-
-        try
-        {
-            distance = (int)Vector2.Distance(unitInfo.tileLocation, targetUnit.tileLocation);
-        }
-        catch
-        {
-            distance = (int)Vector2.Distance(unitInfo.transform.position, targetUnit.transform.position) / 25;
-        }
-
-        Debug.Log("96DISTANCE=" + distance);
-
-        //defender
-        if (IsAllStop(true) && distance <= unitInfo.attackDistance)
-        {
-            stop[4] = false;
-        }
-        else if (IsAllStop(true, 4) && distance > unitInfo.attackDistance ||
-stop[3] && !stop[4] && distance > unitInfo.attackDistance)
-        {
-            Debug.Log(stop[4]);
-            Debug.Log("TILEID"+unitInfo.tileId);
-
-            unitInfo.targets.Remove(unitInfo.currentTarget);
-
-            stop[5] = false; //issue with re-selecting enemy [fix]
-
-            if (unitInfo.targets.Count == 0)
-            {
-                unitInfo.currentTarget = null;
-                return;
-            }
-        }
-
-        if (distance <= unitInfo.attackDistance)
-        {
-            CalculateDamage();
-        }
-
-        //attacker
-        if (!stop[3] && distance <= unitInfo.attackDistance)
-        {
-            SetStop(false);
-stop[3] = true;
-
-            if (targetUnit != null && targetUnit.attackDistance == unitInfo.attackDistance)
-            {
-                targetCombatHandler.ResetCombatPathing();
-            }
-            else
-            {
-                targetCombatHandler.ResetCombatPathing();
-                targetUnit.waypoints.Add(unitInfo);
-            }
-
-            ResetCombatPathing();
-
-            //Debug.Log(unitInfo.tileId + " -> " + unitInfo.currentTarget.tileId);
-
-            if (unitInfo.currentTarget != null && distance <= unitInfo.currentTarget.attackDistance && !unitInfo.currentTarget.targets.Contains(unitInfo))
-            {
-                unitInfo.currentTarget.currentTarget = unitInfo;
-                unitInfo.currentTarget.targets.Insert(0, unitInfo);
-            }
-
-            return;
-        }
-        else if (unitInfo.currentTarget.currentTarget != null && !stop[0] && unitInfo.currentTarget.currentTarget.tileId == unitInfo.tileId)
-        {
-            int count = pathFinding.generatedWayPoints.Count;
-int index = (count / 2);
-
-            if (targetUnit == null || count == 0) return;
-
-            Debug.Log("pathFinding.gwPointsIndex= " + pathFinding.gwPointsIndex + " Count=" + count + " index=" + index);
-
-            if (pathFinding.gwPointsIndex > index)
-            {
-                Debug.Log("RESETTING");
-                ResetCombatPathing();
-unitInfo.waypoints.Add(targetUnit);
-                return;
-            }
-
-            stop[0] = true;
-            targetCombatHandler.ResetCombatPathing();
-            targetCombatHandler.SetStop(true);
-            targetUnit.waypoints.Add(pathFinding.generatedWayPoints[index]);
-
-        }
-        else if (!stop[0] && !stop[1] && distance > unitInfo.attackDistance)
-        {
-            Debug.Log("stop1 re-calculating");
-            stop[1] = true;
-            ResetCombatPathing();
-unitInfo.waypoints.Add(unitInfo.currentTarget);
-        }
-        else if (targetPathFinder != null && targetUnit != null && !stop[0] && targetPathFinder.generatedWayPoints.Count > 0 &&
-                    (
-                        (!stop[2] && stop[1]) ||
-                        (stop[2] && stop[1] && !HasSameTargetId(targetUnit, unitInfo) && 
-                        !HasSameLastWaypoint(pathFinding.generatedWayPoints, targetPathFinder.generatedWayPoints))
-                    )
-                )
-        {
-            Debug.Log("stop2 re-calculating");
-
-            stop[2] = true;
-            ResetCombatPathing();
-unitInfo.waypoints.Add(targetPathFinder.generatedWayPoints[targetPathFinder.generatedWayPoints.Count - 1]);
-        }
-
-
-
-     */

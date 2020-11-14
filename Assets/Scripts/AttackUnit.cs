@@ -38,7 +38,7 @@ public class AttackUnit : MoveUnit
             {
                 //this assumes every data contain in selectedTiles are just duplicate
                 //make sure to check if DoAction calls ClearAllWaypoints or this wont be true anymore
-                List<TileInfo> distinctList = Tools.RemoveDuplicates(selectedTiles, targetList[0]);
+                List<TileInfo> distinctList = Tools.MergeList(selectedTiles, targetList[0]);
                 List<TileInfo> whiteListed = Tools.WhiteList(distinctList, include);
 
                 AssignsToList(whiteListed, targetList);

@@ -90,7 +90,20 @@ public class Tools : MonoBehaviour
         return tileInfos;
     }
 
-    public static List<T> RemoveDuplicates<T>(List<T> selectedTiles, List<T> targetList) where T : TileInfo
+    public static bool Exist<T>(List<T> list, T key) where T : TileInfo
+    {
+        foreach (TileInfo tile in list)
+        {
+            if (tile.tileId == key.tileId)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public static List<T> MergeList<T>(List<T> selectedTiles, List<T> targetList) where T : TileInfo
     {
         List<T> sanitizeList = new List<T>();
 

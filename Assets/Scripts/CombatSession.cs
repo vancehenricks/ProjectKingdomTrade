@@ -8,44 +8,75 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CombatSession
+public class CombatSession : MonoBehaviour
 {
-    public List<TileInfo> combatants;
+    public UnitInfo unitInfo;
+    [SerializeField]
+    private List<TileInfo> combatants;
 
-    public CombatSession()
+    private void Start()
     {
         combatants = new List<TileInfo>();
+        combatants.Add(unitInfo);
+        unitInfo.onEnd += OnEnd;
     }
 
-    public void OnEnd()
+    private void OnEnd()
     {
-        foreach (UnitInfo unit in combatants)
+        for (int i = 1; i < combatants.Count; i++)
         {
+            UnitInfo unit = combatants[i] as UnitInfo;
             CombatHandler unitCombatHandler = unit.unitEffect.combatHandler;
+
             unitCombatHandler.combatSession = null;
         }
     }
 
-    public TileInfo GetPosition()
+    public void Add(TileInfo tileInfo)
     {
-        UnitInfo host = combatants[0] as UnitInfo;
-        PathFinding hostPathFinder = host.unitEffect.pathFinder;
-        CombatHandler hostCombatHandler = host.unitEffect.combatHandler;
+        if (Tools.Exist(combatants, tileInfo)) return;
+
+        combatants.Add(tileInfo);
+    }
+
+    public void Relay()
+    {
+        //PathFinding hostPathFinder = host.unitEffect.pathFinder;
+        CombatHandler hostCombatHandler = unitInfo.unitEffect.combatHandler;
         TileInfoRaycaster tileInfoRaycaster = hostCombatHandler.tileInfoRaycaster;
         Camera cm = tileInfoRaycaster.cm;
-        Vector3 centroid = Vector3.zero;
+        TileInfo point = unitInfo;
+        int startingIndex = 1;
 
-        foreach (UnitInfo unit in combatants)
+        if (unitInfo.currentTarget != null)
         {
-            centroid += unit.transform.position;
+            Vector3 centroid = Vector3.zero;
+
+            foreach (UnitInfo unit in combatants)
+            {
+                centroid += unit.transform.position;
+            }
+
+            centroid /= combatants.Count;
+            point =  tileInfoRaycaster.GetTileInfoFromPos(cm.WorldToScreenPoint(centroid));
+            startingIndex = 0;
         }
-
-        centroid /= combatants.Count;
-
-        TileInfo point = tileInfoRaycaster.GetTileInfoFromPos(cm.WorldToScreenPoint(centroid));
 
         //Debug.Log("POINTS="+point.tileLocation);
 
-        return point;
+        for (int i = startingIndex; i < combatants.Count; i++)
+        {
+            //PathFinding hostPathFinder = host.unitEffect.pathFinder;
+            UnitInfo unit = combatants[i] as UnitInfo;
+            CombatHandler unitCombatHandler = unit.unitEffect.combatHandler;
+
+            unitCombatHandler.GenerateWaypoint(point);
+        }
+    }
+
+    public void Clear()
+    {
+        combatants.Clear();
+        combatants.Add(unitInfo);
     }
 }
