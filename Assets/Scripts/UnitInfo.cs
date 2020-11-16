@@ -17,6 +17,7 @@ public class UnitInfo : TileInfo
     public List<TileInfo> waypoints;
     public List<TileInfo> targets;
     public TileInfo currentTarget;
+    public bool isEngaged;
     public int attackDistance;
     public float killChance;
     public float deathChance;

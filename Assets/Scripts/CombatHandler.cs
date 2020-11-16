@@ -19,11 +19,14 @@ public class CombatHandler : MonoBehaviour
     public TileInfoRaycaster tileInfoRaycaster;
     public CombatSession combatSession;
 
+    private CombatSession defaultCombatSession;
+
     private int previousTargetCount;
     private TileInfo firstTarget;
 
     private void Start()
     {
+        defaultCombatSession = combatSession;
         unitInfo.onEnd += OnEnd;
         Tick.tickUpdate += TickUpdate;
         firstTarget = unitInfo;
@@ -31,10 +34,15 @@ public class CombatHandler : MonoBehaviour
 
     private void OnEnd()
     {
+        UnitInfo targetUnit = unitInfo.currentTarget as UnitInfo;
+
+        DisEngage(unitInfo);
+        DisEngage(targetUnit);
         ResetCombatPathing();
         Tick.tickUpdate -= TickUpdate;
         targetCountChange = null;
         firstTargetChange = null;
+        combatSession = null;
         RemoveDelegates();
     }
 
@@ -60,6 +68,7 @@ public class CombatHandler : MonoBehaviour
                 //Issue with this executing the last target since there is no checking here ideal targetted unit will delete itself in unitInfo.targets
                 //This will be catched on target == null
                 //combatSession.ClearCombantants();
+                target.unitEffect.combatHandler.combatSession.Add(target);
                 combatSession = target.unitEffect.combatHandler.combatSession;
                 combatSession.Add(unitInfo);
                 combatSession.Relay();
@@ -103,7 +112,7 @@ public class CombatHandler : MonoBehaviour
     public void GenerateWaypoint(TileInfo waypoint, bool checkOnlyWithinDistance = false)
     {
 
-        if (unitInfo.currentTarget == null || combatSession == null)
+        if (unitInfo.currentTarget == null)
         {
             if (unitInfo.targets.Count > 0)
             {
@@ -119,11 +128,22 @@ public class CombatHandler : MonoBehaviour
 
         Debug.Log("120DISTANCE=" + distance);
 
-        if (distance <= attackDistance)
+        if (distance <= attackDistance && !unitInfo.isEngaged)
         {
             ResetCombatPathing();
-            //RemoveDelegates(); <-- need to deal with 2 - 3 distance difference
+            RemoveDelegates(); // re-enabled for now we'll likely cause issue later <-- need to deal with 2 - 3 distance difference
             Debug.Log("NEARBY DISTANCE" + distance);
+            unitInfo.isEngaged = true;
+        }
+        else if (distance <= attackDistance && unitInfo.isEngaged)
+        {
+            Debug.Log("Unit [" + unitInfo.tileId + "] attacking Unit [" + targetUnit.tileId + "]");
+        }
+        else if (distance > unitInfo.attackDistance && unitInfo.isEngaged)
+        {
+            Debug.Log("Disengaging!");
+            DisEngage(unitInfo);
+            DisEngage(targetUnit);
         }
         else if (distance > unitInfo.attackDistance && !checkOnlyWithinDistance)
         {
@@ -173,5 +193,18 @@ public class CombatHandler : MonoBehaviour
         pathFinding.ResetDestination();
         pathFinding.ResetGeneratedWaypoints();
         unitInfo.waypoints.Clear();
+    }
+
+    private void DisEngage(UnitInfo unit)
+    {
+        CombatHandler unitCombatHandler = unitInfo.unitEffect.combatHandler;
+
+        if (unit == null) return;
+
+        unit.targets.Remove(unitInfo.currentTarget);
+        unitCombatHandler.combatSession.Remove(unitInfo);
+        unitCombatHandler.combatSession = unitCombatHandler.defaultCombatSession;
+        unit.isEngaged = false;
+        unit.currentTarget = null;
     }
 }

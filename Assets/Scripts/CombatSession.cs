@@ -17,7 +17,6 @@ public class CombatSession : MonoBehaviour
     private void Start()
     {
         combatants = new List<TileInfo>();
-        combatants.Add(unitInfo);
         unitInfo.onEnd += OnEnd;
     }
 
@@ -37,6 +36,11 @@ public class CombatSession : MonoBehaviour
         if (Tools.Exist(combatants, tileInfo)) return;
 
         combatants.Add(tileInfo);
+    }
+
+    public void Remove(TileInfo tileInfo)
+    {
+        combatants.Remove(tileInfo);
     }
 
     public void Relay()
