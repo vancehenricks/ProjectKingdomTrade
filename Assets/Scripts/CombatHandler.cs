@@ -36,14 +36,11 @@ public class CombatHandler : MonoBehaviour
     {
         UnitInfo targetUnit = unitInfo.currentTarget as UnitInfo;
 
-        DisEngage(unitInfo);
-        DisEngage(targetUnit);
-        ResetCombatPathing();
+        //DisEngage(targetUnit);
+        DisEngage();
         Tick.tickUpdate -= TickUpdate;
         targetCountChange = null;
         firstTargetChange = null;
-        combatSession = null;
-        RemoveDelegates();
     }
 
     private void Update()
@@ -51,27 +48,34 @@ public class CombatHandler : MonoBehaviour
         if (unitInfo.currentTarget == null)
         {
             //Issue with selecting towns -- to be implemented later for attacking towns
-            foreach (UnitInfo target in unitInfo.targets)
+            try
             {
-                Debug.Log("41");
-
-                if (target == null)
+                foreach (UnitInfo target in unitInfo.targets)
                 {
-                    unitInfo.targets.Remove(target);
-                    ResetCombatPathing();
-                    break;
-                }
+                    Debug.Log("41");
 
-                //create an instance of CombatSession inside target
-                unitInfo.currentTarget = target;
-                RegisterDelegates();
-                //Issue with this executing the last target since there is no checking here ideal targetted unit will delete itself in unitInfo.targets
-                //This will be catched on target == null
-                //combatSession.ClearCombantants();
-                target.unitEffect.combatHandler.combatSession.Add(target);
-                combatSession = target.unitEffect.combatHandler.combatSession;
-                combatSession.Add(unitInfo);
-                combatSession.Relay();
+                    if (target == null)
+                    {
+                        unitInfo.targets.Remove(target);
+                        ResetCombatPathing();
+                        break;
+                    }
+
+                    //create an instance of CombatSession inside target
+                    unitInfo.currentTarget = target;
+                    RegisterDelegates();
+                    //Issue with this executing the last target since there is no checking here ideal targetted unit will delete itself in unitInfo.targets
+                    //This will be catched on target == null
+                    //combatSession.ClearCombantants();
+                    target.unitEffect.combatHandler.combatSession.Add(target);
+                    combatSession = target.unitEffect.combatHandler.combatSession;
+                    combatSession.Add(unitInfo);
+                    combatSession.Relay();
+                }
+            }
+            catch
+            {
+                Debug.Log("unitInfo.targets got modified...");
             }
         }
 
@@ -131,7 +135,6 @@ public class CombatHandler : MonoBehaviour
         if (distance <= attackDistance && !unitInfo.isEngaged)
         {
             ResetCombatPathing();
-            RemoveDelegates(); // re-enabled for now we'll likely cause issue later <-- need to deal with 2 - 3 distance difference
             Debug.Log("NEARBY DISTANCE" + distance);
             unitInfo.isEngaged = true;
         }
@@ -142,8 +145,7 @@ public class CombatHandler : MonoBehaviour
         else if (distance > unitInfo.attackDistance && unitInfo.isEngaged)
         {
             Debug.Log("Disengaging!");
-            DisEngage(unitInfo);
-            DisEngage(targetUnit);
+            DisEngage();
         }
         else if (distance > unitInfo.attackDistance && !checkOnlyWithinDistance)
         {
@@ -165,6 +167,9 @@ public class CombatHandler : MonoBehaviour
     private void RemoveDelegates()
     {
         UnitInfo targetUnit = unitInfo.currentTarget as UnitInfo;
+
+        if (targetUnit == null) return;
+
         PathFinding targetPathFinder = targetUnit.unitEffect.pathFinder;
 
         targetPathFinder.wayPointCountChange -= WayPointCountChange;
@@ -195,16 +200,16 @@ public class CombatHandler : MonoBehaviour
         unitInfo.waypoints.Clear();
     }
 
-    private void DisEngage(UnitInfo unit)
+    public void DisEngage()
     {
         CombatHandler unitCombatHandler = unitInfo.unitEffect.combatHandler;
 
-        if (unit == null) return;
-
-        unit.targets.Remove(unitInfo.currentTarget);
+        RemoveDelegates();
+        ResetCombatPathing();
+        unitInfo.targets.Remove(unitInfo.currentTarget);
         unitCombatHandler.combatSession.Remove(unitInfo);
         unitCombatHandler.combatSession = unitCombatHandler.defaultCombatSession;
-        unit.isEngaged = false;
-        unit.currentTarget = null;
+        unitInfo.isEngaged = false;
+        unitInfo.currentTarget = null;
     }
 }

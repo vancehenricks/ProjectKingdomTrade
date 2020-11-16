@@ -113,7 +113,7 @@ public class MoveUnit : MonoBehaviour
 
         foreach (UnitInfo unit in unitInfos)
         {
-            unit.currentTarget = null;
+            unit.unitEffect.combatHandler.DisEngage();
         }
     }
 
