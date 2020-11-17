@@ -141,6 +141,7 @@ public class CombatHandler : MonoBehaviour
         else if (distance <= attackDistance && unitInfo.isEngaged)
         {
             Debug.Log("Unit [" + unitInfo.tileId + "] attacking Unit [" + targetUnit.tileId + "]");
+            //Combat mechanics here
         }
         else if (distance > unitInfo.attackDistance && unitInfo.isEngaged)
         {

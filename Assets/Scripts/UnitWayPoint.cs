@@ -86,7 +86,7 @@ public class UnitWayPoint : MonoBehaviour
 
     private void TargetCountChange(TileInfo tileInfo)
     {
-        if (unitInfo.targets.Count == 1) return;
+        //if (unitInfo.targets.Count == 1) return; <- this will likely cause issue if commented out
 
         if (tileInfo == null)
         {
