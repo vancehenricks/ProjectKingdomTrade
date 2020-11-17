@@ -101,16 +101,7 @@ public class MoveUnit : MonoBehaviour
 
     public void ClearAllWaypoints()
     {
-        foreach (List<TileInfo> waypoints in waypointsList)
-        {
-            waypoints.Clear();
-        }
-
-        foreach (List<TileInfo> targets in targetList)
-        {
-            targets.Clear();
-        }
-
+        //This will clear targets and waypoints also no need to call targetList and waypointsList
         foreach (UnitInfo unit in unitInfos)
         {
             unit.unitEffect.combatHandler.DisEngage();

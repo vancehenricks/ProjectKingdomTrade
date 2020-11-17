@@ -209,6 +209,7 @@ public class CombatHandler : MonoBehaviour
         unitInfo.targets.Remove(unitInfo.currentTarget);
         unitCombatHandler.combatSession.Remove(unitInfo);
         unitCombatHandler.combatSession = unitCombatHandler.defaultCombatSession;
+        unitInfo.targets.Clear();
         unitInfo.isEngaged = false;
         unitInfo.currentTarget = null;
     }

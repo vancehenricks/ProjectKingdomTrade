@@ -82,10 +82,7 @@ public class PathFinding : MonoBehaviour
             ResetGeneratedWaypoints();
             firstWayPoint = unitInfo.waypoints[0];
 
-            if (firstWayPointChange != null)
-            {
-                firstWayPointChange(unitInfo.waypoints[0]);
-            }
+            firstWayPointChange?.Invoke(unitInfo.waypoints[0]);
         }
 
         if (previousWayPointCount != unitInfo.waypoints.Count)
@@ -99,10 +96,7 @@ public class PathFinding : MonoBehaviour
                 tile = unitInfo.waypoints[previousWayPointCount - 1];
             }
 
-            if (wayPointCountChange != null)
-            {
-                wayPointCountChange(tile);
-            }
+            wayPointCountChange?.Invoke(tile);
         }
     }
 
