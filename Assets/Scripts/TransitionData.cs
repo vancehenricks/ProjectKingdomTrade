@@ -4,16 +4,14 @@
  * Written by Vance Henricks Patual <vpatual@gmail.com>, November 2020
  */
 
-using System.Collections;
+using System;
 using System.Collections.Generic;
-using UnityEngine.UI;
-using UnityEngine;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-public class TownInfo : TileInfo
+public class TransitionData
 {
-
-    public override void Initialize()
-    {
-        base.Initialize();
-    }
+    public static bool loadMainMenu = true;
 }
+

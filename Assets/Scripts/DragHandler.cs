@@ -22,6 +22,13 @@ public class DragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     public static OverrideOnDrag overrideOnDrag;
     public static OverrideOnEndDrag overrideOnEndDrag;
 
+    private void OnDestroy()
+    {
+        overrideOnBeginDrag = null;
+        overrideOnDrag = null;
+        overrideOnEndDrag = null;
+    }
+
     public void OnBeginDrag(PointerEventData eventData)
     {
         overrideOnBeginDrag(eventData);

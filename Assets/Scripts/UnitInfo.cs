@@ -36,10 +36,9 @@ public class UnitInfo : TileInfo
         base.Initialize();
     }
 
-    public override void End()
+    private void OnDestroy()
     {
         targets.Clear();
         waypoints.Clear();
-        base.End();
     }
 }

@@ -22,6 +22,10 @@ public class MultiSelect : MonoBehaviour
         CommandPipeline.Add(command, 200);
     }
 
+	private void OnDestroy()
+	{
+		onSelectedChange = null;
+	}
 
     private void Command()
     {

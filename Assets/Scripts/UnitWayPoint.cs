@@ -41,10 +41,9 @@ public class UnitWayPoint : MonoBehaviour
         combatHandler.targetCountChange += TargetCountChange;
         combatHandler.firstTargetChange += FirstTargetChange;
         flags = new Dictionary<string, GameObject>();
-        unitInfo.onEnd += OnEnd;
     }
 
-    private void OnEnd()
+    private void OnDestroy()
     {
         RemoveAllFlag();
     }

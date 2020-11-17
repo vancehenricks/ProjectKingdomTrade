@@ -24,14 +24,12 @@ public class UnitEffect : MonoBehaviour
 
     private bool isRegistered = false;
 
-    private void Start()
+    private void OnDestroy()
     {
-        unitInfo.onEnd += OnEnd;
-    }
-
-    private void OnEnd()
-    {
-        unitCycler.StopCycle(unitInfo);
+        if (unitCycler != null)
+        {
+            unitCycler.StopCycle(unitInfo);
+        }
     }
 
     private void OnTriggerStay2D(Collider2D collision)

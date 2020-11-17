@@ -39,6 +39,11 @@ public class Tick : MonoBehaviour
         StartCoroutine(startTick());
     }
 
+    private void OnDestroy()
+    {
+        tickUpdate = null;
+    }
+
     IEnumerator startTick()
     {
 

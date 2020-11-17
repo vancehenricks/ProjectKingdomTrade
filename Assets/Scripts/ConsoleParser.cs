@@ -18,6 +18,11 @@ public class ConsoleParser : MonoBehaviour
         ConsoleHandler.onConsoleEvent += OnConsoleEvent;
     }
 
+    private void OnDestroy()
+    {
+        onParsedConsoleEvent = null;
+    }
+
     //spawn_unit type:archer amount:1000 loc:mousePosition
 
     private void OnConsoleEvent(string rawCommands)

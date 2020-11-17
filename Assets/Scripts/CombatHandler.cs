@@ -27,12 +27,11 @@ public class CombatHandler : MonoBehaviour
     private void Start()
     {
         defaultCombatSession = combatSession;
-        unitInfo.onEnd += OnEnd;
         Tick.tickUpdate += TickUpdate;
         firstTarget = unitInfo;
     }
 
-    private void OnEnd()
+    private void OnDestroy()
     {
         UnitInfo targetUnit = unitInfo.currentTarget as UnitInfo;
 

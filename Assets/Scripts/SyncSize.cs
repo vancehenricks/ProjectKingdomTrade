@@ -31,4 +31,9 @@ public class SyncSize : MonoBehaviour
             rect.sizeDelta = new Vector2(basedRect.rect.width, basedRect.rect.height);
         }
     }
+
+    private void OnDestroy()
+    {
+        doSync = null;
+    }
 }

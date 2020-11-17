@@ -42,13 +42,13 @@ public class Destroy : MonoBehaviour
                     if (type == "Unit" && tile.tileType == type && cLayer == targetLayer)
                     {
                         UnitInfo unit = (UnitInfo)tile;
-                        unit.End();
+                        unit.Destroy();
                         AddLineAndCheckForFocus(string.Format("Destroyed unit [{0}/{1}].", nCount + 1, nMax));
                         break;
                     }
                     else if (type != "Unit" && tile.tileType == type && cLayer == targetLayer)
                     {
-                        tile.End();
+                        tile.Destroy();
                         AddLineAndCheckForFocus(string.Format("Destroyed tile [{0}/{1}].", nCount + 1, nMax));
                         break;
                     }

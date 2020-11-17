@@ -35,9 +35,6 @@ public class TileInfo : MonoBehaviour
     //public bool isSelected;
     //public GameObject obj;
 
-    public delegate void OnEnd();
-    public OnEnd onEnd;
-
     public virtual void Initialize()
     {
         cache = new Dictionary<string, List<TileInfo>>();
@@ -48,14 +45,8 @@ public class TileInfo : MonoBehaviour
         //obj = this.gameObject;
     }
 
-    public virtual void End()
+    public void Destroy()
     {
-        if (onEnd != null)
-        {
-            onEnd();
-            onEnd = null;
-        }
-
         Destroy(this.gameObject);
     }
 

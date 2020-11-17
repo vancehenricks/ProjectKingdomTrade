@@ -17,10 +17,9 @@ public class CombatSession : MonoBehaviour
     private void Start()
     {
         combatants = new List<TileInfo>();
-        unitInfo.onEnd += OnEnd;
     }
 
-    private void OnEnd()
+    private void OnDestroy()
     {
         for (int i = 1; i < combatants.Count; i++)
         {

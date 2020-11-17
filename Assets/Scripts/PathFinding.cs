@@ -48,13 +48,12 @@ public class PathFinding : MonoBehaviour
         destination.tile = unitInfo;
         destination.arrivalTime = -1;
         Tick.tickUpdate += TickUpdate;
-        unitInfo.onEnd += OnEnd;
         unitEffect = unitInfo.unitEffect;
         generatedWayPoints = new List<TileInfo>();
         firstWayPoint = unitInfo;
     }
 
-    public void OnEnd()
+    public void OnDestroy()
     {
         Tick.tickUpdate -= TickUpdate;
         isWalkable = null;

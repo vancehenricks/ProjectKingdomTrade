@@ -42,6 +42,11 @@ public class ConsoleHandler : MonoBehaviour
         _init = this;
     }
 
+    private void OnDestroy()
+    {
+        onConsoleEvent = null;
+    }
+
     private void Update()
     {
         if (runOnce) return;

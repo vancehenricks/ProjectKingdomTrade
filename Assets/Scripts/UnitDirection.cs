@@ -17,10 +17,9 @@ public class UnitDirection : MonoBehaviour
     private void Start()
     {
         Tick.tickUpdate += TickUpdate;
-        unitInfo.onEnd += OnEnd;
     }
 
-    private void OnEnd()
+    private void OnDestroy()
     {
         Tick.tickUpdate -= TickUpdate;
     }
