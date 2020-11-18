@@ -133,8 +133,13 @@ public class CombatHandler : MonoBehaviour
 
         if (distance <= attackDistance && !unitInfo.isEngaged)
         {
-            ResetCombatPathing();
             Debug.Log("NEARBY DISTANCE" + distance);
+
+            ResetCombatPathing();
+            if (targetUnit.targets.Count == 0 || targetUnit.targets[0].tileId != unitInfo.tileId)
+            {
+                targetUnit.targets.Insert(0, unitInfo);
+            }
             unitInfo.isEngaged = true;
         }
         else if (distance <= attackDistance && unitInfo.isEngaged)
@@ -144,7 +149,7 @@ public class CombatHandler : MonoBehaviour
         }
         else if (distance > unitInfo.attackDistance && unitInfo.isEngaged)
         {
-            Debug.Log("Disengaging!");
+            Debug.Log("Unit[" + unitInfo.tileId + "] Disengaging!");
             DisEngage();
         }
         else if (distance > unitInfo.attackDistance && !checkOnlyWithinDistance)
@@ -204,13 +209,17 @@ public class CombatHandler : MonoBehaviour
     {
         CombatHandler unitCombatHandler = unitInfo.unitEffect.combatHandler;
 
-        RemoveDelegates();
+        if (unitInfo.isEngaged || unitInfo.currentTarget != null)
+        {
+            RemoveDelegates();
+            unitCombatHandler.combatSession.Remove(unitInfo);
+            unitCombatHandler.combatSession = unitCombatHandler.defaultCombatSession;
+            unitInfo.targets.Remove(unitInfo.currentTarget);
+            unitInfo.targets.Clear();
+            unitInfo.currentTarget = null;
+            unitInfo.isEngaged = false;
+        }
+
         ResetCombatPathing();
-        unitInfo.targets.Remove(unitInfo.currentTarget);
-        unitCombatHandler.combatSession.Remove(unitInfo);
-        unitCombatHandler.combatSession = unitCombatHandler.defaultCombatSession;
-        unitInfo.targets.Clear();
-        unitInfo.isEngaged = false;
-        unitInfo.currentTarget = null;
     }
 }
