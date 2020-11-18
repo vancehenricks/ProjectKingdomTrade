@@ -111,7 +111,7 @@ public class CombatHandler : MonoBehaviour
 
         UnitInfo targetUnit = unitInfo.currentTarget as UnitInfo;
         int distance = GetDistance(targetUnit);
-        int attackDistance = unitInfo.attackDistance <= 1 ? 0 : unitInfo.attackDistance; //need to look into this if its calculating right value
+        int attackDistance = unitInfo.attackDistance <= 1 ? 0 : unitInfo.attackDistance;
 
         Debug.Log("120DISTANCE=" + distance);
 
