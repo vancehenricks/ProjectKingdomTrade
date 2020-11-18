@@ -61,7 +61,7 @@ public class CombatSession : MonoBehaviour
             }
 
             centroid /= combatants.Count;
-            point =  tileInfoRaycaster.GetTileInfoFromPos(cm.WorldToScreenPoint(centroid));
+            point =  tileInfoRaycaster.GetTileInfoFromPos(cm.WorldToScreenPoint(centroid)); //this does not account for uneven attack-distance from both parties
             startingIndex = 0;
         }
 

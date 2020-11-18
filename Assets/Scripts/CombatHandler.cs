@@ -23,6 +23,7 @@ public class CombatHandler : MonoBehaviour
 
     private int previousTargetCount;
     private TileInfo firstTarget;
+    private TileInfo targetStandingTile;
 
     private void Start()
     {
@@ -62,7 +63,6 @@ public class CombatHandler : MonoBehaviour
 
                     //create an instance of CombatSession inside target
                     unitInfo.currentTarget = target;
-                    RegisterDelegates();
                     //Issue with this executing the last target since there is no checking here ideal targetted unit will delete itself in unitInfo.targets
                     //This will be catched on target == null
                     //combatSession.ClearCombantants();
@@ -92,21 +92,6 @@ public class CombatHandler : MonoBehaviour
 
     }
 
-    private void FirstWayPointChange(TileInfo tileInfo)
-    {
-        combatSession.Relay();
-    }
-
-    private void WayPointCountChange(TileInfo tileInfo)
-    {
-        combatSession.Relay();
-    }
-
-    private void WayPointReached(TileInfo tileInfo)
-    {
-        combatSession.Relay();
-    }
-
     private void TickUpdate()
     {
         GenerateWaypoint(null, true);
@@ -114,7 +99,6 @@ public class CombatHandler : MonoBehaviour
 
     public void GenerateWaypoint(TileInfo waypoint, bool checkOnlyWithinDistance = false)
     {
-
         if (unitInfo.currentTarget == null)
         {
             if (unitInfo.targets.Count > 0)
@@ -127,7 +111,7 @@ public class CombatHandler : MonoBehaviour
 
         UnitInfo targetUnit = unitInfo.currentTarget as UnitInfo;
         int distance = GetDistance(targetUnit);
-        int attackDistance = unitInfo.attackDistance <= 1 ? 0 : unitInfo.attackDistance;
+        int attackDistance = unitInfo.attackDistance <= 1 ? 0 : unitInfo.attackDistance; //need to look into this if its calculating right value
 
         Debug.Log("120DISTANCE=" + distance);
 
@@ -135,12 +119,15 @@ public class CombatHandler : MonoBehaviour
         {
             Debug.Log("NEARBY DISTANCE" + distance);
 
-            ResetCombatPathing();
             if (targetUnit.targets.Count == 0 || targetUnit.targets[0].tileId != unitInfo.tileId)
             {
+                targetUnit.targets.Remove(unitInfo);
                 targetUnit.targets.Insert(0, unitInfo);
             }
             unitInfo.isEngaged = true;
+            targetStandingTile = null;
+            ResetCombatPathing();
+            targetUnit.waypoints.Add(unitInfo);
         }
         else if (distance <= attackDistance && unitInfo.isEngaged)
         {
@@ -156,30 +143,18 @@ public class CombatHandler : MonoBehaviour
         {
             ResetCombatPathing();
             unitInfo.waypoints.Add(waypoint);
+            targetStandingTile = targetUnit.unitEffect.standingTile;
         }
-    }
-
-    private void RegisterDelegates()
-    {
-        UnitInfo targetUnit = unitInfo.currentTarget as UnitInfo;
-        PathFinding targetPathFinder = targetUnit.unitEffect.pathFinder;
-
-        targetPathFinder.wayPointCountChange += WayPointCountChange;
-        targetPathFinder.firstWayPointChange += FirstWayPointChange;
-        targetPathFinder.wayPointReached += WayPointReached;
-    }
-
-    private void RemoveDelegates()
-    {
-        UnitInfo targetUnit = unitInfo.currentTarget as UnitInfo;
-
-        if (targetUnit == null) return;
-
-        PathFinding targetPathFinder = targetUnit.unitEffect.pathFinder;
-
-        targetPathFinder.wayPointCountChange -= WayPointCountChange;
-        targetPathFinder.firstWayPointChange -= FirstWayPointChange;
-        targetPathFinder.wayPointReached -= WayPointReached;
+        else if (!unitInfo.isEngaged && distance > unitInfo.attackDistance && pathFinding.gwPointsIndex >= pathFinding.generatedWayPoints.Count/2)
+        {
+            TileInfo standingTile = targetUnit.unitEffect.standingTile;
+            if (standingTile.tileId != targetStandingTile.tileId)
+            {
+                ResetCombatPathing();
+                unitInfo.waypoints.Add(targetUnit);
+                targetStandingTile = standingTile;
+            }
+        }
     }
 
     private int GetDistance(TileInfo targetUnit)
@@ -211,7 +186,6 @@ public class CombatHandler : MonoBehaviour
 
         if (unitInfo.isEngaged || unitInfo.currentTarget != null)
         {
-            RemoveDelegates();
             unitCombatHandler.combatSession.Remove(unitInfo);
             unitCombatHandler.combatSession = unitCombatHandler.defaultCombatSession;
             unitInfo.targets.Remove(unitInfo.currentTarget);
