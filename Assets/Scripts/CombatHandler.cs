@@ -121,7 +121,9 @@ public class CombatHandler : MonoBehaviour
         {
             Debug.Log("NEARBY DISTANCE" + distance);
 
-            AddToIndex(targetUnit.targets, unitInfo, 0); //this is causing issue somehow with 1 vs 2 scenario
+            AddToIndex(targetUnit.targets, unitInfo, 0);
+            targetUnit.currentTarget = unitInfo;
+
             unitInfo.isEngaged = true;
             targetStandingTile = null;
             ResetCombatPathing();
@@ -130,11 +132,10 @@ public class CombatHandler : MonoBehaviour
         else if (distance <= attackDistance && unitInfo.isEngaged)
         {
             Debug.Log("Unit [" + unitInfo.tileId + "] attacking Unit [" + targetUnit.tileId + "]");
-            //Combat mechanics here
+
         }
         else if (distance > unitInfo.attackDistance && unitInfo.isEngaged)
         {
-            Debug.Log("Unit[" + unitInfo.tileId + "] Disengaging!");
             DisEngage();
         }
         else if (distance > unitInfo.attackDistance && !checkOnlyWithinDistance)
@@ -144,12 +145,11 @@ public class CombatHandler : MonoBehaviour
             targetStandingTile = targetUnit.unitEffect.standingTile;
         }
         else if (!unitInfo.isEngaged &&
-            targetUnit.currentTarget != null &&
-            targetUnit.currentTarget.tileId != unitInfo.tileId &&
             targetUnit.unitEffect.standingTile.tileId != targetStandingTile.tileId &&
             distance > unitInfo.attackDistance &&
             pathFinding.gwPointsIndex >= pathFinding.generatedWayPoints.Count/2)
         {
+            if (targetUnit.currentTarget != null && targetUnit.currentTarget.tileId == unitInfo.tileId) return;
 
             ResetCombatPathing();
             unitInfo.waypoints.Add(targetUnit);
@@ -196,6 +196,8 @@ public class CombatHandler : MonoBehaviour
     public void DisEngage()
     {
         CombatHandler unitCombatHandler = unitInfo.unitEffect.combatHandler;
+
+        Debug.Log("Unit[" + unitInfo.tileId + "] Disengaging!");
 
         if (unitInfo.isEngaged || unitInfo.currentTarget != null)
         {
