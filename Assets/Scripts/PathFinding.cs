@@ -210,6 +210,7 @@ public class PathFinding : MonoBehaviour
 
     private IEnumerator FindPath(TileInfo currentPoint, TileInfo finalPoint)
     {
+        if (currentPoint == null || finalPoint == null) yield break;
 
         string key = currentPoint.transform.position + "," + finalPoint.transform.position;
 

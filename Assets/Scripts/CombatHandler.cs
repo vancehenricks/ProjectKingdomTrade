@@ -145,15 +145,16 @@ public class CombatHandler : MonoBehaviour
             unitInfo.waypoints.Add(waypoint);
             targetStandingTile = targetUnit.unitEffect.standingTile;
         }
-        else if (!unitInfo.isEngaged && distance > unitInfo.attackDistance && pathFinding.gwPointsIndex >= pathFinding.generatedWayPoints.Count/2)
+        else if (!unitInfo.isEngaged &&
+            targetUnit.currentTarget != unitInfo &&
+            targetUnit.unitEffect.standingTile.tileId != targetStandingTile.tileId &&
+            distance > unitInfo.attackDistance &&
+            pathFinding.gwPointsIndex >= pathFinding.generatedWayPoints.Count/2)
         {
-            TileInfo standingTile = targetUnit.unitEffect.standingTile;
-            if (standingTile.tileId != targetStandingTile.tileId)
-            {
-                ResetCombatPathing();
-                unitInfo.waypoints.Add(targetUnit);
-                targetStandingTile = standingTile;
-            }
+
+            ResetCombatPathing();
+            unitInfo.waypoints.Add(targetUnit);
+            targetStandingTile = targetUnit.unitEffect.standingTile;
         }
     }
 
@@ -189,7 +190,6 @@ public class CombatHandler : MonoBehaviour
             unitCombatHandler.combatSession.Remove(unitInfo);
             unitCombatHandler.combatSession = unitCombatHandler.defaultCombatSession;
             unitInfo.targets.Remove(unitInfo.currentTarget);
-            unitInfo.targets.Clear();
             unitInfo.currentTarget = null;
             unitInfo.isEngaged = false;
         }
