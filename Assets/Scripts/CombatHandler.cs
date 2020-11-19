@@ -63,6 +63,8 @@ public class CombatHandler : MonoBehaviour
 
                     //create an instance of CombatSession inside target
                     unitInfo.currentTarget = target;
+                    AddToIndex(target.targetted, unitInfo, 0);
+
                     //Issue with this executing the last target since there is no checking here ideal targetted unit will delete itself in unitInfo.targets
                     //This will be catched on target == null
                     //combatSession.ClearCombantants();
@@ -119,11 +121,7 @@ public class CombatHandler : MonoBehaviour
         {
             Debug.Log("NEARBY DISTANCE" + distance);
 
-            if (targetUnit.targets.Count == 0 || targetUnit.targets[0].tileId != unitInfo.tileId)
-            {
-                targetUnit.targets.Remove(unitInfo);
-                targetUnit.targets.Insert(0, unitInfo);
-            }
+            AddToIndex(targetUnit.targets, unitInfo, 0); //this is causing issue somehow with 1 vs 2 scenario
             unitInfo.isEngaged = true;
             targetStandingTile = null;
             ResetCombatPathing();
@@ -146,7 +144,8 @@ public class CombatHandler : MonoBehaviour
             targetStandingTile = targetUnit.unitEffect.standingTile;
         }
         else if (!unitInfo.isEngaged &&
-            targetUnit.currentTarget != unitInfo &&
+            targetUnit.currentTarget != null &&
+            targetUnit.currentTarget.tileId != unitInfo.tileId &&
             targetUnit.unitEffect.standingTile.tileId != targetStandingTile.tileId &&
             distance > unitInfo.attackDistance &&
             pathFinding.gwPointsIndex >= pathFinding.generatedWayPoints.Count/2)
@@ -181,6 +180,19 @@ public class CombatHandler : MonoBehaviour
         unitInfo.waypoints.Clear();
     }
 
+    private void AddToIndex(List<TileInfo> tileInfos, TileInfo tile, int index)
+    {
+        if (Tools.Exist<TileInfo>(tileInfos, unitInfo))
+        {
+            tileInfos.Remove(unitInfo);
+            tileInfos.Insert(index, unitInfo);
+        }
+        else
+        {
+            tileInfos.Add(unitInfo);
+        }
+    }
+
     public void DisEngage()
     {
         CombatHandler unitCombatHandler = unitInfo.unitEffect.combatHandler;
@@ -189,6 +201,7 @@ public class CombatHandler : MonoBehaviour
         {
             unitCombatHandler.combatSession.Remove(unitInfo);
             unitCombatHandler.combatSession = unitCombatHandler.defaultCombatSession;
+            unitInfo.targetted.Remove(unitInfo.currentTarget);
             unitInfo.targets.Remove(unitInfo.currentTarget);
             unitInfo.currentTarget = null;
             unitInfo.isEngaged = false;

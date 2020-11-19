@@ -17,6 +17,7 @@ public class UnitInfo : TileInfo
     public List<TileInfo> waypoints;
     public List<TileInfo> targets;
     public TileInfo currentTarget;
+    public List<TileInfo> targetted;
     public bool isEngaged;
     public int attackDistance;
     public float killChance;
@@ -27,8 +28,9 @@ public class UnitInfo : TileInfo
         Image shade = tileCaller.shade.GetComponent<Image>();
         Image image = tileCaller.image.GetComponent<Image>();
         waypoints = new List<TileInfo>();
-
         targets = new List<TileInfo>();
+        targetted = new List<TileInfo>();
+
         image.sprite = sprite;
         shade.color = new Color(this.color.r, this.color.g, this.color.b, shade.color.a);
         shade.sprite = sprite;
@@ -38,6 +40,7 @@ public class UnitInfo : TileInfo
 
     private void OnDestroy()
     {
+        targetted.Clear();
         targets.Clear();
         waypoints.Clear();
     }
