@@ -72,9 +72,8 @@ public class MoveUnit : MonoBehaviour
         CursorReplace.SetCurrentCursorAsPrevious();
         waypointsList.Clear();
         targetList.Clear();
-        unitInfos = Tools.Convert<TileInfo, UnitInfo>(MultiSelect.selectedTiles);
-        MultiSelect.selectedTiles.Clear();
-        MultiSelect.Relay();
+        unitInfos = Tools.Convert<TileInfo, UnitInfo>(MultiSelect.GetSelectedTiles());
+        MultiSelect.Clear(true);
         openRightClick.ResetValues();
 
         foreach (UnitInfo unit in unitInfos)

@@ -12,11 +12,12 @@ public class MultiSelect : MonoBehaviour
 {
     public delegate void OnSelectedChange(List<TileInfo> tiles);
     public static OnSelectedChange onSelectedChange;
-    public static List<TileInfo> selectedTiles;
+    private static List<TileInfo> selectedTiles;
     public static bool shiftPressed;
 
     private void Start()
     {
+        shiftPressed = false;
         selectedTiles = new List<TileInfo>();
         ExecuteCommands command = Command;
         CommandPipeline.Add(command, 200);
@@ -40,6 +41,24 @@ public class MultiSelect : MonoBehaviour
         {
             shiftPressed = false;
         }
+    }
+    public static List<TileInfo> GetSelectedTiles()
+    {
+        return MultiSelect.selectedTiles;
+    }
+
+    public static void Add(TileInfo tileInfo, bool relay = false)
+    {
+        MultiSelect.selectedTiles.Add(tileInfo);
+        if (!relay) return;
+        onSelectedChange(MultiSelect.selectedTiles);
+    }
+
+    public static void Clear(bool relay = false)
+    {
+        MultiSelect.selectedTiles.Clear();
+        if (!relay) return;
+        onSelectedChange(MultiSelect.selectedTiles);
     }
 
     public static void Relay()

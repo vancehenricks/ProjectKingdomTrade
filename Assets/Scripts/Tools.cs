@@ -26,6 +26,11 @@ public class Tools : MonoBehaviour
         }
     }
 
+    private void OnDestroy()
+    {
+        _UniqueId = 0;
+    }
+
     public static List<T> Convert<B, T>(List<B> tileInfos)
     {
         List<T> infos = new List<T>();

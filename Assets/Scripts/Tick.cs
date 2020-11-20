@@ -57,7 +57,15 @@ public class Tick : MonoBehaviour
 
                 if (Tick.tickUpdate != null)
                 {
-                    Tick.tickUpdate();
+                    //Added try catch so it can recover from any error as error on this causes crash of whole game
+                    try
+                    {
+                        Tick.tickUpdate();
+                    }
+                    catch (UnassignedReferenceException ex)
+                    {
+                        Debug.LogException(ex);
+                    }
                 }
 
                 seconds++;

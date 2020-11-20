@@ -58,8 +58,9 @@ public class OpenRightClick : MonoBehaviour
             tileInfoRaycaster.GetTileInfosFromPos(Input.mousePosition);
         }
 
-        if ((Input.GetButtonUp("Fire2") || forceDisplay))
+        if (Input.GetButtonUp("Fire2") || forceDisplay)
         {
+
             if (UseDefaultCursor)
             {
                 CursorReplace.currentCursor = CursorType.Default;
@@ -87,9 +88,8 @@ public class OpenRightClick : MonoBehaviour
                 optionGenerator.Initialize();
                 optionGenerator.transform.position = Input.mousePosition + offset;
                 optionGenerator.Display(TileInfoRaycaster.tileInfos[0]);
-
-                MultiSelect.selectedTiles.Clear();
-                MultiSelect.selectedTiles.Add(TileInfoRaycaster.tileInfos[0]);
+                MultiSelect.Clear(true);
+                MultiSelect.Add(TileInfoRaycaster.tileInfos[0]);
                 MultiSelect.Relay();
                 return;
             }
@@ -102,6 +102,7 @@ public class OpenRightClick : MonoBehaviour
             generateCells.Display();
             generateCells.transform.position = Input.mousePosition + offset;
             generateCells.gameObject.SetActive(true);
+
         }
         else if (Input.GetButtonDown("Fire1") || Input.GetButtonDown("Fire3") ||
             Input.GetAxis("Mouse ScrollWheel") < 0 || Input.GetAxis("Mouse ScrollWheel") > 0)
@@ -142,5 +143,6 @@ public class OpenRightClick : MonoBehaviour
         showOptions = true;
         whiteList = false;
         multiSelect = true;
+        include.Clear();
     }
 }

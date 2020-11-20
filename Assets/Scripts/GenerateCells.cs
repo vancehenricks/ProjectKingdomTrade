@@ -104,7 +104,7 @@ public class GenerateCells : MonoBehaviour
             if (cellInfo.tileInfo.tileType == tile.tileType)
             {
                 cellInfo.select.gameObject.SetActive(true);
-                MultiSelect.selectedTiles.Add(cellInfo.tileInfo);
+                MultiSelect.Add(cellInfo.tileInfo);
             }
         }
     }

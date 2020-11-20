@@ -13,12 +13,13 @@ public class TransitionHandler : MonoBehaviour
 {
     public static TransitionHandler instance;
 
+    public static bool loadMainMenu = true;
     public GameObject MainMenu;
 
     private void Awake()
     {
         instance = this;
-        MainMenu.SetActive(TransitionData.loadMainMenu);
+        MainMenu.SetActive(loadMainMenu);
     }
 
     public void Transition()
@@ -28,7 +29,7 @@ public class TransitionHandler : MonoBehaviour
 
     public void TransitionWithoutMenu()
     {
-        TransitionData.loadMainMenu = false;
+        loadMainMenu = false;
         Transition();
     }
 }

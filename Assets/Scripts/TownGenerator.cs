@@ -33,7 +33,7 @@ public class TownGenerator : MonoBehaviour
     private int yCounter;
     public Dictionary<Vector2, GameObject> generatedTowns;
 
-    public void Start()
+    private void Start()
     {
         _init = this;
         MapGenerator.init.onInitialize = MapGenerator.init.onInitialize + Initialize;

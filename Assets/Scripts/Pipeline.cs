@@ -27,6 +27,7 @@ public class Pipeline : MonoBehaviour
 
     public void Execute()
     {
+        //did not add try catch on this as it can recover right after error
         foreach (var command in commandList.Values)
         {
             //Debug.Log(command.Method.ToString());
