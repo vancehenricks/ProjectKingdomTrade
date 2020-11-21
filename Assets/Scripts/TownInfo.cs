@@ -14,6 +14,7 @@ public class TownInfo : UnitInfo
 
     public override void Initialize()
     {
-        base.Initialize(true);
+        base.Initialize();
     }
+
 }

@@ -11,7 +11,6 @@ using UnityEngine;
 [System.Serializable]
 public class TileInfo : MonoBehaviour
 {
-
     public string tileType;
     public string subType;
     public long tileId;
@@ -28,12 +27,7 @@ public class TileInfo : MonoBehaviour
     public int maxChance;
     public List<UnitInfo> unitInfos;
     public Dictionary<string, List<TileInfo>> cache;
-
-    //resource
     public int units;
-
-    //public bool isSelected;
-    //public GameObject obj;
 
     public virtual void Initialize()
     {
@@ -42,7 +36,13 @@ public class TileInfo : MonoBehaviour
         localTemp = Temperature.temperature;
         unitInfos = new List<UnitInfo>();
         tileId = Tools.UniqueId;
-        //obj = this.gameObject;
+    }
+
+    public void OnDestroy()
+    {
+        unitInfos?.Clear();
+        claimants?.Clear();
+        cache?.Clear(); //this could become a problem later as were not clearing list
     }
 
     public void Destroy()

@@ -23,13 +23,13 @@ public class UnitInfo : TileInfo
     public float killChance;
     public float deathChance;
 
-    public void Initialize(bool bypass = false)
+    public override void Initialize()
     {
         waypoints = new List<TileInfo>();
         targets = new List<TileInfo>();
         targetted = new List<TileInfo>();
 
-        if (bypass)
+        if (sprite != null)
         {
             Image shade = tileCaller.shade.GetComponent<Image>();
             Image image = tileCaller.image.GetComponent<Image>();
@@ -42,10 +42,12 @@ public class UnitInfo : TileInfo
         base.Initialize();
     }
 
-    private void OnDestroy()
+    public new void OnDestroy()
     {
-        targetted.Clear();
-        targets.Clear();
-        waypoints.Clear();
+        targetted?.Clear();
+        targets?.Clear();
+        waypoints?.Clear();
+
+        base.OnDestroy();
     }
 }

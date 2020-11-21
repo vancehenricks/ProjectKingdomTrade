@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UnitWayPoint : MonoBehaviour
+public class UnitWayPoint : SelectTiles
 {
 
     public UnitInfo unitInfo;
@@ -18,21 +18,11 @@ public class UnitWayPoint : MonoBehaviour
     public CombatHandler combatHandler;
     public GameObject moveFlag;
     public GameObject attackFlag;
-    public float zLevelFlag;
-    public float zLevelLine;
-
-    //public List<TileInfo> doneWayPoints;
-    public Dictionary<string, GameObject> flags;
 
     //public int index;
     // public bool cleaned;
 
-    private enum obj
-    {
-        Image = 0, Value
-    }
-
-    private void Start()
+    public void Start()
     {
         if (pathFinding != null)
         {
@@ -47,12 +37,7 @@ public class UnitWayPoint : MonoBehaviour
             combatHandler.firstTargetChange += FirstTargetChange;
         }
 
-        flags = new Dictionary<string, GameObject>();
-    }
-
-    private void OnDestroy()
-    {
-        RemoveAllFlag();
+        Initialize();
     }
 
     private void WayPointReached(TileInfo tileInfo)
@@ -103,87 +88,18 @@ public class UnitWayPoint : MonoBehaviour
         DrawAndSyncFlag(tileInfo, attackFlag);
     }
 
-    public GameObject InitializeFlag(GameObject bFlag)
+    public void DrawFlag(TileInfo waypoint, GameObject bFlag, bool syncColor = true)
     {
-        GameObject flag = Instantiate(bFlag);
-        GenericObjectHolder objectHolder = flag.GetComponent<GenericObjectHolder>();
-
-        Image image = objectHolder.GetComponent<Image>((int)obj.Image);
-        Text value = objectHolder.GetComponent<Text>((int)obj.Value);
-
-        image.color = unitInfo.color;
-        value.text = (flags.Count + 1) + "";
-
-        flag.transform.SetParent(bFlag.transform.parent);
-        flag.transform.SetAsFirstSibling();
-
-        return flag;
+        DrawFlag(unitInfo, waypoint, bFlag, syncColor);
     }
 
-    public void DrawFlag(TileInfo waypoint, GameObject bFlag)
+    public void DrawAndSyncFlag(TileInfo waypoint, GameObject bFlag, bool syncColor = true)
     {
-        int salt = (int)Random.Range(0f, 1000f);
-
-        if (waypoint != null && flags.ContainsKey(waypoint.tileLocation + "," + salt)) return;
-
-        GameObject flag = InitializeFlag(bFlag);
-
-        Vector3 pos = waypoint.transform.position;
-        flag.transform.position = new Vector3(pos.x, pos.y, zLevelFlag);
-        flag.SetActive(true);
-
-        string tileLocation = waypoint.tileLocation + "," + salt;
-        flags.Add(tileLocation, flag);
-    }
-
-    public void DrawAndSyncFlag(TileInfo waypoint, GameObject bFlag)
-    {
-        if (flags.ContainsKey(waypoint.tileId + "," + unitInfo.tileId)) return;
-
-        GameObject flag = InitializeFlag(bFlag);
-
-        SyncIcon syncIcon = flag.GetComponent<SyncIcon>();
-        syncIcon.Initialize(waypoint, 0, 0, zLevelFlag);
-        flag.SetActive(true);
-
-        flags.Add(waypoint.tileId + "," + unitInfo.tileId, flag);
+        DrawAndSyncFlag(unitInfo, waypoint, bFlag, syncColor);
     }
 
     public void RemoveFlag(TileInfo tile)
     {
-        Debug.Log("110 Destroy");
-
-        List<string> keys = new List<string>(flags.Keys);
-
-        string keyFormat = tile.tileLocation + ",";
-
-        UnitInfo uInfo = tile as UnitInfo;
-
-        if (uInfo != null && uInfo.targets.Count > 0)
-        {
-            keyFormat = tile.tileId + "," + unitInfo.tileId;
-        }
-
-        for (int i = 0; i < flags.Count; i++)
-        {
-            if (flags[keys[i]] != null && keys[i].Contains(keyFormat))
-            {
-
-                Destroy(flags[keys[i]]);
-                flags.Remove(keys[i]);
-                break;
-            }
-        }
-    }
-
-    private void RemoveAllFlag()
-    {
-        Debug.Log("flags.Count=" + flags.Count);
-        foreach (var flag in flags.Values)
-        {
-            Destroy(flag);
-        }
-
-        flags.Clear();
+        RemoveFlag(unitInfo, tile);
     }
 }
