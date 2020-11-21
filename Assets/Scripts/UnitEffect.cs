@@ -61,7 +61,7 @@ public class UnitEffect : MonoBehaviour
 
         if (!isRegistered && standingTile != null)
         {
-            unitCycler = standingTile.GetComponent<UnitCycler>();
+            unitCycler = standingTile.tileEffect.unitCycler;
             unitCycler.StartCycle(unitInfo);
             isRegistered = true;
             //Debug.Log("41 Activate!");

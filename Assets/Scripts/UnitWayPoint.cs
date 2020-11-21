@@ -34,12 +34,19 @@ public class UnitWayPoint : MonoBehaviour
 
     private void Start()
     {
-        pathFinding.wayPointReached += WayPointReached;
-        //pathFinding.newWayPointAssigned += NewWayPointAssigned;
-        pathFinding.wayPointCountChange += WayPointCountChange;
-        pathFinding.firstWayPointChange += FirstWayPointChange;
-        combatHandler.targetCountChange += TargetCountChange;
-        combatHandler.firstTargetChange += FirstTargetChange;
+        if (pathFinding != null)
+        {
+            pathFinding.wayPointReached += WayPointReached;
+            pathFinding.wayPointCountChange += WayPointCountChange;
+            pathFinding.firstWayPointChange += FirstWayPointChange;
+        }
+
+        if (combatHandler != null)
+        {
+            combatHandler.targetCountChange += TargetCountChange;
+            combatHandler.firstTargetChange += FirstTargetChange;
+        }
+
         flags = new Dictionary<string, GameObject>();
     }
 
@@ -96,7 +103,7 @@ public class UnitWayPoint : MonoBehaviour
         DrawAndSyncFlag(tileInfo, attackFlag);
     }
 
-    private GameObject InitializeFlag(GameObject bFlag)
+    public GameObject InitializeFlag(GameObject bFlag)
     {
         GameObject flag = Instantiate(bFlag);
         GenericObjectHolder objectHolder = flag.GetComponent<GenericObjectHolder>();
@@ -113,7 +120,7 @@ public class UnitWayPoint : MonoBehaviour
         return flag;
     }
 
-    private void DrawFlag(TileInfo waypoint, GameObject bFlag)
+    public void DrawFlag(TileInfo waypoint, GameObject bFlag)
     {
         int salt = (int)Random.Range(0f, 1000f);
 
@@ -129,7 +136,7 @@ public class UnitWayPoint : MonoBehaviour
         flags.Add(tileLocation, flag);
     }
 
-    private void DrawAndSyncFlag(TileInfo waypoint, GameObject bFlag)
+    public void DrawAndSyncFlag(TileInfo waypoint, GameObject bFlag)
     {
         if (flags.ContainsKey(waypoint.tileId + "," + unitInfo.tileId)) return;
 
@@ -142,7 +149,7 @@ public class UnitWayPoint : MonoBehaviour
         flags.Add(waypoint.tileId + "," + unitInfo.tileId, flag);
     }
 
-    private void RemoveFlag(TileInfo tile)
+    public void RemoveFlag(TileInfo tile)
     {
         Debug.Log("110 Destroy");
 

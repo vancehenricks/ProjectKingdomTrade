@@ -23,17 +23,21 @@ public class UnitInfo : TileInfo
     public float killChance;
     public float deathChance;
 
-    public override void Initialize()
+    public void Initialize(bool bypass = false)
     {
-        Image shade = tileCaller.shade.GetComponent<Image>();
-        Image image = tileCaller.image.GetComponent<Image>();
         waypoints = new List<TileInfo>();
         targets = new List<TileInfo>();
         targetted = new List<TileInfo>();
 
-        image.sprite = sprite;
-        shade.color = new Color(this.color.r, this.color.g, this.color.b, shade.color.a);
-        shade.sprite = sprite;
+        if (bypass)
+        {
+            Image shade = tileCaller.shade.GetComponent<Image>();
+            Image image = tileCaller.image.GetComponent<Image>();
+
+            image.sprite = sprite;
+            shade.color = new Color(this.color.r, this.color.g, this.color.b, shade.color.a);
+            shade.sprite = sprite;
+        }
 
         base.Initialize();
     }

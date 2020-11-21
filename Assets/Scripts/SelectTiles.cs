@@ -39,16 +39,6 @@ public class SelectTiles : MonoBehaviour
     public void Select(TileInfo tile)
     {
         if (tile.tileType == "Edge") return;
-
-        GameObject select = Instantiate(baseSelect);
-
-        Image image = select.GetComponent<Image>();
-
-        select.transform.SetParent(tile.transform);
-        select.transform.position = tile.transform.position;
-        select.transform.SetAsLastSibling();
-        select.SetActive(true);
-        selects.Add(select);
     }
 
     private void Clear()

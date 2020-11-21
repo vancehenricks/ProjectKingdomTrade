@@ -27,6 +27,7 @@ public class TileEffect : MonoBehaviour
     public float AutumnTemp;
     public float SummerTemp;
     public UnitCycler unitCycler;
+    public UnitWayPoint UnitWayPoint;
     //public int maxDaysBeforeRevert;
 
     //private int daysResultWinter;
