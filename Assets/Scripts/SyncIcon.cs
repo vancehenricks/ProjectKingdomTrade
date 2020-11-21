@@ -18,11 +18,10 @@ public class SyncIcon : MonoBehaviour
 
     public GenericObjectHolder genericObjectHolder;
 
-    private TileInfo _tile;
-    private Image internalImage;
+    public TileInfo _tile;
     private GameObject image;
 
-    private bool start;
+    public bool start;
 
     public void Initialize(TileInfo tile, float xPadding = 0f, float yPadding = 0f, float zLevelFlag = 0f)
     {
@@ -32,13 +31,20 @@ public class SyncIcon : MonoBehaviour
         _yPadding = yPadding;
 
         _tile = tile;
-        start = true;
+
+        Sync();
     }
 
-    private void Update()
+    public void SetActive(bool visibility)
     {
-        if (!start) return;
+        foreach (GameObject obj in genericObjectHolder.objects)
+        {
+            obj.SetActive(visibility);
+        }
+    }
 
+    private void Sync()
+    {
         try
         {
             gameObject.transform.position = new Vector3(_tile.transform.position.x + _xPadding, _tile.transform.position.y + _yPadding, _zLevelFlag);
@@ -50,8 +56,14 @@ public class SyncIcon : MonoBehaviour
         }
         catch
         {
-            //start = false;
             Destroy(gameObject);
         }
+    }
+
+    private void Update()
+    {
+        if (!start) return;
+
+        Sync();
     }
 }

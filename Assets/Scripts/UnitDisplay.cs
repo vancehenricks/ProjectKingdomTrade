@@ -44,6 +44,7 @@ public class UnitDisplay : MonoBehaviour
         syncIcon = instance.GetComponent<SyncIcon>();
         text = genericObjectHolder.GetComponent<Text>((int)obj.Value);
         syncIcon.Initialize(tile, xLevel, yLevel, zLevel);
+        syncIcon.start = true;
         background = genericObjectHolder.GetComponent<Image>((int)obj.Panel);
         instance.gameObject.SetActive(true);
     }

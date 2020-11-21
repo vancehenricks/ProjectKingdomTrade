@@ -33,7 +33,7 @@ public class SelectTiles : MonoBehaviour
         flags = new Dictionary<string, GameObject>();
     }
 
-    private void OnDestroy()
+    public void OnDestroy()
     {
         RemoveAllFlag();
     }
@@ -44,11 +44,13 @@ public class SelectTiles : MonoBehaviour
 
         if (tileInfos.Count != 0)
         {
+            SetAllVisibleFlags(false);
             RemoveAllFlag();
         }
 
         foreach (TileInfo tile in tileInfos)
         {
+            SetVisibleFlags(tile, true);
             Select(tile);
         }
     }
@@ -89,31 +91,40 @@ public class SelectTiles : MonoBehaviour
 
     public void DrawFlag(TileInfo hostTile, TileInfo waypoint, GameObject bFlag, bool syncColor = true)
     {
-        int salt = (int)Random.Range(0f, 1000f);
-
-        if (waypoint != null && flags.ContainsKey(waypoint.tileLocation + "," + salt)) return;
-
-        GameObject flag = InitializeFlag(hostTile, bFlag, syncColor);
-
-        Vector3 pos = waypoint.transform.position;
-        flag.transform.position = new Vector3(pos.x, pos.y, zLevelFlag);
-        flag.SetActive(true);
-
-        string tileLocation = waypoint.tileLocation + "," + salt;
-        flags.Add(tileLocation, flag);
+        DrawFlag(hostTile, waypoint, bFlag, syncColor, true, false);
     }
 
     public void DrawAndSyncFlag(TileInfo hostTile, TileInfo waypoint, GameObject bFlag, bool syncColor = true)
     {
-        if (flags.ContainsKey(waypoint.tileId + "," + hostTile.tileId)) return;
+        DrawFlag(hostTile, waypoint, bFlag, syncColor, false, true);
+    }
+
+    public void DrawFlag(TileInfo hostTile, TileInfo waypoint, GameObject bFlag, bool syncColor = true, bool repeatable = false, bool autoSync = false)
+    {
+        int salt = (int)Random.Range(0f, 1000f);
+
+        if (repeatable && flags.ContainsKey(waypoint.tileLocation + "," + salt)) return;
+        if (!repeatable && flags.ContainsKey(waypoint.tileId + "," + hostTile.tileId)) return;
 
         GameObject flag = InitializeFlag(hostTile, bFlag, syncColor);
 
         SyncIcon syncIcon = flag.GetComponent<SyncIcon>();
         syncIcon.Initialize(waypoint, 0, 0, zLevelFlag);
-        flag.SetActive(true);
 
-        flags.Add(waypoint.tileId + "," + hostTile.tileId, flag);
+        if (autoSync)
+        {
+            syncIcon.start = true;
+        }
+
+        string id = waypoint.tileId + "," + hostTile.tileId;
+
+        if (repeatable)
+        {
+            id = waypoint.tileLocation + "," + salt;
+        }
+
+        flag.SetActive(true);
+        flags.Add(id, flag);
     }
 
     public void RemoveFlag(TileInfo hostTile, TileInfo tile)
@@ -153,4 +164,38 @@ public class SelectTiles : MonoBehaviour
 
         flags.Clear();
     }
+
+    public void SetAllVisibleFlags(bool visibility)
+    {
+        foreach (var flag in flags.Values)
+        {
+            SyncIcon syncIcon = flag.GetComponent<SyncIcon>();
+            SetVisibleFlags(syncIcon._tile, visibility);
+        }
+    }
+
+    public void SetVisibleFlags(TileInfo hostTile, bool visibility)
+    {
+        Dictionary<string, GameObject>.ValueCollection Values;
+
+        if (hostTile.tileType == "Unit")
+        {
+            UnitInfo unitHost = hostTile as UnitInfo;
+            Values = unitHost?.unitEffect.unitWayPoint.flags?.Values;
+        }
+        else
+        {
+            Values = hostTile.tileEffect.UnitWayPoint?.flags?.Values;
+        }
+
+        if (Values == null) return;
+
+        foreach (GameObject gameObj in Values)
+        {
+            SyncIcon syncIcon = gameObj.GetComponent<SyncIcon>();
+            syncIcon.start = visibility;
+            syncIcon.SetActive(visibility);
+        }
+    }
+
 }
