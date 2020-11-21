@@ -216,26 +216,6 @@ public class PathFinding : MonoBehaviour
 
         List<TileInfo> tempCache = null;
 
-        if (currentPoint.cache != null && currentPoint.cache.ContainsKey(key))
-        {
-            Debug.Log("Found local cache re-using it");
-
-            generatedWayPoints = FitlerWaklableTilesOnly(currentPoint.cache[key]);
-
-            if (!HasSameLastTileInfo(generatedWayPoints, currentPoint.cache[key]))
-            {
-                tempCache = generatedWayPoints;
-                Debug.Log("Re-doing");
-                generatedWayPoints = new List<TileInfo>();
-                goto REDO;
-            }
-
-            Debug.Log("yield break currentPoint.cache.Count=" + currentPoint.cache.Count + " currentPoint.cache[key].Count="
-                + currentPoint.cache[key].Count + " generatedWayPoints.Count=" + generatedWayPoints.Count);
-            yield break;
-
-        }
-
         tempCache = PathFindingCache.RetrieveTileInfos(finalPoint);
         tempCache = PathFindingCache.FindNearest(tempCache, currentPoint, 3);
 
@@ -294,12 +274,10 @@ public class PathFinding : MonoBehaviour
                 }
 
 
-                if (currentPoint.cache != null && generatedWayPoints.Count > 0 && !currentPoint.cache.ContainsKey(key))
+                if (generatedWayPoints.Count > 0 && !PathFindingCache.cache.ContainsKey(key))
                 {
                     Debug.Log("Adding " + generatedWayPoints.Count);
-
                     List<TileInfo> temp = new List<TileInfo>(generatedWayPoints);
-                    currentPoint.cache.Add(key, temp);
                     PathFindingCache.cache.Add(key, temp);
                 }
 

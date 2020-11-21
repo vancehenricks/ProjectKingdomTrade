@@ -26,12 +26,12 @@ public class TileInfo : MonoBehaviour
     public int minChance;
     public int maxChance;
     public List<UnitInfo> unitInfos;
-    public Dictionary<string, List<TileInfo>> cache;
+    //public Dictionary<string, List<TileInfo>> cache;
     public int units;
 
     public virtual void Initialize()
     {
-        cache = new Dictionary<string, List<TileInfo>>();
+        //cache = new Dictionary<string, List<TileInfo>>();
         claimants = new List<TileInfo>();
         localTemp = Temperature.temperature;
         unitInfos = new List<UnitInfo>();
@@ -42,7 +42,7 @@ public class TileInfo : MonoBehaviour
     {
         unitInfos?.Clear();
         claimants?.Clear();
-        cache?.Clear(); //this could become a problem later as were not clearing list
+        //cache?.Clear(); //this could become a problem later as were not clearing list
     }
 
     public void Destroy()
