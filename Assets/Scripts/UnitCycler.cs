@@ -35,6 +35,8 @@ public class UnitCycler : MonoBehaviour
                     goto reset;
                 }*/
 
+                if (unitInfos[i] == null) continue;
+
                 GameObject unit = unitInfos[i].tileCaller.image;
 
                 if (visibleIndex != i)
@@ -77,8 +79,11 @@ public class UnitCycler : MonoBehaviour
 
         for (int i = 0; i < tileInfo.unitInfos.Count; i++)
         {
+            if (tileInfo.unitInfos[i] == null) continue;
+
             if (tileInfo.unitInfos[i].tileId == unit.tileId)
             {
+ 
                 GameObject visibleUnit = tileInfo.unitInfos[i].tileCaller.image;
                 visibleUnit.SetActive(true);
                 tileInfo.unitInfos.RemoveAt(i);

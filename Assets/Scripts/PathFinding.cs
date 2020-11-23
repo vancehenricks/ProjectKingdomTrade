@@ -109,7 +109,6 @@ public class PathFinding : MonoBehaviour
 
         if (unitEffect == null && destination == null) return;
         if (unitEffect.standingTile == null) return;
-        if (Tools.HasNulls(unitInfo.waypoints)) return;
 
         if (destination.arrivalTime == -1 && destination.tile.tileLocation != unitEffect.standingTile.tileLocation)
         {
@@ -131,6 +130,7 @@ public class PathFinding : MonoBehaviour
             }
 
             TileInfo point = unitInfo.waypoints[index];
+            if (point == null) return;
 
             if (unitEffect.standingTile.tileLocation == point.tileLocation || isWalkable != null && !isWalkable(point))
             {
