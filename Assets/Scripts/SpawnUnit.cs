@@ -19,6 +19,7 @@ public class SpawnUnit : MonoBehaviour
     public bool autoFocus;
     public Color color;
     public int attackDistance;
+    public bool notCancel;
 
     private void Start()
     {
@@ -65,8 +66,7 @@ public class SpawnUnit : MonoBehaviour
             autoFocus = true;
             color = Color.white;
             attackDistance = unitInfo.attackDistance;
-
-            bool notCancel = true;
+            notCancel = true;
 
             foreach (string subCommand in subCommands.Keys)
             {

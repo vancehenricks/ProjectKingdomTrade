@@ -9,27 +9,76 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+[SerializeField]
+public class WindowData
+{
+    public bool visible;
+    public Vector3 position;
+
+    public WindowData(GameObject obj)
+    {
+        Save(obj);
+    }
+
+    public void Save(GameObject obj)
+    {
+        visible = obj.activeSelf;
+        position = obj.transform.position;
+    }
+
+    public void Load(GameObject obj)
+    {
+        obj.SetActive(visible);
+        obj.transform.position = position;
+    }
+}
+
+
 public class TransitionHandler : MonoBehaviour
 {
-    public static TransitionHandler instance;
+    public static TransitionHandler _init;
+    private static bool onFirstLoad = true;
 
-    public static bool loadMainMenu = true;
-    public GameObject MainMenu;
+    public static TransitionHandler init
+    {
+        get { return _init; }
+        private set { _init = value; }
+    }
+
+    public static WindowData mainMenuData;
+    public static WindowData consoleData;
+    public static WindowData devInfoData;
+
+    public GameObject mainMenu;
+    public GameObject console;
+    public GameObject devInfo;
 
     private void Awake()
     {
-        instance = this;
-        MainMenu.SetActive(loadMainMenu);
+        if (onFirstLoad)
+        {
+            mainMenuData = new WindowData(mainMenu);
+            consoleData = new WindowData(console);
+            devInfoData = new WindowData(devInfo);
+        }
+
+        init = this;
+        onFirstLoad = false;
+        mainMenuData.Load(mainMenu);
+        consoleData.Load(console);
+        devInfoData.Load(devInfo);
     }
 
     public void Transition()
     {
         SceneManager.LoadScene("sandbox", LoadSceneMode.Single);
+        consoleData.Save(console);
+        devInfoData.Save(devInfo);
     }
 
     public void TransitionWithoutMenu()
     {
-        loadMainMenu = false;
+        mainMenuData.visible = false;
         Transition();
     }
 }

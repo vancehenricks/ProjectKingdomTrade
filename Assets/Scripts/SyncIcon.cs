@@ -35,11 +35,11 @@ public class SyncIcon : MonoBehaviour
         Sync();
     }
 
-    public void SetActive(bool visibility)
+    public void SetActive(bool active)
     {
         foreach (GameObject obj in genericObjectHolder.objects)
         {
-            obj.SetActive(visibility);
+            obj.SetActive(active);
         }
     }
 

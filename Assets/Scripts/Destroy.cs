@@ -17,6 +17,7 @@ public class Destroy : MonoBehaviour
     public int nMax;
     public int targetLayer;
     public bool autoFocus;
+    public bool notCancel;
 
     private void Start()
     {
@@ -79,8 +80,7 @@ public class Destroy : MonoBehaviour
             nMax = 1;
             targetLayer = 1;
             autoFocus = true;
-
-            bool notCancel = true;
+            notCancel = true;
 
             foreach (string subCommand in subCommands.Keys)
             {

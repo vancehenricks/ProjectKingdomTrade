@@ -22,32 +22,35 @@ public class ZoomingWindow : MonoBehaviour, IScrollHandler
     public float scale;
     public float maxScale;
     public float minScale;
-    public Vector3 position;
-
 
     public void OnScroll(PointerEventData eventData)
     {
-        position = cm.transform.position;
-
         if (grid.rect.width > defaultWidth)
         {
             speed = (defaultSpeed + (grid.rect.width / divideWidth));
         }
 
+        Vector3 preZoom = TranslatePosToWorldPoint.pos;
         scale = cm.transform.position.z;
 
         if (InputOverride.GetAxis("Mouse ScrollWheel") > 0 && scale <= maxScale)
         {
-            scale = cm.transform.position.z + speed;
+            scale += speed;
         }
 
         if (InputOverride.GetAxis("Mouse ScrollWheel") < 0 && scale >= minScale)
         {
-            scale = cm.transform.position.z - speed;
+            scale -= speed;
         }
 
+        cm.transform.position = new Vector3(preZoom.x, preZoom.y, preZoom.z+scale);
+
+        Vector3 postZoom = TranslatePosToWorldPoint.pos;
+        Vector3 diffZoom = preZoom - postZoom;
+
+        cm.transform.position = new Vector3(preZoom.x+diffZoom.x, preZoom.y+diffZoom.y, preZoom.z+scale);
+
         CursorReplace.currentCursor = CursorType.Zoom;
-        cm.transform.position = new Vector3(position.x, position.y, scale);
 
         StopAllCoroutines();
         StartCoroutine(DelayStop());

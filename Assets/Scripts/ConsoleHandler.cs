@@ -23,22 +23,33 @@ public class ConsoleHandler : MonoBehaviour
     public static OnConsoleEvent onConsoleEvent;
 
     public Text console;
+
     public InputFieldOverride command;
     public Scrollbar scrollBar;
     public RectTransform context;
-    public List<string> cache;
     public int index;
     public int maxNumberOfLines;
     public float textHeight;
 
     public bool runOnce;
 
-    private int numberOfLines;
-
-    private int remainOnIndex;
+    private static List<string> consoleText;
+    private static List<string> cache;
+    private static int numberOfLines;
+    private static int remainOnIndex;
 
     private void Awake()
     {
+        if (cache == null)
+        {
+            cache = new List<string>();
+            consoleText = new List<string>();
+        }
+        else
+        {
+            AddLines(consoleText.ToArray(), false);
+        }
+
         _init = this;
     }
 
@@ -125,7 +136,7 @@ public class ConsoleHandler : MonoBehaviour
         }
     }
 
-    public void AddLine(string line)
+    public void AddLine(string line, bool record = true)
     {
         if (++numberOfLines > maxNumberOfLines)
         {
@@ -135,21 +146,26 @@ public class ConsoleHandler : MonoBehaviour
         }
 
         console.text += line + "\n";
+        if (record)
+        {
+            consoleText.Add(line);
+        }
         context.sizeDelta = new Vector2(0f, context.rect.height + textHeight);
         ScrollZero();
     }
 
-    public void AddLines(string[] lines)
+    public void AddLines(string[] lines, bool record = true)
     {
         foreach (string line in lines)
         {
-            AddLine(line);
+            AddLine(line, record);
         }
     }
 
     public void Clear()
     {
         console.text = "";
+        consoleText.Clear();
     }
 
     public void Focus()

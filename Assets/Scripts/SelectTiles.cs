@@ -16,6 +16,7 @@ public class SelectTiles : MonoBehaviour
     public float zLevelLine;
     public GameObject baseSelect;
     public Dictionary<string, GameObject> flags;
+    public List<GameObject> exclude;
 
     public enum obj
     {
@@ -165,16 +166,16 @@ public class SelectTiles : MonoBehaviour
         flags.Clear();
     }
 
-    public void SetAllVisibleFlags(bool visibility)
+    public void SetAllVisibleFlags(bool visible)
     {
         foreach (var flag in flags.Values)
         {
             SyncIcon syncIcon = flag.GetComponent<SyncIcon>();
-            SetVisibleFlags(syncIcon._tile, visibility);
+            SetVisibleFlags(syncIcon._tile, visible);
         }
     }
 
-    public void SetVisibleFlags(TileInfo hostTile, bool visibility)
+    public void SetVisibleFlags(TileInfo hostTile, bool visible)
     {
         Dictionary<string, GameObject>.ValueCollection Values;
 
@@ -192,9 +193,11 @@ public class SelectTiles : MonoBehaviour
 
         foreach (GameObject gameObj in Values)
         {
+            if (exclude.Contains(gameObj)) continue;
+
             SyncIcon syncIcon = gameObj.GetComponent<SyncIcon>();
-            syncIcon.start = visibility;
-            syncIcon.SetActive(visibility);
+            syncIcon.start = visible;
+            syncIcon.SetActive(visible);
         }
     }
 
