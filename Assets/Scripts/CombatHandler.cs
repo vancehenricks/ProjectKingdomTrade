@@ -149,7 +149,7 @@ public class CombatHandler : MonoBehaviour
             distance > unitInfo.attackDistance &&
             pathFinding.gwPointsIndex >= pathFinding.generatedWayPoints.Count/2)
         {
-            if (targetUnit?.currentTarget.tileId == unitInfo.tileId) return;
+            if (targetUnit?.currentTarget?.tileId == unitInfo.tileId) return;
 
             ResetCombatPathing();
             unitInfo.waypoints.Add(targetUnit);
