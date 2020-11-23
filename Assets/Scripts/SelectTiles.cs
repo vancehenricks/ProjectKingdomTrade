@@ -177,16 +177,19 @@ public class SelectTiles : MonoBehaviour
 
     public void SetVisibleFlags(TileInfo hostTile, bool visible)
     {
-        Dictionary<string, GameObject>.ValueCollection Values;
+        Dictionary<string, GameObject>.ValueCollection Values = null;
 
         if (hostTile.tileType == "Unit")
         {
             UnitInfo unitHost = hostTile as UnitInfo;
-            Values = unitHost?.unitEffect.unitWayPoint.flags?.Values;
+            if (unitHost != null && unitHost.unitEffect.unitWayPoint.flags != null)
+            {
+                Values = unitHost.unitEffect.unitWayPoint.flags.Values;
+            }
         }
-        else
+        else if (hostTile.tileEffect.UnitWayPoint != null && hostTile.tileEffect.UnitWayPoint.flags != null)
         {
-            Values = hostTile.tileEffect.UnitWayPoint?.flags?.Values;
+            Values = hostTile.tileEffect.UnitWayPoint.flags.Values;
         }
 
         if (Values == null) return;

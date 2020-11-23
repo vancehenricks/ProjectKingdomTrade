@@ -44,9 +44,9 @@ public class UnitInfo : TileInfo
 
     public new void OnDestroy()
     {
-        targetted?.Clear();
-        targets?.Clear();
-        waypoints?.Clear();
+       if (targetted != null) targetted.Clear();
+       if (targets != null) targets.Clear();
+       if (waypoints != null) waypoints.Clear();
 
         base.OnDestroy();
     }

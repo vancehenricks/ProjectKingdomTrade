@@ -40,8 +40,8 @@ public class TileInfo : MonoBehaviour
 
     public void OnDestroy()
     {
-        unitInfos?.Clear();
-        claimants?.Clear();
+        if (unitInfos != null) unitInfos.Clear();
+        if (claimants != null) claimants.Clear();
         //cache?.Clear(); //this could become a problem later as were not clearing list
     }
 

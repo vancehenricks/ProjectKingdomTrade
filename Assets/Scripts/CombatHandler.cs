@@ -112,6 +112,7 @@ public class CombatHandler : MonoBehaviour
         }
 
         UnitInfo targetUnit = unitInfo.currentTarget as UnitInfo;
+
         int distance = GetDistance(targetUnit);
         int attackDistance = unitInfo.attackDistance <= 1 ? 0 : unitInfo.attackDistance;
 
@@ -145,12 +146,13 @@ public class CombatHandler : MonoBehaviour
             targetStandingTile = targetUnit.unitEffect.standingTile;
         }
         else if (!unitInfo.isEngaged &&
-            targetUnit?.unitEffect.standingTile?.tileId != targetStandingTile.tileId &&
+            targetUnit.unitEffect.standingTile != null &&
+            targetUnit.currentTarget != null &&
+            targetUnit.currentTarget.tileId == unitInfo.tileId &&
+            targetUnit.unitEffect.standingTile.tileId != targetStandingTile.tileId &&
             distance > unitInfo.attackDistance &&
             pathFinding.gwPointsIndex >= pathFinding.generatedWayPoints.Count/2)
         {
-            if (targetUnit?.currentTarget?.tileId == unitInfo.tileId) return;
-
             ResetCombatPathing();
             unitInfo.waypoints.Add(targetUnit);
             targetStandingTile = targetUnit.unitEffect.standingTile;
