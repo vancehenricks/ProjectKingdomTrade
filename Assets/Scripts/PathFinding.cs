@@ -75,7 +75,7 @@ public class PathFinding : MonoBehaviour
             destination.arrivalTime = -1;
         }
 
-        if (unitInfo.waypoints.Count > 0 && firstWayPoint.tileId != unitInfo.waypoints[0].tileId)
+        if (unitInfo.waypoints.Count > 0 && unitInfo.waypoints[0] != null && firstWayPoint.tileId != unitInfo.waypoints[0].tileId)
         {
             ResetGeneratedWaypoints();
             firstWayPoint = unitInfo.waypoints[0];
@@ -106,8 +106,10 @@ public class PathFinding : MonoBehaviour
 
     private void TickUpdate()
     {
+
         if (unitEffect == null && destination == null) return;
         if (unitEffect.standingTile == null) return;
+        if (Tools.HasNulls(unitInfo.waypoints)) return;
 
         if (destination.arrivalTime == -1 && destination.tile.tileLocation != unitEffect.standingTile.tileLocation)
         {

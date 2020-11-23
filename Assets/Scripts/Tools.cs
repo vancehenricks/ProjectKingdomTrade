@@ -123,17 +123,25 @@ public class Tools : MonoBehaviour
         return sanitizeList;
     }
 
-    public static List<TileInfo> RemoveNulls(List<TileInfo> tiles)
+    public static void RemoveNulls(List<TileInfo> tiles)
     {
-        List<TileInfo> sanitizedTiles = new List<TileInfo>();
-
         foreach (TileInfo tile in tiles)
         {
-            if (tile == null) continue;
-            sanitizedTiles.Add(tile);
+            if (tile == null)
+            {
+                tiles.Remove(tile);
+            }
+        }
+    }
+
+    public static bool HasNulls(List<TileInfo> tiles)
+    {
+        foreach (TileInfo tile in tiles)
+        {
+            if (tile == null) return true;
         }
 
-        return sanitizedTiles;
+        return false;
     }
 
 

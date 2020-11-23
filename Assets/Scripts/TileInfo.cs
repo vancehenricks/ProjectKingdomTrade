@@ -47,7 +47,7 @@ public class TileInfo : MonoBehaviour
 
     public void Destroy()
     {
-        Destroy(this.gameObject);
+        Destroy(gameObject);
     }
 
 
