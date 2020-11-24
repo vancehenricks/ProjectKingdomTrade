@@ -28,7 +28,7 @@ public class UnitDisplay : MonoBehaviour
     private Image background;
     private int unitTrack;
 
-    private enum obj
+    private enum Obj
     {
         Panel = 0, Status, Value
     }
@@ -42,10 +42,10 @@ public class UnitDisplay : MonoBehaviour
         genericObjectHolder = instance.GetComponent<GenericObjectHolder>();
 
         syncIcon = instance.GetComponent<SyncIcon>();
-        text = genericObjectHolder.GetComponent<Text>((int)obj.Value);
+        text = genericObjectHolder.GetComponent<Text>((int)Obj.Value);
         syncIcon.Initialize(tile, xLevel, yLevel, zLevel);
         syncIcon.start = true;
-        background = genericObjectHolder.GetComponent<Image>((int)obj.Panel);
+        background = genericObjectHolder.GetComponent<Image>((int)Obj.Panel);
         instance.gameObject.SetActive(true);
     }
 

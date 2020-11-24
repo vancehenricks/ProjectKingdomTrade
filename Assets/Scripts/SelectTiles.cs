@@ -18,7 +18,7 @@ public class SelectTiles : MonoBehaviour
     public Dictionary<string, GameObject> flags;
     public List<GameObject> exclude;
 
-    public enum obj
+    public enum Obj
     {
         Image = 0, Value
     }
@@ -75,8 +75,8 @@ public class SelectTiles : MonoBehaviour
         GameObject flag = Instantiate(bFlag);
         GenericObjectHolder objectHolder = flag.GetComponent<GenericObjectHolder>();
 
-        Image image = objectHolder.GetComponent<Image>((int)obj.Image);
-        Text value = objectHolder.GetComponent<Text>((int)obj.Value);
+        Image image = objectHolder.GetComponent<Image>((int)Obj.Image);
+        Text value = objectHolder.GetComponent<Text>((int)Obj.Value);
 
         if (syncColor)
         {

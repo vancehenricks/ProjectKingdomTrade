@@ -146,13 +146,12 @@ public class CombatHandler : MonoBehaviour
             targetStandingTile = targetUnit.unitEffect.standingTile;
         }
         else if (!unitInfo.isEngaged &&
-            targetUnit.unitEffect.standingTile != null &&
-            targetUnit.currentTarget != null &&
-            targetUnit.currentTarget.tileId == unitInfo.tileId &&
-            targetUnit.unitEffect.standingTile.tileId != targetStandingTile.tileId &&
             distance > unitInfo.attackDistance &&
             pathFinding.gwPointsIndex >= pathFinding.generatedWayPoints.Count/2)
         {
+            if (targetUnit.unitEffect.standingTile != null && targetUnit.unitEffect.standingTile.tileId == targetStandingTile.tileId) return;
+            if (targetUnit.currentTarget != null && targetUnit.currentTarget.tileId == unitInfo.tileId) return;
+
             ResetCombatPathing();
             unitInfo.waypoints.Add(targetUnit);
             targetStandingTile = targetUnit.unitEffect.standingTile;
