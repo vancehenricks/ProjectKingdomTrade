@@ -19,17 +19,33 @@ public class SpawnUnit : MonoBehaviour
     public bool autoFocus;
     public Color color;
     public int attackDistance;
+    public bool executeAll;
     public bool notCancel;
+
+    private bool fire1Clicked;
+    private Dictionary<string, string> subCommands;
 
     private void Start()
     {
         ConsoleParser.onParsedConsoleEvent += OnParsedConsoleEvent;
+        subCommands = new Dictionary<string, string>();
+        subCommands.Add("amount", "1");
+        subCommands.Add("color", "#ffffff");
+        subCommands.Add("attack-distance", "1");
+        subCommands.Add("auto-focus", "true");
+        subCommands.Add("execute-all", "");
+        subCommands.Add("cancel", "");
+        subCommands.Add("help", "");
+
+        ConsoleHandler.init.commands.Add("spawn-unit", subCommands);
+        ConsoleHandler.init.AddCache("spawn-unit");
     }
 
     private void Update()
     {
-        if (nCount < nMax && Input.GetButtonDown("Fire1"))
+        if ((Input.GetButtonDown("Fire1") && nCount < nMax) || (fire1Clicked && executeAll && nCount < nMax))
         {
+            fire1Clicked = true;
             //make the units random color
             TileInfo tile = tileInfoRaycaster.GetTileInfoFromPos(Input.mousePosition);
             if (tile != null)
@@ -49,6 +65,11 @@ public class SpawnUnit : MonoBehaviour
                     ConsoleHandler.init.Focus();
                 }
                 nCount++;
+
+                if (nCount == 1)
+                {
+                    ConsoleHandler.init.AddCache(ConsoleHandler.init.previousCommand);
+                }
             }
         }
     }
@@ -67,6 +88,8 @@ public class SpawnUnit : MonoBehaviour
             color = Color.white;
             attackDistance = unitInfo.attackDistance;
             notCancel = true;
+            executeAll = false;
+            fire1Clicked = false;
 
             foreach (string subCommand in subCommands.Keys)
             {
@@ -86,10 +109,19 @@ public class SpawnUnit : MonoBehaviour
                     case "attack-distance":
                         int.TryParse(subCommands[subCommand], out attackDistance);
                         break;
+                    case "execute-all":
+                        executeAll = true;
+                        break;
                     case "cancel":
                         nMax = 0;
                         notCancel = false;
-                        ConsoleHandler.init.AddLine("spawn_unit command cancelled");
+                        ConsoleHandler.init.AddLine("spawn-unit command cancelled");
+                        break;
+                    case "help":
+                    default:
+                        nMax = 0;
+                        notCancel = false;
+                        ConsoleHandler.init.DisplaySubCommands("spawn-unit");
                         break;
                 }
             }

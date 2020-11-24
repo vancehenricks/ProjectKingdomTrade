@@ -11,7 +11,7 @@ using UnityEngine;
 
 public class ConsoleHandler : MonoBehaviour
 {
-    public static ConsoleHandler _init;
+    private static ConsoleHandler _init;
 
     public static ConsoleHandler init
     {
@@ -27,12 +27,16 @@ public class ConsoleHandler : MonoBehaviour
     public InputFieldOverride command;
     public Scrollbar scrollBar;
     public RectTransform context;
-    public int index;
+
     public int maxNumberOfLines;
     public float textHeight;
+    public Dictionary<string, Dictionary<string,string>> commands;
 
-    public bool runOnce;
+    private bool runOnce;
+    public string previousCommand;
 
+    public static int index;
+    private static string cacheCommand;
     private static List<string> consoleText;
     private static List<string> cache;
     private static int numberOfLines;
@@ -40,21 +44,29 @@ public class ConsoleHandler : MonoBehaviour
 
     private void Awake()
     {
+        commands = new Dictionary<string, Dictionary<string, string>>();
+
         if (cache == null)
         {
+            index = 0;
             cache = new List<string>();
             consoleText = new List<string>();
         }
         else
         {
+            command.text = cacheCommand;
             AddLines(consoleText.ToArray(), false);
         }
 
+        AddCache("cancel");
+        AddCache("help");
+        AddCache("clear");
         _init = this;
     }
 
     private void OnDestroy()
     {
+        cacheCommand = command.text;
         onConsoleEvent = null;
     }
 
@@ -75,6 +87,20 @@ public class ConsoleHandler : MonoBehaviour
             IncrementIndex(-1);
             DisplayCache();
         }
+
+        if (OverrideGetKey(KeyCode.Tab))
+        {
+            string[] substrings = command.text.Split(' ');
+
+            if (commands.ContainsKey(substrings[0]))
+            {
+                DisplaySubCommands(substrings[0]);
+            }
+            else
+            {
+                DisplayCommands();
+            }
+        }
     }
 
     public void NextLine()
@@ -89,16 +115,24 @@ public class ConsoleHandler : MonoBehaviour
             {
                 Clear();
             }
+            else if (command.text == "help")
+            {
+                DisplayCommands();
+            }
+            else if (command.text == "cancel")
+            {
+                foreach (var cmd in commands)
+                {
+                    onConsoleEvent(cmd.Key + " cancel");
+                }
+            }
             else if (onConsoleEvent != null)
             {
                 onConsoleEvent(command.text);
             }
 
-            if (!cache.Contains(command.text))
-            {
-                cache.Add(command.text);
-                index++;
-            }
+            previousCommand = command.text;
+
             remainOnIndex = 0;
 
             command.text = "";
@@ -106,6 +140,44 @@ public class ConsoleHandler : MonoBehaviour
         else
         {
             command.DeactivateInputField();
+        }
+    }
+
+    public void DisplayCommands()
+    {
+        AddLine("cancel");
+        AddLine("help");
+        AddLine("clear");
+        foreach (var cmd in commands)
+        {
+            AddLine(cmd.Key);
+        }
+    }
+
+    public void DisplaySubCommands(string text)
+    {
+        Dictionary<string, string> subCommands = commands[text];
+        AddLine(text);
+
+        foreach (var subCommand in subCommands)
+        {
+            if (subCommand.Value != "")
+            {
+                AddLine(" " + subCommand.Key + ":" + subCommand.Value);
+            }
+            else
+            {
+                AddLine(" " + subCommand.Key);
+            }
+        }
+    }
+
+    public void AddCache(string text)
+    {
+        if (!cache.Contains(text))
+        {
+            cache.Add(text);
+            index++;
         }
     }
 
@@ -141,8 +213,6 @@ public class ConsoleHandler : MonoBehaviour
         if (++numberOfLines > maxNumberOfLines)
         {
             Clear();
-            numberOfLines = 0;
-            context.sizeDelta = new Vector2(0f, textHeight);
         }
 
         console.text += line + "\n";
@@ -166,6 +236,8 @@ public class ConsoleHandler : MonoBehaviour
     {
         console.text = "";
         consoleText.Clear();
+        numberOfLines = 0;
+        context.sizeDelta = new Vector2(0f, textHeight);
     }
 
     public void Focus()

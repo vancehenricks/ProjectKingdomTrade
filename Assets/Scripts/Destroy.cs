@@ -17,17 +17,33 @@ public class Destroy : MonoBehaviour
     public int nMax;
     public int targetLayer;
     public bool autoFocus;
+    public bool executeAll;
     public bool notCancel;
+
+    private bool fire1Clicked;
+    private Dictionary<string, string> subCommands;
 
     private void Start()
     {
         ConsoleParser.onParsedConsoleEvent += OnParsedConsoleEvent;
+        subCommands = new Dictionary<string, string>();
+        subCommands.Add("type", "Unit");
+        subCommands.Add("amount", "1");
+        subCommands.Add("layer", "1");
+        subCommands.Add("auto-focus", "true");
+        subCommands.Add("execute-all", "");
+        subCommands.Add("cancel", "");
+        subCommands.Add("help", "");
+
+        ConsoleHandler.init.commands.Add("destroy", subCommands);
+        ConsoleHandler.init.AddCache("destroy");
     }
 
     private void Update()
     {
-        if (nCount < nMax && Input.GetButtonDown("Fire1"))
+        if ((Input.GetButtonDown("Fire1") && nCount < nMax) || (fire1Clicked && executeAll && nCount < nMax))
         {
+            fire1Clicked = true;
             //Debug.Log("test");
 
             //make the units random color
@@ -81,6 +97,8 @@ public class Destroy : MonoBehaviour
             targetLayer = 1;
             autoFocus = true;
             notCancel = true;
+            executeAll = false;
+            fire1Clicked = false;
 
             foreach (string subCommand in subCommands.Keys)
             {
@@ -98,10 +116,19 @@ public class Destroy : MonoBehaviour
                     case "auto-focus":
                         bool.TryParse(subCommands[subCommand], out autoFocus);
                         break;
+                    case "execute-all":
+                        executeAll = true;
+                        break;
                     case "cancel":
                         nMax = 0;
                         notCancel = false;
                         ConsoleHandler.init.AddLine("destroy command cancelled");
+                        break;
+                    case "help":
+                    default:
+                        nMax = 0;
+                        notCancel = false;
+                        ConsoleHandler.init.DisplaySubCommands("destroy");
                         break;
                 }
             }
