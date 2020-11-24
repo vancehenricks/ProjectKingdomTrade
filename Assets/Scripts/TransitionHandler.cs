@@ -97,7 +97,7 @@ public class TransitionHandler : MonoBehaviour
         Transition();
     }
 
-    IEnumerator OnLoading()
+    private IEnumerator OnLoading()
     {
         loadingOperation = SceneManager.LoadSceneAsync("sandbox", LoadSceneMode.Single);
         loadingOperation.allowSceneActivation = false;

@@ -196,14 +196,12 @@ public class CombatHandler : MonoBehaviour
 
     public void DisEngage()
     {
-        CombatHandler unitCombatHandler = unitInfo.unitEffect.combatHandler;
-
         Debug.Log("Unit[" + unitInfo.tileId + "] Disengaging!");
 
         if (unitInfo.isEngaged || unitInfo.currentTarget != null)
         {
-            unitCombatHandler.combatSession.Remove(unitInfo);
-            unitCombatHandler.combatSession = unitCombatHandler.defaultCombatSession;
+            combatSession.Remove(unitInfo);
+            combatSession = defaultCombatSession;
             unitInfo.targetted.Remove(unitInfo.currentTarget);
             unitInfo.targets.Remove(unitInfo.currentTarget);
             unitInfo.currentTarget = null;
