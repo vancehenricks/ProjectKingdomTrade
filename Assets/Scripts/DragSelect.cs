@@ -13,7 +13,6 @@ using UnityEngine.EventSystems;
 public class DragSelect : MonoBehaviour
 {
     public GameObject selectorObj;
-    public TileInfoRaycaster tileInfoRaycaster;
     public OpenRightClick openRightClick;
 
     public Vector2 offset;
