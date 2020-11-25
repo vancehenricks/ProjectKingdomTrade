@@ -50,13 +50,10 @@ public class TransitionHandler : MonoBehaviour
     public static WindowData consoleData;
     public static WindowData devInfoData;
 
-    public GenericObjectHolder loadingScreen;
     public GameObject mainMenu;
     public GameObject console;
     public GameObject devInfo;
 
-    private Text text;
-    private Image image;
     private AsyncOperation loadingOperation;
 
     private enum Loading
@@ -101,23 +98,17 @@ public class TransitionHandler : MonoBehaviour
     {
         loadingOperation = SceneManager.LoadSceneAsync("sandbox", LoadSceneMode.Single);
         loadingOperation.allowSceneActivation = false;
-        text = loadingScreen.GetComponent<Text>((int)Loading.Text);
-        image = loadingScreen.GetComponent<Image>((int)Loading.Progress);
-        loadingScreen.gameObject.SetActive(true);
+        LoadingHandler.init.SetActive(true);
         consoleData.Save(console);
         devInfoData.Save(devInfo);
 
         while (loadingOperation.progress < 0.7f)
         {
-            float progress = loadingOperation.progress;
-
-            text.text = (int)(progress * 100) + "%";
-            image.fillAmount = progress;
+            LoadingHandler.init.Set(loadingOperation.progress);
             yield return new WaitForFixedUpdate();
         }
 
-        text.text = "100%";
-        image.fillAmount = 1;
+        LoadingHandler.init.Set(1f);
         yield return new WaitForSeconds(1f);
         loadingOperation.allowSceneActivation = true;
     }

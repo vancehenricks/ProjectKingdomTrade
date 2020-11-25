@@ -57,7 +57,7 @@ public class NewGameAction : MonoBehaviour
                     return;
                 }
             }
-            DoNewGameLogic();
+            StartCoroutine(DoNewGameLogic());
 
         }
         else
@@ -71,21 +71,39 @@ public class NewGameAction : MonoBehaviour
     {
         if (response)
         {
-            DoNewGameLogic();
+            StartCoroutine(DoNewGameLogic());
         }
     }
 
-    private void DoNewGameLogic()
+    private IEnumerator DoNewGameLogic()
     {
-        grid.sizeDelta = new Vector2(w, h);
         closeWindow.DoClose();
-        openWindow.DoOpen();
+        LoadingHandler.init.SetActive(true);
+        yield return new WaitForSeconds(0.5f);
+        grid.sizeDelta = new Vector2(w, h);
         SyncSize.doSync();
         resetCenter.DoAction();
+        LoadingHandler.init.Set(0.3f);
+        yield return new WaitForSeconds(0.5f);
         MapGenerator.init.Initialize();
+        LoadingHandler.init.Set(0.5f);
+        yield return new WaitForSeconds(0.5f);
         //cloudCycle.Initialize();
         cloudCycle2.Initialize();
         celestialCycle.Initialize();
         tick.Initialize();
+
+        float speed = ((w / 10) / 10);
+
+        Tick.speed = (int)speed + 30;
+        LoadingHandler.init.Set(0.8f);
+        yield return new WaitForSeconds((speed/10)+3f);
+        Tick.speed = 1;
+        tick.Initialize();
+        openWindow.DoOpen();
+        LoadingHandler.init.Set(1f);
+        yield return new WaitForSeconds(1.5f);
+        LoadingHandler.init.SetActive(false);
+
     }
 }

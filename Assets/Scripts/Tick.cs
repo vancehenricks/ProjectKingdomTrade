@@ -27,6 +27,7 @@ public class Tick : MonoBehaviour
 
     public void Initialize()
     {
+        StopAllCoroutines();
         realSeconds = 5f;
         seconds = 5f;
         speed = 1;
