@@ -4,7 +4,6 @@
  * Written by Vance Henricks Patual <vpatual@gmail.com>, November 2020
  */
 
-
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

@@ -8,7 +8,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpawnUnit : MonoBehaviour
+public class SpawnUnit : Command
 {
     public GameObject baseUnit;
     public Transform parent;
@@ -23,11 +23,9 @@ public class SpawnUnit : MonoBehaviour
     public bool notCancel;
 
     private bool fire1Clicked;
-    private Dictionary<string, string> subCommands;
 
-    private void Start()
+    public override void Initialize()
     {
-        ConsoleParser.onParsedConsoleEvent += OnParsedConsoleEvent;
         subCommands = new Dictionary<string, string>();
         subCommands.Add("amount", "1");
         subCommands.Add("color", "#ffffff");
@@ -41,40 +39,47 @@ public class SpawnUnit : MonoBehaviour
         ConsoleHandler.init.AddCache("spawn-unit");
     }
 
-    private void Update()
+    private IEnumerator CommandStream()
     {
-        if ((Input.GetButtonDown("Fire1") && nCount < nMax) || (fire1Clicked && executeAll && nCount < nMax))
+        while (nCount < nMax)
         {
-            fire1Clicked = true;
-            //make the units random color
-            TileInfo tile = tileInfoRaycaster.GetTileInfoFromPos(Input.mousePosition);
-            if (tile != null)
+            if (Input.GetButtonDown("Fire1") || (fire1Clicked && executeAll))
             {
-                GameObject unit = Instantiate(baseUnit, parent);
-                unit.transform.position = tile.transform.position;
-                UnitInfo unitInfo = unit.GetComponent<UnitInfo>();
-                //unitInfo.tileId = Tools.UniqueId + "";
-                unitInfo.color = color == Color.white ? Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f) : color;
-                unitInfo.attackDistance = attackDistance;
-                unitInfo.Initialize();
-                unit.SetActive(true);
-                ConsoleHandler.init.AddLine(string.Format("Spawning unit [{0}/{1}].", nCount + 1, nMax));
-
-                if (autoFocus)
+                fire1Clicked = true;
+                //make the units random color
+                TileInfo tile = tileInfoRaycaster.GetTileInfoFromPos(Input.mousePosition);
+                if (tile != null)
                 {
-                    ConsoleHandler.init.Focus();
-                }
-                nCount++;
+                    GameObject unit = Instantiate(baseUnit, parent);
+                    unit.transform.position = tile.transform.position;
+                    UnitInfo unitInfo = unit.GetComponent<UnitInfo>();
+                    //unitInfo.tileId = Tools.UniqueId + "";
+                    unitInfo.color = color == Color.white ? Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f) : color;
+                    unitInfo.attackDistance = attackDistance;
+                    unitInfo.Initialize();
+                    unit.SetActive(true);
+                    ConsoleHandler.init.AddLine(string.Format("Spawning unit [{0}/{1}].", nCount + 1, nMax));
 
-                if (nCount == 1)
-                {
-                    ConsoleHandler.init.AddCache(ConsoleHandler.init.previousCommand);
+                    if (autoFocus)
+                    {
+                        ConsoleHandler.init.Focus();
+                    }
+                    nCount++;
+
+                    if (nCount == 1)
+                    {
+                        ConsoleHandler.init.AddCache(ConsoleHandler.init.previousCommand);
+                    }
                 }
             }
+
+            yield return null;
         }
+
+        ConsoleHandler.init.AddLine("Done!");
     }
 
-    private void OnParsedConsoleEvent(string command, string[] arguments)
+    public override void OnParsedConsoleEvent(string command, string[] arguments)
     {
         if (command == "spawn-unit")
         {
@@ -90,6 +95,7 @@ public class SpawnUnit : MonoBehaviour
             notCancel = true;
             executeAll = false;
             fire1Clicked = false;
+            StopAllCoroutines();
 
             foreach (string subCommand in subCommands.Keys)
             {
@@ -129,6 +135,7 @@ public class SpawnUnit : MonoBehaviour
             if (notCancel)
             {
                 ConsoleHandler.init.AddLine("Click a tile to spawn.");
+                StartCoroutine(CommandStream());
             }
         }
     }

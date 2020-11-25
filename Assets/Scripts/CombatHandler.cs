@@ -200,8 +200,11 @@ public class CombatHandler : MonoBehaviour
 
         if (unitInfo.isEngaged || unitInfo.currentTarget != null)
         {
-            combatSession.Remove(unitInfo);
-            combatSession = defaultCombatSession;
+            if (combatSession != null && defaultCombatSession != null)
+            {
+                combatSession.Remove(unitInfo);
+                combatSession = defaultCombatSession;
+            }
             unitInfo.targetted.Remove(unitInfo.currentTarget);
             unitInfo.targets.Remove(unitInfo.currentTarget);
             unitInfo.currentTarget = null;

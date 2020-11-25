@@ -19,6 +19,9 @@ public class ConsoleHandler : MonoBehaviour
         private set { _init = value; }
     }
 
+    public delegate void Initialize();
+    public static Initialize initialize;
+
     public delegate void OnConsoleEvent(string command);
     public static OnConsoleEvent onConsoleEvent;
 
@@ -62,12 +65,18 @@ public class ConsoleHandler : MonoBehaviour
         AddCache("help");
         AddCache("clear");
         _init = this;
+
+        if (initialize != null)
+        {
+            initialize();
+        }
     }
 
     private void OnDestroy()
     {
         cacheCommand = command.text;
         onConsoleEvent = null;
+        initialize = null;
     }
 
     private void Update()
@@ -145,29 +154,31 @@ public class ConsoleHandler : MonoBehaviour
 
     public void DisplayCommands()
     {
-        AddLine("cancel");
-        AddLine("help");
-        AddLine("clear");
+        AddLine("Commands:");
+        AddLine("\t" + "cancel");
+        AddLine("\t" + "help");
+        AddLine("\t" + "clear");
         foreach (var cmd in commands)
         {
-            AddLine(cmd.Key);
+            AddLine("\t" + cmd.Key);
         }
     }
 
     public void DisplaySubCommands(string text)
     {
         Dictionary<string, string> subCommands = commands[text];
-        AddLine(text);
-
+        AddLine("Command:");
+        AddLine("\t" + text);
+        AddLine("Parameters:");
         foreach (var subCommand in subCommands)
         {
             if (subCommand.Value != "")
             {
-                AddLine(" " + subCommand.Key + ":" + subCommand.Value);
+                AddLine(string.Format("\t {0}:{1}", subCommand.Key, subCommand.Value));
             }
             else
             {
-                AddLine(" " + subCommand.Key);
+                AddLine("\t" + subCommand.Key);
             }
         }
     }

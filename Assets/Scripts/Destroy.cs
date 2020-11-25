@@ -8,7 +8,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Destroy : MonoBehaviour
+public class Destroy : Command
 {
     public TileInfoRaycaster tileInfoRaycaster;
     //public bool isEnabled;
@@ -21,11 +21,10 @@ public class Destroy : MonoBehaviour
     public bool notCancel;
 
     private bool fire1Clicked;
-    private Dictionary<string, string> subCommands;
 
-    private void Start()
+
+    public override void Initialize()
     {
-        ConsoleParser.onParsedConsoleEvent += OnParsedConsoleEvent;
         subCommands = new Dictionary<string, string>();
         subCommands.Add("type", "Unit");
         subCommands.Add("amount", "1");
@@ -39,40 +38,47 @@ public class Destroy : MonoBehaviour
         ConsoleHandler.init.AddCache("destroy");
     }
 
-    private void Update()
+    private IEnumerator CommandStream()
     {
-        if ((Input.GetButtonDown("Fire1") && nCount < nMax) || (fire1Clicked && executeAll && nCount < nMax))
+        while (nCount < nMax)
         {
-            fire1Clicked = true;
-            //Debug.Log("test");
-
-            //make the units random color
-            List<TileInfo> tiles = new List<TileInfo>();
-            tileInfoRaycaster.GetTileInfosFromPos(Input.mousePosition, tiles);
-
-            int cLayer = 0;
-            foreach (TileInfo tile in tiles)
+            if (Input.GetButtonDown("Fire1") || (fire1Clicked && executeAll))
             {
-                if (tile != null)
-                {
+                fire1Clicked = true;
+                //Debug.Log("test");
 
-                    if (type == "Unit" && tile.tileType == type && cLayer == targetLayer)
+                //make the units random color
+                List<TileInfo> tiles = new List<TileInfo>();
+                tileInfoRaycaster.GetTileInfosFromPos(Input.mousePosition, tiles);
+
+                int cLayer = 0;
+                foreach (TileInfo tile in tiles)
+                {
+                    if (tile != null)
                     {
-                        UnitInfo unit = (UnitInfo)tile;
-                        unit.Destroy();
-                        AddLineAndCheckForFocus(string.Format("Destroyed unit [{0}/{1}].", nCount + 1, nMax));
-                        break;
+
+                        if (type == "Unit" && tile.tileType == type && cLayer == targetLayer)
+                        {
+                            UnitInfo unit = (UnitInfo)tile;
+                            unit.Destroy();
+                            AddLineAndCheckForFocus(string.Format("Destroyed unit [{0}/{1}].", nCount + 1, nMax));
+                            break;
+                        }
+                        else if (type != "Unit" && tile.tileType == type && cLayer == targetLayer)
+                        {
+                            tile.Destroy();
+                            AddLineAndCheckForFocus(string.Format("Destroyed tile [{0}/{1}].", nCount + 1, nMax));
+                            break;
+                        }
+                        cLayer++;
                     }
-                    else if (type != "Unit" && tile.tileType == type && cLayer == targetLayer)
-                    {
-                        tile.Destroy();
-                        AddLineAndCheckForFocus(string.Format("Destroyed tile [{0}/{1}].", nCount + 1, nMax));
-                        break;
-                    }
-                    cLayer++;
                 }
             }
+
+            yield return null;
         }
+
+        ConsoleHandler.init.AddLine("Done!");
     }
 
     private void AddLineAndCheckForFocus(string line)
@@ -85,7 +91,7 @@ public class Destroy : MonoBehaviour
         nCount++;
     }
 
-    private void OnParsedConsoleEvent(string command, string[] arguments)
+    public override void OnParsedConsoleEvent(string command, string[] arguments)
     {
         if (command == "destroy")
         {
@@ -99,6 +105,7 @@ public class Destroy : MonoBehaviour
             notCancel = true;
             executeAll = false;
             fire1Clicked = false;
+            StopAllCoroutines();
 
             foreach (string subCommand in subCommands.Keys)
             {
@@ -136,6 +143,7 @@ public class Destroy : MonoBehaviour
             if (notCancel)
             {
                 ConsoleHandler.init.AddLine("Click a tile/unit to destroy...");
+                StartCoroutine(CommandStream());
             }
         }
     }
