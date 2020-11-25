@@ -50,13 +50,11 @@ public class NewGameAction : MonoBehaviour
             {
                 ShowMessage show = confirmationMessage.SetMessage("Warning",
                     "Map size might be too big could cause the game to be unresponsive. Would you like to continue?",
-                    "Yes", "No", null, CallbackYes);
+                    "Yes", "No", null, OnResponse);
 
-                if (!show.response)
-                {
-                    return;
-                }
+                if (!show.response) return;
             }
+
             StartCoroutine(DoNewGameLogic());
 
         }
@@ -67,7 +65,7 @@ public class NewGameAction : MonoBehaviour
 
     }
 
-    private void CallbackYes(bool response)
+    private void OnResponse(bool response)
     {
         if (response)
         {
@@ -100,10 +98,9 @@ public class NewGameAction : MonoBehaviour
         yield return new WaitForSeconds((speed/10)+3f);
         Tick.speed = 1;
         tick.Initialize();
-        openWindow.DoOpen();
         LoadingHandler.init.Set(1f);
         yield return new WaitForSeconds(1.5f);
         LoadingHandler.init.SetActive(false);
-
+        openWindow.DoOpen();
     }
 }

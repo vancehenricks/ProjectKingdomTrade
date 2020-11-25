@@ -29,11 +29,27 @@ public class ShowMessage : MonoBehaviour
 
     public ShowMessage SetMessage(string t, string m, string c, Sprite i, ExecuteAction exe)
     {
+        return SetMessage(t, m, c, "", i, exe);
+    }
+
+    private void OnDestroy()
+    {
+        exeAction = null;
+    }
+
+    public ShowMessage SetMessage(string t, string m, string c, string d, Sprite i, ExecuteAction exe)
+    {
+        if (d != "")
+        {
+            deny.text = d;
+        }
+
         title.text = t;
         if (i != null)
         {
             icon.sprite = i;
         }
+
         message.text = m;
         confirm.text = c;
         GameObject temp = Instantiate(window, window.transform.parent);
@@ -43,13 +59,8 @@ public class ShowMessage : MonoBehaviour
         background.SetActive(true);
         ShowMessage msg = temp.GetComponent<ShowMessage>();
         msg.exeAction = exe;
-        return temp.GetComponent<ShowMessage>();
-    }
 
-    public ShowMessage SetMessage(string t, string m, string c, string d, Sprite i, ExecuteAction exe)
-    {
-        deny.text = d;
-        return SetMessage(t, m, c, i, exe);
+        return temp.GetComponent<ShowMessage>();
     }
 
     public void SetReponse(bool r)
@@ -60,6 +71,7 @@ public class ShowMessage : MonoBehaviour
         {
             exeAction(r);
         }
+        exeAction = null;
         Destroy(gameObject);
     }
 
