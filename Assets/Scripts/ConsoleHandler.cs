@@ -39,9 +39,9 @@ public class ConsoleHandler : MonoBehaviour
     public string previousCommand;
 
     public static int index;
-    private static string cacheCommand;
-    private static List<string> consoleText;
-    private static List<string> cache;
+    private static string cacheInput;
+    private static List<string> cacheConsole;
+    private static List<string> cacheCommands;
     private static int numberOfLines;
     private static int remainOnIndex;
 
@@ -49,16 +49,16 @@ public class ConsoleHandler : MonoBehaviour
     {
         commands = new Dictionary<string, Dictionary<string, string>>();
 
-        if (cache == null)
+        if (cacheCommands == null)
         {
             index = 0;
-            cache = new List<string>();
-            consoleText = new List<string>();
+            cacheCommands = new List<string>();
+            cacheConsole = new List<string>();
         }
         else
         {
-            command.text = cacheCommand;
-            AddLines(consoleText.ToArray(), false);
+            command.text = cacheInput;
+            AddLines(cacheConsole.ToArray(), false);
         }
 
         AddCache("cancel");
@@ -74,7 +74,7 @@ public class ConsoleHandler : MonoBehaviour
 
     private void OnDestroy()
     {
-        cacheCommand = command.text;
+        cacheInput = command.text;
         onConsoleEvent = null;
         initialize = null;
     }
@@ -185,9 +185,9 @@ public class ConsoleHandler : MonoBehaviour
 
     public void AddCache(string text)
     {
-        if (!cache.Contains(text))
+        if (!cacheCommands.Contains(text))
         {
-            cache.Add(text);
+            cacheCommands.Add(text);
             index++;
         }
     }
@@ -229,7 +229,7 @@ public class ConsoleHandler : MonoBehaviour
         console.text += line + "\n";
         if (record)
         {
-            consoleText.Add(line);
+            cacheConsole.Add(line);
         }
         context.sizeDelta = new Vector2(0f, context.rect.height + textHeight);
         ScrollZero();
@@ -246,7 +246,7 @@ public class ConsoleHandler : MonoBehaviour
     public void Clear()
     {
         console.text = "";
-        consoleText.Clear();
+        cacheConsole.Clear();
         numberOfLines = 0;
         context.sizeDelta = new Vector2(0f, textHeight);
     }
@@ -291,17 +291,17 @@ public class ConsoleHandler : MonoBehaviour
     {
         if (index < 0)
         {
-            index = cache.Count - 1;
+            index = cacheCommands.Count - 1;
         }
-        else if (index >= cache.Count)
+        else if (index >= cacheCommands.Count)
         {
             index = 0;
         }
 
-        if (cache.Count > 0 && index < cache.Count)
+        if (cacheCommands.Count > 0 && index < cacheCommands.Count)
         {
-            Debug.Log("cache[index]=" + cache[index] + " index=" + index);
-            command.text = cache[index];
+            Debug.Log("cache[index]=" + cacheCommands[index] + " index=" + index);
+            command.text = cacheCommands[index];
         }
 
         command.caretPosition = command.text.Length;

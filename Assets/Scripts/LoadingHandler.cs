@@ -33,9 +33,9 @@ public class LoadingHandler : MonoBehaviour
         init = this;
     }
 
-    public void SetActive(bool visiblity)
+    public void SetActive(bool visible)
     {
-        loadingScreen.SetActive(visiblity);
+        loadingScreen.SetActive(visible);
         Set(0);
     }
 
