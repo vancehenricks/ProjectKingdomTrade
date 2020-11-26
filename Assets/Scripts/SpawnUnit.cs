@@ -35,7 +35,7 @@ public class SpawnUnit : Command
         subCommands.Add("cancel", "");
         subCommands.Add("help", "");
 
-        ConsoleHandler.init.commands.Add("spawn-unit", subCommands);
+        ConsoleHandler.init.AddCommand("spawn-unit", subCommands);
         ConsoleHandler.init.AddCache("spawn-unit");
     }
 

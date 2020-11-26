@@ -15,21 +15,27 @@ public class WindowData
 {
     public bool visible;
     public Vector3 position;
+    public bool ignorePos;
 
-    public WindowData(GameObject obj)
+    public WindowData(GameObject obj, bool _ignorePos = false)
     {
+        ignorePos = _ignorePos;
         Save(obj);
     }
 
     public void Save(GameObject obj)
     {
         visible = obj.activeSelf;
+
+        if (ignorePos) return;
         position = obj.transform.position;
     }
 
     public void Load(GameObject obj)
     {
         obj.SetActive(visible);
+
+        if (ignorePos) return;
         obj.transform.position = position;
     }
 }
@@ -66,9 +72,9 @@ public class TransitionHandler : MonoBehaviour
     {
         if (onFirstLoad)
         {
-            mainMenuData = new WindowData(mainMenu);
+            mainMenuData = new WindowData(mainMenu, true);
             consoleData = new WindowData(console);
-            devInfoData = new WindowData(devInfo);
+            devInfoData = new WindowData(devInfo, true);
         }
 
         init = this;

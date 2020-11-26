@@ -33,12 +33,12 @@ public class ConsoleHandler : MonoBehaviour
 
     public int maxNumberOfLines;
     public float textHeight;
-    public Dictionary<string, Dictionary<string,string>> commands;
 
     private bool runOnce;
     public string previousCommand;
 
-    public static int index;
+    private static int index;
+    private static Dictionary<string, Dictionary<string, string>> commandList;
     private static string cacheInput;
     private static List<string> cacheConsole;
     private static List<string> cacheCommands;
@@ -47,36 +47,32 @@ public class ConsoleHandler : MonoBehaviour
 
     private void Awake()
     {
-        commands = new Dictionary<string, Dictionary<string, string>>();
-
         if (cacheCommands == null)
         {
             index = 0;
+
+            commandList = new Dictionary<string, Dictionary<string, string>>();
             cacheCommands = new List<string>();
             cacheConsole = new List<string>();
+            AddCache("cancel");
+            AddCache("help");
+            AddCache("clear");
+            init = this;
+            initialize();
         }
         else
         {
             command.text = cacheInput;
             AddLines(cacheConsole.ToArray(), false);
-        }
-
-        AddCache("cancel");
-        AddCache("help");
-        AddCache("clear");
-        _init = this;
-
-        if (initialize != null)
-        {
-            initialize();
+            init = this;
         }
     }
 
     private void OnDestroy()
     {
         cacheInput = command.text;
-        onConsoleEvent = null;
         initialize = null;
+        onConsoleEvent = null;
     }
 
     private void Update()
@@ -101,7 +97,7 @@ public class ConsoleHandler : MonoBehaviour
         {
             string[] substrings = command.text.Split(' ');
 
-            if (commands.ContainsKey(substrings[0]))
+            if (commandList.ContainsKey(substrings[0]))
             {
                 DisplaySubCommands(substrings[0]);
             }
@@ -130,7 +126,7 @@ public class ConsoleHandler : MonoBehaviour
             }
             else if (command.text == "cancel")
             {
-                foreach (var cmd in commands)
+                foreach (var cmd in commandList)
                 {
                     onConsoleEvent(cmd.Key + " cancel");
                 }
@@ -158,7 +154,7 @@ public class ConsoleHandler : MonoBehaviour
         AddLine("\t" + "cancel");
         AddLine("\t" + "help");
         AddLine("\t" + "clear");
-        foreach (var cmd in commands)
+        foreach (var cmd in commandList)
         {
             AddLine("\t" + cmd.Key);
         }
@@ -166,7 +162,7 @@ public class ConsoleHandler : MonoBehaviour
 
     public void DisplaySubCommands(string text)
     {
-        Dictionary<string, string> subCommands = commands[text];
+        Dictionary<string, string> subCommands = commandList[text];
         AddLine("Command:");
         AddLine("\t" + text);
         AddLine("Parameters:");
@@ -189,6 +185,14 @@ public class ConsoleHandler : MonoBehaviour
         {
             cacheCommands.Add(text);
             index++;
+        }
+    }
+
+    public void AddCommand(string cmd, Dictionary<string, string> subCmds)
+    {
+        if (!commandList.ContainsKey(cmd))
+        {
+            commandList.Add(cmd, subCmds);
         }
     }
 

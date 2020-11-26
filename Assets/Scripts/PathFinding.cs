@@ -266,6 +266,7 @@ public class PathFinding : MonoBehaviour
                     open.Add(n._tile.tileLocation, n);
                 }
 
+                yield return null;
             }
 
             executeAlgorithmCounter = 0;

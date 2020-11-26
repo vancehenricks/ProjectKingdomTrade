@@ -34,7 +34,7 @@ public class Destroy : Command
         subCommands.Add("cancel", "");
         subCommands.Add("help", "");
 
-        ConsoleHandler.init.commands.Add("destroy", subCommands);
+        ConsoleHandler.init.AddCommand("destroy", subCommands);
         ConsoleHandler.init.AddCache("destroy");
     }
 
