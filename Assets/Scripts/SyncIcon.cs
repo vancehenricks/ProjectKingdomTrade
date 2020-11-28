@@ -43,6 +43,7 @@ public class SyncIcon : MonoBehaviour
         else
         {
             StopAllCoroutines();
+            Sync();
         }
     }
 

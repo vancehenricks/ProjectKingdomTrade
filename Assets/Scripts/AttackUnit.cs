@@ -42,6 +42,8 @@ public class AttackUnit : MoveUnit
 
         if (_selectedTiles.Count > 0 && targetList.Count > 0)
         {
+            openRightClick.openLeftClick.ignore = true;
+
             if (MultiSelect.shiftPressed)
             {
                 //this assumes every data contain in selectedTiles are just duplicate
@@ -60,14 +62,12 @@ public class AttackUnit : MoveUnit
                 ClearAllWaypoints();
                 AssignsToList(sanitizeList[0], targetList);
             }
-
-            openRightClick.openLeftClick.ignore = true;
         }
     }
 
     protected void OnSelectedChangeProxy(List<TileInfo> selectedTiles)
     {
-        OnSelectedChange();
+        onSelectChange = true;
         _selectedTiles = selectedTiles;
     }
 
@@ -95,6 +95,8 @@ public class AttackUnit : MoveUnit
 
             if (tileInfos.Count == 0) return;
 
+            openRightClick.openLeftClick.ignore = true;
+
             if (tileInfos.Count == 1)
             {
 
@@ -104,7 +106,6 @@ public class AttackUnit : MoveUnit
                 }
 
                 AssignsToList(tileInfos[0], targetList);
-                openRightClick.openLeftClick.ignore = true;
                 return;
             }
 
