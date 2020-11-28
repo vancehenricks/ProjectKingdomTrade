@@ -19,6 +19,7 @@ public class OpenRightClick : MonoBehaviour
     public Vector3 offset;
     public GraphicRaycaster graphicsRaycaster;
     public EventSystem eventSystem;
+    public OpenLeftClick openLeftClick;
 
     public bool forceDisplay;
     public bool doNotDisplay;
@@ -83,14 +84,14 @@ public class OpenRightClick : MonoBehaviour
                 return;
             }
 
+            openLeftClick.ignore = true;
             if (TileInfoRaycaster.tileInfos.Count == 1)
             {
                 optionGenerator.Initialize();
                 optionGenerator.transform.position = Input.mousePosition + offset;
                 optionGenerator.Display(TileInfoRaycaster.tileInfos[0]);
                 MultiSelect.Clear(true);
-                MultiSelect.Add(TileInfoRaycaster.tileInfos[0]);
-                MultiSelect.Relay();
+                MultiSelect.Add(TileInfoRaycaster.tileInfos[0], true);
                 return;
             }
 
@@ -123,7 +124,7 @@ public class OpenRightClick : MonoBehaviour
         }
     }
 
-    private List<RaycastResult> FireRayCast()
+    public List<RaycastResult> FireRayCast()
     {
         pointerEventData = new PointerEventData(eventSystem);
         pointerEventData.position = Input.mousePosition;

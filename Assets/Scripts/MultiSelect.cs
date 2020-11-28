@@ -54,6 +54,13 @@ public class MultiSelect : MonoBehaviour
         onSelectedChange(MultiSelect.selectedTiles);
     }
 
+    public static void AddRange(List<TileInfo> tileInfos, bool relay = false)
+    {
+        MultiSelect.selectedTiles.AddRange(tileInfos);
+        if (!relay) return;
+        onSelectedChange(MultiSelect.selectedTiles);
+    }
+
     public static void Clear(bool relay = false)
     {
         MultiSelect.selectedTiles.Clear();

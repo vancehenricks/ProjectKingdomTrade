@@ -18,6 +18,13 @@ public class Command : MonoBehaviour
         ConsoleParser.onParsedConsoleEvent += OnParsedConsoleEvent;
     }
 
+    private void OnDestroy()
+    {
+        //if console object is not active at all it will not call OnDestroy on those thus not clearing the delegates
+        ConsoleHandler.initialize -= Initialize;
+        ConsoleParser.onParsedConsoleEvent -= OnParsedConsoleEvent;
+    }
+
     public virtual void Initialize()
     {
         //implementation

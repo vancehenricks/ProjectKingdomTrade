@@ -21,8 +21,6 @@ public class SyncIcon : MonoBehaviour
     public TileInfo _tile;
     private GameObject image;
 
-    public bool start;
-
     public void Initialize(TileInfo tile, float xPadding = 0f, float yPadding = 0f, float zLevelFlag = 0f)
     {
         image = tile.tileCaller.image;
@@ -35,11 +33,33 @@ public class SyncIcon : MonoBehaviour
         Sync();
     }
 
+    public void Sync(bool start)
+    {
+        if (start)
+        {
+            StopAllCoroutines();
+            StartCoroutine(SyncCoroutine());
+        }
+        else
+        {
+            StopAllCoroutines();
+        }
+    }
+
     public void SetActive(bool active)
     {
         foreach (GameObject obj in genericObjectHolder.objects)
         {
             obj.SetActive(active);
+        }
+    }
+
+    private IEnumerator SyncCoroutine()
+    {
+        while (true)
+        {
+            Sync();
+            yield return null;
         }
     }
 
@@ -58,12 +78,13 @@ public class SyncIcon : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
     }
 
-    private void Update()
+    /*private void Update()
     {
         if (!start) return;
 
         Sync();
-    }
+    }*/
 }

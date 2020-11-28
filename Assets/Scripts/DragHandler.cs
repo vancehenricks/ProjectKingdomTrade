@@ -22,6 +22,16 @@ public class DragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     public static OverrideOnDrag overrideOnDrag;
     public static OverrideOnEndDrag overrideOnEndDrag;
 
+    private bool onBeginDrag, onDrag, onEndDrag;
+    private PointerEventData pOnBeginDrag, pOnDrag, pOnEndDrag;
+
+
+    private void Start()
+    {
+        ExecuteCommands command = Command;
+        CommandPipeline.Add(command, 999);
+    }
+
     private void OnDestroy()
     {
         overrideOnBeginDrag = null;
@@ -29,18 +39,42 @@ public class DragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         overrideOnEndDrag = null;
     }
 
+    private void Command()
+    {
+        if (onBeginDrag)
+        {
+            onBeginDrag = false;
+            overrideOnBeginDrag(pOnBeginDrag);
+        }
+
+        if (onDrag)
+        {
+            onDrag = false;
+            overrideOnDrag(pOnDrag);
+        }
+
+        if (onEndDrag)
+        {
+            onEndDrag = false;
+            overrideOnEndDrag(pOnEndDrag);
+        }
+    }
+
     public void OnBeginDrag(PointerEventData eventData)
     {
-        overrideOnBeginDrag(eventData);
+        onBeginDrag = true;
+        pOnBeginDrag = eventData;
     }
 
     public void OnDrag(PointerEventData eventData)
     {
-        overrideOnDrag(eventData);
+        onDrag = true;
+        pOnDrag = eventData;
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        overrideOnEndDrag(eventData);
+        onEndDrag = true;
+        pOnEndDrag = eventData;
     }
 }

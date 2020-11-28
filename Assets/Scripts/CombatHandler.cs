@@ -149,6 +149,7 @@ public class CombatHandler : MonoBehaviour
             distance > unitInfo.attackDistance &&
             pathFinding.gwPointsIndex >= pathFinding.generatedWayPoints.Count/2)
         {
+            if (targetStandingTile == null) return;
             if (targetUnit.unitEffect.standingTile != null && targetUnit.unitEffect.standingTile.tileId == targetStandingTile.tileId) return;
             if (targetUnit.currentTarget != null && targetUnit.currentTarget.tileId == unitInfo.tileId) return;
 

@@ -47,7 +47,7 @@ public class ConsoleHandler : MonoBehaviour
 
     private void Awake()
     {
-        if (cacheCommands == null)
+        if (commandList == null)
         {
             index = 0;
 
@@ -198,7 +198,7 @@ public class ConsoleHandler : MonoBehaviour
 
     private bool OverrideGetKey(KeyCode key)
     {
-        if (InputOverride.GetKey(key, command.gameObject, true) && !runOnce)
+        if (InputOverride.GetKeyDown(key, command.gameObject, true) && !runOnce)
         {
             runOnce = true;
             StartCoroutine(Reset());

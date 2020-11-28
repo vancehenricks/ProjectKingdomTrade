@@ -23,7 +23,7 @@ public class SelectTiles : MonoBehaviour
         Image = 0, Value
     }
 
-    private void Start()
+    protected void Start()
     {
         MultiSelect.onSelectedChange += OnSelectedChange;
         Initialize();
@@ -34,7 +34,7 @@ public class SelectTiles : MonoBehaviour
         flags = new Dictionary<string, GameObject>();
     }
 
-    public void OnDestroy()
+    protected void OnDestroy()
     {
         RemoveAllFlag();
     }
@@ -111,12 +111,6 @@ public class SelectTiles : MonoBehaviour
 
         SyncIcon syncIcon = flag.GetComponent<SyncIcon>();
         syncIcon.Initialize(waypoint, 0, 0, zLevelFlag);
-
-        if (autoSync)
-        {
-            syncIcon.start = true;
-        }
-
         string id = waypoint.tileId + "," + hostTile.tileId;
 
         if (repeatable)
@@ -125,6 +119,7 @@ public class SelectTiles : MonoBehaviour
         }
 
         flag.SetActive(true);
+        syncIcon.Sync(autoSync);
         flags.Add(id, flag);
     }
 
@@ -170,8 +165,13 @@ public class SelectTiles : MonoBehaviour
     {
         foreach (var flag in flags.Values)
         {
+            if (flag == null) continue;
+
             SyncIcon syncIcon = flag.GetComponent<SyncIcon>();
-            SetVisibleFlags(syncIcon._tile, visible);
+            if (syncIcon != null)
+            {
+                SetVisibleFlags(syncIcon._tile, visible);
+            }
         }
     }
 
@@ -199,7 +199,7 @@ public class SelectTiles : MonoBehaviour
             if (exclude.Contains(gameObj)) continue;
 
             SyncIcon syncIcon = gameObj.GetComponent<SyncIcon>();
-            syncIcon.start = visible;
+            syncIcon.Sync(visible);
             syncIcon.SetActive(visible);
         }
     }

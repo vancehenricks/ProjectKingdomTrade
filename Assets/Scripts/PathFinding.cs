@@ -219,6 +219,16 @@ public class PathFinding : MonoBehaviour
     {
         if (currentPoint == null || finalPoint == null) yield break;
 
+        List<TileInfo> tempCache = PathFindingCache.RetrieveTileInfos(currentPoint, finalPoint);
+        //tempCache = PathFindingCache.FindNearest(tempCache, currentPoint, 3);
+
+        if (tempCache != null)
+        {
+            Debug.Log("Found global cache re-using it tempCache.Count " + tempCache.Count);
+        }
+
+
+        REDO:
         Dictionary<Vector2, Node> open = new Dictionary<Vector2, Node>();
         Dictionary<Vector2, Node> closed = new Dictionary<Vector2, Node>();
 
@@ -233,10 +243,13 @@ public class PathFinding : MonoBehaviour
         //mark as explored any nodes which were already explored
         //h g f cost are always calculated the moment parent node is selected
 
-        Debug.Log("213 open.Count=" + open.Count);
+        //Debug.Log("213 open.Count=" + open.Count);
 
         while (open.Count > 0)
         {
+
+            //Debug.Log("241 open.Count=");
+
             Node current = Node.GetLowestFCost(open);
             open.Remove(current._tile.tileLocation);
 
@@ -244,9 +257,33 @@ public class PathFinding : MonoBehaviour
 
             closed.Add(current._tile.tileLocation, current);
 
-            if (current._tile.tileLocation == finalPoint.tileLocation)
+            if (current._tile.tileLocation == finalPoint.tileLocation || tempCache != null)
             {
                 generatedWayPoints = current.GenerateWaypoints();
+
+                if (tempCache != null && tempCache.Count > 0)
+                {
+                    generatedWayPoints.AddRange(tempCache);
+                    generatedWayPoints = FitlerWaklableTilesOnly(generatedWayPoints);
+
+                    if (!HasSameLastTileInfo(generatedWayPoints, tempCache))
+                    {
+                        Debug.Log("CHECKING FAIL " + generatedWayPoints[generatedWayPoints.Count - 1].tileLocation + "!=" + finalPoint.tileLocation);
+                        tempCache = generatedWayPoints;
+                        generatedWayPoints = new List<TileInfo>();
+                        currentPoint = generatedWayPoints[generatedWayPoints.Count - 1];
+                        goto REDO;
+                    }
+                }
+
+                if (generatedWayPoints.Count > 0 && !PathFindingCache.ContainsKey(currentPoint, finalPoint))
+                {
+                    Debug.Log("Adding " + generatedWayPoints.Count);
+                    List<TileInfo> temp = new List<TileInfo>(generatedWayPoints);
+                    PathFindingCache.Add(currentPoint, finalPoint, temp);
+                }
+
+                break;
             }
 
             foreach (Node n in current.GetNeighbours())
@@ -266,7 +303,7 @@ public class PathFinding : MonoBehaviour
                     open.Add(n._tile.tileLocation, n);
                 }
 
-                yield return null;
+               yield return null;
             }
 
             executeAlgorithmCounter = 0;
@@ -292,8 +329,8 @@ public class PathFinding : MonoBehaviour
         {
             if (isWalkable != null && !isWalkable(tile)) return final;
 
-            Debug.Log("Checking for walkables");
-            Debug.Log("tiles.count=" + tiles.Count);
+            //Debug.Log("Checking for walkables");
+            //Debug.Log("tiles.count=" + tiles.Count);
             final.Add(tile);
         }
 

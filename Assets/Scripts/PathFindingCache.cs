@@ -10,16 +10,16 @@ using UnityEngine;
 
 public class PathFindingCache : MonoBehaviour
 {
-    public static Dictionary<string, List<TileInfo>> cache;
+    private static Dictionary<string, List<TileInfo>> cache;
 
     private void Start()
     {
         cache = new Dictionary<string, List<TileInfo>>();
     }
 
-    public static List<TileInfo> RetrieveTileInfos(TileInfo endPoint)
+    public static List<TileInfo> RetrieveTileInfos(TileInfo startPoint, TileInfo endPoint)
     {
-        string keyword = "," + endPoint.transform.position;
+        string keyword = startPoint.transform.position + "," + endPoint.transform.position;
 
         foreach (string key in cache.Keys)
         {
@@ -32,46 +32,18 @@ public class PathFindingCache : MonoBehaviour
         return null;
     }
 
-    public static TileInfo FindIntersectingTile(List<TileInfo> tileInfos, TileInfo originTile)
+    public static bool ContainsKey(TileInfo startPoint , TileInfo endPoint)
     {
-        return FindNearest(tileInfos, originTile, 3, true)[0];
+        return cache.ContainsKey(startPoint.transform.position + "," + endPoint.transform.position) ||
+            cache.ContainsKey(endPoint.transform.position + "," + startPoint.transform.position);
     }
 
-    public static List<TileInfo> FindNearest(List<TileInfo> tileInfos, TileInfo originTile, int maxDistance, bool returnTileInfoOnly = false)
+    public static void Add(TileInfo startPoint, TileInfo endPoint, List<TileInfo> generatedPoints)
     {
-        if (tileInfos == null) return null;
-
-        List<TileInfo> final = new List<TileInfo>();
-
-        int nearestIndex = 0;
-        float lowestDistance = maxDistance;
-
-        for (int i = 0; i < tileInfos.Count; i++)
-        {
-            float distance = Vector2.Distance(originTile.tileLocation, tileInfos[i].tileLocation);
-
-            Debug.Log("FindNearest distance=" + distance);
-
-            if (distance <= maxDistance && distance <= lowestDistance)
-            {
-                lowestDistance = distance;
-                nearestIndex = i;
-            }
-        }
-
-        for (int i = nearestIndex; i < tileInfos.Count; i++)
-        {
-            Debug.Log("Found some");
-            final.Add(tileInfos[i]);
-
-            if (returnTileInfoOnly) return final;
-        }
-
-        if (final.Count == 0)
-        {
-            final = null;
-        }
-
-        return final;
+        cache.Add(startPoint.transform.position + "," + endPoint.transform.position, generatedPoints);
+        List<TileInfo> reverse = new List<TileInfo>(generatedPoints);
+        reverse.Reverse();
+        reverse.Add(startPoint);
+        cache.Add(endPoint.transform.position + "," + startPoint.transform.position, reverse);
     }
 }

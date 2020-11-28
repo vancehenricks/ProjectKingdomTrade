@@ -22,7 +22,7 @@ public class UnitWayPoint : SelectTiles
     //public int index;
     // public bool cleaned;
 
-    public void Start()
+    protected new void Start()
     {
         if (pathFinding != null)
         {

@@ -15,10 +15,15 @@ public class AttackUnit : MoveUnit
 {
     public List<TileInfo> include;
 
+    private List<TileInfo> _selectedTiles;
+    private bool onSelectChange;
+
     protected override void Start()
     {
         base.Start();
-        MultiSelect.onSelectedChange += OnSelectedChange;
+        MultiSelect.onSelectedChange += OnSelectedChangeProxy;
+        ExecuteCommands command = OnSelectedChange;
+        CommandPipeline.Add(command, 500);
     }
 
     public override void DoAction()
@@ -28,31 +33,42 @@ public class AttackUnit : MoveUnit
         CursorReplace.SetCurrentCursorAsPrevious();
     }
 
-    protected void OnSelectedChange(List<TileInfo> selectedTiles)
+    private void OnSelectedChange()
     {
+        if (!onSelectChange) return;
+        onSelectChange = false;
+
         if (unitInfos.Count == 0) return;
 
-        if (selectedTiles.Count > 0 && targetList.Count > 0)
+        if (_selectedTiles.Count > 0 && targetList.Count > 0)
         {
             if (MultiSelect.shiftPressed)
             {
                 //this assumes every data contain in selectedTiles are just duplicate
                 //make sure to check if DoAction calls ClearAllWaypoints or this wont be true anymore
-                List<TileInfo> distinctList = Tools.MergeList(selectedTiles, targetList[0]);
+                List<TileInfo> distinctList = Tools.MergeList(_selectedTiles, targetList[0]);
                 List<TileInfo> whiteListed = Tools.WhiteList(distinctList, include);
 
                 AssignsToList(whiteListed, targetList);
             }
             else
             {
-                List<TileInfo> sanitizeList = Tools.WhiteList(selectedTiles, include);
+                List<TileInfo> sanitizeList = Tools.WhiteList(_selectedTiles, include);
 
                 if (sanitizeList.Count == 0) return;
 
                 ClearAllWaypoints();
                 AssignsToList(sanitizeList[0], targetList);
             }
+
+            openRightClick.openLeftClick.ignore = true;
         }
+    }
+
+    protected void OnSelectedChangeProxy(List<TileInfo> selectedTiles)
+    {
+        OnSelectedChange();
+        _selectedTiles = selectedTiles;
     }
 
     protected override void Command()
@@ -88,6 +104,7 @@ public class AttackUnit : MoveUnit
                 }
 
                 AssignsToList(tileInfos[0], targetList);
+                openRightClick.openLeftClick.ignore = true;
                 return;
             }
 
@@ -98,7 +115,6 @@ public class AttackUnit : MoveUnit
             //openRightClick.multiSelect = false;
             openRightClick.tileInfoRaycaster.GetTileInfosFromPos(Input.mousePosition);
             openRightClick.forceDisplay = true;
-
             Debug.Log("SELECTED");
 
             //TileInfo tileInfo = tileInfoRaycaster.GetUnitInfoFromPos(Input.mousePosition);
