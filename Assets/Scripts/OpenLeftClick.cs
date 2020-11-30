@@ -14,7 +14,14 @@ public class OpenLeftClick : MonoBehaviour
     public TileInfoRaycaster tileInfoRaycaster;
     public OpenRightClick openRightClick;
 
-    public bool ignore;
+    private bool ignore;
+
+    public bool Ignore()
+    {
+        ignore = true;
+
+        return ignore;
+    }
 
     private void Start()
     {

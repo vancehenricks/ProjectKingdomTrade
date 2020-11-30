@@ -42,7 +42,7 @@ public class AttackUnit : MoveUnit
 
         if (_selectedTiles.Count > 0 && targetList.Count > 0)
         {
-            openRightClick.openLeftClick.ignore = true;
+            openRightClick.openLeftClick.Ignore();
 
             if (MultiSelect.shiftPressed)
             {
@@ -95,7 +95,7 @@ public class AttackUnit : MoveUnit
 
             if (tileInfos.Count == 0) return;
 
-            openRightClick.openLeftClick.ignore = true;
+            openRightClick.openLeftClick.Ignore();
 
             if (tileInfos.Count == 1)
             {

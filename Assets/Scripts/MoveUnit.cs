@@ -37,7 +37,7 @@ public class MoveUnit : MonoBehaviour
 
         if (Input.GetButtonDown("Fire1") && MultiSelect.shiftPressed)
         {
-            openRightClick.openLeftClick.ignore = true;
+            openRightClick.openLeftClick.Ignore();
             Debug.Log("Creating multiple waypoint...");
             AssignsToList(tileInfoRaycaster.GetTileInfoFromPos(Input.mousePosition), waypointsList);
             //shiftSelected = false;
@@ -45,7 +45,7 @@ public class MoveUnit : MonoBehaviour
 
         if (Input.GetButtonDown("Fire1") && !MultiSelect.shiftPressed)
         {
-            openRightClick.openLeftClick.ignore = true;
+            openRightClick.openLeftClick.Ignore();
             Debug.Log("Creating one waypoint... unitInfos.Count=" + unitInfos.Count);
             TileInfo tileInfo = tileInfoRaycaster.GetTileInfoFromPos(Input.mousePosition);
             ClearAllWaypoints();
@@ -87,7 +87,7 @@ public class MoveUnit : MonoBehaviour
         ClearAllWaypoints();
         //actionDone = true;
         //Debug.Log("CLEARING XXXXX");
-        openRightClick.openLeftClick.ignore = true;
+        openRightClick.openLeftClick.Ignore();
     }
 
     public virtual void EndAction()

@@ -27,6 +27,7 @@ public class TileInfo : MonoBehaviour
     public List<UnitInfo> unitInfos;
     //public Dictionary<string, List<TileInfo>> cache;
     public int units;
+    public bool selected;
 
     public virtual void Initialize()
     {

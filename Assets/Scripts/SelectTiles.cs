@@ -119,7 +119,10 @@ public class SelectTiles : MonoBehaviour
         }
 
         flag.SetActive(true);
-        syncIcon.Sync(autoSync);
+
+        syncIcon.Sync(hostTile.selected && autoSync);
+        syncIcon.SetActive(hostTile.selected);
+
         flags.Add(id, flag);
     }
 
@@ -179,6 +182,8 @@ public class SelectTiles : MonoBehaviour
     {
         Dictionary<string, GameObject>.ValueCollection Values = null;
 
+        hostTile.selected = visible;
+
         if (hostTile.tileType == "Unit")
         {
             UnitInfo unitHost = hostTile as UnitInfo;
@@ -199,8 +204,8 @@ public class SelectTiles : MonoBehaviour
             if (exclude.Contains(gameObj)) continue;
 
             SyncIcon syncIcon = gameObj.GetComponent<SyncIcon>();
-            syncIcon.Sync(visible);
             syncIcon.SetActive(visible);
+            syncIcon.Sync(visible);
         }
     }
 

@@ -15,6 +15,7 @@ public class SyncIcon : MonoBehaviour
     public float _zLevelFlag;
     public float _xPadding;
     public float _yPadding;
+    public bool alwaysOn;
 
     public GenericObjectHolder genericObjectHolder;
 
@@ -35,7 +36,7 @@ public class SyncIcon : MonoBehaviour
 
     public void Sync(bool start)
     {
-        if (start)
+        if (start || alwaysOn)
         {
             StopAllCoroutines();
             StartCoroutine(SyncCoroutine());
@@ -43,12 +44,13 @@ public class SyncIcon : MonoBehaviour
         else
         {
             StopAllCoroutines();
-            Sync();
         }
     }
 
     public void SetActive(bool active)
     {
+        if(alwaysOn) return;
+
         foreach (GameObject obj in genericObjectHolder.objects)
         {
             obj.SetActive(active);
@@ -81,11 +83,4 @@ public class SyncIcon : MonoBehaviour
         }
 
     }
-
-    /*private void Update()
-    {
-        if (!start) return;
-
-        Sync();
-    }*/
 }

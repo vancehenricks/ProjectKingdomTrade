@@ -4,6 +4,7 @@
  * Written by Vance Henricks Patual <vpatual@gmail.com>, June 2020
  */
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -165,11 +166,11 @@ public class CombatHandler : MonoBehaviour
 
         try
         {
-            distance = (int)Vector2.Distance(unitInfo.tileLocation, targetUnit.tileLocation);
+            distance = (int)Math.Round(Vector2.Distance(unitInfo.tileLocation, targetUnit.tileLocation), MidpointRounding.AwayFromZero);
         }
         catch
         {
-            distance = (int)Vector2.Distance(unitInfo.transform.position, targetUnit.transform.position) / 25;
+            distance = (int)Math.Round(Vector2.Distance(unitInfo.transform.position, targetUnit.transform.position) / 25, MidpointRounding.AwayFromZero);
         }
 
         return distance;

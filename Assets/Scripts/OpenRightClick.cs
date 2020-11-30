@@ -84,7 +84,7 @@ public class OpenRightClick : MonoBehaviour
                 return;
             }
 
-            openLeftClick.ignore = true;
+            openLeftClick.Ignore();
             if (TileInfoRaycaster.tileInfos.Count == 1)
             {
                 optionGenerator.Initialize();
