@@ -90,7 +90,15 @@ public class CombatHandler : MonoBehaviour
         if (targetCountChange != null && previousTargetCount != unitInfo.targets.Count)
         {
             previousTargetCount = unitInfo.targets.Count;
-            targetCountChange(unitInfo.currentTarget);
+
+            if (previousTargetCount == 0)
+            {
+                targetCountChange(null);
+            }
+            else
+            {
+                targetCountChange(unitInfo.targets[previousTargetCount - 1]);
+            }
         }
 
     }
