@@ -34,7 +34,6 @@ public class ConsoleHandler : MonoBehaviour
     public int maxNumberOfLines;
     public float textHeight;
 
-    private bool runOnce;
     public string previousCommand;
 
     private static int index;
@@ -54,9 +53,14 @@ public class ConsoleHandler : MonoBehaviour
             commandList = new Dictionary<string, Dictionary<string, string>>();
             cacheCommands = new List<string>();
             cacheConsole = new List<string>();
+
             AddCache("cancel");
             AddCache("help");
             AddCache("clear");
+            commandList.Add("cancel", new Dictionary<string, string>());
+            commandList.Add("help", new Dictionary<string, string>());
+            commandList.Add("clear", new Dictionary<string, string>());
+
             init = this;
             initialize();
         }
@@ -77,32 +81,40 @@ public class ConsoleHandler : MonoBehaviour
 
     private void Update()
     {
-        if (runOnce) return;
-
-        if (OverrideGetKey(KeyCode.UpArrow))
+        if (OverrideGetKeyUp(KeyCode.UpArrow))
         {
             Debug.Log("UP");
             IncrementIndex(1);
             DisplayCache();
         }
 
-        if (OverrideGetKey(KeyCode.DownArrow))
+        if (OverrideGetKeyUp(KeyCode.DownArrow))
         {
             Debug.Log("DOWN");
             IncrementIndex(-1);
             DisplayCache();
         }
 
-        if (OverrideGetKey(KeyCode.Tab))
+        if (OverrideGetKeyUp(KeyCode.Tab))
         {
             string[] substrings = command.text.Split(' ');
 
+            if (substrings.Length == 0) return;
+
             if (commandList.ContainsKey(substrings[0]))
             {
+                if (substrings.Length > 1)
+                {
+                    AutoFill(substrings, new List<string>(commandList[substrings[0]].Keys));
+                }
                 DisplaySubCommands(substrings[0]);
             }
             else
             {
+                if (substrings.Length == 1)
+                {
+                    AutoFill(substrings, new List<string>(commandList.Keys));
+                }
                 DisplayCommands();
             }
         }
@@ -151,9 +163,6 @@ public class ConsoleHandler : MonoBehaviour
     public void DisplayCommands()
     {
         AddLine("Commands:");
-        AddLine("\t" + "cancel");
-        AddLine("\t" + "help");
-        AddLine("\t" + "clear");
         foreach (var cmd in commandList)
         {
             AddLine("\t" + cmd.Key);
@@ -196,22 +205,24 @@ public class ConsoleHandler : MonoBehaviour
         }
     }
 
-    private bool OverrideGetKey(KeyCode key)
+    private bool OverrideGetKeyUp(KeyCode key)
     {
-        if (InputOverride.GetKeyDown(key, command.gameObject, true) && !runOnce)
+        if (InputOverride.GetKeyUp(key, command.gameObject, true))
         {
-            runOnce = true;
-            StartCoroutine(Reset());
             return true;
         }
 
         return false;
     }
 
-    private IEnumerator Reset()
+    private bool OverrideGetKeyDown(KeyCode key)
     {
-        yield return new WaitForSeconds(0.1f);
-        runOnce = false;
+        if (InputOverride.GetKeyDown(key, command.gameObject, true))
+        {
+            return true;
+        }
+
+        return false;
     }
 
     private IEnumerator ScrollToZero()
@@ -291,6 +302,34 @@ public class ConsoleHandler : MonoBehaviour
 
     }
 
+    private bool AutoFill(string[] substrings, List<string> values)
+    {
+        foreach (string val in values)
+        {
+            if (val.Contains(substrings[substrings.Length - 1]))
+            {
+                string final = "";
+
+                for (int i = 0; i < substrings.Length - 1; i++)
+                {
+                    final += substrings[i] + " ";
+                }
+
+                //int prevLength = final.Length;
+
+                final += val;
+
+                command.text = final;
+                command.caretPosition = command.text.Length;
+                //command.selectionAnchorPosition = prevLength;
+                //command.selectionFocusPosition = command.text.Length;
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     private void DisplayCache()
     {
         if (index < 0)
@@ -309,5 +348,7 @@ public class ConsoleHandler : MonoBehaviour
         }
 
         command.caretPosition = command.text.Length;
+        //command.selectionAnchorPosition = 0;
+        //command.selectionFocusPosition = command.text.Length;
     }
 }
