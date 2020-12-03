@@ -105,7 +105,7 @@ public class ConsoleHandler : MonoBehaviour
             {
                 if (substrings.Length > 1)
                 {
-                    AutoFill(substrings, new List<string>(commandList[substrings[0]].Keys));
+                    AutoFill(substrings, commandList[substrings[0]].Keys);
                 }
                 DisplaySubCommands(substrings[0]);
             }
@@ -113,7 +113,7 @@ public class ConsoleHandler : MonoBehaviour
             {
                 if (substrings.Length == 1)
                 {
-                    AutoFill(substrings, new List<string>(commandList.Keys));
+                    AutoFill(substrings, commandList.Keys);
                 }
                 DisplayCommands();
             }
@@ -302,7 +302,7 @@ public class ConsoleHandler : MonoBehaviour
 
     }
 
-    private bool AutoFill(string[] substrings, List<string> values)
+    private bool AutoFill(string[] substrings, IEnumerable<string> values)
     {
         foreach (string val in values)
         {
