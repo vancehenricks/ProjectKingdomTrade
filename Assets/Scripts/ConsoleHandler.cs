@@ -66,6 +66,7 @@ public class ConsoleHandler : MonoBehaviour
         }
         else
         {
+            AddLine("Queued commands cancelled!");
             command.text = cacheInput;
             AddLines(cacheConsole.ToArray(), false);
             init = this;

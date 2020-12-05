@@ -58,7 +58,7 @@ public class ZoomingWindow : MonoBehaviour, IScrollHandler
 
     IEnumerator DelayStop()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.5f);
         CursorReplace.currentCursor = CursorType.Previous;
     }
 
