@@ -10,28 +10,28 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class MoveUnit : MonoBehaviour
+public class MoveUnit : PlayerCommand
 {
 
     public List<UnitInfo> unitInfos;
-    public TileInfoRaycaster tileInfoRaycaster;
-    public OpenRightClick openRightClick;
     public List<List<TileInfo>> waypointsList;
     public List<List<TileInfo>> targetList;
 
-    protected virtual void Start()
+    protected override void Start()
     {
+        base.Start();
+
         waypointsList = new List<List<TileInfo>>();
         targetList = new List<List<TileInfo>>();
-        ExecuteCommands command = Command;
-        CommandPipeline.Add(command, 100);
 
         DragHandler.overrideOnBeginDrag += OverrideOnBeginDrag;
     }
 
-    protected virtual void Command()
+    protected override void Command()
     {
         //Debug.Log("MoveUnit");
+
+        base.Command();
 
         if (unitInfos.Count == 0) return;
 
@@ -65,10 +65,11 @@ public class MoveUnit : MonoBehaviour
         EndAction();
     }
 
-    public virtual void DoAction()
+    public override void DoAction()
     {
         //doNotDisplay = false;
         //OpenRightClick.doNotDisplay = true;
+        base.DoAction();
 
         CursorReplace.currentCursor = CursorType.Move;
         CursorReplace.SetCurrentCursorAsPrevious();
@@ -90,8 +91,10 @@ public class MoveUnit : MonoBehaviour
         openRightClick.openLeftClick.Ignore();
     }
 
-    public virtual void EndAction()
+    public override void EndAction()
     {
+        base.EndAction();
+
         Debug.Log("END ACTION");
         //tileInfoRaycaster.GetTileInfosFromPos(Input.mousePosition);
         CursorReplace.currentCursor = CursorType.Default;

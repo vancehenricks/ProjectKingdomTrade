@@ -309,6 +309,8 @@ public class ConsoleHandler : MonoBehaviour
         {
             if (val.Contains(substrings[substrings.Length - 1]))
             {
+                if (val.IndexOf(substrings[substrings.Length - 1][0]) > 0) continue;
+
                 string final = "";
 
                 for (int i = 0; i < substrings.Length - 1; i++)

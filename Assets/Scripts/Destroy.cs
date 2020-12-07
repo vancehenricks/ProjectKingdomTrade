@@ -8,7 +8,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Destroy : Command
+public class Destroy : ConsoleCommand
 {
     public TileInfoRaycaster tileInfoRaycaster;
     //public bool isEnabled;

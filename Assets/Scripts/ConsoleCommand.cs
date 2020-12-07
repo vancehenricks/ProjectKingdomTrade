@@ -8,7 +8,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Command : MonoBehaviour
+public class ConsoleCommand : MonoBehaviour
 {
     public Dictionary<string, string> subCommands;
 

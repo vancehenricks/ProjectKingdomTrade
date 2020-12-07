@@ -8,7 +8,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpawnUnit : Command
+public class SpawnUnit : ConsoleCommand
 {
     public GameObject baseUnit;
     public Transform parent;
@@ -21,6 +21,7 @@ public class SpawnUnit : Command
     public int attackDistance;
     public bool executeAll;
     public bool notCancel;
+    public int units;
 
     private bool fire1Clicked;
 
@@ -30,6 +31,7 @@ public class SpawnUnit : Command
         subCommands.Add("amount", "1");
         subCommands.Add("color", "#ffffff");
         subCommands.Add("attack-distance", "1");
+        subCommands.Add("units", "10");
         subCommands.Add("auto-focus", "true");
         subCommands.Add("execute-all", "");
         subCommands.Add("cancel", "");
@@ -56,6 +58,7 @@ public class SpawnUnit : Command
                     //unitInfo.tileId = Tools.UniqueId + "";
                     unitInfo.color = color == Color.white ? Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f) : color;
                     unitInfo.attackDistance = attackDistance;
+                    unitInfo.units = units;
                     unitInfo.Initialize();
                     unit.SetActive(true);
                     ConsoleHandler.init.AddLine(string.Format("Spawning unit [{0}/{1}].", nCount + 1, nMax));
@@ -92,6 +95,7 @@ public class SpawnUnit : Command
             autoFocus = true;
             color = Color.white;
             attackDistance = unitInfo.attackDistance;
+            units = unitInfo.units;
             notCancel = true;
             executeAll = false;
             fire1Clicked = false;
@@ -117,6 +121,9 @@ public class SpawnUnit : Command
                         break;
                     case "execute-all":
                         executeAll = true;
+                        break;
+                    case "units":
+                        int.TryParse(subCommands[subCommand], out units);
                         break;
                     case "cancel":
                         nMax = 0;

@@ -14,15 +14,14 @@ public class Pipeline : MonoBehaviour
 {
     public static SortedList<float, ExecuteCommands> commandList;
 
-    private void Awake()
+    protected void Awake()
     {
         commandList = new SortedList<float, ExecuteCommands>();
-        OnAwake();
     }
 
-    public virtual void OnAwake()
+    protected void OnDestroy()
     {
-        //do nothing
+        commandList = null;
     }
 
     public void Execute()

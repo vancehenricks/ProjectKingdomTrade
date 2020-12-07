@@ -7,6 +7,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class OptionGenerator : MonoBehaviour
@@ -50,23 +51,37 @@ public class OptionGenerator : MonoBehaviour
             case "Forest":
             case "Sea":
             case "Mountain":
-                optionDictionary["Examine_1"].SetActive(true);
+                Show("Examine_1");
                 break;
             case "Town":
-                optionDictionary["HireMerchant_1"].SetActive(true);
-                optionDictionary["EnlistCivilian_1"].SetActive(true);
-                optionDictionary["BuildShip_1"].SetActive(true);
-                optionDictionary["SetTradePort_1"].SetActive(true);
-                optionDictionary["Examine_1"].SetActive(true);
+                Show("HireMerchant_1");
+                Show("EnlistCivilian_1");
+                Show("BuildShip_1");
+                Show("SetTradePort_1");
+                Show("Examine_1");
                 break;
             case "Unit":
-                optionDictionary["Move_1"].SetActive(true);
-                optionDictionary["Attack_1"].SetActive(true);
-                optionDictionary["Merge_1"].SetActive(true);
-                optionDictionary["Resupply_1"].SetActive(true);
-                optionDictionary["Examine_1"].SetActive(true);
+                Show("Move_1");
+                Show("Attack_1");
+                if (MultiSelect.Count() > 1)
+                {
+                    Show("Merge_1");
+                }
+                else if (MultiSelect.GetSelectedTiles()[0].units > 1)
+                {
+                    Show("Split_1");
+                }
+                Show("Resupply_1");
+                Show("Examine_1");
                 break;
         }
+    }
+
+    private void Show(string name)
+    {
+        GameObject obj = optionDictionary[name];
+        obj.transform.SetAsLastSibling();
+        obj.SetActive(true);
     }
 
     public void SetActiveAll(bool active)
