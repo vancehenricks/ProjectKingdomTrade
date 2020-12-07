@@ -15,11 +15,16 @@ public class PlayerCommand : MonoBehaviour
 {
     public TileInfoRaycaster tileInfoRaycaster;
     public OpenRightClick openRightClick;
+    public List<UnitInfo> unitInfos;
+    public List<List<TileInfo>> waypointsList;
+    public List<List<TileInfo>> targetList;
 
     protected virtual void Start()
     {
         ExecuteCommands command = Command;
         CommandPipeline.Add(command, 100);
+        waypointsList = new List<List<TileInfo>>();
+        targetList = new List<List<TileInfo>>();
     }
 
     protected virtual void Command()
@@ -29,11 +34,58 @@ public class PlayerCommand : MonoBehaviour
 
     public virtual void DoAction()
     {
+        waypointsList.Clear();
+        targetList.Clear();
+        unitInfos = Tools.Convert<TileInfo, UnitInfo>(MultiSelect.GetSelectedTiles());
+        MultiSelect.Clear(true);
+        openRightClick.ResetValues();
 
+        foreach (UnitInfo unit in unitInfos)
+        {
+            waypointsList.Add(unit.waypoints);
+            targetList.Add(unit.targets);
+        }
+
+        ClearAllWaypoints();
     }
 
     public virtual void EndAction()
     {
+        Debug.Log("END ACTION");
+        CursorReplace.currentCursor = CursorType.Previous;
+        unitInfos.Clear();
+    }
 
+    public virtual void ClearAllWaypoints()
+    {
+
+        foreach (List<TileInfo> target in targetList)
+        {
+            target.Clear();
+        }
+
+        foreach (UnitInfo unit in unitInfos)
+        {
+            unit.unitEffect.combatHandler.DisEngage();
+        }
+    }
+
+    protected void AssignsToList(List<TileInfo> waypoints, List<List<TileInfo>> _waypointList)
+    {
+        foreach (List<TileInfo> _waypoints in _waypointList)
+        {
+            _waypoints.AddRange(waypoints);
+        }
+    }
+
+    protected void AssignsToList(TileInfo waypoint, List<List<TileInfo>> _waypointList)
+    {
+        foreach (List<TileInfo> waypoints in _waypointList)
+        {
+            if (waypoint != null)
+            {
+                waypoints.Add(waypoint);
+            }
+        }
     }
 }

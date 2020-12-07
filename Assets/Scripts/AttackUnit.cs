@@ -77,7 +77,6 @@ public class AttackUnit : MoveUnit
 
         if (Input.GetButtonDown("Fire2"))
         {
-            //ClearAllWaypoints();
             openRightClick.doNotDisplay = true;
             //Debug.Log("AttackUnit set doNotDisplay" + openRightClick.doNotDisplay);
             openRightClick.ResetValues();
@@ -117,11 +116,6 @@ public class AttackUnit : MoveUnit
             openRightClick.tileInfoRaycaster.GetTileInfosFromPos(Input.mousePosition);
             openRightClick.forceDisplay = true;
             Debug.Log("SELECTED");
-
-            //TileInfo tileInfo = tileInfoRaycaster.GetUnitInfoFromPos(Input.mousePosition);
-
-            //ClearAllWaypoints();
-            //AssignWaypointsToList(tileInfo);
         }
 
     }
@@ -133,10 +127,5 @@ public class AttackUnit : MoveUnit
         openRightClick.ResetValues();
 
         yield return null;
-    }
-
-    public override void EndAction()
-    {
-        base.EndAction();
     }
 }

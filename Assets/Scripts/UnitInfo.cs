@@ -18,6 +18,7 @@ public class UnitInfo : TileInfo
     public List<TileInfo> targets;
     public TileInfo currentTarget;
     public List<TileInfo> targetted;
+    public TileInfo merge;
     public bool isEngaged;
     public int attackDistance;
     public float killChance;

@@ -8,22 +8,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MergeUnit : PlayerCommand
+public class MergeHandler : MonoBehaviour
 {
-    protected override void Start()
-    {
-        base.Start();
-    }
+    public UnitInfo unitInfo;
+    public PathFinding pathFinding;
 
-    public override void DoAction()
+    private void Start()
     {
-        base.DoAction();
-        //get unitInfos then assign all units after index 0 with index 0 in merge
-        EndAction();
-    }
-
-    public override void EndAction()
-    {
-        base.EndAction();
+        
     }
 }
