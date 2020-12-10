@@ -18,7 +18,13 @@ public class MergeUnit : PlayerCommand
     public override void DoAction()
     {
         base.DoAction();
-        //get unitInfos then assign all units after index 0 with index 0 in merge
+        openRightClick.openLeftClick.Ignore();
+
+        for (int i = 1;i < unitInfos.Count;i++)
+        {
+            unitInfos[i].merge = unitInfos[0];
+            unitInfos[i].unitEffect.mergeHandler.GenerateWayPoint();
+        }
         EndAction();
     }
 

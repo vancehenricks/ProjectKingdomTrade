@@ -11,7 +11,7 @@ TextureImporter:
     21300012: flag_1
     21300014: catalpult_1
     21300016: attack_1
-    21300018: select_2
+    21300018: merge_1
   externalObjects: {}
   serializedVersion: 9
   mipmaps:
@@ -228,8 +228,8 @@ TextureImporter:
       name: flag_1
       rect:
         serializedVersion: 2
-        x: 937
-        y: 1710
+        x: 934
+        y: 1716
         width: 85
         height: 85
       alignment: 0
@@ -268,8 +268,8 @@ TextureImporter:
       name: attack_1
       rect:
         serializedVersion: 2
-        x: 1200
-        y: 1711
+        x: 1195
+        y: 1716
         width: 85
         height: 85
       alignment: 0
@@ -285,15 +285,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: select_2
+      name: merge_1
       rect:
         serializedVersion: 2
         x: 1324
-        y: 1714
+        y: 1716
         width: 85
         height: 85
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []

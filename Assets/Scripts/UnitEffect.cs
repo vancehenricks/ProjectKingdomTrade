@@ -15,6 +15,7 @@ public class UnitEffect : MonoBehaviour
     public TileInfo standingTile;
     public PathFinding pathFinder;
     public CombatHandler combatHandler;
+    public MergeHandler mergeHandler;
     //public TileInfo previousTile;
     public UnitCycler unitCycler;
     public UnitDirection unitDirection;

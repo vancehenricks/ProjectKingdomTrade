@@ -67,7 +67,9 @@ public class PathFinding : MonoBehaviour
             transform.position = Vector2.Lerp(transform.position, destination.tile.transform.position, (10f * Tick.speed) * Time.deltaTime);
         }
 
-        if (destination.arrivalTime == 0 && Vector2.Distance(transform.position, destination.tile.transform.position) < 0.5f)
+        //Debug.Log(Vector2.Distance(transform.position, destination.tile.transform.position) / 25);
+
+        if (destination.arrivalTime == 0 && Vector2.Distance(transform.position, destination.tile.transform.position) < 0.8f)
         //if (destination.arrivalTime == 0 && unitInfo.tileLocation == destination.tile.tileLocation)
         {
             transform.position = destination.tile.transform.position;

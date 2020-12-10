@@ -194,7 +194,11 @@ public class ConsoleHandler : MonoBehaviour
         if (!cacheCommands.Contains(text))
         {
             cacheCommands.Add(text);
-            index++;
+            index = cacheCommands.Count - 1;
+        }
+        else
+        {
+            index = cacheCommands.IndexOf(text);
         }
     }
 

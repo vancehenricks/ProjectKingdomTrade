@@ -61,11 +61,6 @@ public class MultiSelect : MonoBehaviour
         onSelectedChange(MultiSelect.selectedTiles);
     }
 
-    public static int Count()
-    {
-        return MultiSelect.selectedTiles.Count;
-    }
-
     public static void Clear(bool relay = false)
     {
         MultiSelect.selectedTiles.Clear();

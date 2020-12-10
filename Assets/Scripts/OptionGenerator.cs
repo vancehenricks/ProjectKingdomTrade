@@ -44,6 +44,8 @@ public class OptionGenerator : MonoBehaviour
         gameObject.SetActive(true);
         string tileType = tileInfo.tileType;
 
+        List<TileInfo> selected = MultiSelect.GetSelectedTiles();
+
         switch (tileType)
         {
             case "Land":
@@ -63,11 +65,11 @@ public class OptionGenerator : MonoBehaviour
             case "Unit":
                 Show("Move_1");
                 Show("Attack_1");
-                if (MultiSelect.Count() > 1)
+                if (selected.Count > 1)
                 {
                     Show("Merge_1");
                 }
-                else if (MultiSelect.GetSelectedTiles()[0].units > 1)
+                else if (selected.Count == 1 && selected[0].units > 1) //need to account for drag selection
                 {
                     Show("Split_1");
                 }

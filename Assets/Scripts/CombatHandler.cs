@@ -73,6 +73,7 @@ public class CombatHandler : MonoBehaviour
                     combatSession = target.unitEffect.combatHandler.combatSession;
                     combatSession.Add(unitInfo);
                     combatSession.Relay();
+                    break;
                 }
             }
             catch

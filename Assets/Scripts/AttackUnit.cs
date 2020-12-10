@@ -30,7 +30,6 @@ public class AttackUnit : MoveUnit
     {
         base.DoAction();
         CursorReplace.currentCursor = CursorType.Attack;
-        CursorReplace.SetCurrentCursorAsPrevious();
     }
 
     private void OnSelectedChange()
