@@ -123,6 +123,8 @@ public class CloudCycle : MonoBehaviour
             cloud.transform.SetParent(baseCloud[index].transform.parent);
             cloud.transform.localScale = baseCloud[index].transform.localScale;
             clouds.Add(cloud);
+            Image image = cloud.GetComponent<Image>();
+            image.enabled = hide;
             cloud.SetActive(true);
             counter++;
 

@@ -18,6 +18,7 @@ public class UnitWayPoint : SelectTiles
     public CombatHandler combatHandler;
     public GameObject moveFlag;
     public GameObject attackFlag;
+    public GameObject mergeFlag;
 
     //public int index;
     // public bool cleaned;
@@ -53,12 +54,18 @@ public class UnitWayPoint : SelectTiles
         if (unitInfo.targets.Count > 0) return;
 
         RemoveAllFlag();
+
+        if (unitInfo.merge != null)
+        {
+            DrawAndSyncFlag(unitInfo.merge, mergeFlag);
+            return;
+        }
         DrawFlag(tileInfo, moveFlag);
     }
 
     private void WayPointCountChange(TileInfo tileInfo)
     {
-        if (unitInfo.targets.Count > 0 || unitInfo.waypoints.Count == 1) return;
+        if (unitInfo.targets.Count > 0 || unitInfo.waypoints.Count == 1 || unitInfo.merge != null) return;
 
         if (tileInfo == null)
         {
