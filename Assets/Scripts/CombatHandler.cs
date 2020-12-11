@@ -123,7 +123,7 @@ public class CombatHandler : MonoBehaviour
 
         UnitInfo targetUnit = unitInfo.currentTarget as UnitInfo;
 
-        int distance = GetDistance(targetUnit);
+        int distance = Tools.GetTileLocationDistance(unitInfo, targetUnit);
         int attackDistance = unitInfo.attackDistance <= 1 ? 0 : unitInfo.attackDistance;
 
         Debug.Log("120DISTANCE=" + distance);
@@ -167,22 +167,6 @@ public class CombatHandler : MonoBehaviour
             unitInfo.waypoints.Add(targetUnit);
             targetStandingTile = targetUnit.unitEffect.standingTile;
         }
-    }
-
-    private int GetDistance(TileInfo targetUnit)
-    {
-        int distance = 0;
-
-        try
-        {
-            distance = (int)Math.Round(Vector2.Distance(unitInfo.tileLocation, targetUnit.tileLocation), MidpointRounding.AwayFromZero);
-        }
-        catch
-        {
-            distance = (int)Math.Round(Vector2.Distance(unitInfo.transform.position, targetUnit.transform.position) / 25, MidpointRounding.AwayFromZero);
-        }
-
-        return distance;
     }
 
     private void ResetCombatPathing()

@@ -4,6 +4,7 @@
  * Written by Vance Henricks Patual <vpatual@gmail.com>, August 2020
  */
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -132,6 +133,22 @@ public class Tools : MonoBehaviour
                 tiles.Remove(tile);
             }
         }
+    }
+
+    public static int GetTileLocationDistance(TileInfo tile1, TileInfo tile2)
+    {
+        int distance = 0;
+
+        try
+        {
+            distance = (int)Math.Round(Vector2.Distance(tile1.tileLocation, tile2.tileLocation), MidpointRounding.AwayFromZero);
+        }
+        catch
+        {
+            distance = (int)Math.Round(Vector2.Distance(tile1.transform.position, tile2.transform.position) / 25, MidpointRounding.AwayFromZero);
+        }
+
+        return distance;
     }
 
     public static bool HasNulls(List<TileInfo> tiles)

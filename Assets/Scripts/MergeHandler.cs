@@ -4,6 +4,7 @@
  * Written by Vance Henricks Patual <vpatual@gmail.com>, December 2020
  */
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,6 +13,8 @@ public class MergeHandler : MonoBehaviour
 {
     public UnitInfo unitInfo;
     public PathFinding pathFinding;
+
+    private bool isMerging;
 
     private void Start()
     {
@@ -25,26 +28,32 @@ public class MergeHandler : MonoBehaviour
 
     public void GenerateWayPoint()
     {
-        unitInfo.waypoints.Add(unitInfo.merge);
+        //MergeReset();
+        unitInfo.waypoints.Add(unitInfo.merge.unitEffect.standingTile);
+        isMerging = true;
     }
 
-    //this does not work well if standing tile does not match likely use tickupdate instead and check for distance
     private void WayPointReached(TileInfo tile)
     {
-        UnitInfo unit = tile as UnitInfo;
-
-        if (unit == null)
+        if (!isMerging && unitInfo.merge == null)
         {
-            unitInfo.merge = null;
+            MergeReset();
+            return;
         }
-        else if (unit.tileId != unitInfo.merge.tileId)
+
+        if (Tools.GetTileLocationDistance(unitInfo, unitInfo.merge) > 0)
         {
             GenerateWayPoint();
         }
-        else if (unit.tileId == unitInfo.merge.tileId)
+        else if (Tools.GetTileLocationDistance(unitInfo, unitInfo.merge) == 0)
         {
-            //do merge logic
-            unitInfo.merge = null;
+            MergeReset();
         }
+    }
+
+    private void MergeReset()
+    {
+        isMerging = false;
+        unitInfo.merge = null;
     }
 }
