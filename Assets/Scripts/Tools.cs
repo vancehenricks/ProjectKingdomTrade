@@ -168,6 +168,19 @@ public class Tools : MonoBehaviour
         Destroy(unit1.gameObject);
     }
 
+    public static void Split(UnitInfo baseTile)
+    {
+        GameObject clone = Instantiate(baseTile.gameObject, baseTile.transform.parent);
+        UnitInfo unitInfo = clone.GetComponent<UnitInfo>();
+        int result1 = baseTile.units / 2;
+        int result2 = baseTile.units - result1;
+        // same with merge need to calculate other stats also;
+
+        unitInfo.units = result1;
+        baseTile.units = result2;
+        unitInfo.Initialize();
+    }
+
     public static string ConvertToSymbols(int value)
     {
         string _value = value.ToString("N");

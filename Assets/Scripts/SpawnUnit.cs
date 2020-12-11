@@ -11,7 +11,6 @@ using UnityEngine;
 public class SpawnUnit : ConsoleCommand
 {
     public GameObject baseUnit;
-    public Transform parent;
     public TileInfoRaycaster tileInfoRaycaster;
     //public KeyCode spawnKey;
     public int nCount;
@@ -52,7 +51,7 @@ public class SpawnUnit : ConsoleCommand
                 TileInfo tile = tileInfoRaycaster.GetTileInfoFromPos(Input.mousePosition);
                 if (tile != null)
                 {
-                    GameObject unit = Instantiate(baseUnit, parent);
+                    GameObject unit = Instantiate(baseUnit, baseUnit.transform.parent);
                     unit.transform.position = tile.transform.position;
                     UnitInfo unitInfo = unit.GetComponent<UnitInfo>();
                     //unitInfo.tileId = Tools.UniqueId + "";

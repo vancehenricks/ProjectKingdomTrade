@@ -62,18 +62,18 @@ public class PathFinding : MonoBehaviour
 
     private void Update()
     {
-        if (destination.arrivalTime == 0)
-        {
-            transform.position = Vector2.Lerp(transform.position, destination.tile.transform.position, (10f * Tick.speed) * Time.deltaTime);
-        }
-
-        //Debug.Log(Vector2.Distance(transform.position, destination.tile.transform.position) / 25);
-
-        if (destination.arrivalTime == 0 && Vector2.Distance(transform.position, destination.tile.transform.position) < 0.8f)
-        //if (destination.arrivalTime == 0 && unitInfo.tileLocation == destination.tile.tileLocation)
+        if (destination.arrivalTime == -1)
         {
             transform.position = destination.tile.transform.position;
-            destination.arrivalTime = -1;
+        }
+        else if (destination.arrivalTime == 0)
+        {
+            transform.position = Vector2.Lerp(transform.position, destination.tile.transform.position, (10f * Tick.speed) * Time.deltaTime);
+
+            if (Vector2.Distance(transform.position, destination.tile.transform.position) < 0.5f)
+            {
+                destination.arrivalTime = -1;
+            }
         }
 
         if (unitInfo.waypoints.Count > 0 && unitInfo.waypoints[0] != null && firstWayPoint.tileId != unitInfo.waypoints[0].tileId)

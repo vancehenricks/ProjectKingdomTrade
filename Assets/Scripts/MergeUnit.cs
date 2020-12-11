@@ -15,9 +15,9 @@ public class MergeUnit : PlayerCommand
         base.Start();
     }
 
-    public override void DoAction()
+    public void DoMergeAction()
     {
-        base.DoAction();
+        DoAction();
         openRightClick.openLeftClick.Ignore();
 
         for (int i = 1;i < unitInfos.Count;i++)
@@ -28,8 +28,11 @@ public class MergeUnit : PlayerCommand
         EndAction();
     }
 
-    public override void EndAction()
+    public void DoSplitAction()
     {
-        base.EndAction();
+        DoAction();
+        openRightClick.openLeftClick.Ignore();
+        Tools.Split(unitInfos[0]);
+        EndAction();
     }
 }
