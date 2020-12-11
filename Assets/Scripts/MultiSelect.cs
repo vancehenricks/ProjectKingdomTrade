@@ -42,6 +42,7 @@ public class MultiSelect : MonoBehaviour
             shiftPressed = false;
         }
     }
+
     public static List<TileInfo> GetSelectedTiles()
     {
         return MultiSelect.selectedTiles;

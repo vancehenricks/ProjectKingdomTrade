@@ -7,6 +7,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class HideBorder : MonoBehaviour
 {
@@ -42,7 +43,8 @@ public class HideBorder : MonoBehaviour
 
                     if (!isException)
                     {
-                        tileCaller.shade.SetActive(!tileCaller.shade.activeSelf);
+                        Image image = tileCaller.shade.GetComponent<Image>();
+                        image.enabled = !image.enabled;
                     }
                 }
             }

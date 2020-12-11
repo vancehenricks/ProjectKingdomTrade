@@ -97,11 +97,12 @@ public class GenerateCells : MonoBehaviour
 
     public void SelectAll(TileInfo tile)
     {
+        MultiSelect.Add(tile);
         foreach (GameObject cell in cells)
         {
             CellInfo cellInfo = cell.GetComponent<CellInfo>();
 
-            if (cellInfo.tileInfo.tileType == tile.tileType)
+            if (cellInfo.tileInfo.tileType == tile.tileType && cellInfo.tileInfo.tileId != tile.tileId)
             {
                 cellInfo.select.gameObject.SetActive(true);
                 MultiSelect.Add(cellInfo.tileInfo);

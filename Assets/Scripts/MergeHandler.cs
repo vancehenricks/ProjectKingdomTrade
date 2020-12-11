@@ -35,7 +35,7 @@ public class MergeHandler : MonoBehaviour
 
     private void WayPointReached(TileInfo tile)
     {
-        if (!isMerging && unitInfo.merge == null)
+        if (!isMerging || unitInfo.merge == null)
         {
             MergeReset();
             return;
@@ -47,7 +47,7 @@ public class MergeHandler : MonoBehaviour
         }
         else if (Tools.GetTileLocationDistance(unitInfo, unitInfo.merge) == 0)
         {
-            MergeReset();
+            Tools.Merge(unitInfo, unitInfo.merge);
         }
     }
 

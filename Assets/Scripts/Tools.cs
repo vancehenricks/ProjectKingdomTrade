@@ -161,6 +161,12 @@ public class Tools : MonoBehaviour
         return false;
     }
 
+    public static void Merge(UnitInfo unit1, UnitInfo unit2)
+    {
+        unit2.units += unit1.units;
+        //need to deal how to calculate other values e.g. attackDistance, killChance and deathChance
+        Destroy(unit1.gameObject);
+    }
 
     public static string ConvertToSymbols(int value)
     {

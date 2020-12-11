@@ -108,7 +108,8 @@ public class CloudAction : MonoBehaviour
             yield return new WaitForSeconds(0.1f);
         }
 
-        Destroy(obj);
+        cloudCycle.clouds.Remove(obj);
         cloudCycle.counter--;
+        Destroy(obj);
     }
 }

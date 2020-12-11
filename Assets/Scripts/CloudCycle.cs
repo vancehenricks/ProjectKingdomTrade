@@ -22,12 +22,15 @@ public class CloudCycle : MonoBehaviour
     public int maxSpawn;
     public int spawnChance;
     public float zLevel;
+    public List<GameObject> clouds;
+    public KeyCode hideClouds;
 
     private int maxSpawnSaved;
     private int obsoluteMaxSpawn;
     private bool hasSpawnDoubled;
     private bool hasStarted;
-    private List<GameObject> clouds;
+    private bool hide;
+
 
     private void Awake()
     {
@@ -38,6 +41,20 @@ public class CloudCycle : MonoBehaviour
     {
         clouds = new List<GameObject>();
         obsoluteMaxSpawn = maxSpawn;
+        hide = true;
+    }
+
+    private void Update()
+    {
+        if (InputOverride.GetKeyUp(hideClouds))
+        {
+            hide = !hide;
+            foreach (GameObject cloud in clouds)
+            {
+                Image image = cloud.GetComponent<Image>();
+                image.enabled = hide;
+            }
+        }
     }
 
     // Update is called once per frame
