@@ -41,11 +41,13 @@ public class MergeHandler : MonoBehaviour
             return;
         }
 
-        if (Tools.GetTileLocationDistance(unitInfo, unitInfo.merge) > 0)
+        int distance = Tools.TileLocationDistance(unitInfo, unitInfo.merge);
+
+        if (distance > 0)
         {
             GenerateWayPoint();
         }
-        else if (Tools.GetTileLocationDistance(unitInfo, unitInfo.merge) == 0)
+        else if (distance == 0)
         {
             Tools.Merge(unitInfo, unitInfo.merge);
         }

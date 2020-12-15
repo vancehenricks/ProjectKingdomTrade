@@ -123,7 +123,7 @@ public class CombatHandler : MonoBehaviour
 
         UnitInfo targetUnit = unitInfo.currentTarget as UnitInfo;
 
-        int distance = Tools.GetTileLocationDistance(unitInfo, targetUnit);
+        int distance = Tools.TileLocationDistance(unitInfo, targetUnit);
         int attackDistance = unitInfo.attackDistance <= 1 ? 0 : unitInfo.attackDistance;
 
         Debug.Log("120DISTANCE=" + distance);
@@ -144,18 +144,18 @@ public class CombatHandler : MonoBehaviour
         {
             Debug.Log("Unit [" + unitInfo.tileId + "] attacking Unit [" + targetUnit.tileId + "]");
         }
-        else if (distance > unitInfo.attackDistance && unitInfo.isEngaged)
+        else if (distance > attackDistance && unitInfo.isEngaged)
         {
             DisEngage();
         }
-        else if (distance > unitInfo.attackDistance && !checkOnlyWithinDistance)
+        else if (distance > attackDistance && !checkOnlyWithinDistance)
         {
             ResetCombatPathing();
             unitInfo.waypoints.Add(waypoint);
             targetStandingTile = targetUnit.unitEffect.standingTile;
         }
         else if (!unitInfo.isEngaged &&
-            distance > unitInfo.attackDistance &&
+            distance > attackDistance &&
             pathFinding.gwPointsIndex >= pathFinding.generatedWayPoints.Count/2)
         {
             if (targetStandingTile == null) return;

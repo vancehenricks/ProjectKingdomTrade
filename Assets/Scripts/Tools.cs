@@ -135,7 +135,7 @@ public class Tools : MonoBehaviour
         }
     }
 
-    public static int GetTileLocationDistance(TileInfo tile1, TileInfo tile2)
+    public static int TileLocationDistance(TileInfo tile1, TileInfo tile2)
     {
         int distance = 0;
 

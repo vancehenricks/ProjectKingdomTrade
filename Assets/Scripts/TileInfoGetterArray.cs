@@ -31,7 +31,7 @@ public class TileInfoGetterArray : MonoBehaviour
 
         TileInfo temp = col.GetComponent<TileInfo>();
 
-        if (temp == null) return;
+        if (temp == null || tileInfos.Contains(temp)) return;
 
         foreach (TileInfo tile in baseTiles)
         {

@@ -27,24 +27,16 @@ public class OptionGenerator : MonoBehaviour
         foreach (GameObject option in options)
         {
             option.SetActive(false);
-            //image.enabled = false;
             optionDictionary.Add(option.name, option);
         }
     }
 
     public void Display(TileInfo tileInfo)
     {
-        /*if (blockDisplay)
-        {
-            blockDisplay = false;
-            return;
-        }*/
-        //TileSelected.tileInfo = tileInfo;
         SetActiveAll(false);
         gameObject.SetActive(true);
         string tileType = tileInfo.tileType;
-
-        List<TileInfo> selected = MultiSelect.GetSelectedTiles();
+        List<TileInfo> tileInfos = TileInfoRaycaster.tileInfos;
 
         switch (tileType)
         {
@@ -65,15 +57,14 @@ public class OptionGenerator : MonoBehaviour
             case "Unit":
                 Show("Move_1");
                 Show("Attack_1");
-                if (selected.Count > 1)
+                if (tileInfos.Count > 1)
                 {
                     Show("Merge_1");
                 }
-                else if (selected.Count == 1 && selected[0].units > 1) //need to account for drag selection
+                else if (tileInfos.Count == 1 && tileInfo.units > 1)
                 {
                     Show("Split_1");
                 }
-                Show("Resupply_1");
                 Show("Examine_1");
                 break;
         }
