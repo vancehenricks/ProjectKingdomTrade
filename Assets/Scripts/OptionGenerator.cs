@@ -26,6 +26,8 @@ public class OptionGenerator : MonoBehaviour
 
         foreach (GameObject option in options)
         {
+            if (option == null) continue; 
+
             option.SetActive(false);
             optionDictionary.Add(option.name, option);
         }
@@ -36,7 +38,8 @@ public class OptionGenerator : MonoBehaviour
         SetActiveAll(false);
         gameObject.SetActive(true);
         string tileType = tileInfo.tileType;
-        List<TileInfo> tileInfos = TileInfoRaycaster.tileInfos;
+        List<TileInfo> raycastTile = TileInfoRaycaster.tileInfos;
+        List<TileInfo> multiSelect = MultiSelect.GetSelectedTiles();
 
         switch (tileType)
         {
@@ -48,8 +51,7 @@ public class OptionGenerator : MonoBehaviour
                 Show("Examine_1");
                 break;
             case "Town":
-                Show("HireMerchant_1");
-                Show("EnlistCivilian_1");
+                Show("Recruit_1");
                 Show("BuildShip_1");
                 Show("SetTradePort_1");
                 Show("Examine_1");
@@ -57,11 +59,11 @@ public class OptionGenerator : MonoBehaviour
             case "Unit":
                 Show("Move_1");
                 Show("Attack_1");
-                if (tileInfos.Count > 1)
+                if (multiSelect.Count > 1 && raycastTile.Count > 1)
                 {
                     Show("Merge_1");
                 }
-                else if (tileInfos.Count == 1 && tileInfo.units > 1)
+                else if ((multiSelect.Count == 1 || raycastTile.Count == 1) && tileInfo.units > 1)
                 {
                     Show("Split_1");
                 }
@@ -79,7 +81,9 @@ public class OptionGenerator : MonoBehaviour
 
     public void SetActiveAll(bool active)
     {
-        foreach (GameObject option in options)
+        if (optionDictionary == null) return;
+
+        foreach (GameObject option in optionDictionary.Values)
         {
             option.SetActive(active);
         }

@@ -58,7 +58,21 @@ public class OpenLeftClick : MonoBehaviour
                 return;
             }
 
-            if (TileInfoRaycaster.tileInfos.Count > 0)
+            int count = TileInfoRaycaster.tileInfos.Count;
+
+            if (count > 1)
+            {
+                MultiSelect.Clear(true);
+
+                foreach (TileInfo tile in TileInfoRaycaster.tileInfos)
+                {
+                    if (tile.tileType != "Unit") continue;
+                    MultiSelect.Add(tile);
+                }
+
+                MultiSelect.Relay();
+            }
+            else if (count == 1)
             {
                 MultiSelect.Clear(true);
                 MultiSelect.AddRange(TileInfoRaycaster.tileInfos, true);
