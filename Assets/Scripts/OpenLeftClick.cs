@@ -29,7 +29,7 @@ public class OpenLeftClick : MonoBehaviour
         ExecuteCommands preCommand = PreCommand;
 
         CommandPipeline.Add(command, 1001);
-        CommandPipeline.Add(preCommand, 10);
+        CommandPipeline.Add(preCommand, 49);
     }
 
     private void PreCommand()
