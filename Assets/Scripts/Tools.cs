@@ -200,4 +200,12 @@ public class Tools : MonoBehaviour
 
         return value + "";
     }
+
+    public static int GetNumberOfTiles(float w1, float h1, float w2, float h2)
+    {
+        float width = w1 / w2;
+        float height = h1 / h2;
+
+        return (int)(width * height);
+    }
 }

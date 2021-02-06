@@ -46,10 +46,10 @@ public class NewGameAction : MonoBehaviour
                 w = h = 500;
             }
 
-            if (w > 1000 && h > 1000)
+            if (Tools.GetNumberOfTiles(w, h, 25, 25) > Tools.GetNumberOfTiles(1000, 1000, 25, 25))
             {
                 ShowMessage show = confirmationMessage.SetMessage("Warning",
-                    "Map size might be too big could cause the game to be unresponsive. Would you like to continue?",
+                    "Map size is greater than 1000x1000. This could cause the game to be unresponsive. Would you like to continue?",
                     "Yes", "No", null, OnResponse);
 
                 if (!show.response) return;
@@ -60,7 +60,7 @@ public class NewGameAction : MonoBehaviour
         }
         else
         {
-            message.SetMessage("Invalid Input", "Decimal values only in map size", "OK", null, null);
+            message.SetMessage("Invalid Input", "Integer values only in map size", "OK", null, null);
         }
 
     }

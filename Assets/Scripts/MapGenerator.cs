@@ -22,7 +22,7 @@ public class MapGenerator : MonoBehaviour
 
     public List<GameObject> baseTile;
     public GameObject placeHolderTile;
-    public GameObject grid;
+    public RectTransform grid;
     public float distanceOfEachTile;
     public bool useGridSize;
     public float width;
@@ -46,7 +46,6 @@ public class MapGenerator : MonoBehaviour
     public OnInitialize onInitialize;
 
     private List<int> _borderIndex;
-    private RectTransform rectGrid;
     private RectTransform rectPlaceHolder;
     private Vector2 originalPos;
 
@@ -76,10 +75,9 @@ public class MapGenerator : MonoBehaviour
 
         if (useGridSize)
         {
-            rectGrid = grid.GetComponent<RectTransform>();
             rectPlaceHolder = placeHolderTile.GetComponent<RectTransform>();
-            width = rectGrid.rect.width / rectPlaceHolder.rect.width;
-            height = rectGrid.rect.height / rectPlaceHolder.rect.height;
+            width = grid.rect.width / rectPlaceHolder.rect.width;
+            height = grid.rect.height / rectPlaceHolder.rect.height;
         }
         placeHolderTile.SetActive(true);
         onInitialize();

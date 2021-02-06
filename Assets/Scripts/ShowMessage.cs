@@ -27,9 +27,9 @@ public class ShowMessage : MonoBehaviour
     public delegate void ExecuteAction(bool response);
     private ExecuteAction exeAction;
 
-    public ShowMessage SetMessage(string t, string m, string c, Sprite i, ExecuteAction exe)
+    public ShowMessage SetMessage(string _title, string _message, string _confirm, Sprite _icon, ExecuteAction exe)
     {
-        return SetMessage(t, m, c, "", i, exe);
+        return SetMessage(_title, _message, _confirm, "", _icon, exe);
     }
 
     private void OnDestroy()
@@ -37,39 +37,39 @@ public class ShowMessage : MonoBehaviour
         exeAction = null;
     }
 
-    public ShowMessage SetMessage(string t, string m, string c, string d, Sprite i, ExecuteAction exe)
+    public ShowMessage SetMessage(string _title, string _message, string _confirm, string _deny, Sprite _icon, ExecuteAction exe)
     {
-        if (d != "")
+        if (_deny != "")
         {
-            deny.text = d;
+            deny.text = _deny;
         }
 
-        title.text = t;
-        if (i != null)
+        title.text = _title;
+        if (_icon != null)
         {
-            icon.sprite = i;
+            icon.sprite = _icon;
         }
 
-        message.text = m;
-        confirm.text = c;
+        message.text = _message;
+        confirm.text = _confirm;
         GameObject temp = Instantiate(window, window.transform.parent);
         background.transform.SetAsLastSibling();
         temp.transform.SetAsLastSibling();
         temp.SetActive(true);
         background.SetActive(true);
-        ShowMessage msg = temp.GetComponent<ShowMessage>();
-        msg.exeAction = exe;
+        ShowMessage showMessage = temp.GetComponent<ShowMessage>();
+        showMessage.exeAction = exe;
 
         return temp.GetComponent<ShowMessage>();
     }
 
-    public void SetReponse(bool r)
+    public void SetReponse(bool _response)
     {
         background.SetActive(false);
-        response = r;
+        response = _response;
         if (exeAction != null)
         {
-            exeAction(r);
+            exeAction(_response);
         }
         exeAction = null;
         Destroy(gameObject);
