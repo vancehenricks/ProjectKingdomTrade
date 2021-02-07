@@ -10,7 +10,8 @@ using UnityEngine;
 
 public class SpawnUnit : ConsoleCommand
 {
-    public GameObject baseUnit;
+    public List<UnitInfo> baseUnits;
+    public Dictionary<string, UnitInfo> _baseUnits;
     public TileInfoRaycaster tileInfoRaycaster;
     //public KeyCode spawnKey;
     public int nCount;
@@ -21,12 +22,20 @@ public class SpawnUnit : ConsoleCommand
     public bool executeAll;
     public bool notCancel;
     public int units;
+    public string subType;
 
     private bool fire1Clicked;
 
     public override void Initialize()
     {
+        _baseUnits = new Dictionary<string, UnitInfo>();
+        foreach (UnitInfo unit in baseUnits)
+        {
+            _baseUnits.Add(unit.subType, unit);
+        }
+
         subCommands = new Dictionary<string, string>();
+        subCommands.Add("sub-type", "Worker");
         subCommands.Add("amount", "1");
         subCommands.Add("color", "#ffffff");
         subCommands.Add("attack-distance", "1");
@@ -51,7 +60,7 @@ public class SpawnUnit : ConsoleCommand
                 TileInfo tile = tileInfoRaycaster.GetTileInfoFromPos(Input.mousePosition);
                 if (tile != null)
                 {
-                    GameObject unit = Instantiate(baseUnit, baseUnit.transform.parent);
+                    GameObject unit = Instantiate(_baseUnits[subType].gameObject, _baseUnits[subType].transform.parent);
                     unit.transform.position = tile.transform.position;
                     UnitInfo unitInfo = unit.GetComponent<UnitInfo>();
                     //unitInfo.tileId = Tools.UniqueId + "";
@@ -87,7 +96,8 @@ public class SpawnUnit : ConsoleCommand
         {
             Dictionary<string, string> subCommands = ConsoleParser.ArgumentsToSubCommands(arguments);
 
-            UnitInfo unitInfo = baseUnit.GetComponent<UnitInfo>();
+            subType = "Worker";
+            UnitInfo unitInfo = _baseUnits[subType].GetComponent<UnitInfo>();
 
             nMax = 1;
             nCount = 0;
@@ -106,6 +116,14 @@ public class SpawnUnit : ConsoleCommand
 
                 switch (subCommand)
                 {
+                    case "sub-type":
+                        if (!_baseUnits.ContainsKey(subCommands[subCommand])) break;
+
+                        subType = subCommands[subCommand];
+                        UnitInfo unitInfo1 = _baseUnits[subType].GetComponent<UnitInfo>();
+                        attackDistance = unitInfo1.attackDistance;
+                        units = unitInfo1.units;
+                        break;
                     case "amount":
                         int.TryParse(subCommands[subCommand], out nMax);
                         break;

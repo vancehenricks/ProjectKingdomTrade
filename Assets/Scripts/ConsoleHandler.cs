@@ -311,7 +311,8 @@ public class ConsoleHandler : MonoBehaviour
     {
         foreach (string val in values)
         {
-            if (val.Contains(substrings[substrings.Length - 1]))
+
+            if (substrings[substrings.Length - 1].Length > 0 && val.Contains(substrings[substrings.Length - 1]))
             {
                 if (val.IndexOf(substrings[substrings.Length - 1][0]) > 0) continue;
 

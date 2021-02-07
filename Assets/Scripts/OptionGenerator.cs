@@ -37,11 +37,8 @@ public class OptionGenerator : MonoBehaviour
     {
         SetActiveAll(false);
         gameObject.SetActive(true);
-        string tileType = tileInfo.tileType;
-        List<TileInfo> raycastTile = TileInfoRaycaster.tileInfos;
-        List<TileInfo> multiSelect = MultiSelect.GetSelectedTiles();
 
-        switch (tileType)
+        switch (tileInfo.tileType)
         {
             case "Land":
             case "Grass":
@@ -57,18 +54,54 @@ public class OptionGenerator : MonoBehaviour
                 Show("Examine_1");
                 break;
             case "Unit":
-                Show("Move_1");
-                Show("Attack_1");
-                if (multiSelect.Count > 1 && raycastTile.Count > 1)
+                switch (tileInfo.subType)
                 {
-                    Show("Merge_1");
+                    case "Merchant":
+                        Show("Move_1");
+                        Show("Trade_1");
+                        Show("EstablishTown_1");
+                        Show("Examine_1");
+                        break;
+                    case "Worker":
+                        Show("Move_1");
+                        Show("Gather_1");
+                        ShowMergeAndSplit(tileInfo);
+                        Show("Examine_1");
+                        break;
+                    case "Infantry":
+                    case "Cavalry":
+                    case "Archer":
+                        Show("Move_1");
+                        Show("Attack_1");
+                        ShowMergeAndSplit(tileInfo);
+                        Show("Examine_1");
+                        break;
+                    case "Trebuchet":
+                        Show("Move_1");
+                        Show("Attack_1");
+                        Show("Examine_1");
+                        break;
+                    case "Ship":
+                        Show("Move_1");
+                        Show("Examine_1");
+                        break;
                 }
-                else if ((multiSelect.Count == 1 || raycastTile.Count == 1) && tileInfo.units > 1)
-                {
-                    Show("Split_1");
-                }
-                Show("Examine_1");
                 break;
+        }
+    }
+
+    private void ShowMergeAndSplit(TileInfo tileInfo)
+    {
+        List<TileInfo> raycastTile = TileInfoRaycaster.tileInfos;
+        List<TileInfo> multiSelect = MultiSelect.GetSelectedTiles();
+
+        if (multiSelect.Count > 1 && raycastTile.Count > 1)
+        {
+            Show("Merge_1");
+        }
+        else if ((multiSelect.Count == 1 || raycastTile.Count == 1) && tileInfo.units > 1)
+        {
+            Show("Split_1");
         }
     }
 
