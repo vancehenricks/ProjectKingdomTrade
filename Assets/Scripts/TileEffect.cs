@@ -88,9 +88,9 @@ public class TileEffect : MonoBehaviour
 
         if (tileInfo.tileType == "Town") return;
 
-        foreach (TileInfo tile in tileInfo.claimants)
+        foreach (PlayerInfo player in tileInfo.claimants)
         {
-            border.color = tile.color;
+            border.color = player.color;
         }
         border.color /= tileInfo.claimants.Count;
         border.color = new Color(border.color.r, border.color.g, border.color.b);

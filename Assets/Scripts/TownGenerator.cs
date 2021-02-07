@@ -25,6 +25,7 @@ public class TownGenerator : MonoBehaviour
     public int maxAmountOfTowns;
     public int distanceOfEachTowns;
     public int spawnChance;
+    public PlayerInfo basePlayerInfo;
 
     public List<TileInfo> allowedTiles;
 
@@ -88,6 +89,7 @@ public class TownGenerator : MonoBehaviour
                 TownInfo townInfo = tile.GetComponent<TownInfo>();
                 townInfo.tileLocation = location;
                 townInfo.Initialize();
+                townInfo.playerInfo = Instantiate(basePlayerInfo, basePlayerInfo.transform.parent);
                 generatedTowns.Add(location, tile);
                 Debug.Log("TILENAME: " + townInfo.tileType);
                 xCounter = 0;

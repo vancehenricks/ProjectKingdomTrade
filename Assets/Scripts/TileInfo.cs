@@ -14,7 +14,8 @@ public class TileInfo : MonoBehaviour
     public string subType;
     public long tileId;
     public string tileName;
-    public List<TileInfo> claimants;
+    public PlayerInfo playerInfo;
+    public HashSet<PlayerInfo> claimants;
     public TileEffect tileEffect;
     public TileCaller tileCaller;
     public Color color;
@@ -30,7 +31,7 @@ public class TileInfo : MonoBehaviour
 
     public virtual void Initialize()
     {
-        claimants = new List<TileInfo>();
+        claimants = new HashSet<PlayerInfo>();
         localTemp = Temperature.temperature;
         unitInfos = new List<UnitInfo>();
         tileId = Tools.UniqueId;

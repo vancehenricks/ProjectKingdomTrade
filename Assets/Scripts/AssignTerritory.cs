@@ -22,7 +22,13 @@ public class AssignTerritory : MonoBehaviour
 
             if (tileEffect != null && tileEffect.tileInfo.tileType != "Edge")
             {
-                tileEffect.tileInfo.claimants.Add(baseTileInfo);
+                if (tileEffect.tileInfo.playerInfo == null)
+                {
+                    tileEffect.tileInfo.playerInfo = baseTileInfo.playerInfo;
+                }
+
+                tileEffect.tileInfo.claimants.Add(baseTileInfo.playerInfo);
+                baseTileInfo.playerInfo.claims.Add(tileEffect.tileInfo);
                 tileEffect.UpdateTerritoryColor();
             }
         }
