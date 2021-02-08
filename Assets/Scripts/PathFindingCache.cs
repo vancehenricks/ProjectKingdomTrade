@@ -17,6 +17,11 @@ public class PathFindingCache : MonoBehaviour
         cache = new Dictionary<string, List<TileInfo>>();
     }
 
+    private void OnDestroy()
+    {
+        cache.Clear();
+    }
+
     public static List<TileInfo> RetrieveTileInfos(TileInfo startPoint, TileInfo endPoint)
     {
         string keyword = startPoint.transform.position + "," + endPoint.transform.position;

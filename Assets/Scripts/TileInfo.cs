@@ -18,7 +18,6 @@ public class TileInfo : MonoBehaviour
     public HashSet<PlayerInfo> claimants;
     public TileEffect tileEffect;
     public TileCaller tileCaller;
-    public Color color;
     //Tilelocation already has tile size accomodated to it no need for dividing 25 again
     public Vector2 tileLocation;
     public float localTemp;

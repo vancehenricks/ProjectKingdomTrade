@@ -13,9 +13,11 @@ public class PlayerInfo : MonoBehaviour
     public Color color;
     public HashSet<TileInfo> claims;
     public string playerName;
+    public long playerId;
 
-    private void Start()
+    public void Initialize()
     {
+        playerId = Tools.UniqueId;
         claims = new HashSet<TileInfo>();
     }
 }

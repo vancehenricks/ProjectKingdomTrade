@@ -7,6 +7,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class SpawnUnit : ConsoleCommand
 {
@@ -23,6 +24,8 @@ public class SpawnUnit : ConsoleCommand
     public bool notCancel;
     public int units;
     public string subType;
+    public long playerId;
+    public PlayerInfo playerInfo;
 
     private bool fire1Clicked;
 
@@ -35,6 +38,7 @@ public class SpawnUnit : ConsoleCommand
         }
 
         subCommands = new Dictionary<string, string>();
+        subCommands.Add("player-id", "1");
         subCommands.Add("sub-type", "Worker");
         subCommands.Add("amount", "1");
         subCommands.Add("color", "#ffffff");
@@ -64,7 +68,8 @@ public class SpawnUnit : ConsoleCommand
                     unit.transform.position = tile.transform.position;
                     UnitInfo unitInfo = unit.GetComponent<UnitInfo>();
                     //unitInfo.tileId = Tools.UniqueId + "";
-                    unitInfo.color = color == Color.white ? Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f) : color;
+                    unitInfo.playerInfo = playerInfo;
+                    unitInfo.playerInfo.color = color == Color.white ? playerInfo.color : color;
                     unitInfo.attackDistance = attackDistance;
                     unitInfo.units = units;
                     unitInfo.Initialize();
@@ -95,20 +100,7 @@ public class SpawnUnit : ConsoleCommand
         if (command == "spawn-unit")
         {
             Dictionary<string, string> subCommands = ConsoleParser.ArgumentsToSubCommands(arguments);
-
-            subType = "Worker";
-            UnitInfo unitInfo = _baseUnits[subType].GetComponent<UnitInfo>();
-
-            nMax = 1;
-            nCount = 0;
-            autoFocus = true;
-            color = Color.white;
-            attackDistance = unitInfo.attackDistance;
-            units = unitInfo.units;
-            notCancel = true;
-            executeAll = false;
-            fire1Clicked = false;
-            StopAllCoroutines();
+            SetParameters();
 
             foreach (string subCommand in subCommands.Keys)
             {
@@ -116,13 +108,15 @@ public class SpawnUnit : ConsoleCommand
 
                 switch (subCommand)
                 {
+                    case "player-id":
+                        long.TryParse(subCommands[subCommand], out playerId);
+
+                        if (!PlayerList.init.players.ContainsKey(playerId)) break;
+                        playerInfo = PlayerList.init.players[playerId];
+                        break;
                     case "sub-type":
                         if (!_baseUnits.ContainsKey(subCommands[subCommand])) break;
-
-                        subType = subCommands[subCommand];
-                        UnitInfo unitInfo1 = _baseUnits[subType].GetComponent<UnitInfo>();
-                        attackDistance = unitInfo1.attackDistance;
-                        units = unitInfo1.units;
+                        SetParameters(subType, playerInfo);
                         break;
                     case "amount":
                         int.TryParse(subCommands[subCommand], out nMax);
@@ -162,5 +156,29 @@ public class SpawnUnit : ConsoleCommand
                 StartCoroutine(CommandStream());
             }
         }
+    }
+
+    private void SetParameters(string _subType = "Worker")
+    {
+        SetParameters(_subType, PlayerList.init.players.Values.ElementAt(0));
+    }
+
+    private void SetParameters(string _subType, PlayerInfo _playerInfo)
+    {
+        subType = _subType;
+        UnitInfo unitInfo = _baseUnits[subType].GetComponent<UnitInfo>();
+
+        playerInfo = _playerInfo;
+        playerId = _playerInfo.playerId;
+        nMax = 1;
+        nCount = 0;
+        autoFocus = true;
+        color = Color.white;
+        attackDistance = unitInfo.attackDistance;
+        units = unitInfo.units;
+        notCancel = true;
+        executeAll = false;
+        fire1Clicked = false;
+        StopAllCoroutines();
     }
 }

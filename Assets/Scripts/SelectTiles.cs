@@ -80,7 +80,7 @@ public class SelectTiles : MonoBehaviour
 
         if (syncColor)
         {
-            image.color = hostTile.color;
+            image.color = hostTile.playerInfo.color;
         }
         value.text = (flags.Count + 1) + "";
 

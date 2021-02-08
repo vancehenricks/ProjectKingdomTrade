@@ -89,7 +89,7 @@ public class TownGenerator : MonoBehaviour
                 TownInfo townInfo = tile.GetComponent<TownInfo>();
                 townInfo.tileLocation = location;
                 townInfo.Initialize();
-                townInfo.playerInfo = Instantiate(basePlayerInfo, basePlayerInfo.transform.parent);
+                townInfo.playerInfo = PlayerList.init.Instantiate();
                 generatedTowns.Add(location, tile);
                 Debug.Log("TILENAME: " + townInfo.tileType);
                 xCounter = 0;
@@ -128,7 +128,7 @@ public class TownGenerator : MonoBehaviour
             if (colors.Exists(c => c != temp))
             {
                 colors.Add(temp);
-                obj.GetComponent<TileInfo>().color = temp;
+                obj.GetComponent<TileInfo>().playerInfo.color = temp;
             }
         }
     }

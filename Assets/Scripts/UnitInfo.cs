@@ -36,7 +36,7 @@ public class UnitInfo : TileInfo
             Image image = tileCaller.image.GetComponent<Image>();
 
             image.sprite = sprite;
-            shade.color = new Color(this.color.r, this.color.g, this.color.b, shade.color.a);
+            shade.color = new Color(playerInfo.color.r, playerInfo.color.g, playerInfo.color.b, shade.color.a);
             shade.sprite = sprite;
         }
 

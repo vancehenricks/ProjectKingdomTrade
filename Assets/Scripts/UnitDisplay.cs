@@ -57,6 +57,6 @@ public class UnitDisplay : MonoBehaviour
 
         text.text = Tools.ConvertToSymbols(tile.units);
         unitTrack = tile.units;
-        background.color = new Color(tile.color.r, tile.color.g, tile.color.b, background.color.a);
+        background.color = new Color(tile.playerInfo.color.r, tile.playerInfo.color.g, tile.playerInfo.color.b, background.color.a);
     }
 }

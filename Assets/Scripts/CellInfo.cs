@@ -51,10 +51,11 @@ public class CellInfo : MonoBehaviour
             image.sprite = img.sprite;
         }
 
-        if (tileInfo.color == Color.white)
+        //this causes error since some tiles dont have playerInfo need to fix
+        if (tileInfo.playerInfo.color == Color.white)
         {
             border.gameObject.SetActive(false);
-            image.color = new Color(tileInfo.color.r, tileInfo.color.g, tileInfo.color.b);
+            image.color = new Color(tileInfo.playerInfo.color.r, tileInfo.playerInfo.color.g, tileInfo.playerInfo.color.b);
         }
         else
         {
@@ -62,12 +63,12 @@ public class CellInfo : MonoBehaviour
 
             if (shade == null)
             {
-                border.color = new Color(tileInfo.color.r, tileInfo.color.g, tileInfo.color.b);
+                border.color = new Color(tileInfo.playerInfo.color.r, tileInfo.playerInfo.color.g, tileInfo.playerInfo.color.b);
             }
             else
             {
                 border.sprite = shade.sprite;
-                border.color = new Color(tileInfo.color.r, tileInfo.color.g, tileInfo.color.b, shade.color.a);
+                border.color = new Color(tileInfo.playerInfo.color.r, tileInfo.playerInfo.color.g, tileInfo.playerInfo.color.b, shade.color.a);
             }
         }
 

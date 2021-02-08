@@ -72,7 +72,7 @@ public class TileEffect : MonoBehaviour
     {
         if (tileInfo.tileType == "Edge") return;
 
-        border.color = tileInfo.color;
+        border.color = tileInfo.playerInfo.color;
         if (tileInfo.claimants.Count == 1)
         {
             border.sprite = borderClaimed;
@@ -88,10 +88,6 @@ public class TileEffect : MonoBehaviour
 
         if (tileInfo.tileType == "Town") return;
 
-        foreach (PlayerInfo player in tileInfo.claimants)
-        {
-            border.color = player.color;
-        }
         border.color /= tileInfo.claimants.Count;
         border.color = new Color(border.color.r, border.color.g, border.color.b);
     }
