@@ -51,11 +51,10 @@ public class CellInfo : MonoBehaviour
             image.sprite = img.sprite;
         }
 
-        //this causes error since some tiles dont have playerInfo need to fix
-        if (tileInfo.playerInfo.color == Color.white)
+        if (tileInfo.playerInfo == null)
         {
             border.gameObject.SetActive(false);
-            image.color = new Color(tileInfo.playerInfo.color.r, tileInfo.playerInfo.color.g, tileInfo.playerInfo.color.b);
+            image.color = Color.white;
         }
         else
         {
