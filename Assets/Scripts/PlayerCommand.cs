@@ -66,8 +66,11 @@ public class PlayerCommand : MonoBehaviour
 
         foreach (UnitInfo unit in unitInfos)
         {
-            unit.unitEffect.combatHandler.DisEngage();
-            unit.merge = null;
+            if (unit != null)
+            {
+                unit.unitEffect.combatHandler.DisEngage();
+                unit.merge = null;
+            }
         }
     }
 
