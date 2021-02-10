@@ -1,17 +1,16 @@
 fileFormatVersion: 2
-guid: c004ac775cee855469278eeb585cb553
+guid: 7402a0b100ef4cf44a9f1b84ef4bce5c
 TextureImporter:
   fileIDToRecycleName:
-    21300000: merchant_1
-    21300002: cavalry_1
-    21300004: infantry_1
-    21300006: archer_1
-    21300008: ship_1
-    21300010: worker_1
-    21300012: flag_1
-    21300014: catalpult_1
-    21300016: attack_1
-    21300018: merge_1
+    21300000: tiles_2_0
+    21300002: tiles_2_1
+    21300004: tiles_2_2
+    21300006: tiles_2_3
+    21300008: tiles_2_4
+    21300010: tiles_2_5
+    21300012: tiles_2_6
+    21300014: tiles_2_7
+    21300016: tiles_2_8
   externalObjects: {}
   serializedVersion: 9
   mipmaps:
@@ -23,8 +22,8 @@ TextureImporter:
     borderMipMap: 0
     mipMapsPreserveCoverage: 0
     alphaTestReferenceValue: 0.5
-    mipMapFadeDistanceStart: 0
-    mipMapFadeDistanceEnd: 2
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
   bumpmap:
     convertToNormalMap: 0
     externalNormalMap: 0
@@ -42,7 +41,7 @@ TextureImporter:
   textureSettings:
     serializedVersion: 2
     filterMode: -1
-    aniso: 16
+    aniso: -1
     mipBias: -100
     wrapU: 1
     wrapV: 1
@@ -73,29 +72,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 0
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    androidETC2FallbackOverride: 0
-  - serializedVersion: 2
-    buildTarget: Standalone
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 0
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    androidETC2FallbackOverride: 0
-  - serializedVersion: 2
-    buildTarget: Android
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 0
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -105,201 +82,181 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: merchant_1
+      name: tiles_2_0
       rect:
         serializedVersion: 2
-        x: 153
-        y: 1712
-        width: 85
-        height: 85
+        x: 0
+        y: 261
+        width: 130
+        height: 130
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 82b99f9fd72cd1742b84ce5ed1b3f67d
+      spriteID: 7270c8fff368f1541a78834d1f9f5c3a
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: cavalry_1
+      name: tiles_2_1
       rect:
         serializedVersion: 2
-        x: 282
-        y: 1714
-        width: 85
-        height: 85
+        x: 130
+        y: 261
+        width: 130
+        height: 130
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e77bb338a6e6ae941ac6aac910574437
+      spriteID: d595190848d6ca240b7991abc7a6cd0b
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: infantry_1
+      name: tiles_2_2
       rect:
         serializedVersion: 2
-        x: 415
-        y: 1713
-        width: 85
-        height: 85
+        x: 260
+        y: 261
+        width: 130
+        height: 130
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c7b665fe9a436c347bb8a878d34a7193
+      spriteID: 2b1ab70d2a8bd464382f344047540373
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: archer_1
+      name: tiles_2_3
       rect:
         serializedVersion: 2
-        x: 547
-        y: 1716
-        width: 85
-        height: 85
+        x: 0
+        y: 131
+        width: 130
+        height: 130
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: cef460f2bc8cd434cb8404eebcf440fa
+      spriteID: 4fddd88041eb42e4ebbf5cf113b844ee
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ship_1
+      name: tiles_2_4
       rect:
         serializedVersion: 2
-        x: 673
-        y: 1712
-        width: 85
-        height: 85
+        x: 130
+        y: 131
+        width: 130
+        height: 130
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 00b76cd375b0f7b46b5d27a56f52d7c2
+      spriteID: f498ede217a3e834590eb35da63aed3a
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: worker_1
+      name: tiles_2_5
       rect:
         serializedVersion: 2
-        x: 807
-        y: 1710
-        width: 85
-        height: 85
+        x: 260
+        y: 131
+        width: 130
+        height: 130
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c083a8ace94ce2347af960589de1a702
+      spriteID: 7c72c27fc1e8b30428efb689c671a0dc
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: flag_1
+      name: tiles_2_6
       rect:
         serializedVersion: 2
-        x: 934
-        y: 1716
-        width: 85
-        height: 85
+        x: 0
+        y: 1
+        width: 130
+        height: 130
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 4bfbbcb3f37b78b47a9370e4d704afe1
+      spriteID: 1d74b4ae61173914ab8f891c7886bd57
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: catalpult_1
+      name: tiles_2_7
       rect:
         serializedVersion: 2
-        x: 1063
-        y: 1712
-        width: 85
-        height: 85
+        x: 130
+        y: 1
+        width: 130
+        height: 130
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d71ab4daab640d94195ae2d4f7f290c6
+      spriteID: 6c2525b853081a541ab66a7e85c687a7
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: attack_1
+      name: tiles_2_8
       rect:
         serializedVersion: 2
-        x: 1195
-        y: 1716
-        width: 85
-        height: 85
+        x: 260
+        y: 1
+        width: 130
+        height: 130
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 4b9d91f0de846d14e93398f4def1b85e
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: merge_1
-      rect:
-        serializedVersion: 2
-        x: 1324
-        y: 1716
-        width: 85
-        height: 85
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 5eed600d3b7ac074aa4833d325d9bdb8
+      spriteID: 2f90202b866cf2c46be20acfba14102d
       vertices: []
       indices: 
       edges: []
@@ -307,7 +264,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: ee0c66dabf61838418451b09238dbd64
+    spriteID: ec60b943c0df1d44397db0396ade00db
     vertices: []
     indices: 
     edges: []
