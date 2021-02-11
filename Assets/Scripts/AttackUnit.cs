@@ -119,7 +119,7 @@ public class AttackUnit : MoveUnit
 
     }
 
-    private IEnumerator closeCellDelay()
+    private IEnumerator CloseCellDelay()
     {
         yield return new WaitForSeconds(0.4f);
 
