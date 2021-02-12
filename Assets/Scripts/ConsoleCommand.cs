@@ -12,7 +12,7 @@ public class ConsoleCommand : MonoBehaviour
 {
     public Dictionary<string, string> subCommands;
 
-    private void Start()
+    protected void Start()
     {
         ConsoleHandler.initialize += Initialize;
         ConsoleParser.onParsedConsoleEvent += OnParsedConsoleEvent;

@@ -29,13 +29,19 @@ public class SpawnUnit : ConsoleCommand
 
     private bool fire1Clicked;
 
-    public override void Initialize()
+    public new void Start()
     {
         _baseUnits = new Dictionary<string, UnitInfo>();
         foreach (UnitInfo unit in baseUnits)
         {
             _baseUnits.Add(unit.subType, unit);
         }
+
+        base.Start();
+    }
+
+    public override void Initialize()
+    {
 
         subCommands = new Dictionary<string, string>();
         subCommands.Add("player-id", "0");
@@ -100,7 +106,7 @@ public class SpawnUnit : ConsoleCommand
         if (command == "spawn-unit")
         {
             Dictionary<string, string> subCommands = ConsoleParser.ArgumentsToSubCommands(arguments);
-            SetParameters();
+            SetDefaults();
 
             foreach (string subCommand in subCommands.Keys)
             {
@@ -116,7 +122,10 @@ public class SpawnUnit : ConsoleCommand
                         break;
                     case "sub-type":
                         if (!_baseUnits.ContainsKey(subCommands[subCommand])) break;
-                        SetParameters(subType, playerInfo);
+                        subType = subCommands[subCommand];
+                        UnitInfo unitInfo = _baseUnits[subType].GetComponent<UnitInfo>();
+                        attackDistance = unitInfo.attackDistance;
+                        units = unitInfo.units;
                         break;
                     case "amount":
                         int.TryParse(subCommands[subCommand], out nMax);
@@ -158,24 +167,18 @@ public class SpawnUnit : ConsoleCommand
         }
     }
 
-    private void SetParameters(string _subType = "Worker")
+    private void SetDefaults()
     {
-        SetParameters(_subType, PlayerList.init.players.Values.ElementAt(0));
-    }
-
-    private void SetParameters(string _subType, PlayerInfo _playerInfo)
-    {
-        subType = _subType;
+        subType = "Worker";
         UnitInfo unitInfo = _baseUnits[subType].GetComponent<UnitInfo>();
-
-        playerInfo = _playerInfo;
-        playerId = _playerInfo.playerId;
+        playerInfo = PlayerList.init.players.Values.ElementAt(0);
+        playerId = playerInfo.playerId;
+        attackDistance = unitInfo.attackDistance;
+        units = unitInfo.units;
         nMax = 1;
         nCount = 0;
         autoFocus = true;
         color = Color.white;
-        attackDistance = unitInfo.attackDistance;
-        units = unitInfo.units;
         notCancel = true;
         executeAll = false;
         fire1Clicked = false;

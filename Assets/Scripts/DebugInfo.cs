@@ -21,6 +21,9 @@ public class DebugInfo : MonoBehaviour
     public Text tileType;
     public Text tileLocation;
 
+    private TileInfo tile;
+    private PlayerInfo playerInfo;
+
     private void Start()
     {
         MultiSelect.onSelectedChange += OnSelectedChange;
@@ -31,13 +34,13 @@ public class DebugInfo : MonoBehaviour
         if (tiles == null || tiles.Count == 0) return;
 
         int lastIndex = tiles.Count - 1;
-        TileInfo tile = tiles[lastIndex];
-        PlayerInfo playerInfo = tile.playerInfo;
 
+        tile = tiles[lastIndex];
+        playerInfo = tile.playerInfo;
         tileId.text = tile.tileId + "";
         subType.text = tile.subType + "";
         tileType.text = tile.tileType + "";
-        tileLocation.text = tile.tileLocation + "";
+
 
         if (playerInfo == null)
         {
@@ -53,6 +56,10 @@ public class DebugInfo : MonoBehaviour
 
     private void Update()
     {
+        if (tile != null)
+        {
+            tileLocation.text = tile.tileLocation + "";
+        }
         ms.text = string.Format("{0:0.##}", Time.deltaTime * 1000.0f);
         fps.text = string.Format("{0:0}", 1.0f / Time.deltaTime);
     }
