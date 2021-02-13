@@ -25,7 +25,7 @@ public class ConsoleParser : MonoBehaviour
 
     //spawn_unit type:archer amount:1000 loc:mousePosition
 
-    private void OnConsoleEvent(string rawCommands)
+    public static void OnConsoleEvent(string rawCommands)
     {
         string[] commandArray = rawCommands.Split(' ');
         string command = commandArray[0];

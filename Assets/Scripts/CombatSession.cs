@@ -32,7 +32,7 @@ public class CombatSession : MonoBehaviour
 
     public void Add(TileInfo tileInfo)
     {
-        if (Tools.Exist(combatants, tileInfo)) return;
+        if (Tools.Exist(combatants, tileInfo) > -1) return;
 
         combatants.Add(tileInfo);
     }

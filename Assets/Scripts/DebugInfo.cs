@@ -41,7 +41,6 @@ public class DebugInfo : MonoBehaviour
         subType.text = tile.subType + "";
         tileType.text = tile.tileType + "";
 
-
         if (playerInfo == null)
         {
             playerId.text = "NULL";

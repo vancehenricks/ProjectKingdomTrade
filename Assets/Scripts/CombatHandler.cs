@@ -177,7 +177,7 @@ public class CombatHandler : MonoBehaviour
 
     private void AddToIndex(List<TileInfo> tileInfos, TileInfo tile, int index)
     {
-        if (Tools.Exist<TileInfo>(tileInfos, unitInfo))
+        if (Tools.Exist<TileInfo>(tileInfos, unitInfo) > -1)
         {
             tileInfos.Remove(unitInfo);
             tileInfos.Insert(index, unitInfo);

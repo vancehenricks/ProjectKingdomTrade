@@ -96,18 +96,24 @@ public class Tools : MonoBehaviour
         return tileInfos;
     }
 
-    public static bool Exist<T>(List<T> list, T key) where T : TileInfo
+    public static int Exist<T>(List<T> list, T key) where T : TileInfo
     {
+
+        int index = -1;
+
         foreach (TileInfo tile in list)
         {
+            index++;
+
             if (tile.tileId == key.tileId)
             {
-                return true;
+                return index;
             }
         }
 
-        return false;
+        return -1;
     }
+
 
     public static List<T> MergeList<T>(List<T> selectedTiles, List<T> targetList) where T : TileInfo
     {

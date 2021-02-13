@@ -19,6 +19,7 @@ public class Destroy : ConsoleCommand
     public bool autoFocus;
     public bool executeAll;
     public bool notCancel;
+    public long tileId;
 
     private bool fire1Clicked;
 
@@ -29,6 +30,7 @@ public class Destroy : ConsoleCommand
         subCommands.Add("type", "Unit");
         subCommands.Add("amount", "1");
         subCommands.Add("layer", "1");
+        subCommands.Add("tile-id", "0");
         subCommands.Add("auto-focus", "true");
         subCommands.Add("execute-all", "");
         subCommands.Add("cancel", "");
@@ -97,6 +99,7 @@ public class Destroy : ConsoleCommand
         {
             Dictionary<string, string> subCommands = ConsoleParser.ArgumentsToSubCommands(arguments);
 
+            tileId = 0;
             type = "Unit";
             nCount = 0;
             nMax = 1;
@@ -125,6 +128,11 @@ public class Destroy : ConsoleCommand
                         break;
                     case "execute-all":
                         executeAll = true;
+                        break;
+                    case "tile-id":
+                        long.TryParse(subCommands[subCommand], out tileId);
+                        //no handling right now need to find a way to retrieve all units/tiles generated
+                        nCount = nMax;
                         break;
                     case "cancel":
                         nMax = 0;

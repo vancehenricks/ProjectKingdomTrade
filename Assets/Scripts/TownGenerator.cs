@@ -32,13 +32,13 @@ public class TownGenerator : MonoBehaviour
     private int nTowns;
     private int xCounter;
     private int yCounter;
-    public Dictionary<Vector2, GameObject> generatedTowns;
+    public Dictionary<long, GameObject> generatedTowns;
 
     private void Start()
     {
         _init = this;
         MapGenerator.init.onInitialize = MapGenerator.init.onInitialize + Initialize;
-        generatedTowns = new Dictionary<Vector2, GameObject>();
+        generatedTowns = new Dictionary<long, GameObject>();
     }
 
     public void Initialize()
@@ -90,7 +90,7 @@ public class TownGenerator : MonoBehaviour
                 townInfo.tileLocation = location;
                 townInfo.Initialize();
                 townInfo.playerInfo = PlayerList.init.Instantiate();
-                generatedTowns.Add(location, tile);
+                generatedTowns.Add(townInfo.tileId, tile);
                 Debug.Log("TILENAME: " + townInfo.tileType);
                 xCounter = 0;
                 nTowns++;

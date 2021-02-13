@@ -8,16 +8,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerInfo : MonoBehaviour
+public class UnitList : MonoBehaviour
 {
-    public Color color;
-    public HashSet<TileInfo> claims;
-    public string playerName;
-    public long playerId;
-
-    public void Initialize()
+    // Start is called before the first frame update
+    void Start()
     {
-        playerId = Tools.UniqueId;
-        claims = new HashSet<TileInfo>();
+        
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        
     }
 }
