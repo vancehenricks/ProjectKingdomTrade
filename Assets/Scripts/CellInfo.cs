@@ -83,8 +83,17 @@ public class CellInfo : MonoBehaviour
     {
         if (MultiSelect.shiftPressed && multiSelect)
         {
-            MultiSelect.Add(tileInfo);
-            MultiSelect.Relay();
+            List<TileInfo> selectedTiles = MultiSelect.GetSelectedTiles();
+
+            if (selectedTiles.Count > 0 && (selectedTiles[0].tileType != tileInfo.tileType
+                || selectedTiles[0].subType != tileInfo.subType))
+            {
+                generateCells.ResetSelectedCells();
+                generateCells.DisableSelectCells();
+                MultiSelect.Clear(true);
+            }
+
+            MultiSelect.Add(tileInfo, true);
             isSelectedTwice = false;
         }
         else if (!isSelectedTwice)
@@ -92,8 +101,7 @@ public class CellInfo : MonoBehaviour
             generateCells.ResetSelectedCells();
             generateCells.DisableSelectCells();
             MultiSelect.Clear(true);
-            MultiSelect.Add(tileInfo);
-            MultiSelect.Relay();
+            MultiSelect.Add(tileInfo, true);
             isSelectedTwice = true;
         }
         else

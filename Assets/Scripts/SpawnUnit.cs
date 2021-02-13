@@ -115,17 +115,25 @@ public class SpawnUnit : ConsoleCommand
                 switch (subCommand)
                 {
                     case "player-id":
-                        long.TryParse(subCommands[subCommand], out playerId);
-
                         if (!PlayerList.init.players.ContainsKey(playerId)) break;
+
+                        long.TryParse(subCommands[subCommand], out playerId);
                         playerInfo = PlayerList.init.players[playerId];
                         break;
                     case "sub-type":
                         if (!_baseUnits.ContainsKey(subCommands[subCommand])) break;
                         subType = subCommands[subCommand];
                         UnitInfo unitInfo = _baseUnits[subType].GetComponent<UnitInfo>();
-                        attackDistance = unitInfo.attackDistance;
-                        units = unitInfo.units;
+
+                        if (!subCommands.ContainsKey("units"))
+                        {
+                            units = unitInfo.units;
+                        }
+
+                        if (!subCommands.ContainsKey("attackDistance"))
+                        {
+                            attackDistance = unitInfo.attackDistance;
+                        }
                         break;
                     case "amount":
                         int.TryParse(subCommands[subCommand], out nMax);
