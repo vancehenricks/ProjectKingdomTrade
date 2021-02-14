@@ -83,7 +83,7 @@ public class CellInfo : MonoBehaviour
     {
         if (MultiSelect.shiftPressed && multiSelect)
         {
-            List<TileInfo> selectedTiles = MultiSelect.GetSelectedTiles();
+            List<TileInfo> selectedTiles = MultiSelect.selectedTiles;
 
             if (selectedTiles.Count > 0 && (selectedTiles[0].tileType != tileInfo.tileType
                 || selectedTiles[0].subType != tileInfo.subType))

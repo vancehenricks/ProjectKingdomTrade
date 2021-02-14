@@ -93,7 +93,7 @@ public class OptionGenerator : MonoBehaviour
     private void ShowMergeAndSplit(TileInfo tileInfo)
     {
         List<TileInfo> raycastTile = TileInfoRaycaster.tileInfos;
-        List<TileInfo> multiSelect = MultiSelect.GetSelectedTiles();
+        List<TileInfo> multiSelect = MultiSelect.selectedTiles;
 
         if (multiSelect.Count > 1 && raycastTile.Count > 1)
         {

@@ -32,6 +32,17 @@ public class Tools : MonoBehaviour
         _UniqueId = 0;
     }
 
+    /*
+		up		    current index - width	
+		down	    current index + width	
+		left	    current index - 1	
+		right	    current index + 1
+        up-left     current index - width)-1
+        up-right    current index - width)+1
+        down-left   current index + width)-1
+        down-right  current index - width)+1
+	*/
+
     public static List<T> Convert<B, T>(List<B> tileInfos)
     {
         List<T> infos = new List<T>();
@@ -60,21 +71,6 @@ public class Tools : MonoBehaviour
             T info = (T)System.Convert.ChangeType(tileInfo, typeof(T));
             return info;
         }
-    }
-
-    public static List<TileInfo> GetNeighbours(TileInfo tile)
-    {
-        List<TileInfo> tiles = new List<TileInfo>();
-
-        for (int i = 0; i < (int)Direction.Length; i++)
-        {
-            GameObject obj = MapGenerator.init.GetObjectFrom(tile.tileLocation, (Direction)i);
-            if (obj == null) continue;
-
-            tiles.Add(obj.GetComponent<TileInfo>());
-        }
-
-        return tiles;
     }
 
     public static List<T> WhiteList<T>(List<T> _tileInfos, List<T> include) where T : TileInfo
@@ -214,4 +210,5 @@ public class Tools : MonoBehaviour
 
         return (int)(width * height);
     }
+
 }

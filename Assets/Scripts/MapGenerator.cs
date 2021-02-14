@@ -20,7 +20,7 @@ public class MapGenerator : MonoBehaviour
         private set { _init = value; }
     }
 
-    public List<GameObject> baseTile;
+    public List<TileInfo> baseTile;
     public GameObject placeHolderTile;
     public RectTransform grid;
     public float distanceOfEachTile;
@@ -31,9 +31,9 @@ public class MapGenerator : MonoBehaviour
     public int homogeneousChance;
     //public List<GameObject> generatedTile;
     //public List<GameObject> borderTile;
-    public Dictionary<Vector2, GameObject> generatedTile;
+    //public Dictionary<Vector2, TileInfo> generatedTile;
 
-    public delegate void OnGenerateTile(ref GameObject tile, GameObject placeHolderTile, Vector2 location, int x, int y);
+    public delegate void OnGenerateTile(ref TileInfo tile, GameObject placeHolderTile, Vector2 location, int x, int y);
     public OnGenerateTile onGenerateTile;
 
     public delegate void OnNewLine(int x, int y);
@@ -45,7 +45,7 @@ public class MapGenerator : MonoBehaviour
     public delegate void OnInitialize();
     public OnInitialize onInitialize;
 
-    private List<int> _borderIndex;
+    //private List<int> _borderIndex;
     private RectTransform rectPlaceHolder;
     private Vector2 originalPos;
 
@@ -57,18 +57,18 @@ public class MapGenerator : MonoBehaviour
     private void Awake()
     {
         _init = this;
-        generatedTile = new Dictionary<Vector2, GameObject>();
+        //generatedTile = new Dictionary<Vector2, TileInfo>();
         //borderTile = new List<GameObject>();
     }
 
     public void Initialize()
     {
 
-        foreach (GameObject tile in generatedTile.Values)
+        foreach (TileInfo tile in TileList.generatedTiles.Values)
         {
             Destroy(tile);
         }
-        generatedTile.Clear();
+        TileList.generatedTiles.Clear();
         //borderTile.Clear();
 
         originalPos = placeHolderTile.transform.position;
@@ -88,63 +88,12 @@ public class MapGenerator : MonoBehaviour
         onDoneGenerate = null;
     }
 
-    /*
-		up		    current index - width	
-		down	    current index + width	
-		left	    current index - 1	
-		right	    current index + 1
-        up-left     current index - width)-1
-        up-right    current index - width)+1
-        down-left   current index + width)-1
-        down-right  current index - width)+1
-	*/
-
-
-    public GameObject GetObjectFrom(Vector2 tileLocation, Direction direction)
+    public int GetBaseTileIndex(TileInfo tileInfo)
     {
-        Vector2 key = Vector2.zero;
-        GameObject obj = null;
-
-        switch (direction)
-        {
-            case Direction.Up:
-                key = new Vector2(tileLocation.x - 1, tileLocation.y);
-                break;
-            case Direction.UpRight:
-                key = new Vector2(tileLocation.x - 1, tileLocation.y + 1);
-                break;
-            case Direction.Right:
-                key = new Vector2(tileLocation.x, tileLocation.y + 1);
-                break;
-            case Direction.DownRight:
-                key = new Vector2(tileLocation.x + 1, tileLocation.y + 1);
-                break;
-            case Direction.Down:
-                key = new Vector2(tileLocation.x + 1, tileLocation.y);
-                break;
-            case Direction.DownLeft:
-                key = new Vector2(tileLocation.x + 1, tileLocation.y - 1);
-                break;
-            case Direction.Left:
-                key = new Vector2(tileLocation.x, tileLocation.y - 1);
-                break;
-            case Direction.UpLeft:
-                key = new Vector2(tileLocation.x - 1, tileLocation.y - 1);
-                break;
-        }
-
-        generatedTile.TryGetValue(key, out obj);
-
-        return obj;
-    }
-
-    public int GetBaseTileIndex(GameObject obj)
-    {
-        TileInfo tileInfo = obj.GetComponent<TileInfo>();
 
         for (int i = 0; i < baseTile.Count; i++)
         {
-            TileInfo bTile = baseTile[i].GetComponent<TileInfo>();
+            TileInfo bTile = baseTile[i];
 
             if (bTile.tileType == tileInfo.tileType)
             {
@@ -173,8 +122,6 @@ public class MapGenerator : MonoBehaviour
 
         for (int y = 0; y < height; y++)
         {
-            GameObject tile = null;
-
             for (int x = 0; x < width; x++)
             {
 
@@ -219,13 +166,13 @@ public class MapGenerator : MonoBehaviour
                     if (tileCounter - tileReserved <= numberOfTilesInARow && localX <= width)
                     {
                         //Check Up and Left generated obj if they are the same then lets make this new tile the same
-                        GameObject UpObj = GetObjectFrom(tileLocation, Direction.Up);
-                        GameObject LeftObj = GetObjectFrom(tileLocation, Direction.Left);
+                        TileInfo UpTile = TileList.GetObjectFrom(tileLocation, Direction.Up);
+                        TileInfo LeftTile = TileList.GetObjectFrom(tileLocation, Direction.Left);
 
-                        if (UpObj != null && LeftObj != null)
+                        if (UpTile != null && LeftTile != null)
                         {
-                            int upIndex = GetBaseTileIndex(UpObj);
-                            int leftIndex = GetBaseTileIndex(LeftObj);
+                            int upIndex = GetBaseTileIndex(UpTile);
+                            int leftIndex = GetBaseTileIndex(LeftTile);
 
                             if (upIndex == leftIndex && Random.Range(1, 100) < homogeneousChance)
                             {
@@ -233,16 +180,16 @@ public class MapGenerator : MonoBehaviour
                             }
                         }
 
-                        tile = Instantiate(baseTile[index], placeHolderTile.transform.position, placeHolderTile.transform.rotation, placeHolderTile.transform.parent);
-                        TileInfo tileInfo = tile.GetComponent<TileInfo>();
+                        GameObject gameObject = Instantiate(baseTile[index].gameObject, placeHolderTile.transform.position, placeHolderTile.transform.rotation, placeHolderTile.transform.parent);
+                        TileInfo tileInfo = gameObject.GetComponent<TileInfo>();
                         tileLocation = new Vector2(tileLocationX, tileLocationY);
                         tileInfo.tileLocation = tileLocation;
                         tileInfo.Initialize();
 
-                        onGenerateTile(ref tile, placeHolderTile, tileLocation, localX, y);
+                        onGenerateTile(ref tileInfo, placeHolderTile, tileLocation, localX, y);
                         //Debug.Log(tileLocation);
-                        generatedTile.Add(tileLocation, tile);
-                        tile.SetActive(true);
+                        //generatedTile.Add(tileLocation, tileInfo); Initialize() will add this in generatedTile
+                        tileInfo.gameObject.SetActive(true);
                         tileLocationX++;
                         tileCounter++;
 

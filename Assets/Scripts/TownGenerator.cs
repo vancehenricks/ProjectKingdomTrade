@@ -20,7 +20,7 @@ public class TownGenerator : MonoBehaviour
         private set { _init = value; }
     }
 
-    public List<GameObject> baseTile;
+    public List<TownInfo> baseTile;
     public bool allowAdvanceTowns;
     public int maxAmountOfTowns;
     public int distanceOfEachTowns;
@@ -32,13 +32,13 @@ public class TownGenerator : MonoBehaviour
     private int nTowns;
     private int xCounter;
     private int yCounter;
-    public Dictionary<long, GameObject> generatedTowns;
+    //public Dictionary<Vector2, TileInfo> generatedTowns;
 
     private void Start()
     {
         _init = this;
         MapGenerator.init.onInitialize = MapGenerator.init.onInitialize + Initialize;
-        generatedTowns = new Dictionary<long, GameObject>();
+        //generatedTowns = new Dictionary<Vector2, TileInfo>();
     }
 
     public void Initialize()
@@ -47,14 +47,13 @@ public class TownGenerator : MonoBehaviour
         MapGenerator.init.onGenerateTile += OnGenerateTile;
         MapGenerator.init.onNewLine += OnNewLine;
         MapGenerator.init.onDoneGenerate += OnDoneGenerate;
-        generatedTowns.Clear();
+        //generatedTowns.Clear();
     }
 
-    public void OnGenerateTile(ref GameObject tile, GameObject placeHolderTile, Vector2 location, int x, int y)
+    public void OnGenerateTile(ref TileInfo parentTileInfo, GameObject placeHolderTile, Vector2 location, int x, int y)
     {
 
         int i = 0;
-        TileInfo parentTileInfo = tile.GetComponent<TileInfo>();
 
         if (allowAdvanceTowns)
         {
@@ -84,13 +83,14 @@ public class TownGenerator : MonoBehaviour
 
             if (allowed)
             {
-                Destroy(tile);
-                tile = Instantiate(baseTile[i], placeHolderTile.transform.position, placeHolderTile.transform.rotation, placeHolderTile.transform.parent);
-                TownInfo townInfo = tile.GetComponent<TownInfo>();
+                Destroy(parentTileInfo);
+                GameObject gameObject = Instantiate(baseTile[i].gameObject, placeHolderTile.transform.position, placeHolderTile.transform.rotation, placeHolderTile.transform.parent);
+                TownInfo townInfo = gameObject.GetComponent<TownInfo>();
+                parentTileInfo = townInfo;
                 townInfo.tileLocation = location;
                 townInfo.Initialize();
                 townInfo.playerInfo = PlayerList.init.Instantiate();
-                generatedTowns.Add(townInfo.tileId, tile);
+                //generatedTowns.Add(location, townInfo);
                 Debug.Log("TILENAME: " + townInfo.tileType);
                 xCounter = 0;
                 nTowns++;
@@ -119,16 +119,16 @@ public class TownGenerator : MonoBehaviour
         Color a = Random.ColorHSV(0f, 1f, 1f, 1f, 1f, 1f); //This is temporary
         colors.Add(a);
 
-        foreach (GameObject obj in generatedTowns.Values)
+        foreach (TileInfo tile in TileList.generatedTowns.Values)
         {
-            obj.GetComponent<TileCaller>().border.SetActive(true);
+            tile.tileCaller.border.SetActive(true);
             Color temp = Random.ColorHSV(0f, 1f, 1f, 1f, 1f, 1f); //This is temporary
 
 
             if (colors.Exists(c => c != temp))
             {
                 colors.Add(temp);
-                obj.GetComponent<TileInfo>().playerInfo.color = temp;
+                tile.playerInfo.color = temp;
             }
         }
     }

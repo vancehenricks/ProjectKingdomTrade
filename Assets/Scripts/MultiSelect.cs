@@ -12,7 +12,7 @@ public class MultiSelect : MonoBehaviour
 {
     public delegate void OnSelectedChange(List<TileInfo> tiles);
     public static OnSelectedChange onSelectedChange;
-    private static List<TileInfo> selectedTiles;
+    public static List<TileInfo> selectedTiles;
     public static bool shiftPressed;
 
     private void Start()
@@ -41,11 +41,6 @@ public class MultiSelect : MonoBehaviour
         {
             shiftPressed = false;
         }
-    }
-
-    public static List<TileInfo> GetSelectedTiles()
-    {
-        return MultiSelect.selectedTiles;
     }
 
     public static void Add(TileInfo tileInfo, bool relay = false)

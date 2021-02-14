@@ -34,12 +34,14 @@ public class TileInfo : MonoBehaviour
         localTemp = Temperature.temperature;
         unitInfos = new List<UnitInfo>();
         tileId = Tools.UniqueId;
+        TileList.Add(this);
     }
 
     public void OnDestroy()
     {
         if (unitInfos != null) unitInfos.Clear();
         if (claimants != null) claimants.Clear();
+        TileList.Remove(this);
     }
 
     public void Destroy()

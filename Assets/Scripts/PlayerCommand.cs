@@ -36,7 +36,7 @@ public class PlayerCommand : MonoBehaviour
     {
         waypointsList.Clear();
         targetList.Clear();
-        unitInfos = Tools.Convert<TileInfo, UnitInfo>(MultiSelect.GetSelectedTiles());
+        unitInfos = Tools.Convert<TileInfo, UnitInfo>(MultiSelect.selectedTiles);
         MultiSelect.Clear(true);
         openRightClick.ResetValues();
 

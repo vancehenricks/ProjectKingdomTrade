@@ -22,12 +22,10 @@ public class HideBorder : MonoBehaviour
         if (InputOverride.GetKeyUp(key))
         {
 
-            foreach (GameObject tile in MapGenerator.init.generatedTile.Values)
+            foreach (TileInfo tileInfo in TileList.generatedTiles.Values)
             {
-                TileCaller tileCaller = tile.GetComponent<TileCaller>();
-                TileInfo tileInfo = tile.GetComponent<TileInfo>();
 
-                if (tileCaller.shade != null)
+                if (tileInfo.tileCaller.shade != null)
                 {
 
                     bool isException = false;
@@ -43,7 +41,7 @@ public class HideBorder : MonoBehaviour
 
                     if (!isException)
                     {
-                        Image image = tileCaller.shade.GetComponent<Image>();
+                        Image image = tileInfo.tileCaller.shade.GetComponent<Image>();
                         image.enabled = !image.enabled;
                     }
                 }

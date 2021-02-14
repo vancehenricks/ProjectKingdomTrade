@@ -57,7 +57,7 @@ public class Node
     {
         List<Node> neighbours = new List<Node>();
 
-        foreach (TileInfo tile in Tools.GetNeighbours(_tile))
+        foreach (TileInfo tile in TileList.GetNeighbours(_tile))
         {
             if (parent == null || parent != null && tile.tileLocation != parent._tile.tileLocation)
             {

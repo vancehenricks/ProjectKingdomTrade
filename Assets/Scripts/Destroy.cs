@@ -20,6 +20,7 @@ public class Destroy : ConsoleCommand
     public bool executeAll;
     public bool notCancel;
     public long tileId;
+    public bool noMouseRequired;
 
     private bool fire1Clicked;
 
@@ -27,10 +28,10 @@ public class Destroy : ConsoleCommand
     public override void Initialize()
     {
         subCommands = new Dictionary<string, string>();
+        subCommands.Add("tile-id", "0");
         subCommands.Add("type", "Unit");
         subCommands.Add("amount", "1");
         subCommands.Add("layer", "1");
-        subCommands.Add("tile-id", "0");
         subCommands.Add("auto-focus", "true");
         subCommands.Add("execute-all", "");
         subCommands.Add("cancel", "");
@@ -93,6 +94,23 @@ public class Destroy : ConsoleCommand
         nCount++;
     }
 
+    private void ExecuteCommand()
+    {
+        TileInfo tile = TileList.tileInfos[tileId];
+
+        if (type == "Unit")
+        {
+            UnitInfo unit = (UnitInfo)tile;
+            unit.Destroy();
+            ConsoleHandler.init.AddLine($"Destroyed unit [{nCount + 1}/{nMax}].");
+        }
+        else if (type != "Unit")
+        {
+            tile.Destroy();
+            ConsoleHandler.init.AddLine($"Destroyed tile [{nCount + 1}/{nMax}].");
+        }
+    }
+
     public override void OnParsedConsoleEvent(string command, string[] arguments)
     {
         if (command == "destroy")
@@ -106,6 +124,7 @@ public class Destroy : ConsoleCommand
             targetLayer = 1;
             autoFocus = true;
             notCancel = true;
+            noMouseRequired = true;
             executeAll = false;
             fire1Clicked = false;
             StopAllCoroutines();
@@ -131,8 +150,7 @@ public class Destroy : ConsoleCommand
                         break;
                     case "tile-id":
                         long.TryParse(subCommands[subCommand], out tileId);
-                        //no handling right now need to find a way to retrieve all units/tiles generated
-                        nCount = nMax;
+                        noMouseRequired = true;
                         break;
                     case "cancel":
                         nMax = 0;
@@ -150,8 +168,15 @@ public class Destroy : ConsoleCommand
 
             if (notCancel)
             {
-                ConsoleHandler.init.AddLine("Click a tile/unit to destroy...");
-                StartCoroutine(CommandStream());
+                if (noMouseRequired)
+                {
+                    ExecuteCommand();
+                }
+                else
+                {
+                    ConsoleHandler.init.AddLine("Click a tile/unit to destroy...");
+                    StartCoroutine(CommandStream());
+                }
             }
         }
     }
