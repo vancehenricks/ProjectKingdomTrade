@@ -19,14 +19,14 @@ public class ConsoleHandler : MonoBehaviour
         private set { _init = value; }
     }
 
-    public delegate void Initialize();
-    public static Initialize initialize;
+    //public delegate void Initialize();
+    //public static Initialize initialize;
 
     public delegate void OnConsoleEvent(string command);
     public static OnConsoleEvent onConsoleEvent;
 
+    public GameObject window;
     public Text console;
-
     public InputFieldOverride command;
     public Scrollbar scrollBar;
     public RectTransform context;
@@ -62,7 +62,8 @@ public class ConsoleHandler : MonoBehaviour
             commandList.Add("clear", new Dictionary<string, string>());
 
             init = this;
-            initialize();
+
+           // initialize();
         }
         else
         {
@@ -76,7 +77,7 @@ public class ConsoleHandler : MonoBehaviour
     private void OnDestroy()
     {
         cacheInput = command.text;
-        initialize = null;
+        //initialize = null;
         onConsoleEvent = null;
     }
 
@@ -273,10 +274,11 @@ public class ConsoleHandler : MonoBehaviour
 
     public void Focus()
     {
+
         Debug.Log("FOCUS");
         ScrollZero();
 
-        if (gameObject.activeSelf)
+        if (window.activeSelf)
         {
             command.ActivateInputField();
         }
@@ -284,7 +286,7 @@ public class ConsoleHandler : MonoBehaviour
 
     private void ScrollZero()
     {
-        if (gameObject.activeSelf)
+        if (window.activeSelf)
         {
             StartCoroutine(ScrollToZero()); //Hack to force it to go zero sometimes it stays at 0.05f which is considered zero by system
         }

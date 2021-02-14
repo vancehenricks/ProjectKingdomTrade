@@ -29,20 +29,8 @@ public class SpawnUnit : ConsoleCommand
 
     private bool fire1Clicked;
 
-    public new void Start()
-    {
-        _baseUnits = new Dictionary<string, UnitInfo>();
-        foreach (UnitInfo unit in baseUnits)
-        {
-            _baseUnits.Add(unit.subType, unit);
-        }
-
-        base.Start();
-    }
-
     public override void Initialize()
     {
-
         subCommands = new Dictionary<string, string>();
         subCommands.Add("player-id", "0");
         subCommands.Add("sub-type", "Worker");
@@ -57,6 +45,12 @@ public class SpawnUnit : ConsoleCommand
 
         ConsoleHandler.init.AddCommand("spawn-unit", subCommands);
         ConsoleHandler.init.AddCache("spawn-unit");
+
+        _baseUnits = new Dictionary<string, UnitInfo>();
+        foreach (UnitInfo unit in baseUnits)
+        {
+            _baseUnits.Add(unit.subType, unit);
+        }
     }
 
     private IEnumerator CommandStream()
@@ -98,7 +92,7 @@ public class SpawnUnit : ConsoleCommand
             yield return null;
         }
 
-        ConsoleHandler.init.AddLine("Done!");
+        //ConsoleHandler.init.AddLine("Done!");
     }
 
     public override void OnParsedConsoleEvent(string command, string[] arguments)
