@@ -37,7 +37,7 @@ public class SpawnUnit : ConsoleCommand
         subCommands.Add("player-id", "0");
         subCommands.Add("sub-type", "Worker");
         subCommands.Add("amount", "1");
-        subCommands.Add("tile-location", "0,1");
+        subCommands.Add("tile-location", "0,0");
         subCommands.Add("color", "#ffffff");
         subCommands.Add("attack-distance", "1");
         subCommands.Add("units", "10");
@@ -193,6 +193,7 @@ public class SpawnUnit : ConsoleCommand
 
     private void SetDefaults()
     {
+        tileLocation = Vector2.zero;
         subType = "Worker";
         UnitInfo unitInfo = _baseUnits[subType].GetComponent<UnitInfo>();
         playerInfo = PlayerList.init.players.Values.ElementAt(0);
