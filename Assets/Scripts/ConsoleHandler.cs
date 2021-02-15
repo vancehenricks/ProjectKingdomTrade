@@ -126,6 +126,8 @@ public class ConsoleHandler : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.Return))
         {
+            previousCommand = command.text;
+
             command.ActivateInputField();
             if (command.text == "") return;
             AddLine(">" + command.text);
@@ -149,8 +151,6 @@ public class ConsoleHandler : MonoBehaviour
             {
                 onConsoleEvent(command.text);
             }
-
-            previousCommand = command.text;
 
             remainOnIndex = 0;
 

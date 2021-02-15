@@ -211,4 +211,15 @@ public class Tools : MonoBehaviour
         return (int)(width * height);
     }
 
+    public static Vector2 ParseLocation(string coordinates)
+    {
+        string[] locArray = coordinates.Split(',');
+        float x, y;
+
+        float.TryParse(locArray[0], out x);
+        float.TryParse(locArray[1], out y);
+
+        return new Vector2(x, y);
+    }
+
 }

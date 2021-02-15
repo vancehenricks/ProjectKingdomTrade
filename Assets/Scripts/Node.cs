@@ -28,8 +28,8 @@ public class Node
         _target = target;
         if (firstNode)
         {
-            _g = Vector2.Distance(tile.tileLocation, origin.tileLocation);
-            _h = Vector2.Distance(tile.tileLocation, target.tileLocation);
+            _g = Tools.TileLocationDistance(tile, origin);
+            _h = Tools.TileLocationDistance(tile, target);
         }
         _tile = tile;
         _closed = closed;

@@ -64,13 +64,13 @@ public class Destroy : ConsoleCommand
                         {
                             UnitInfo unit = (UnitInfo)tile;
                             unit.Destroy();
-                            AddLineAndCheckForFocus(string.Format("Destroyed unit [{0}/{1}].", nCount + 1, nMax));
+                            AddLineAndCheckForFocus($"Destroyed tile [{nCount + 1}/{nMax}].");
                             break;
                         }
                         else if (type != "Unit" && tile.tileType == type && cLayer == targetLayer)
                         {
                             tile.Destroy();
-                            AddLineAndCheckForFocus(string.Format("Destroyed tile [{0}/{1}].", nCount + 1, nMax));
+                            AddLineAndCheckForFocus($"Destroyed unit [{nCount + 1}/{nMax}].");
                             break;
                         }
                         cLayer++;
@@ -91,7 +91,13 @@ public class Destroy : ConsoleCommand
         {
             ConsoleHandler.init.Focus();
         }
+
         nCount++;
+
+        if (nCount == 1)
+        {
+            ConsoleHandler.init.AddCache(ConsoleHandler.init.previousCommand);
+        }
     }
 
     private void ExecuteCommand()
@@ -102,12 +108,12 @@ public class Destroy : ConsoleCommand
         {
             UnitInfo unit = (UnitInfo)tile;
             unit.Destroy();
-            ConsoleHandler.init.AddLine($"Destroyed unit [{nCount + 1}/{nMax}].");
+            AddLineAndCheckForFocus($"Destroyed unit [{nCount + 1}/{nMax}].");
         }
         else if (type != "Unit")
         {
             tile.Destroy();
-            ConsoleHandler.init.AddLine($"Destroyed tile [{nCount + 1}/{nMax}].");
+            AddLineAndCheckForFocus($"Destroyed tile [{nCount + 1}/{nMax}].");
         }
     }
 

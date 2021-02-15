@@ -26,6 +26,8 @@ public class SpawnUnit : ConsoleCommand
     public string subType;
     public long playerId;
     public PlayerInfo playerInfo;
+    public bool noMouseRequired;
+    public Vector2 tileLocation;
 
     private bool fire1Clicked;
 
@@ -35,6 +37,7 @@ public class SpawnUnit : ConsoleCommand
         subCommands.Add("player-id", "0");
         subCommands.Add("sub-type", "Worker");
         subCommands.Add("amount", "1");
+        subCommands.Add("tile-location", "0,1");
         subCommands.Add("color", "#ffffff");
         subCommands.Add("attack-distance", "1");
         subCommands.Add("units", "10");
@@ -64,35 +67,17 @@ public class SpawnUnit : ConsoleCommand
                 TileInfo tile = tileInfoRaycaster.GetTileInfoFromPos(Input.mousePosition);
                 if (tile != null)
                 {
-                    GameObject unit = Instantiate(_baseUnits[subType].gameObject, _baseUnits[subType].transform.parent);
-                    unit.transform.position = tile.transform.position;
-                    UnitInfo unitInfo = unit.GetComponent<UnitInfo>();
-                    //unitInfo.tileId = Tools.UniqueId + "";
-                    unitInfo.playerInfo = playerInfo;
-                    unitInfo.playerInfo.color = color == Color.white ? playerInfo.color : color;
-                    unitInfo.attackDistance = attackDistance;
-                    unitInfo.units = units;
-                    unitInfo.Initialize();
-                    unit.SetActive(true);
-                    ConsoleHandler.init.AddLine(string.Format("Spawning unit [{0}/{1}].", nCount + 1, nMax));
-
-                    if (autoFocus)
-                    {
-                        ConsoleHandler.init.Focus();
-                    }
-                    nCount++;
-
-                    if (nCount == 1)
-                    {
-                        ConsoleHandler.init.AddCache(ConsoleHandler.init.previousCommand);
-                    }
+                    Spawn(tile.transform.position);
                 }
             }
 
             yield return null;
         }
+    }
 
-        //ConsoleHandler.init.AddLine("Done!");
+    private void ExecuteCommand()
+    {
+        Spawn(TileList.generatedTiles[tileLocation].transform.position);
     }
 
     public override void OnParsedConsoleEvent(string command, string[] arguments)
@@ -108,6 +93,10 @@ public class SpawnUnit : ConsoleCommand
 
                 switch (subCommand)
                 {
+                    case "tile-location":
+                        tileLocation = Tools.ParseLocation(subCommands[subCommand]);
+                        noMouseRequired = true;
+                        break;
                     case "player-id":
                         if (!PlayerList.init.players.ContainsKey(playerId)) break;
 
@@ -163,9 +152,42 @@ public class SpawnUnit : ConsoleCommand
 
             if (notCancel)
             {
-                ConsoleHandler.init.AddLine("Click a tile to spawn.");
-                StartCoroutine(CommandStream());
+                if (noMouseRequired)
+                {
+                    ExecuteCommand();
+                }
+                else
+                {
+                    ConsoleHandler.init.AddLine("Click a tile to spawn.");
+                    StartCoroutine(CommandStream());
+                }
             }
+        }
+    }
+
+    private void Spawn(Vector3 loc)
+    {
+        GameObject unit = Instantiate(_baseUnits[subType].gameObject, _baseUnits[subType].transform.parent);
+        unit.transform.position = loc;
+        UnitInfo unitInfo = unit.GetComponent<UnitInfo>();
+        //unitInfo.tileId = Tools.UniqueId + "";
+        unitInfo.playerInfo = playerInfo;
+        unitInfo.playerInfo.color = color == Color.white ? playerInfo.color : color;
+        unitInfo.attackDistance = attackDistance;
+        unitInfo.units = units;
+        unitInfo.Initialize();
+        unit.SetActive(true);
+        ConsoleHandler.init.AddLine(string.Format("Spawning unit [{0}/{1}].", nCount + 1, nMax));
+
+        if (autoFocus)
+        {
+            ConsoleHandler.init.Focus();
+        }
+        nCount++;
+
+        if (nCount == 1)
+        {
+            ConsoleHandler.init.AddCache(ConsoleHandler.init.previousCommand);
         }
     }
 
