@@ -222,4 +222,65 @@ public class Tools : MonoBehaviour
         return new Vector2(x, y);
     }
 
+    public static List<string> JsonBeautify(string json)
+    {
+        string[] jsonArray = json.Split('{');
+        List<string> final = new List<string>();
+        string space = "";
+        for (int i = 0; i < jsonArray.Length; i++)
+        {
+            if (jsonArray[i].Length > 0)
+            {
+                final.Add(space + "{");
+                space += " ";
+            }
+
+            string[] jsonArray2 = jsonArray[i].Split(',');
+
+            for (int ii = 0; ii < jsonArray2.Length; ii++)
+            {
+                if (jsonArray2[ii].Length > 0 && !jsonArray2[ii].Contains("{") && !jsonArray2[ii].Contains("}")
+                    && jsonArray2[ii][jsonArray2[ii].Length - 1] != ':')
+                {
+                    final.Add(space + jsonArray2[ii] + ",");
+                }
+                else if (jsonArray2[ii].Length > 0 && jsonArray2[ii][jsonArray2[ii].Length - 1] == ':')
+                {
+                    final.Add(space + jsonArray2[ii]);
+                }
+
+                if (jsonArray2[ii].Contains("}"))
+                {
+                    string normalized = jsonArray2[ii];
+
+                    while (normalized.Contains("}"))
+                    {
+                        normalized = normalized.Remove(normalized.Length - 1);
+                    }
+
+                    final.Add(space + normalized);
+
+                    normalized = jsonArray2[ii];
+
+                    while (normalized.Contains("}"))
+                    {
+                        normalized = normalized.Remove(normalized.Length - 1);
+
+                        if (space.Length > 0)
+                        {
+                            space = space.Remove(space.Length - 1);
+                        }
+                        else
+                        {
+                            space = "";
+                        }
+
+                        final.Add(space + "}");
+                    }
+                }
+            }
+        }
+
+        return final;
+    }
 }
