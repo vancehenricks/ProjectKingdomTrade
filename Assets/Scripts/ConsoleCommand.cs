@@ -8,13 +8,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ConsoleCommand : MonoBehaviour
+public abstract class ConsoleCommand : MonoBehaviour
 {
     public Dictionary<string, string> subCommands;
 
     private void Start()
     {
         ConsoleParser.onParsedConsoleEvent += OnParsedConsoleEvent;
+        subCommands = new Dictionary<string, string>();
         Initialize();
     }
 
@@ -22,15 +23,9 @@ public class ConsoleCommand : MonoBehaviour
     {
         //if console object is not active at all it will not call OnDestroy on those thus not clearing the delegates
         ConsoleParser.onParsedConsoleEvent -= OnParsedConsoleEvent;
+        subCommands.Clear();
     }
 
-    public virtual void Initialize()
-    {
-        //implementation
-    }
-
-    public virtual void OnParsedConsoleEvent(string command, string[] arguments)
-    {
-        //implementation
-    }
+    public abstract void Initialize();
+    public abstract void OnParsedConsoleEvent(string command, string[] arguments);
 }

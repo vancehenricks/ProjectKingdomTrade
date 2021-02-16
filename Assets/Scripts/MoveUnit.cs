@@ -23,8 +23,6 @@ public class MoveUnit : PlayerCommand
     {
         //Debug.Log("MoveUnit");
 
-        base.Command();
-
         if (unitInfos.Count == 0) return;
 
         if (Input.GetButtonDown("Fire1") && MultiSelect.shiftPressed)

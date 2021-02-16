@@ -33,7 +33,6 @@ public class SpawnUnit : ConsoleCommand
 
     public override void Initialize()
     {
-        subCommands = new Dictionary<string, string>();
         subCommands.Add("player-id", "0");
         subCommands.Add("sub-type", "Worker");
         subCommands.Add("amount", "1");

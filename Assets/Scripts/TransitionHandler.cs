@@ -115,7 +115,7 @@ public class TransitionHandler : MonoBehaviour
         }
 
         LoadingHandler.init.Set(1f);
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(2f);
         loadingOperation.allowSceneActivation = true;
     }
 }

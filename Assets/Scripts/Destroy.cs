@@ -27,7 +27,6 @@ public class Destroy : ConsoleCommand
 
     public override void Initialize()
     {
-        subCommands = new Dictionary<string, string>();
         subCommands.Add("tile-id", "0");
         subCommands.Add("type", "Unit");
         subCommands.Add("amount", "1");
