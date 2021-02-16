@@ -15,6 +15,7 @@ public class ConsoleMoveUnit : ConsoleCommand
 
     public override void Initialize()
     {
+        Dictionary<string, string> subCommands = new Dictionary<string, string>();
         subCommands.Add("tile-id", "0");
         subCommands.Add("tile-location","0,0");
 
@@ -24,7 +25,12 @@ public class ConsoleMoveUnit : ConsoleCommand
 
     private void ExecuteCommand()
     {
+        UnitInfo unitInfo = (UnitInfo)TileList.generatedUnits[tileId];
+        unitInfo.unitEffect.combatHandler.DisEngage();
+        unitInfo.merge = null;
+        unitInfo.waypoints.Add(TileList.generatedTiles[tileLocation]);
 
+        ConsoleHandler.init.AddLine("Moving unit " + tileId + " to tile " + tileLocation);
         ConsoleHandler.init.AddCache(ConsoleHandler.init.previousCommand);
     }
 

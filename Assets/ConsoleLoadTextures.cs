@@ -12,6 +12,7 @@ public class ConsoleLoadTextures : ConsoleCommand
 {
     public override void Initialize()
     {
+        Dictionary<string, string> subCommands = new Dictionary<string, string>();
         subCommands.Add("cancel", "");
         subCommands.Add("help", "");
         ConsoleHandler.init.AddCommand("load-textures", subCommands);

@@ -10,12 +10,10 @@ using UnityEngine;
 
 public abstract class ConsoleCommand : MonoBehaviour
 {
-    public Dictionary<string, string> subCommands;
-
     private void Start()
     {
         ConsoleParser.onParsedConsoleEvent += OnParsedConsoleEvent;
-        subCommands = new Dictionary<string, string>();
+        Debug.Log(this.GetHashCode());
         Initialize();
     }
 
@@ -23,7 +21,6 @@ public abstract class ConsoleCommand : MonoBehaviour
     {
         //if console object is not active at all it will not call OnDestroy on those thus not clearing the delegates
         ConsoleParser.onParsedConsoleEvent -= OnParsedConsoleEvent;
-        subCommands.Clear();
     }
 
     public abstract void Initialize();
