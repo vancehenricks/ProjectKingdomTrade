@@ -13,7 +13,6 @@ public abstract class ConsoleCommand : MonoBehaviour
     private void Start()
     {
         ConsoleParser.onParsedConsoleEvent += OnParsedConsoleEvent;
-        Debug.Log(this.GetHashCode());
         Initialize();
     }
 
