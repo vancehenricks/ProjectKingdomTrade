@@ -12,34 +12,32 @@ public class CombatSession : MonoBehaviour
 {
     public UnitInfo unitInfo;
     [SerializeField]
-    private List<TileInfo> combatants;
+    private List<UnitInfo> combatants;
 
     private void Start()
     {
-        combatants = new List<TileInfo>();
+        combatants = new List<UnitInfo>();
     }
 
     private void OnDestroy()
     {
         for (int i = 1; i < combatants.Count; i++)
         {
-            UnitInfo unit = combatants[i] as UnitInfo;
-            CombatHandler unitCombatHandler = unit.unitEffect.combatHandler;
-
+            CombatHandler unitCombatHandler = combatants[i].unitEffect.combatHandler;
             unitCombatHandler.combatSession = null;
         }
     }
 
-    public void Add(TileInfo tileInfo)
+    public void Add(UnitInfo unitInfo)
     {
-        if (Tools.Exist(combatants, tileInfo) > -1) return;
+        if (Tools.Exist(combatants, unitInfo) > -1) return;
 
-        combatants.Add(tileInfo);
+        combatants.Add(unitInfo);
     }
 
-    public void Remove(TileInfo tileInfo)
+    public void Remove(UnitInfo unitInfo)
     {
-        combatants.Remove(tileInfo);
+        combatants.Remove(unitInfo);
     }
 
     public void Relay()
@@ -70,9 +68,7 @@ public class CombatSession : MonoBehaviour
         for (int i = startingIndex; i < combatants.Count; i++)
         {
             //PathFinding hostPathFinder = host.unitEffect.pathFinder;
-            UnitInfo unit = combatants[i] as UnitInfo;
-            CombatHandler unitCombatHandler = unit.unitEffect.combatHandler;
-
+            CombatHandler unitCombatHandler = combatants[i].unitEffect.combatHandler;
             unitCombatHandler.GenerateWaypoint(point);
         }
     }

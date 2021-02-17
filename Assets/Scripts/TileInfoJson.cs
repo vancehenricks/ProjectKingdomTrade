@@ -9,37 +9,31 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-public class TestInfo
+public class TileInfoJson
 {
+    public string baseSprite;
+    public string freezingSprite;
+    public string autumnSprite;
+    public string summerSprite;
     public string tileType;
     public string subType;
     public long tileId;
     public string tileName;
+    //public PlayerInfo playerInfo;
+    //public HashSet<PlayerInfo> claimants;
+    //public TileEffect tileEffect;
+    //public TileCaller tileCaller;
+    public Vector2 tileLocation;
     public float localTemp;
-    public Vector2 test2;
     public float travelTime;
     public int minChance;
     public int maxChance;
+    //public List<UnitInfo> unitInfos;
     public int units;
-    public bool selected;
-    public Vector2 tileLocation;
-}
-
-public class JsonTest : MonoBehaviour
-{
-    private void Start()
-    {
-        TestInfo testInfo = new TestInfo();
-
-        string json = JsonUtility.ToJson(testInfo);
-
-        StreamWriter writer = File.CreateText(Path.Combine(Application.streamingAssetsPath, "Config/sample.json"));
-
-        foreach (string line in Tools.JsonBeautify(json))
-        {
-            writer.WriteLine(line);
-        }
-
-        writer.Close();
-    }
+    //public bool selected;
+    public float travelSpeed;
+    public bool isEngaged;
+    public int attackDistance;
+    public float killChance;
+    public float deathChance;
 }

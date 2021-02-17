@@ -35,7 +35,7 @@ public class CombatHandler : MonoBehaviour
 
     private void OnDestroy()
     {
-        UnitInfo targetUnit = unitInfo.currentTarget as UnitInfo;
+        //UnitInfo targetUnit = (UnitInfo)unitInfo.currentTarget;
 
         //DisEngage(targetUnit);
         DisEngage();
@@ -121,7 +121,7 @@ public class CombatHandler : MonoBehaviour
             return;
         }
 
-        UnitInfo targetUnit = unitInfo.currentTarget as UnitInfo;
+        UnitInfo targetUnit = (UnitInfo)unitInfo.currentTarget;
 
         int distance = Tools.TileLocationDistance(unitInfo, targetUnit);
         int attackDistance = unitInfo.attackDistance <= 1 ? 0 : unitInfo.attackDistance;
