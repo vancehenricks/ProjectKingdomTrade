@@ -40,22 +40,22 @@ public class LoadingHandler : MonoBehaviour
         loadingScreen.SetActive(visible);
     }
 
-    public void Set(float _progress)
+    public void Set(float _progress, string message = "")
     {
         StopAllCoroutines();
-        StartCoroutine(LoadingAnimation(_progress, progressBar.fillAmount));
+        StartCoroutine(LoadingAnimation(_progress, progressBar.fillAmount, message));
     }
 
-    private IEnumerator LoadingAnimation(float target, float current)
+    private IEnumerator LoadingAnimation(float target, float current, string message)
     {
         for (float i = current;i <= target;i += 0.01f)
         {
             int percentage = (int)(i * 100);
-            label.text = percentage + "%";
+            label.text = message + " " + percentage + "%";
 
             if (percentage >= 98)
             {
-                label.text = "100%";
+                label.text = message + " 100%";
             }
 
             progressBar.fillAmount = i;

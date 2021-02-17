@@ -1,24 +1,15 @@
 {
- "baseSprite":"",
+ "tileType":"",
+ "subType":"",
+ "sprite":"",
  "freezingSprite":"",
  "autumnSprite":"",
  "summerSprite":"",
- "tileType":"",
- "subType":"",
- "tileId":0,
- "tileName":"",
- "tileLocation":
- {
-  "x":0.0,
-  "y":0.0
- }
- "localTemp":0.0,
  "travelTime":0.0,
  "minChance":0,
  "maxChance":0,
  "units":0,
  "travelSpeed":0.0,
- "isEngaged":false,
  "attackDistance":0,
  "killChance":0.0,
  "deathChance":0.0

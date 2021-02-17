@@ -110,11 +110,11 @@ public class TransitionHandler : MonoBehaviour
 
         while (loadingOperation.progress < 0.7f)
         {
-            LoadingHandler.init.Set(loadingOperation.progress);
+            LoadingHandler.init.Set(loadingOperation.progress, "Saving Game...");
             yield return new WaitForFixedUpdate();
         }
 
-        LoadingHandler.init.Set(1f);
+        LoadingHandler.init.Set(1f, "Saving Game...");
         yield return new WaitForSeconds(2f);
         loadingOperation.allowSceneActivation = true;
     }

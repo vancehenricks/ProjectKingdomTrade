@@ -7,24 +7,38 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using UnityEditor;
 using UnityEngine;
 
 public class PreLoaderHandler : MonoBehaviour
 {
     public static PreLoaderHandler init;
-    public static bool isDone;
 
-    public List<Texture2D> textures;
+    private static bool isDone;
+
+    public List<Texture2D> _textures;
+    public Dictionary<string, Texture2D> textures;
     public List<GameObject> gameObjects;
 
     private void Start()
+    {
+        ExecuteCommands command = Initialize;
+        PreLoadPipeline.Add(command, 0);
+    }
+
+    private void Initialize()
     {
         init = this;
 
         if (!isDone)
         {
             isDone = true;
+
+            textures = new Dictionary<string, Texture2D>();
+            foreach (Texture2D texture in _textures)
+            {
+                textures.Add(texture.name, texture);
+            }
+
             LoadTextures();
         }
 
@@ -44,7 +58,7 @@ public class PreLoaderHandler : MonoBehaviour
         float count = 0;
         float total = textures.Count;
 
-        foreach (Texture2D texture in textures)
+        foreach (Texture2D texture in textures.Values)
         {
             string path = Path.Combine(Application.streamingAssetsPath, "Sprites/" + texture.name + ".png");
 
@@ -56,15 +70,35 @@ public class PreLoaderHandler : MonoBehaviour
             count++;
             progress = count / total;
 
-            LoadingHandler.init.Set(progress);
+            LoadingHandler.init.Set(progress, "Loading Textures...");
             yield return new WaitForSeconds(0.1f);
         }
 
-        LoadingHandler.init.Set(1f);
+        LoadingHandler.init.Set(1f, "Loading Textures...");
         yield return new WaitForSeconds(1f);
 
         LoadingHandler.init.SetActive(false);
 
+    }
+
+    public Sprite GetTexture(string name)
+    {
+        string template = "empty.png";
+
+        if (template.Contains("-icon"))
+        {
+            template = "empty-icon";
+        }
+
+        string path = Path.Combine(Application.streamingAssetsPath, "Sprites/");
+
+        Texture2D texture = Instantiate(textures[template]);
+
+        texture.name = name;
+        texture.LoadImage(File.ReadAllBytes(path + name));
+        textures.Add(texture.name, texture);
+
+        return Sprite.Create(texture, new Rect(0.0f, 0.0f, texture.width, texture.height), new Vector2(0.5f, 0.5f), 100.0f);
     }
 
     public void LoadTextures()

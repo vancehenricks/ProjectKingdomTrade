@@ -13,11 +13,11 @@ public class GenerateJsonTemplate : MonoBehaviour
 {
     private void Start()
     {
-        TileInfoJson tileInfoJson = new TileInfoJson();
+        TileConfig tileConfig = new TileConfig();
 
-        string json = JsonUtility.ToJson(tileInfoJson);
+        string json = JsonUtility.ToJson(tileConfig);
 
-        StreamWriter writer = File.CreateText(Path.Combine(Application.streamingAssetsPath, "Config/tile-sample.json"));
+        StreamWriter writer = File.CreateText(Path.Combine(Application.streamingAssetsPath, "Config/Tiles/template.json"));
 
         foreach (string line in Tools.JsonBeautify(json))
         {
