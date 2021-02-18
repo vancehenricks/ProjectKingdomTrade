@@ -1,0 +1,16 @@
+{
+ "tileType":"Land",
+ "subType":"",
+ "sprite":"tiles_28.png",
+ "freezingSprite":"tiles_4.png",
+ "autumnSprite":"tiles_18.png",
+ "summerSprite":"tiles_18.png",
+ "travelTime":2,
+ "minChance":1,
+ "maxChance":30,
+ "units":0,
+ "travelSpeed":0.0,
+ "attackDistance":0,
+ "killChance":0.0,
+ "deathChance":0.0
+}

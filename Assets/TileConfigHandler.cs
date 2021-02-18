@@ -12,37 +12,26 @@ using UnityEngine;
 public class TileConfigHandler : MonoBehaviour
 {
     public Dictionary<string, TileInfo> baseTiles;
-
     public static TileConfigHandler init;
-
-    private static bool isDone;
-
     public TileInfo baseTile;
     public UnitInfo baseUnit;
 
-    private void Start()
-    {
-        ExecuteCommands command = Initialize;
-        PreLoadPipeline.Add(command, 1);
-    }
-
-    public void Initialize()
+    private void Awake()
     {
         init = this;
-
-        if (!isDone)
-        {
-            //LoadTiles();
-            isDone = false;
-        }
     }
 
     public void LoadTiles()
     {
+        baseTiles = new Dictionary<string, TileInfo>();
         string includePath = Path.Combine(Application.streamingAssetsPath, "Config/include");
         string[] files = File.ReadAllLines(includePath);
 
         string tilePath = Path.Combine(Application.streamingAssetsPath, "Config/Tiles/");
+
+        float progress = 0f;
+        float count = 0;
+        float total = files.Length;
 
         foreach (string file in files)
         {
@@ -57,6 +46,8 @@ public class TileConfigHandler : MonoBehaviour
             {
                 baseTiles.Add(tileInfo.subType, tileInfo);
             }
+            count++;
+            progress = count / total;
         }
     }
 
@@ -68,7 +59,7 @@ public class TileConfigHandler : MonoBehaviour
             unitInfo.transform.SetParent(baseUnit.transform.parent);
             unitInfo.tileType = config.tileType;
             unitInfo.subType = config.subType;
-            unitInfo.sprite = PreLoaderHandler.init.GetTexture(config.sprite);
+            unitInfo.sprite = TextureHandler.init.GetSprite(config.sprite);
             unitInfo.units = config.units;
             unitInfo.travelSpeed = config.travelSpeed;
             unitInfo.attackDistance = config.attackDistance;
@@ -83,17 +74,16 @@ public class TileConfigHandler : MonoBehaviour
             tileInfo.transform.SetParent(baseTile.transform.parent);
             tileInfo.tileType = config.tileType;
             tileInfo.subType = config.subType;
-            Sprite sprite = PreLoaderHandler.init.GetTexture(config.sprite);
+            Sprite sprite = TextureHandler.init.GetSprite(config.sprite);
             tileInfo.tileEffect.image.sprite = sprite;
             tileInfo.tileEffect.springTile = sprite;
-            tileInfo.tileEffect.freezingTile = PreLoaderHandler.init.GetTexture(config.freezingSprite);
-            tileInfo.tileEffect.autumnTile = PreLoaderHandler.init.GetTexture(config.autumnSprite);
-            tileInfo.tileEffect.summerTile = PreLoaderHandler.init.GetTexture(config.summerSprite);
+            tileInfo.tileEffect.freezingTile = TextureHandler.init.GetSprite(config.freezingSprite);
+            tileInfo.tileEffect.autumnTile = TextureHandler.init.GetSprite(config.autumnSprite);
+            tileInfo.tileEffect.summerTile = TextureHandler.init.GetSprite(config.summerSprite);
 
             return tileInfo;
         }
 
         return null;
     }
-
 }

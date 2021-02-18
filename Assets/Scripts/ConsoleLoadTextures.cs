@@ -21,7 +21,7 @@ public class ConsoleLoadTextures : ConsoleCommand
 
     private void ExecuteCommand()
     {
-        PreLoaderHandler.init.LoadTextures();
+        TextureHandler.init.LoadTextures();
         ConsoleHandler.init.AddLine("Textures Loaded!");
         ConsoleHandler.init.AddCache(ConsoleHandler.init.previousCommand);
     }

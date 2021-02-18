@@ -13,11 +13,6 @@ public class UnitCycler : MonoBehaviour
 
     public TileInfo tileInfo;
 
-    private void Start()
-    {
-        tileInfo = GetComponent<TileInfo>();
-    }
-
     private IEnumerator Cycle(List<UnitInfo> unitInfos)
     {
         yield return new WaitForSeconds(2);

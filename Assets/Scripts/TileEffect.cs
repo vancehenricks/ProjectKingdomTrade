@@ -35,11 +35,6 @@ public class TileEffect : MonoBehaviour
 
     //private int startedDay;
 
-    private void Start()
-    {
-        tileInfo.tileEffect = this;
-    }
-
     public void UpdateTileEffect()
     {
 
