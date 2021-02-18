@@ -77,8 +77,9 @@ public class SyncIcon : MonoBehaviour
                 obj.SetActive(image.activeSelf);
             }
         }
-        catch
+        catch (System.Exception e)
         {
+            Debug.LogError(e);
             Destroy(gameObject);
         }
 

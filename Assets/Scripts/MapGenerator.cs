@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using System.Linq;
 
 public class MapGenerator : MonoBehaviour
 {
@@ -20,7 +21,6 @@ public class MapGenerator : MonoBehaviour
         private set { _init = value; }
     }
 
-    public List<TileInfo> baseTile;
     public GameObject placeHolderTile;
     public RectTransform grid;
     public float distanceOfEachTile;
@@ -88,12 +88,13 @@ public class MapGenerator : MonoBehaviour
         onDoneGenerate = null;
     }
 
-    public int GetBaseTileIndex(TileInfo tileInfo)
+    private int GetBaseTileIndex(TileInfo tileInfo)
     {
+        List<TileInfo> baseTiles = TileConfigHandler.init.baseTiles.Values.ToList<TileInfo>();
 
-        for (int i = 0; i < baseTile.Count; i++)
+        for (int i = 0; i < baseTiles.Count; i++)
         {
-            TileInfo bTile = baseTile[i];
+            TileInfo bTile = baseTiles[i];
 
             if (bTile.tileType == tileInfo.tileType)
             {
@@ -106,6 +107,7 @@ public class MapGenerator : MonoBehaviour
 
     private void GenerateMapLogic()
     {
+        List<TileInfo> baseTiles = TileConfigHandler.init.baseTiles.Values.ToList<TileInfo>();
 
         int numberOfTilesInARow = 0;
         int tileCounter = 0;
@@ -132,8 +134,8 @@ public class MapGenerator : MonoBehaviour
                 if (tileCounter >= numberOfTilesInARow)
                 {
 
-                    index = Random.Range(0, baseTile.Count);
-                    TileInfo candidateTile = baseTile[index].GetComponent<TileInfo>();
+                    index = Random.Range(0, baseTiles.Count);
+                    TileInfo candidateTile = baseTiles[index].GetComponent<TileInfo>();
                     numberOfTilesInARow = Random.Range(candidateTile.minChance, candidateTile.maxChance);
 
                     tileCounter = 0;
@@ -180,7 +182,7 @@ public class MapGenerator : MonoBehaviour
                             }
                         }
 
-                        GameObject gameObject = Instantiate(baseTile[index].gameObject, placeHolderTile.transform.position, placeHolderTile.transform.rotation, placeHolderTile.transform.parent);
+                        GameObject gameObject = Instantiate(baseTiles[index].gameObject, placeHolderTile.transform.position, placeHolderTile.transform.rotation, placeHolderTile.transform.parent);
                         TileInfo tileInfo = gameObject.GetComponent<TileInfo>();
                         tileLocation = new Vector2(tileLocationX, tileLocationY);
                         tileInfo.tileLocation = tileLocation;

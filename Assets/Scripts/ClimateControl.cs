@@ -32,7 +32,7 @@ public class ClimateControl : MonoBehaviour
     public float summerMaxTemp;
     public static bool isSummer { get; private set; }
 
-    private void Update()
+    private void FixedUpdate()
     {
 
         if (Tick.month >= 8 && Tick.month <= 10 && !isAutumn)
@@ -44,8 +44,7 @@ public class ClimateControl : MonoBehaviour
             isSpring = false;
             isSummer = false;
         }
-
-        if (Tick.month >= 11 && Tick.month <= 12 && !isWinter)
+        else if (Tick.month >= 11 && Tick.month <= 12 && !isWinter)
         {
             Temperature.minTemp = winterMinTemp;
             Temperature.maxTemp = winterMaxTemp;
@@ -54,8 +53,7 @@ public class ClimateControl : MonoBehaviour
             isSpring = false;
             isSummer = false;
         }
-
-        if (Tick.month >= 1 && Tick.month <= 4 && !isSpring)
+        else if (Tick.month >= 1 && Tick.month <= 4 && !isSpring)
         {
             Temperature.minTemp = springMinTemp;
             Temperature.maxTemp = springMaxTemp;
@@ -64,8 +62,7 @@ public class ClimateControl : MonoBehaviour
             isSpring = true;
             isSummer = false;
         }
-
-        if (Tick.month >= 5 && Tick.month < 8 && !isSummer)
+        else if (Tick.month >= 5 && Tick.month < 8 && !isSummer)
         {
             Temperature.minTemp = summerMinTemp;
             Temperature.maxTemp = summerMaxTemp;

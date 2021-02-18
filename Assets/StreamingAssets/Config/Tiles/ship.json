@@ -1,0 +1,19 @@
+{
+ "tileType":"Unit",
+ "subType":"Ship",
+ "sprite":"units_5.png",
+ "freezingSprite":"",
+ "autumnSprite":"",
+ "summerSprite":"",
+ "freezingTemp":0.0,
+ "autumnTemp":0,
+ "summerTemp":0,
+ "travelTime":0,
+ "minChance":0,
+ "maxChance":0,
+ "units":10,
+ "travelSpeed":2,
+ "attackDistance":0,
+ "killChance":0,
+ "deathChance":8
+}

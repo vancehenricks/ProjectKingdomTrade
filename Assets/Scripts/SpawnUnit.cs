@@ -11,8 +11,6 @@ using System.Linq;
 
 public class SpawnUnit : ConsoleCommand
 {
-    public List<UnitInfo> baseUnits;
-    public Dictionary<string, UnitInfo> _baseUnits;
     public TileInfoRaycaster tileInfoRaycaster;
     //public KeyCode spawnKey;
     public int nCount;
@@ -49,11 +47,6 @@ public class SpawnUnit : ConsoleCommand
         ConsoleHandler.init.AddCommand("spawn-unit", subCommands);
         ConsoleHandler.init.AddCache("spawn-unit");
 
-        _baseUnits = new Dictionary<string, UnitInfo>();
-        foreach (UnitInfo unit in baseUnits)
-        {
-            _baseUnits.Add(unit.subType, unit);
-        }
     }
 
     private IEnumerator CommandStream()
@@ -104,9 +97,9 @@ public class SpawnUnit : ConsoleCommand
                         playerInfo = PlayerList.init.players[playerId];
                         break;
                     case "sub-type":
-                        if (!_baseUnits.ContainsKey(subCommands[subCommand])) break;
+                        if (!TileConfigHandler.init.baseUnits.ContainsKey(subCommands[subCommand])) break;
                         subType = subCommands[subCommand];
-                        UnitInfo unitInfo = _baseUnits[subType].GetComponent<UnitInfo>();
+                        UnitInfo unitInfo = TileConfigHandler.init.baseUnits[subType].GetComponent<UnitInfo>();
 
                         if (!subCommands.ContainsKey("units"))
                         {
@@ -167,7 +160,7 @@ public class SpawnUnit : ConsoleCommand
 
     private void Spawn(Vector3 loc)
     {
-        GameObject unit = Instantiate(_baseUnits[subType].gameObject, _baseUnits[subType].transform.parent);
+        GameObject unit = Instantiate(TileConfigHandler.init.baseUnits[subType].gameObject, TileConfigHandler.init.baseUnits[subType].transform.parent);
         unit.transform.position = loc;
         UnitInfo unitInfo = unit.GetComponent<UnitInfo>();
         //unitInfo.tileId = Tools.UniqueId + "";
@@ -195,7 +188,7 @@ public class SpawnUnit : ConsoleCommand
     {
         tileLocation = Vector2.zero;
         subType = "Worker";
-        UnitInfo unitInfo = _baseUnits[subType].GetComponent<UnitInfo>();
+        UnitInfo unitInfo = TileConfigHandler.init.baseUnits[subType].GetComponent<UnitInfo>();
         playerInfo = PlayerList.init.players.Values.ElementAt(0);
         playerId = playerInfo.playerId;
         attackDistance = unitInfo.attackDistance;

@@ -1,0 +1,19 @@
+{
+ "tileType":"Unit",
+ "subType":"Merchant",
+ "sprite":"units_1.png",
+ "freezingSprite":"",
+ "autumnSprite":"",
+ "summerSprite":"",
+ "freezingTemp":0.0,
+ "autumnTemp":0,
+ "summerTemp":0,
+ "travelTime":0,
+ "minChance":0,
+ "maxChance":0,
+ "units":10,
+ "travelSpeed":1.5,
+ "attackDistance":0,
+ "killChance":0.0,
+ "deathChance":5
+}

@@ -19,11 +19,16 @@ public class ConsoleLoadTextures : ConsoleCommand
         ConsoleHandler.init.AddCache("load-textures");
     }
 
-    private void ExecuteCommand()
+    private IEnumerator ExecuteCommand()
     {
+        LoadingHandler.init.SetActive(true);
+        LoadingHandler.init.Set(1f, "Loading Textures...");
         TextureHandler.init.LoadTextures();
-        ConsoleHandler.init.AddLine("Textures Loaded!");
+        yield return new WaitForSeconds(1f);
         ConsoleHandler.init.AddCache(ConsoleHandler.init.previousCommand);
+        yield return new WaitForSeconds(1f);
+        ConsoleHandler.init.AddLine("Textures Loaded!");
+        LoadingHandler.init.SetActive(false);
     }
 
     public override void OnParsedConsoleEvent(string command, string[] arguments)
@@ -45,7 +50,8 @@ public class ConsoleLoadTextures : ConsoleCommand
                 }
             }
 
-            ExecuteCommand();
+            StopAllCoroutines();
+            StartCoroutine(ExecuteCommand());
         }
     }
 }

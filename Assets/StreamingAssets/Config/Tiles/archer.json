@@ -1,0 +1,19 @@
+{
+ "tileType":"Unit",
+ "subType":"Archer",
+ "sprite":"units_4.png",
+ "freezingSprite":"",
+ "autumnSprite":"",
+ "summerSprite":"",
+ "freezingTemp":0.0,
+ "autumnTemp":0,
+ "summerTemp":0,
+ "travelTime":0,
+ "minChance":0,
+ "maxChance":0,
+ "units":10,
+ "travelSpeed":0.5,
+ "attackDistance":2,
+ "killChance":5,
+ "deathChance":8
+}

@@ -76,9 +76,10 @@ public class CombatHandler : MonoBehaviour
                     break;
                 }
             }
-            catch
+            catch (System.Exception e)
             {
-                Debug.Log("unitInfo.targets got modified...");
+                Debug.LogError(e);
+                Debug.LogError("unitInfo.targets got modified...");
             }
         }
 

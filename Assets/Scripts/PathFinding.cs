@@ -62,11 +62,11 @@ public class PathFinding : MonoBehaviour
 
     private void Update()
     {
-        if (destination.arrivalTime == -1)
+        if (destination.arrivalTime <= -1)
         {
             transform.position = destination.tile.transform.position;
         }
-        else if (destination.arrivalTime == 0)
+        else if (destination.arrivalTime <= 0)
         {
             transform.position = Vector2.Lerp(transform.position, destination.tile.transform.position, (10f * Tick.speed) * Time.deltaTime);
 
@@ -184,7 +184,7 @@ public class PathFinding : MonoBehaviour
         {
             //Debug.Log("145");
             destination.tile = generatedWayPoints[gwPointsIndex];
-            destination.arrivalTime = destination.tile.travelTime;
+            destination.arrivalTime = destination.tile.travelTime - unitEffect.unitInfo.travelSpeed;
             gwPointsIndex++;
             //Debug.Log("146");
         }

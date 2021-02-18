@@ -83,8 +83,10 @@ public class Node
             {
                 sortedNodes.Add(n.f, n);
             }
-            catch { /*do nothing*/ }
-
+            catch (System.Exception e)
+            {
+                Debug.LogError(e);
+            }
         }
 
         return sortedNodes.Values.First();

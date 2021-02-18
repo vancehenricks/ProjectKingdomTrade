@@ -23,9 +23,9 @@ public class TileEffect : MonoBehaviour
     public Sprite autumnTile;
     public Sprite summerTile;
     public Sprite springTile;
-    public float FreezingTemp;
-    public float AutumnTemp;
-    public float SummerTemp;
+    public float freezingTemp;
+    public float autumnTemp;
+    public float summerTemp;
     public UnitCycler unitCycler;
     public UnitWayPoint UnitWayPoint;
     //public int maxDaysBeforeRevert;
@@ -41,23 +41,23 @@ public class TileEffect : MonoBehaviour
         if (tileInfo.tileType == "Edge") return;
 
         //daysResult = Tick.realDays-startedDay;
-        if (tileInfo.localTemp <= SummerTemp && ClimateControl.isSpring)
+        if (tileInfo.localTemp <= summerTemp && ClimateControl.isSpring)
         {
             image.sprite = springTile;
             //image.sprite = Temperature.temperature;
         }
 
-        if (tileInfo.localTemp >= SummerTemp && ClimateControl.isSummer)
+        if (tileInfo.localTemp >= summerTemp && ClimateControl.isSummer)
         {
             image.sprite = summerTile;
         }
 
-        if (tileInfo.localTemp <= AutumnTemp && ClimateControl.isAutumn)
+        if (tileInfo.localTemp <= autumnTemp && ClimateControl.isAutumn)
         {
             image.sprite = autumnTile;
         }
 
-        if (tileInfo.localTemp <= FreezingTemp && ClimateControl.isWinter)
+        if (tileInfo.localTemp <= freezingTemp && ClimateControl.isWinter)
         {
             image.sprite = freezingTile;
         }

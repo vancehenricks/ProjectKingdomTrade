@@ -18,8 +18,6 @@ public class NewGameAction : MonoBehaviour
     public Text height;
     public RectTransform grid;
     public ResetCenter resetCenter;
-    public ShowMessage message;
-    public ShowMessage confirmationMessage;
     public OpenWindow openWindow;
     public CloseWindow closeWindow;
     /*public CloudCycle cloudCycle;*/
@@ -48,7 +46,7 @@ public class NewGameAction : MonoBehaviour
 
             if (Tools.GetNumberOfTiles(w, h, 25, 25) > Tools.GetNumberOfTiles(1000, 1000, 25, 25))
             {
-                ShowMessage show = confirmationMessage.SetMessage("Warning",
+                ShowMessage show = ShowMessageHandler.init.confirmWindow.SetMessage("Warning",
                     "Map size is greater than 1000x1000. This could cause the game to be unresponsive. Would you like to continue?",
                     "Yes", "No", null, OnResponse);
 
@@ -60,7 +58,7 @@ public class NewGameAction : MonoBehaviour
         }
         else
         {
-            message.SetMessage("Invalid Input", "Integer values only in map size", "OK", null, null);
+            ShowMessageHandler.init.infoWindow.SetMessage("Invalid Input", "Integer values only in map size", "OK", null, null);
         }
 
     }

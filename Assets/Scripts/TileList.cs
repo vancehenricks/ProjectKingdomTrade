@@ -76,8 +76,11 @@ public class TileList : MonoBehaviour
         {
             generatedTiles.Remove(tileInfo.tileLocation);
         }
-        catch { /*Do nothing*/ }
-        
+        catch (System.Exception e)
+        {
+            Debug.LogError(e);
+        }
+
         generatedTiles.Add(tileInfo.tileLocation, tileInfo);
     }
 
@@ -87,7 +90,10 @@ public class TileList : MonoBehaviour
         {
             generatedTowns.Remove(tileInfo.tileLocation);
         }
-        catch { /*Do nothing*/ }
+        catch (System.Exception e)
+        {
+            Debug.LogError(e);
+        }
 
         generatedTowns.Add(tileInfo.tileLocation, tileInfo);
     }

@@ -12,6 +12,7 @@ using UnityEngine;
 public class TileConfigHandler : MonoBehaviour
 {
     public Dictionary<string, TileInfo> baseTiles;
+    public Dictionary<string, TileInfo> baseUnits;
     public static TileConfigHandler init;
     public TileInfo baseTile;
     public UnitInfo baseUnit;
@@ -24,30 +25,50 @@ public class TileConfigHandler : MonoBehaviour
     public void LoadTiles()
     {
         baseTiles = new Dictionary<string, TileInfo>();
+        baseUnits = new Dictionary<string, TileInfo>();
+
         string includePath = Path.Combine(Application.streamingAssetsPath, "Config/include");
         string[] files = File.ReadAllLines(includePath);
 
         string tilePath = Path.Combine(Application.streamingAssetsPath, "Config/Tiles/");
 
-        float progress = 0f;
-        float count = 0;
-        float total = files.Length;
-
         foreach (string file in files)
         {
-            string json = File.ReadAllText(tilePath + file);
-            TileInfo tileInfo = GenerateTileFromConfig(JsonUtility.FromJson<TileConfig>(json));
 
-            if (tileInfo.subType == "")
+            if (file.Contains("//")) continue;
+
+            TileInfo tileInfo = null;
+
+            string json = File.ReadAllText(tilePath + file);
+            try
             {
-                baseTiles.Add(tileInfo.tileType, tileInfo);
+                tileInfo = GenerateTileFromConfig(JsonUtility.FromJson<TileConfig>(json));
             }
-            else
+            catch (System.Exception e)
             {
-                baseTiles.Add(tileInfo.subType, tileInfo);
+                Debug.LogError(e);
+                ShowMessageHandler.init.infoWindow.SetMessage("Json Error",
+                    "Please check " + file + " and correct any syntax errors.", "OK", null, null);
             }
-            count++;
-            progress = count / total;
+
+            try
+            {
+                if (tileInfo.subType == "")
+                {
+                    baseTiles.Add(tileInfo.tileType, tileInfo);
+                }
+                else if(tileInfo.tileType == "Unit")
+                {
+                    baseUnits.Add(tileInfo.subType, tileInfo);
+                }
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError(e);
+                ShowMessageHandler.init.infoWindow.SetMessage("Json Error",
+                    "Please check " + file + " and make sure tileType is unique if subType " +
+                    "is empty else make sure subType is unique.", "OK", null, null);
+            }
         }
     }
 
@@ -74,15 +95,24 @@ public class TileConfigHandler : MonoBehaviour
             tileInfo.transform.SetParent(baseTile.transform.parent);
             tileInfo.tileType = config.tileType;
             tileInfo.subType = config.subType;
+            tileInfo.travelTime = config.travelTime;
+            tileInfo.minChance = config.minChance;
+            tileInfo.maxChance = config.maxChance;
+
+
             Sprite sprite = TextureHandler.init.GetSprite(config.sprite);
             tileInfo.tileEffect.image.sprite = sprite;
             tileInfo.tileEffect.springTile = sprite;
             tileInfo.tileEffect.freezingTile = TextureHandler.init.GetSprite(config.freezingSprite);
             tileInfo.tileEffect.autumnTile = TextureHandler.init.GetSprite(config.autumnSprite);
             tileInfo.tileEffect.summerTile = TextureHandler.init.GetSprite(config.summerSprite);
+            tileInfo.tileEffect.freezingTemp = config.freezingTemp;
+            tileInfo.tileEffect.autumnTemp = config.autumnTemp;
+            tileInfo.tileEffect.summerTemp = config.summerTemp;
 
             return tileInfo;
         }
+        //Add for town
 
         return null;
     }

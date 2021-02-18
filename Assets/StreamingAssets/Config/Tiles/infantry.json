@@ -1,0 +1,19 @@
+{
+ "tileType":"Unit",
+ "subType":"Infantry",
+ "sprite":"units_3.png",
+ "freezingSprite":"",
+ "autumnSprite":"",
+ "summerSprite":"",
+ "freezingTemp":0.0,
+ "autumnTemp":0,
+ "summerTemp":0,
+ "travelTime":0,
+ "minChance":0,
+ "maxChance":0,
+ "units":10,
+ "travelSpeed":1,
+ "attackDistance":1,
+ "killChance":8,
+ "deathChance":3
+}

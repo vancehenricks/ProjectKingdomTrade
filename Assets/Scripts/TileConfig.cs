@@ -17,6 +17,9 @@ public struct TileConfig
     public string freezingSprite;
     public string autumnSprite;
     public string summerSprite;
+    public float freezingTemp;
+    public float autumnTemp;
+    public float summerTemp;
     public float travelTime;
     public int minChance;
     public int maxChance;

@@ -65,9 +65,10 @@ public class Tools : MonoBehaviour
             T info = (T)System.Convert.ChangeType(tileInfo, typeof(B));
             return info;
         }
-        catch
+        catch (System.Exception e)
         {
-            Debug.Log("Conversion error try something else");
+            Debug.LogError(e);
+            Debug.LogError("Conversion error try something else");
             T info = (T)System.Convert.ChangeType(tileInfo, typeof(T));
             return info;
         }
@@ -145,8 +146,9 @@ public class Tools : MonoBehaviour
         {
             distance = (int)Math.Round(Vector2.Distance(tile1.tileLocation, tile2.tileLocation), MidpointRounding.AwayFromZero);
         }
-        catch
+        catch (System.Exception e)
         {
+            Debug.LogError(e);
             distance = (int)Math.Round(Vector2.Distance(tile1.transform.position, tile2.transform.position) / 25, MidpointRounding.AwayFromZero);
         }
 

@@ -13,7 +13,6 @@ using UnityEngine.EventSystems;
 
 public class ShowMessage : MonoBehaviour
 {
-
     public GameObject window;
     public Text message;
     public Text title;
