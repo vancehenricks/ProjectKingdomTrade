@@ -7,6 +7,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 public class Tools : MonoBehaviour
@@ -222,6 +223,20 @@ public class Tools : MonoBehaviour
         float.TryParse(locArray[1], out y);
 
         return new Vector2(x, y);
+    }
+
+    public static void WriteTileConfig(TileConfig tileConfig, string fileName)
+    {
+        string json = JsonUtility.ToJson(tileConfig);
+
+        StreamWriter writer = File.CreateText(Path.Combine(Application.streamingAssetsPath, "Config/Tiles/" + fileName));
+
+        foreach (string line in Tools.JsonBeautify(json))
+        {
+            writer.WriteLine(line);
+        }
+
+        writer.Close();
     }
 
     public static List<string> JsonBeautify(string json)

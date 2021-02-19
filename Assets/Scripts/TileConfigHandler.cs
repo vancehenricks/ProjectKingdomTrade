@@ -42,7 +42,8 @@ public class TileConfigHandler : MonoBehaviour
             string json = File.ReadAllText(tilePath + file);
             try
             {
-                tileInfo = GenerateTileFromConfig(JsonUtility.FromJson<TileConfig>(json));
+                tileInfo = Convert(JsonUtility.FromJson<TileConfig>(json));
+                Tools.WriteTileConfig(Convert(tileInfo), file);
             }
             catch (System.Exception e)
             {
@@ -72,7 +73,46 @@ public class TileConfigHandler : MonoBehaviour
         }
     }
 
-    public TileInfo GenerateTileFromConfig(TileConfig config)
+    public TileConfig Convert(TileInfo tileInfo)
+    {
+        TileConfig config = new TileConfig();
+
+        if (tileInfo.tileType == "Unit")
+        {
+            UnitInfo unitInfo = (UnitInfo)tileInfo;
+            config.tileType = unitInfo.tileType;
+            config.subType = unitInfo.subType;
+            config.sprite = unitInfo.sprite.name;
+            config.units = unitInfo.units;
+            config.travelSpeed = unitInfo.travelSpeed;
+            config.attackDistance = unitInfo.attackDistance;
+            config.killChance = unitInfo.killChance;
+            config.deathChance = unitInfo.deathChance;
+        }
+        else if (config.tileType != "Town")
+        {
+            config.tileType = tileInfo.tileType;
+            config.subType = tileInfo.subType;
+            config.travelTime = tileInfo.travelTime;
+            config.minChance = tileInfo.minChance;
+            config.maxChance = tileInfo.maxChance;
+
+            config.sprite = tileInfo.tileEffect.image.sprite.name;
+            config.freezingSprite = tileInfo.tileEffect.freezingTile.name;
+            config.autumnSprite = tileInfo.tileEffect.autumnTile.name;
+            config.summerSprite = tileInfo.tileEffect.summerTile.name;
+            config.freezingTemp = tileInfo.tileEffect.freezingTemp;
+            config.autumnTemp = tileInfo.tileEffect.autumnTemp;
+            config.summerTemp = tileInfo.tileEffect.summerTemp;
+        }
+
+        //Add town later
+
+        return config;
+    }
+
+
+    public TileInfo Convert(TileConfig config)
     {
         if (config.tileType == "Unit")
         {

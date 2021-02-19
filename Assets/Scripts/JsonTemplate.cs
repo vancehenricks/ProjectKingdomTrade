@@ -9,21 +9,12 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-public class GenerateJsonTemplate : MonoBehaviour
+public class JsonTemplate : MonoBehaviour
 {
     private void Start()
     {
         TileConfig tileConfig = new TileConfig();
-
-        string json = JsonUtility.ToJson(tileConfig);
-
-        StreamWriter writer = File.CreateText(Path.Combine(Application.streamingAssetsPath, "Config/Tiles/template.json"));
-
-        foreach (string line in Tools.JsonBeautify(json))
-        {
-            writer.WriteLine(line);
-        }
-
-        writer.Close();
+        Tools.WriteTileConfig(tileConfig, "template.json");
     }
+
 }

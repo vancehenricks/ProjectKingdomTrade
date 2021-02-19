@@ -41,7 +41,10 @@ public class TextureHandler : MonoBehaviour
             textures.Add(name, texture);
         }
 
-        return Sprite.Create(texture, new Rect(0.0f, 0.0f, texture.width, texture.height), new Vector2(0.5f, 0.5f), 100.0f);
+        Sprite sprite = Sprite.Create(texture, new Rect(0.0f, 0.0f, texture.width, texture.height), new Vector2(0.5f, 0.5f), 100.0f);
+        sprite.name = texture.name;
+
+        return sprite;
     }
 
     public void LoadTextures()

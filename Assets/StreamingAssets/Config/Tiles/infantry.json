@@ -6,14 +6,14 @@
  "autumnSprite":"",
  "summerSprite":"",
  "freezingTemp":0.0,
- "autumnTemp":0,
- "summerTemp":0,
- "travelTime":0,
+ "autumnTemp":0.0,
+ "summerTemp":0.0,
+ "travelTime":0.0,
  "minChance":0,
  "maxChance":0,
  "units":10,
- "travelSpeed":1,
+ "travelSpeed":1.0,
  "attackDistance":1,
- "killChance":8,
- "deathChance":3
+ "killChance":8.0,
+ "deathChance":3.0
 }
