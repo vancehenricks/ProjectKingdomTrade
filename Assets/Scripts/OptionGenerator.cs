@@ -12,10 +12,9 @@ using UnityEngine.UI;
 
 public class OptionGenerator : MonoBehaviour
 {
-
     public Image image;
     public List<GameObject> options;
-    private Dictionary<string, GameObject> optionDictionary;
+    public Dictionary<string, GameObject> optionDictionary;
     //public static bool blockDisplay;
 
     public void Initialize()
@@ -33,80 +32,46 @@ public class OptionGenerator : MonoBehaviour
         }
     }
 
-    public void Display(TileInfo tileInfo)
+    public void Display(TileInfo tileInfo, List<string> options = null)
     {
         SetActiveAll(false);
         gameObject.SetActive(true);
 
-        switch (tileInfo.tileType)
+        if (options == null)
         {
-            case "Land":
-            case "Grass":
-            case "Forest":
-            case "Sea":
-            case "Mountain":
-                Show("Examine_1");
-                break;
-            case "Town":
-                Show("Recruit_1");
-                Show("BuildShip_1");
-                Show("SetTradePort_1");
-                Show("Examine_1");
-                break;
-            case "Unit":
-                switch (tileInfo.subType)
-                {
-                    case "Merchant":
-                        Show("Move_1");
-                        Show("Trade_1");
-                        Show("EstablishTown_1");
-                        Show("Examine_1");
-                        break;
-                    case "Worker":
-                        Show("Move_1");
-                        Show("Gather_1");
-                        ShowMergeAndSplit(tileInfo);
-                        Show("Examine_1");
-                        break;
-                    case "Infantry":
-                    case "Cavalry":
-                    case "Archer":
-                        Show("Move_1");
-                        Show("Attack_1");
-                        ShowMergeAndSplit(tileInfo);
-                        Show("Examine_1");
-                        break;
-                    case "Trebuchet":
-                        Show("Move_1");
-                        Show("Attack_1");
-                        Show("Examine_1");
-                        break;
-                    case "Ship":
-                        Show("Move_1");
-                        Show("Examine_1");
-                        break;
-                }
-                break;
+            options = tileInfo.options;
+        }
+
+        foreach (string option in options)
+        {
+            Show(option, tileInfo);
         }
     }
 
-    private void ShowMergeAndSplit(TileInfo tileInfo)
+    private void Show(string name, TileInfo tileInfo)
     {
         List<TileInfo> raycastTile = TileInfoRaycaster.tileInfos;
         List<TileInfo> multiSelect = MultiSelect.selectedTiles;
 
-        if (multiSelect.Count > 1 && raycastTile.Count > 1)
-        {
-            Show("Merge_1");
-        }
-        else if ((multiSelect.Count == 1 || raycastTile.Count == 1) && tileInfo.units > 1)
-        {
-            Show("Split_1");
-        }
-    }
+        string[] n = name.Split('_');
+        name = n[0] + "_" + n[1];
 
-    private void Show(string name)
-    {
+        switch (name)
+        {
+            case "Merge_1":
+                if ((multiSelect.Count == 1 || raycastTile.Count == 1) && tileInfo.units > 1)
+                {
+                    return;
+                }
+                break;
+            case "Split_1":
+                if (multiSelect.Count > 1 && raycastTile.Count > 1)
+                {
+                    return;
+                }
+                break;
+        }
+
         GameObject obj = optionDictionary[name];
         obj.transform.SetAsLastSibling();
         obj.SetActive(true);
@@ -121,10 +86,4 @@ public class OptionGenerator : MonoBehaviour
             option.SetActive(active);
         }
     }
-
-    public void ResetAll()
-    {
-        gameObject.SetActive(false);
-    }
-
 }

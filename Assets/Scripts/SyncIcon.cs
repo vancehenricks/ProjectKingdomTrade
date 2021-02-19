@@ -79,7 +79,7 @@ public class SyncIcon : MonoBehaviour
         }
         catch (System.Exception e)
         {
-            Debug.LogError(e);
+            Debug.LogWarning(e);
             Destroy(gameObject);
         }
 

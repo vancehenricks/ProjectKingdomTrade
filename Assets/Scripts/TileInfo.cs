@@ -27,6 +27,7 @@ public class TileInfo : MonoBehaviour
     public List<UnitInfo> unitInfos;
     public int units;
     public bool selected;
+    public List<string> options;
 
     public virtual void Initialize()
     {

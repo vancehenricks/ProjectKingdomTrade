@@ -85,13 +85,13 @@ public class CellInfo : MonoBehaviour
         {
             List<TileInfo> selectedTiles = MultiSelect.selectedTiles;
 
-            if (selectedTiles.Count > 0 && (selectedTiles[0].tileType != tileInfo.tileType
+            /*if (selectedTiles.Count > 0 && (selectedTiles[0].tileType != tileInfo.tileType
                 || selectedTiles[0].subType != tileInfo.subType))
             {
                 generateCells.ResetSelectedCells();
                 generateCells.DisableSelectCells();
                 MultiSelect.Clear(true);
-            }
+            }*/
 
             MultiSelect.Add(tileInfo, true);
             isSelectedTwice = false;
@@ -117,8 +117,49 @@ public class CellInfo : MonoBehaviour
         if (showOptions)
         {
             optionGenerator.transform.position = corner.position + offset;
-            optionGenerator.Display(tileInfo);
+            //generate approriate option where it will only show that is common on all selected tiles
+            optionGenerator.Display(tileInfo, GetCommonOptions(MultiSelect.selectedTiles));
+
         }
 
+    }
+
+    private List<string> GetCommonOptions(List<TileInfo> tileInfos)
+    {
+        if (tileInfos.Count <= 1) return null;
+
+        TileInfo selectedTile = tileInfos[tileInfos.Count - 1];
+
+        Dictionary<string, int> count = new Dictionary<string, int>();
+
+        for (int i = 0; i < tileInfos.Count-1;i++)
+        {
+            foreach (string option in tileInfos[i].options)
+            {
+                if(selectedTile.options.Contains(option))
+                {
+                    if (count.ContainsKey(option))
+                    {
+                        count[option]++;
+                    }
+                    else
+                    {
+                        count.Add(option, 1);
+                    }
+                }
+            }
+        }
+
+        List<string> final = new List<string>();
+
+        foreach (string option in count.Keys)
+        {
+            if (count[option] == tileInfos.Count-1)
+            {
+                final.Add(option);
+            }
+        }
+
+        return final;
     }
 }

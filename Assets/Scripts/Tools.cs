@@ -8,6 +8,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Text.RegularExpressions;
 using UnityEngine;
 
 public class Tools : MonoBehaviour
@@ -68,8 +69,7 @@ public class Tools : MonoBehaviour
         }
         catch (System.Exception e)
         {
-            Debug.LogError(e);
-            Debug.LogError("Conversion error try something else");
+            Debug.LogWarning(e);
             T info = (T)System.Convert.ChangeType(tileInfo, typeof(T));
             return info;
         }
@@ -239,62 +239,39 @@ public class Tools : MonoBehaviour
         writer.Close();
     }
 
+
     public static List<string> JsonBeautify(string json)
     {
-        string[] jsonArray = json.Split('{');
+        string[] jsonArray = Regex.Split(json, @"(\{|\}|\[|\]|,)");
         List<string> final = new List<string>();
         string space = "";
         for (int i = 0; i < jsonArray.Length; i++)
         {
-            if (jsonArray[i].Length > 0)
+            if (jsonArray[i].Contains("{") || jsonArray[i].Contains("["))
             {
-                final.Add(space + "{");
+                final.Add(space + jsonArray[i]);
                 space += " ";
             }
-
-            string[] jsonArray2 = jsonArray[i].Split(',');
-
-            for (int ii = 0; ii < jsonArray2.Length; ii++)
+            else if (jsonArray[i].Contains("}") || jsonArray[i].Contains("]"))
             {
-                if (jsonArray2[ii].Length > 0 && !jsonArray2[ii].Contains("{") && !jsonArray2[ii].Contains("}")
-                    && jsonArray2[ii][jsonArray2[ii].Length - 1] != ':')
+                if (space.Length > 0)
                 {
-                    final.Add(space + jsonArray2[ii] + ",");
+                    space = space.Remove(space.Length - 1);
                 }
-                else if (jsonArray2[ii].Length > 0 && jsonArray2[ii][jsonArray2[ii].Length - 1] == ':')
+                else
                 {
-                    final.Add(space + jsonArray2[ii]);
+                    space = "";
                 }
 
-                if (jsonArray2[ii].Contains("}"))
-                {
-                    string normalized = jsonArray2[ii];
-
-                    while (normalized.Contains("}"))
-                    {
-                        normalized = normalized.Remove(normalized.Length - 1);
-                    }
-
-                    final.Add(space + normalized);
-
-                    normalized = jsonArray2[ii];
-
-                    while (normalized.Contains("}"))
-                    {
-                        normalized = normalized.Remove(normalized.Length - 1);
-
-                        if (space.Length > 0)
-                        {
-                            space = space.Remove(space.Length - 1);
-                        }
-                        else
-                        {
-                            space = "";
-                        }
-
-                        final.Add(space + "}");
-                    }
-                }
+                final.Add(space + jsonArray[i]);
+            }
+            else if (jsonArray[i].Length > 0 && !jsonArray[i].Contains(","))
+            {
+                final.Add(space + jsonArray[i]);
+            }
+            else if (jsonArray[i].Contains(","))
+            {
+                final[final.Count - 1] += ",";
             }
         }
 

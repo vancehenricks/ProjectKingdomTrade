@@ -26,6 +26,7 @@ public struct TileConfig
     public int units;
     public float travelSpeed;
     public int attackDistance;
+    public string[] options;
     public float killChance;
     public float deathChance;
 }

@@ -48,8 +48,8 @@ public class TileConfigHandler : MonoBehaviour
             catch (System.Exception e)
             {
                 Debug.LogError(e);
-                ShowMessageHandler.init.infoWindow.SetMessage("Json Error",
-                    "Please check " + file + " and correct any syntax errors.", "OK", null, null);
+                ShowMessageHandler.init.infoWindow.SetMessage("Json Error - " + file,
+                    e.ToString(), "OK", null, null);
             }
 
             try
@@ -66,9 +66,8 @@ public class TileConfigHandler : MonoBehaviour
             catch (System.Exception e)
             {
                 Debug.LogError(e);
-                ShowMessageHandler.init.infoWindow.SetMessage("Json Error",
-                    "Please check " + file + " and make sure tileType is unique if subType " +
-                    "is empty else make sure subType is unique.", "OK", null, null);
+                ShowMessageHandler.init.infoWindow.SetMessage("Json Error - " + file,
+                    e.ToString(), "OK", null, null);
             }
         }
     }
@@ -88,6 +87,7 @@ public class TileConfigHandler : MonoBehaviour
             config.attackDistance = unitInfo.attackDistance;
             config.killChance = unitInfo.killChance;
             config.deathChance = unitInfo.deathChance;
+            config.options = unitInfo.options.ToArray();
         }
         else if (config.tileType != "Town")
         {
@@ -104,6 +104,7 @@ public class TileConfigHandler : MonoBehaviour
             config.freezingTemp = tileInfo.tileEffect.freezingTemp;
             config.autumnTemp = tileInfo.tileEffect.autumnTemp;
             config.summerTemp = tileInfo.tileEffect.summerTemp;
+            config.options = tileInfo.options.ToArray();
         }
 
         //Add town later
@@ -126,6 +127,7 @@ public class TileConfigHandler : MonoBehaviour
             unitInfo.attackDistance = config.attackDistance;
             unitInfo.killChance = config.killChance;
             unitInfo.deathChance = config.deathChance;
+            unitInfo.options = new List<string>(config.options);
 
             return unitInfo;
         }
@@ -138,6 +140,7 @@ public class TileConfigHandler : MonoBehaviour
             tileInfo.travelTime = config.travelTime;
             tileInfo.minChance = config.minChance;
             tileInfo.maxChance = config.maxChance;
+            tileInfo.options = new List<string>(config.options);
 
 
             Sprite sprite = TextureHandler.init.GetSprite(config.sprite);

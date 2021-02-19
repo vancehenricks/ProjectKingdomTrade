@@ -14,6 +14,22 @@
  "units":0,
  "travelSpeed":0.0,
  "attackDistance":0,
+ "options":
+ [
+  "Move_1",
+  "Attack_1",
+  "Merge_1",
+  "Split_1",
+  "ViewKingdom_1",
+  "Trade_1",
+  "DeclareWar_1",
+  "Gather_1",
+  "EstablishTown_1",
+  "Recruit_1",
+  "BuildShip_1",
+  "SetTradePort_1",
+  "Examine_1"
+ ],
  "killChance":0.0,
  "deathChance":0.0
 }

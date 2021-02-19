@@ -11,9 +11,19 @@ using UnityEngine;
 
 public class JsonTemplate : MonoBehaviour
 {
+    public OptionGenerator optionGenerator;
+
     private void Start()
     {
+        List<string> options = new List<string>();
+
+        foreach (GameObject option in optionGenerator.options)
+        {
+            options.Add(option.name);
+        }
+
         TileConfig tileConfig = new TileConfig();
+        tileConfig.options = options.ToArray();
         Tools.WriteTileConfig(tileConfig, "template.json");
     }
 

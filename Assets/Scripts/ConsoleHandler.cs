@@ -8,6 +8,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
+using System;
 
 public class ConsoleHandler : MonoBehaviour
 {
@@ -247,7 +248,7 @@ public class ConsoleHandler : MonoBehaviour
             Clear();
         }
 
-        console.text += line + "\n";
+        console.text += line + Environment.NewLine;
         if (record)
         {
             cacheConsole.Add(line);

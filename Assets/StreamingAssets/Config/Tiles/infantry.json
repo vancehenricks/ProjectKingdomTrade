@@ -14,6 +14,14 @@
  "units":10,
  "travelSpeed":1.0,
  "attackDistance":1,
+ "options":
+ [
+  "Move_1",
+  "Attack_1",
+  "Merge_1_3",
+  "Split_1_3",
+  "Examine_1"
+ ],
  "killChance":8.0,
  "deathChance":3.0
 }
