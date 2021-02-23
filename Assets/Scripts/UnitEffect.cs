@@ -35,6 +35,8 @@ public class UnitEffect : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D collision)
     {
+        if (unitInfo.tileType == "Town") return;
+
         TileInfo tempTile = collision.GetComponent<TileInfo>();
 
         if (tempTile == null)
@@ -79,6 +81,7 @@ public class UnitEffect : MonoBehaviour
         {
             return;
         }*/
+        if (unitInfo.tileType == "Town") return;
 
         if (unitInfo.waypoints.Count > 0 || unitInfo.targets.Count > 0)
         {

@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
 using System;
+using System.Linq;
 
 public class ConsoleHandler : MonoBehaviour
 {
@@ -108,7 +109,7 @@ public class ConsoleHandler : MonoBehaviour
             {
                 if (substrings.Length > 1)
                 {
-                    AutoFill(substrings, commandList[substrings[0]].Keys);
+                    AutoFill(substrings, commandList[substrings[0]].Keys, commandList[substrings[0]].Values);
                 }
                 DisplaySubCommands(substrings[0]);
             }
@@ -310,10 +311,25 @@ public class ConsoleHandler : MonoBehaviour
 
     }
 
-    private bool AutoFill(string[] substrings, IEnumerable<string> values)
+    private bool AutoFill(string[] substrings, IEnumerable<string> values, IEnumerable<string> descriptions = null)
     {
+        List<string> descriptionList = null;
+
+        if (descriptions != null)
+        {
+            descriptionList = descriptions.ToList<string>();
+        }
+
+        int index = 0;
         foreach (string val in values)
         {
+            index++;
+            string args = "";
+
+            if (descriptionList != null && descriptionList[index].Length > 0)
+            {
+                args = ":";
+            }
 
             if (substrings[substrings.Length - 1].Length > 0 && val.Contains(substrings[substrings.Length - 1]))
             {
@@ -328,7 +344,7 @@ public class ConsoleHandler : MonoBehaviour
 
                 //int prevLength = final.Length;
 
-                final += val;
+                final += val + args;
 
                 command.text = final;
                 command.caretPosition = command.text.Length;

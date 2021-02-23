@@ -22,6 +22,13 @@
   "Split_1_1",
   "Examine_1"
  ],
- "killChance":5.0,
- "deathChance":8.0
+ "killChance":0.5,
+ "deathChance":0.800000011920929,
+ "nonWalkable":
+ [
+  {
+   "tile":"Sea",
+   "temperature":0.0
+  }
+ ]
 }

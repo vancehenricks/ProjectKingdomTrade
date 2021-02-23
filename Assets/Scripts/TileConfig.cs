@@ -29,4 +29,5 @@ public struct TileConfig
     public string[] options;
     public float killChance;
     public float deathChance;
+    public Walkable[] nonWalkable;
 }

@@ -31,5 +31,12 @@
   "Examine_1"
  ],
  "killChance":0.0,
- "deathChance":0.0
+ "deathChance":0.0,
+ "nonWalkable":
+ [
+  {
+   "tile":"Sea",
+   "temperature":0.0
+  }
+ ]
 }

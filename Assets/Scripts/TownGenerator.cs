@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using System.Linq;
 
 public class TownGenerator : MonoBehaviour
 {
@@ -20,7 +21,6 @@ public class TownGenerator : MonoBehaviour
         private set { _init = value; }
     }
 
-    public List<TownInfo> baseTile;
     public bool allowAdvanceTowns;
     public int maxAmountOfTowns;
     public int distanceOfEachTowns;
@@ -52,7 +52,7 @@ public class TownGenerator : MonoBehaviour
 
     public void OnGenerateTile(ref TileInfo parentTileInfo, GameObject placeHolderTile, Vector2 location, int x, int y)
     {
-
+        List<TileInfo> baseTile = TileConfigHandler.init.baseTowns.Values.ToList<TileInfo>();
         int i = 0;
 
         if (allowAdvanceTowns)
@@ -85,13 +85,13 @@ public class TownGenerator : MonoBehaviour
             {
                 Destroy(parentTileInfo);
                 GameObject gameObject = Instantiate(baseTile[i].gameObject, placeHolderTile.transform.position, placeHolderTile.transform.rotation, placeHolderTile.transform.parent);
-                TownInfo townInfo = gameObject.GetComponent<TownInfo>();
-                parentTileInfo = townInfo;
-                townInfo.tileLocation = location;
-                townInfo.Initialize();
-                townInfo.playerInfo = PlayerList.init.Instantiate();
+                UnitInfo unitInfo = gameObject.GetComponent<UnitInfo>();
+                parentTileInfo = unitInfo;
+                unitInfo.tileLocation = location;
+                unitInfo.Initialize(); //need to check if this calls UnitInfo or TileInfo initialize
+                unitInfo.playerInfo = PlayerList.init.Instantiate();
                 //generatedTowns.Add(location, townInfo);
-                Debug.Log("TILENAME: " + townInfo.tileType);
+                Debug.Log("TILENAME: " + unitInfo.tileType);
                 xCounter = 0;
                 nTowns++;
             }

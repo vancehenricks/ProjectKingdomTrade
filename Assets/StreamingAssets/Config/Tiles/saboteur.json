@@ -1,7 +1,7 @@
 {
  "tileType":"Unit",
- "subType":"Cavalry",
- "sprite":"units_2.png",
+ "subType":"Saboteur",
+ "sprite":"units_12.png",
  "freezingSprite":"",
  "autumnSprite":"",
  "summerSprite":"",
@@ -12,18 +12,18 @@
  "minChance":0,
  "maxChance":0,
  "units":10,
- "travelSpeed":1.7000000476837159,
+ "travelSpeed":1.0,
  "attackDistance":1,
  "options":
  [
   "Move_1",
   "Attack_1",
-  "Merge_1_4",
-  "Split_1_4",
+  "Merge_1_5",
+  "Split_1_5",
   "Examine_1"
  ],
- "killChance":0.800000011920929,
- "deathChance":0.5,
+ "killChance":3.0,
+ "deathChance":5.0,
  "nonWalkable":
  [
   {

@@ -8,9 +8,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
+public struct Walkable
+{
+    public string tile;
+    public float temperature;
+
+    public Walkable (string _tile, float _temperature)
+    {
+        tile = _tile;
+        temperature = _temperature;
+    }
+}
+
 public class NonWalkableTiles : MonoBehaviour
 {
-
     public PathFinding pathFinding;
 
     private void Start()
@@ -22,9 +34,14 @@ public class NonWalkableTiles : MonoBehaviour
     {
         bool isWalkable = true;
 
-        if (tile.tileType == "Sea" && tile.localTemp > 0)
+        List<Walkable> nonWalkable = pathFinding.unitInfo.nonWalkable;
+
+        for (int i = 0; i < nonWalkable.Count;i++)
         {
-            isWalkable = false;
+            if (tile.tileType == nonWalkable[i].tile && tile.localTemp > nonWalkable[i].temperature)
+            {
+                isWalkable = false;
+            }
         }
 
         return isWalkable;

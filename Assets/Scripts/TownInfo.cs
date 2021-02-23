@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
 
-public class TownInfo : TileInfo
+public class TownInfo : UnitInfo
 {
 
     public override void Initialize()

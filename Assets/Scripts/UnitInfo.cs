@@ -23,6 +23,7 @@ public class UnitInfo : TileInfo
     public int attackDistance;
     public float killChance;
     public float deathChance;
+    public List<Walkable> nonWalkable;
 
     public override void Initialize()
     {

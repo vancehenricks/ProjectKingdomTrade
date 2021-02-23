@@ -13,8 +13,10 @@ public class TileConfigHandler : MonoBehaviour
 {
     public Dictionary<string, TileInfo> baseTiles;
     public Dictionary<string, TileInfo> baseUnits;
+    public Dictionary<string, TileInfo> baseTowns;
     public static TileConfigHandler init;
     public TileInfo baseTile;
+    public UnitInfo baseTown;
     public UnitInfo baseUnit;
 
     private void Awake()
@@ -26,6 +28,7 @@ public class TileConfigHandler : MonoBehaviour
     {
         baseTiles = new Dictionary<string, TileInfo>();
         baseUnits = new Dictionary<string, TileInfo>();
+        baseTowns = new Dictionary<string, TileInfo>();
 
         string includePath = Path.Combine(Application.streamingAssetsPath, "Config/include");
         string[] files = File.ReadAllLines(includePath);
@@ -58,9 +61,13 @@ public class TileConfigHandler : MonoBehaviour
                 {
                     baseTiles.Add(tileInfo.tileType, tileInfo);
                 }
-                else if(tileInfo.tileType == "Unit")
+                else if (tileInfo.tileType == "Unit")
                 {
                     baseUnits.Add(tileInfo.subType, tileInfo);
+                }
+                else if (tileInfo.tileType == "Town")
+                {
+                    baseTowns.Add(tileInfo.subType, tileInfo);
                 }
             }
             catch (System.Exception e)
@@ -88,8 +95,9 @@ public class TileConfigHandler : MonoBehaviour
             config.killChance = unitInfo.killChance;
             config.deathChance = unitInfo.deathChance;
             config.options = unitInfo.options.ToArray();
+            config.nonWalkable = unitInfo.nonWalkable.ToArray();
         }
-        else if (config.tileType != "Town")
+        else if (tileInfo.tileType != "Town")
         {
             config.tileType = tileInfo.tileType;
             config.subType = tileInfo.subType;
@@ -106,8 +114,30 @@ public class TileConfigHandler : MonoBehaviour
             config.summerTemp = tileInfo.tileEffect.summerTemp;
             config.options = tileInfo.options.ToArray();
         }
+        else if (tileInfo.tileType == "Town")
+        {
+            UnitInfo unitInfo = (UnitInfo)tileInfo;
+            config.tileType = unitInfo.tileType;
+            config.subType = unitInfo.subType;
+            config.units = unitInfo.units;
+            //config.travelSpeed = unitInfo.travelSpeed;
+            config.attackDistance = unitInfo.attackDistance;
+            config.killChance = unitInfo.killChance;
+            config.deathChance = unitInfo.deathChance;
+            config.options = unitInfo.options.ToArray();
+            config.travelTime = unitInfo.travelTime;
+            //config.minChance = unitInfo.minChance;
+            //config.maxChance = unitInfo.maxChance;
 
-        //Add town later
+            config.sprite = unitInfo.sprite.name;
+            config.freezingSprite = unitInfo.tileEffect.freezingTile.name;
+            config.autumnSprite = unitInfo.tileEffect.autumnTile.name;
+            config.summerSprite = unitInfo.tileEffect.summerTile.name;
+            config.freezingTemp = unitInfo.tileEffect.freezingTemp;
+            config.autumnTemp = unitInfo.tileEffect.autumnTemp;
+            config.summerTemp = unitInfo.tileEffect.summerTemp;
+            config.options = unitInfo.options.ToArray();
+        }
 
         return config;
     }
@@ -127,7 +157,16 @@ public class TileConfigHandler : MonoBehaviour
             unitInfo.attackDistance = config.attackDistance;
             unitInfo.killChance = config.killChance;
             unitInfo.deathChance = config.deathChance;
-            unitInfo.options = new List<string>(config.options);
+
+            if (config.options != null)
+            {
+                unitInfo.options = new List<string>(config.options);
+            }
+
+            if (config.nonWalkable != null)
+            {
+                unitInfo.nonWalkable = new List<Walkable>(config.nonWalkable);
+            }
 
             return unitInfo;
         }
@@ -140,8 +179,11 @@ public class TileConfigHandler : MonoBehaviour
             tileInfo.travelTime = config.travelTime;
             tileInfo.minChance = config.minChance;
             tileInfo.maxChance = config.maxChance;
-            tileInfo.options = new List<string>(config.options);
 
+            if (config.options != null)
+            {
+                tileInfo.options = new List<string>(config.options);
+            }
 
             Sprite sprite = TextureHandler.init.GetSprite(config.sprite);
             tileInfo.tileEffect.image.sprite = sprite;
@@ -155,7 +197,45 @@ public class TileConfigHandler : MonoBehaviour
 
             return tileInfo;
         }
-        //Add for town
+        else if (config.tileType == "Town")
+        {
+            UnitInfo unitInfo = Instantiate(baseTown);
+            unitInfo.transform.SetParent(baseUnit.transform.parent);
+            unitInfo.tileType = config.tileType;
+            unitInfo.subType = config.subType;
+            unitInfo.units = config.units;
+            //unitInfo.travelSpeed = config.travelSpeed;
+            unitInfo.attackDistance = config.attackDistance;
+            unitInfo.killChance = config.killChance;
+            unitInfo.deathChance = config.deathChance;
+            unitInfo.travelTime = config.travelTime;
+            //unitInfo.minChance = config.minChance;
+            //unitInfo.maxChance = config.maxChance;
+
+            Sprite sprite = TextureHandler.init.GetSprite(config.sprite);
+            unitInfo.sprite = sprite;
+            //unitInfo.tileEffect.image.sprite = sprite; unitInfo.initialize will handle this
+            unitInfo.tileEffect.springTile = TextureHandler.init.GetSprite(config.sprite);
+            unitInfo.tileEffect.freezingTile = TextureHandler.init.GetSprite(config.freezingSprite);
+            unitInfo.tileEffect.autumnTile = TextureHandler.init.GetSprite(config.autumnSprite);
+            unitInfo.tileEffect.summerTile = TextureHandler.init.GetSprite(config.summerSprite);
+            unitInfo.tileEffect.freezingTemp = config.freezingTemp;
+            unitInfo.tileEffect.autumnTemp = config.autumnTemp;
+            unitInfo.tileEffect.summerTemp = config.summerTemp;
+
+            if (config.options != null)
+            {
+                unitInfo.options = new List<string>(config.options);
+            }
+
+            if (config.nonWalkable != null)
+            {
+                unitInfo.nonWalkable = new List<Walkable>(config.nonWalkable);
+            }
+
+
+            return unitInfo;
+        }
 
         return null;
     }

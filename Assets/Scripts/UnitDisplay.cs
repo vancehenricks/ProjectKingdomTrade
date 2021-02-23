@@ -30,7 +30,7 @@ public class UnitDisplay : MonoBehaviour
 
     private enum Obj
     {
-        Panel = 0, Status, Value
+        Panel = 0, Value
     }
 
     private void Start()

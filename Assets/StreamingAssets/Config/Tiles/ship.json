@@ -20,5 +20,28 @@
   "Examine_1"
  ],
  "killChance":0.0,
- "deathChance":8.0
+ "deathChance":8.0,
+ "nonWalkable":
+ [
+  {
+   "tile":"Land",
+   "temperature":-100.0
+  },
+  {
+   "tile":"Grass",
+   "temperature":-100.0
+  },
+  {
+   "tile":"Mountain",
+   "temperature":-100.0
+  },
+  {
+   "tile":"Forest",
+   "temperature":-100.0
+  },
+  {
+   "tile":"Town",
+   "temperature":-100.0
+  }
+ ]
 }
