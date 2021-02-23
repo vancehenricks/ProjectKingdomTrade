@@ -30,4 +30,5 @@ public struct TileConfig
     public float killChance;
     public float deathChance;
     public Walkable[] nonWalkable;
+    public bool isTownAllowed;
 }

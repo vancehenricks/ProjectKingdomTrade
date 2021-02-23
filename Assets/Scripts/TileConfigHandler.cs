@@ -57,17 +57,17 @@ public class TileConfigHandler : MonoBehaviour
 
             try
             {
-                if (tileInfo.subType == "")
+                if (tileInfo.tileType == "Town")
+                {
+                    baseTowns.Add(tileInfo.subType, tileInfo);
+                }
+                else if (tileInfo.subType == "")
                 {
                     baseTiles.Add(tileInfo.tileType, tileInfo);
                 }
                 else if (tileInfo.tileType == "Unit")
                 {
                     baseUnits.Add(tileInfo.subType, tileInfo);
-                }
-                else if (tileInfo.tileType == "Town")
-                {
-                    baseTowns.Add(tileInfo.subType, tileInfo);
                 }
             }
             catch (System.Exception e)
@@ -113,6 +113,7 @@ public class TileConfigHandler : MonoBehaviour
             config.autumnTemp = tileInfo.tileEffect.autumnTemp;
             config.summerTemp = tileInfo.tileEffect.summerTemp;
             config.options = tileInfo.options.ToArray();
+            config.isTownAllowed = tileInfo.isTownAllowed;
         }
         else if (tileInfo.tileType == "Town")
         {
@@ -129,7 +130,7 @@ public class TileConfigHandler : MonoBehaviour
             //config.minChance = unitInfo.minChance;
             //config.maxChance = unitInfo.maxChance;
 
-            config.sprite = unitInfo.sprite.name;
+            config.sprite = unitInfo.tileEffect.image.sprite.name;
             config.freezingSprite = unitInfo.tileEffect.freezingTile.name;
             config.autumnSprite = unitInfo.tileEffect.autumnTile.name;
             config.summerSprite = unitInfo.tileEffect.summerTile.name;
@@ -194,6 +195,7 @@ public class TileConfigHandler : MonoBehaviour
             tileInfo.tileEffect.freezingTemp = config.freezingTemp;
             tileInfo.tileEffect.autumnTemp = config.autumnTemp;
             tileInfo.tileEffect.summerTemp = config.summerTemp;
+            tileInfo.isTownAllowed = config.isTownAllowed;
 
             return tileInfo;
         }
@@ -213,9 +215,9 @@ public class TileConfigHandler : MonoBehaviour
             //unitInfo.maxChance = config.maxChance;
 
             Sprite sprite = TextureHandler.init.GetSprite(config.sprite);
-            unitInfo.sprite = sprite;
-            //unitInfo.tileEffect.image.sprite = sprite; unitInfo.initialize will handle this
-            unitInfo.tileEffect.springTile = TextureHandler.init.GetSprite(config.sprite);
+            //unitInfo.sprite = sprite;
+            unitInfo.tileEffect.image.sprite = sprite;
+            unitInfo.tileEffect.springTile = sprite;
             unitInfo.tileEffect.freezingTile = TextureHandler.init.GetSprite(config.freezingSprite);
             unitInfo.tileEffect.autumnTile = TextureHandler.init.GetSprite(config.autumnSprite);
             unitInfo.tileEffect.summerTile = TextureHandler.init.GetSprite(config.summerSprite);

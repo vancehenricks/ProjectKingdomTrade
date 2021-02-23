@@ -26,9 +26,6 @@ public class TownGenerator : MonoBehaviour
     public int distanceOfEachTowns;
     public int spawnChance;
     public PlayerInfo basePlayerInfo;
-
-    public List<TileInfo> allowedTiles;
-
     private int nTowns;
     private int xCounter;
     private int yCounter;
@@ -67,34 +64,20 @@ public class TownGenerator : MonoBehaviour
 
         xCounter++;
 
-        if (nTowns < maxAmountOfTowns && xCounter > distanceOfEachTowns && yCounter >= distanceOfEachTowns)
+        if (parentTileInfo.isTownAllowed && nTowns < maxAmountOfTowns && 
+            xCounter > distanceOfEachTowns && yCounter >= distanceOfEachTowns)
         {
-
-            bool allowed = false;
-
-            foreach (TileInfo t in allowedTiles)
-            {
-                if (parentTileInfo.tileType == t.tileType)
-                {
-                    allowed = true;
-                    break;
-                }
-            }
-
-            if (allowed)
-            {
-                Destroy(parentTileInfo);
-                GameObject gameObject = Instantiate(baseTile[i].gameObject, placeHolderTile.transform.position, placeHolderTile.transform.rotation, placeHolderTile.transform.parent);
-                UnitInfo unitInfo = gameObject.GetComponent<UnitInfo>();
-                parentTileInfo = unitInfo;
-                unitInfo.tileLocation = location;
-                unitInfo.Initialize(); //need to check if this calls UnitInfo or TileInfo initialize
-                unitInfo.playerInfo = PlayerList.init.Instantiate();
-                //generatedTowns.Add(location, townInfo);
-                Debug.Log("TILENAME: " + unitInfo.tileType);
-                xCounter = 0;
-                nTowns++;
-            }
+            Destroy(parentTileInfo);
+            GameObject gameObject = Instantiate(baseTile[i].gameObject, placeHolderTile.transform.position, placeHolderTile.transform.rotation, placeHolderTile.transform.parent);
+            UnitInfo unitInfo = gameObject.GetComponent<UnitInfo>();
+            parentTileInfo = unitInfo;
+            unitInfo.tileLocation = location;
+            unitInfo.playerInfo = PlayerList.init.Instantiate();
+            unitInfo.Initialize(); //need to check if this calls UnitInfo or TileInfo initialize
+            //generatedTowns.Add(location, townInfo);
+            Debug.Log("TILENAME: " + unitInfo.tileType);
+            xCounter = 0;
+            nTowns++;
         }
 
     }

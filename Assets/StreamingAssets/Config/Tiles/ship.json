@@ -43,5 +43,6 @@
    "tile":"Town",
    "temperature":-100.0
   }
- ]
+ ],
+ "isTownAllowed":false
 }

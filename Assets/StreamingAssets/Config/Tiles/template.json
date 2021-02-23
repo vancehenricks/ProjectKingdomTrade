@@ -38,5 +38,6 @@
    "tile":"Sea",
    "temperature":0.0
   }
- ]
+ ],
+ "isTownAllowed":false
 }

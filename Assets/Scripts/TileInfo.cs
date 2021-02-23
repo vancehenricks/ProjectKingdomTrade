@@ -28,6 +28,7 @@ public class TileInfo : MonoBehaviour
     public int units;
     public bool selected;
     public List<string> options;
+    public bool isTownAllowed;
 
     public virtual void Initialize()
     {

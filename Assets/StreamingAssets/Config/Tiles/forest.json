@@ -22,5 +22,6 @@
  "deathChance":0.0,
  "nonWalkable":
  [
- ]
+ ],
+ "isTownAllowed":false
 }
