@@ -120,7 +120,7 @@ public class PathFinding : MonoBehaviour
         if (destination.arrivalTime > -1)
         {
             //Debug.Log("91");
-            destination.arrivalTime--;
+            destination.arrivalTime -= 0.25f;
         }
         else if (unitInfo.waypoints.Count > 0)
         {

@@ -12,7 +12,7 @@
  "minChance":0,
  "maxChance":0,
  "units":10,
- "travelSpeed":2.0,
+ "travelSpeed":2.5,
  "attackDistance":0,
  "options":
  [
