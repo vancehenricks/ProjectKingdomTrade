@@ -45,6 +45,12 @@ public class PathFindingCache : MonoBehaviour
 
     public static void Add(TileInfo startPoint, TileInfo endPoint, List<TileInfo> generatedPoints)
     {
+        if (cache.ContainsKey(startPoint.transform.position + "," + endPoint.transform.position))
+        {
+            cache.Remove(startPoint.transform.position + "," + endPoint.transform.position);
+            cache.Remove(endPoint.transform.position + "," + startPoint.transform.position);
+        }
+
         cache.Add(startPoint.transform.position + "," + endPoint.transform.position, generatedPoints);
         List<TileInfo> reverse = new List<TileInfo>(generatedPoints);
         reverse.Reverse();

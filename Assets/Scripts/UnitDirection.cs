@@ -11,7 +11,7 @@ using UnityEngine;
 public class UnitDirection : MonoBehaviour
 {
 
-    public PathFinding pathfinding;
+    public PathFindingHandler pathfinding;
     public UnitInfo unitInfo;
 
     private void Start()

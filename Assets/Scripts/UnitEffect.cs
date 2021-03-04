@@ -13,7 +13,7 @@ public class UnitEffect : MonoBehaviour
 
     public UnitInfo unitInfo;
     public TileInfo standingTile;
-    public PathFinding pathFinder;
+    public PathFindingHandler pathFinder;
     public CombatHandler combatHandler;
     public MergeHandler mergeHandler;
     //public TileInfo previousTile;

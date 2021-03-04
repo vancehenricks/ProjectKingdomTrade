@@ -23,7 +23,7 @@ public struct Walkable
 
 public class NonWalkableTiles : MonoBehaviour
 {
-    public PathFinding pathFinding;
+    public PathFindingHandler pathFinding;
 
     private void Start()
     {

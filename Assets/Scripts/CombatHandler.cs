@@ -12,7 +12,7 @@ using UnityEngine;
 public class CombatHandler : MonoBehaviour
 {
     public UnitInfo unitInfo;
-    public PathFinding pathFinding;
+    public PathFindingHandler pathFinding;
     public delegate void TargetCountChange(TileInfo tile);
     public TargetCountChange targetCountChange;
     public delegate void FirstTargetChange(TileInfo tile);

@@ -12,7 +12,7 @@ using UnityEngine;
 public class MergeHandler : MonoBehaviour
 {
     public UnitInfo unitInfo;
-    public PathFinding pathFinding;
+    public PathFindingHandler pathFinding;
 
     private bool isMerging;
 

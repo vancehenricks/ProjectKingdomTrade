@@ -14,7 +14,7 @@ public class UnitWayPoint : SelectTiles
 
     public UnitInfo unitInfo;
     //public LineRenderer lineRenderer;
-    public PathFinding pathFinding;
+    public PathFindingHandler pathFinding;
     public CombatHandler combatHandler;
     public GameObject moveFlag;
     public GameObject attackFlag;
