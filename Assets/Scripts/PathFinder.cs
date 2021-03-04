@@ -118,6 +118,7 @@ public class PathFinder
 
         onDoneCalculate = null;
         algorthimicCounter = null;
+		isWalkable = null; //might cause an issue
     }
 
     private bool HasSameLastTileInfo(List<TileInfo> tiles1, List<TileInfo> tiles2)
