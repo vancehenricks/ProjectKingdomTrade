@@ -43,6 +43,8 @@ public class PathFindingHandler : MonoBehaviour
     private TileInfo firstWayPoint;
     private bool saveCache;
 
+    private static string currentTileId;
+
     private void Start()
     {
         destination = new Destination();
@@ -188,14 +190,20 @@ public class PathFindingHandler : MonoBehaviour
 
     private void ExecuteAlgorithm(TileInfo standingTile, TileInfo pointTileInfo, Destination destination)
     {
+
         //Debug.Log("136");
-        if (gwPointsIndex == 0 && task == null && pointTileInfo.tileLocation != unitInfo.tileLocation)
+        if (currentTileId == "" && gwPointsIndex == 0 && task == null && pointTileInfo.tileLocation != unitInfo.tileLocation)
         {
             List<TileInfo> tempCache = PathFindingCache.RetrieveTileInfos(standingTile, pointTileInfo);
             PathFinder pathFinder = new PathFinder(standingTile, pointTileInfo, tempCache, isWalkable, OnDoneCalculate, AlgorithmicCounter);
             task = new Task(pathFinder.Calculate);
             task.Start();
             Debug.Log("generatedWayPoints.Count:" + generatedWayPoints.Count);
+            currentTileId = standingTile.tileId + "";
+        }
+        else if (currentTileId == (standingTile.tileId + "") && generatedWayPoints.Count > 0)
+        {
+            currentTileId = "";
         }
 
         //Debug.Log("generatedWayPoints.Count=" + generatedWayPoints.Count);
@@ -208,6 +216,8 @@ public class PathFindingHandler : MonoBehaviour
             List<TileInfo> temp = new List<TileInfo>(generatedWayPoints);
             PathFindingCache.Add(standingTile, pointTileInfo, temp);
         }
+
+        if (currentTileId != "") return;
 
         if (gwPointsIndex < generatedWayPoints.Count)
         {
@@ -232,6 +242,7 @@ public class PathFindingHandler : MonoBehaviour
 
     public void ResetGeneratedWaypoints()
     {
+        currentTileId = "";
         gwPointsIndex = 0;
         StopAllCoroutines();
         task = null; 

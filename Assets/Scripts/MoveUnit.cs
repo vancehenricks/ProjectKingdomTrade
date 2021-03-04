@@ -55,7 +55,6 @@ public class MoveUnit : PlayerCommand
 
     public override void DoAction()
     {
-        CursorReplace.SetCurrentCursorAsPrevious();
         CursorReplace.currentCursor = CursorType.Move;
 
         base.DoAction();

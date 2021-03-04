@@ -50,7 +50,12 @@ public class CursorReplace : MonoBehaviour
             }
             else
             {
-                currentTexture2D = cursorArray[(int)value];
+                //had to go with this complex way of passing same Texture2D to avoid Cursor warning despite using same config
+                
+                Texture2D texture = cursorArray[(int)value];
+                currentTexture2D = new Texture2D(texture.width, texture.height, TextureFormat.RGBA32, false);
+                currentTexture2D.alphaIsTransparency = true;
+                currentTexture2D.SetPixels32(texture.GetPixels32());
             }
 
             Cursor.SetCursor(currentTexture2D, hotSpot, cursorMode);

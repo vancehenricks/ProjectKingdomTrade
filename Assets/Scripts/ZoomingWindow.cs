@@ -50,6 +50,11 @@ public class ZoomingWindow : MonoBehaviour, IScrollHandler
 
         cm.transform.position = new Vector3(preZoom.x+diffZoom.x, preZoom.y+diffZoom.y, preZoom.z+scale);
 
+        if(CursorReplace.currentCursor != CursorType.Zoom)
+        {
+            CursorReplace.SetCurrentCursorAsPrevious();
+        }
+
         CursorReplace.currentCursor = CursorType.Zoom;
 
         StopAllCoroutines();

@@ -52,7 +52,8 @@ public class PlayerCommand : MonoBehaviour
     public virtual void EndAction()
     {
         Debug.Log("END ACTION");
-        CursorReplace.currentCursor = CursorType.Previous;
+        CursorReplace.currentCursor = CursorType.Default;
+        CursorReplace.SetCurrentCursorAsPrevious();
         unitInfos.Clear();
     }
 
