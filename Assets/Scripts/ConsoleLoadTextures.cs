@@ -42,11 +42,11 @@ public class ConsoleLoadTextures : ConsoleCommand
                 switch (subCommand)
                 {
                     case "cancel":
-                        break;
+                        return;
                     case "help":
                     default:
                         ConsoleHandler.init.DisplaySubCommands("load-textures");
-                        break;
+                        return;
                 }
             }
 

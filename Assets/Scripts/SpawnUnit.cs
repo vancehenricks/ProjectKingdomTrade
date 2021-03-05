@@ -19,7 +19,6 @@ public class SpawnUnit : ConsoleCommand
     public Color color;
     public int attackDistance;
     public bool executeAll;
-    public bool notCancel;
     public int units;
     public string subType;
     public long playerId;
@@ -130,30 +129,23 @@ public class SpawnUnit : ConsoleCommand
                         int.TryParse(subCommands[subCommand], out units);
                         break;
                     case "cancel":
-                        nMax = 0;
-                        notCancel = false;
                         ConsoleHandler.init.AddLine("spawn-unit command cancelled");
-                        break;
+                        return;
                     case "help":
                     default:
-                        nMax = 0;
-                        notCancel = false;
                         ConsoleHandler.init.DisplaySubCommands("spawn-unit");
-                        break;
+                        return;
                 }
             }
 
-            if (notCancel)
+            if (noMouseRequired)
             {
-                if (noMouseRequired)
-                {
-                    ExecuteCommand();
-                }
-                else
-                {
-                    ConsoleHandler.init.AddLine("Click a tile to spawn.");
-                    StartCoroutine(CommandStream());
-                }
+                ExecuteCommand();
+            }
+            else
+            {
+                ConsoleHandler.init.AddLine("Click a tile to spawn.");
+                StartCoroutine(CommandStream());
             }
         }
     }
@@ -197,7 +189,6 @@ public class SpawnUnit : ConsoleCommand
         nCount = 0;
         autoFocus = true;
         color = Color.white;
-        notCancel = true;
         executeAll = false;
         fire1Clicked = false;
         StopAllCoroutines();

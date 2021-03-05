@@ -58,6 +58,7 @@ public class CursorReplace : MonoBehaviour
                 currentTexture2D.alphaIsTransparency = true;
                 #endif
                 currentTexture2D.SetPixels32(texture.GetPixels32());
+                texture.Apply(false);
             }
 
             Cursor.SetCursor(currentTexture2D, hotSpot, cursorMode);

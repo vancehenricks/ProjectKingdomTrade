@@ -56,11 +56,11 @@ public class ConsoleMoveUnit : ConsoleCommand
                         tileLocation = Tools.ParseLocation(subCommands[subCommand]);
                         break;
                     case "cancel":
-                        break;
+                        return;
                     case "help":
                     default:
                         ConsoleHandler.init.DisplaySubCommands("move-unit");
-                        break;
+                        return;
                 }
             }
 

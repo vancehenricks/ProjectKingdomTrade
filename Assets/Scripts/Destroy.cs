@@ -18,7 +18,6 @@ public class Destroy : ConsoleCommand
     public int targetLayer;
     public bool autoFocus;
     public bool executeAll;
-    public bool notCancel;
     public long tileId;
     public bool noMouseRequired;
 
@@ -129,7 +128,6 @@ public class Destroy : ConsoleCommand
             nMax = 1;
             targetLayer = 1;
             autoFocus = true;
-            notCancel = true;
             noMouseRequired = true;
             executeAll = false;
             fire1Clicked = false;
@@ -159,30 +157,23 @@ public class Destroy : ConsoleCommand
                         noMouseRequired = true;
                         break;
                     case "cancel":
-                        nMax = 0;
-                        notCancel = false;
                         ConsoleHandler.init.AddLine("destroy command cancelled");
-                        break;
+                        return;
                     case "help":
                     default:
-                        nMax = 0;
-                        notCancel = false;
                         ConsoleHandler.init.DisplaySubCommands("destroy");
-                        break;
+                        return;
                 }
             }
 
-            if (notCancel)
+            if (noMouseRequired)
             {
-                if (noMouseRequired)
-                {
-                    ExecuteCommand();
-                }
-                else
-                {
-                    ConsoleHandler.init.AddLine("Click a tile/unit to destroy...");
-                    StartCoroutine(CommandStream());
-                }
+                ExecuteCommand();
+            }
+            else
+            {
+                ConsoleHandler.init.AddLine("Click a tile/unit to destroy...");
+                StartCoroutine(CommandStream());
             }
         }
     }
