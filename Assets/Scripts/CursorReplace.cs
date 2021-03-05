@@ -54,7 +54,9 @@ public class CursorReplace : MonoBehaviour
                 
                 Texture2D texture = cursorArray[(int)value];
                 currentTexture2D = new Texture2D(texture.width, texture.height, TextureFormat.RGBA32, false);
+                #if UNITY_EDITOR
                 currentTexture2D.alphaIsTransparency = true;
+                #endif
                 currentTexture2D.SetPixels32(texture.GetPixels32());
             }
 
