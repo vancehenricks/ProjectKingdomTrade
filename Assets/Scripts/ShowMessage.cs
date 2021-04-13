@@ -40,17 +40,17 @@ public class ShowMessage : MonoBehaviour
     {
         if (_deny != "")
         {
-            deny.text = _deny;
+            LanguageHandler.init.Text(deny, _deny);
         }
 
-        title.text = _title;
+        LanguageHandler.init.Text(title, _title);
         if (_icon != null)
         {
             icon.sprite = _icon;
         }
 
-        message.text = _message;
-        confirm.text = _confirm;
+        LanguageHandler.init.Text(message, _message);
+        LanguageHandler.init.Text(confirm, _confirm);
         GameObject temp = Instantiate(window, window.transform.parent);
         background.transform.SetAsLastSibling();
         temp.transform.SetAsLastSibling();

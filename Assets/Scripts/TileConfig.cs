@@ -4,11 +4,6 @@
  * Written by Vance Henricks Patual <vpatual@gmail.com>, February 2021
  */
 
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using UnityEngine;
-
 public struct TileConfig
 {
     public string tileType;

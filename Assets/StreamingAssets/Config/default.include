@@ -1,0 +1,17 @@
+//Loads all tiles that are included on the list
+//For modding make sure to create different include file to avoid being overwritten by installer or updates
+//e.g. modname.include
+land.json
+grass.json
+forest.json
+sea.json
+mountain.json
+worker.json
+infantry.json
+archer.json
+merchant.json
+ship.json
+trebuchet.json
+cavalry.json
+saboteur.json
+town.json

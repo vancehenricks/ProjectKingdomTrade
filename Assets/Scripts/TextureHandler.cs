@@ -29,12 +29,12 @@ public class TextureHandler : MonoBehaviour
             template = "empty-icon";
         }
 
-        string path = Path.Combine(Application.streamingAssetsPath, "Sprites/");
+        string path = Path.Combine(Application.streamingAssetsPath, "Sprites", name);
 
         Texture2D texture = Instantiate(textures[template]);
 
         texture.name = name;
-        texture.LoadImage(File.ReadAllBytes(path + name));
+        texture.LoadImage(File.ReadAllBytes(path));
 
         if (!textures.ContainsKey(name))
         {
@@ -47,7 +47,7 @@ public class TextureHandler : MonoBehaviour
         return sprite;
     }
 
-    public void LoadTextures()
+    public void Load()
     {
         textures = new Dictionary<string, Texture2D>();
         foreach (Texture2D texture in _textures)
@@ -57,7 +57,13 @@ public class TextureHandler : MonoBehaviour
 
         foreach (Texture2D texture in textures.Values)
         {
-            string path = Path.Combine(Application.streamingAssetsPath, "Sprites/" + texture.name + ".png");
+            string path = Path.Combine(Application.streamingAssetsPath, "Sprites", texture.name + ".png");
+            string alternative = Path.Combine(Application.streamingAssetsPath, "Sprites", "mod_" + texture.name + ".png");
+
+            if (File.Exists(alternative))
+            {
+                path = alternative;
+            }
 
             if (!File.Exists(path)) continue;
 

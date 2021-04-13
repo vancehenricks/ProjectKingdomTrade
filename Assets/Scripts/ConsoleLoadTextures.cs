@@ -23,7 +23,7 @@ public class ConsoleLoadTextures : ConsoleCommand
     {
         LoadingHandler.init.SetActive(true);
         LoadingHandler.init.Set(1f, "Loading Textures...");
-        TextureHandler.init.LoadTextures();
+        TextureHandler.init.Load();
         yield return new WaitForSeconds(1f);
         ConsoleHandler.init.AddCache(ConsoleHandler.init.previousCommand);
         yield return new WaitForSeconds(1f);

@@ -1,0 +1,4 @@
+//Loads all languages that are included on the list
+//For modding make sure to create different include file to avoid being overwritten by installer or updates
+//e.g. modname.include
+English=en-us.lang

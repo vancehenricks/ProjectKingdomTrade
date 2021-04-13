@@ -4,6 +4,7 @@
  * Written by Vance Henricks Patual <vpatual@gmail.com>, February 2021
  */
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -24,16 +25,22 @@ public class TileConfigHandler : MonoBehaviour
         init = this;
     }
 
-    public void LoadTiles()
+    public void Load()
     {
         baseTiles = new Dictionary<string, TileInfo>();
         baseUnits = new Dictionary<string, TileInfo>();
         baseTowns = new Dictionary<string, TileInfo>();
 
-        string includePath = Path.Combine(Application.streamingAssetsPath, "Config/include");
-        string[] files = File.ReadAllLines(includePath);
+        List<string> files = new List<string>();
+        string[] includePaths = Directory.GetFiles(Path.Combine(Application.streamingAssetsPath, "Config"), "*include");
 
-        string tilePath = Path.Combine(Application.streamingAssetsPath, "Config/Tiles/");
+        foreach (string includePath in includePaths)
+        {
+            string[] temp = File.ReadAllLines(includePath);
+            files.AddRange(temp);
+        }
+
+        string tilePath = Path.Combine(Application.streamingAssetsPath, "Config", "Tiles");
 
         foreach (string file in files)
         {
@@ -42,7 +49,7 @@ public class TileConfigHandler : MonoBehaviour
 
             TileInfo tileInfo = null;
 
-            string json = File.ReadAllText(tilePath + file);
+            string json = File.ReadAllText(Path.Combine(tilePath, file));
             try
             {
                 tileInfo = Convert(JsonUtility.FromJson<TileConfig>(json));

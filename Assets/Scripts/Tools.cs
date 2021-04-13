@@ -225,11 +225,11 @@ public class Tools : MonoBehaviour
         return new Vector2(x, y);
     }
 
-    public static void WriteTileConfig(TileConfig tileConfig, string fileName)
+    public static void WriteConfig(object tileConfig, string fileName)
     {
         string json = JsonUtility.ToJson(tileConfig);
 
-        StreamWriter writer = File.CreateText(Path.Combine(Application.streamingAssetsPath, "Config/Tiles/" + fileName));
+        StreamWriter writer = File.CreateText(Path.Combine(Application.streamingAssetsPath, fileName));
 
         foreach (string line in Tools.JsonBeautify(json))
         {
@@ -239,6 +239,10 @@ public class Tools : MonoBehaviour
         writer.Close();
     }
 
+    public static void WriteTileConfig(TileConfig tileConfig, string fileName)
+    {
+        WriteConfig(tileConfig, Path.Combine("Config", "Tiles", fileName));
+    }
 
     public static List<string> JsonBeautify(string json)
     {
