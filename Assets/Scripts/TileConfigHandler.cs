@@ -109,8 +109,9 @@ public class TileConfigHandler : MonoBehaviour
             config.tileType = tileInfo.tileType;
             config.subType = tileInfo.subType;
             config.travelTime = tileInfo.travelTime;
-            config.minChance = tileInfo.minChance;
-            config.maxChance = tileInfo.maxChance;
+            config.spawnHeightMin = tileInfo.spawnHeightMin;
+            config.spawnHeightMax = tileInfo.spawnHeightMax;
+            config.spawnChance = tileInfo.spawnChance;
 
             config.sprite = tileInfo.tileEffect.image.sprite.name;
             config.freezingSprite = tileInfo.tileEffect.freezingTile.name;
@@ -185,8 +186,9 @@ public class TileConfigHandler : MonoBehaviour
             tileInfo.tileType = config.tileType;
             tileInfo.subType = config.subType;
             tileInfo.travelTime = config.travelTime;
-            tileInfo.minChance = config.minChance;
-            tileInfo.maxChance = config.maxChance;
+            tileInfo.spawnHeightMin = config.spawnHeightMin;
+            tileInfo.spawnHeightMax = config.spawnHeightMax;
+            tileInfo.spawnChance = config.spawnChance;
 
             if (config.options != null)
             {

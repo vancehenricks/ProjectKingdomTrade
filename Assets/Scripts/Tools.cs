@@ -244,9 +244,11 @@ public class Tools : MonoBehaviour
         WriteConfig(tileConfig, Path.Combine("Config", "Tiles", fileName));
     }
 
+    private static Regex regexSplit;
+
     public static List<string> JsonBeautify(string json)
     {
-        string[] jsonArray = Regex.Split(json, @"(\{|\}|\[|\]|,)");
+        string[] jsonArray = Regex.Split(json, @"(\{|\}|\[|\]|,)", RegexOptions.Compiled);
         List<string> final = new List<string>();
         string space = "";
         for (int i = 0; i < jsonArray.Length; i++)

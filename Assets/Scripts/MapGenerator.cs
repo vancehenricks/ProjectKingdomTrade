@@ -27,8 +27,11 @@ public class MapGenerator : MonoBehaviour
     public bool useGridSize;
     public float width;
     public float height;
-    public int spawnDownChance;
-    public int homogeneousChance;
+    public float xSeed;
+    public float ySeed;
+    public float scale;
+    //public int spawnDownChance;
+    //public int homogeneousChance;
     //public List<GameObject> generatedTile;
     //public List<GameObject> borderTile;
     //public Dictionary<Vector2, TileInfo> generatedTile;
@@ -46,13 +49,15 @@ public class MapGenerator : MonoBehaviour
     public OnInitialize onInitialize;
 
     //private List<int> _borderIndex;
-    private RectTransform rectPlaceHolder;
-    private Vector2 originalPos;
+    //private RectTransform rectPlaceHolder;
+    //private Vector2 originalPos;
 
     // Use this for initialization
     /*void Start () {
 		GenerateMap();
 	}*/
+
+    private List<TileInfo> baseTiles;
 
     private void Awake()
     {
@@ -63,6 +68,7 @@ public class MapGenerator : MonoBehaviour
 
     public void Initialize()
     {
+        baseTiles = TileConfigHandler.init.baseTiles.Values.ToList<TileInfo>();
 
         foreach (TileInfo tile in TileList.generatedTiles.Values)
         {
@@ -71,15 +77,15 @@ public class MapGenerator : MonoBehaviour
         TileList.generatedTiles.Clear();
         //borderTile.Clear();
 
-        originalPos = placeHolderTile.transform.position;
+        //originalPos = placeHolderTile.transform.position;
 
         if (useGridSize)
         {
-            rectPlaceHolder = placeHolderTile.GetComponent<RectTransform>();
+            RectTransform rectPlaceHolder = placeHolderTile.GetComponent<RectTransform>();
             width = grid.rect.width / rectPlaceHolder.rect.width;
             height = grid.rect.height / rectPlaceHolder.rect.height;
         }
-        placeHolderTile.SetActive(true);
+        //placeHolderTile.SetActive(true); no point activating it
 
         if (onInitialize != null)
         {
@@ -94,8 +100,6 @@ public class MapGenerator : MonoBehaviour
 
     private int GetBaseTileIndex(TileInfo tileInfo)
     {
-        List<TileInfo> baseTiles = TileConfigHandler.init.baseTiles.Values.ToList<TileInfo>();
-
         for (int i = 0; i < baseTiles.Count; i++)
         {
             TileInfo bTile = baseTiles[i];
@@ -111,10 +115,72 @@ public class MapGenerator : MonoBehaviour
 
     private void GenerateMapLogic()
     {
-        List<TileInfo> baseTiles = TileConfigHandler.init.baseTiles.Values.ToList<TileInfo>();
-        
+        Vector3 placeHolder = placeHolderTile.transform.position;
+        Vector3 originPos = placeHolder;
 
+        for (float y = 0f; y < height;y++)
+        {
+            for (float x = 0f; x < width;x++)
+            {
+                float xCoord = xSeed + x / width * scale;
+                float yCoord = ySeed + y / height * scale;
+                float spawnHeight = Mathf.PerlinNoise(xCoord, yCoord);
 
+                TileInfo newTile = Instantiate(GetBaseTile(spawnHeight), grid);
+                newTile.transform.position = placeHolder;
+                newTile.tileLocation = new Vector2(x, y);
+                newTile.Initialize();
+                newTile.gameObject.SetActive(true);
+
+                placeHolder = new Vector3(placeHolder.x + 25f, placeHolder.y, placeHolder.z);
+
+                //pix[(int)y * noiseTex.width + (int)x] = new Color(sample, sample, sample);
+            }
+
+            placeHolder = new Vector3(originPos.x, placeHolder.y - 25, originPos.z);
+        }
+    }
+
+    private TileInfo GetBaseTile(float spawnHeight)
+    {
+        //sortedlist is ascending order
+        SortedList<float,TileInfo> candidateTiles = new SortedList<float,TileInfo>();
+
+        candidateTiles.Add(baseTiles[0].spawnChance, baseTiles[0]);
+
+        foreach (TileInfo baseTile in baseTiles)
+        {
+            if (spawnHeight >= baseTile.spawnHeightMin && spawnHeight <= baseTile.spawnHeightMax)
+            {
+                float spawnChance = baseTile.spawnChance;
+
+                //guarantees no duplication causing exception
+
+                RECHECK:
+                if (candidateTiles.ContainsKey(spawnChance))
+                {
+                    if (Random.Range(0f,1f) > 0.5f)
+                    {
+                        candidateTiles[baseTile.spawnChance] = baseTile;
+                    }
+
+                    spawnChance = baseTile.spawnChance + Random.Range(0f,1f);
+                    goto RECHECK;
+                }
+
+                candidateTiles.Add(spawnChance, baseTile);
+            }
+        }
+
+        foreach (TileInfo candidateTile in candidateTiles.Values)
+        {
+            if (Random.Range(0f, 1f) <= candidateTile.spawnChance)
+            {
+                return candidateTile;
+            }
+        }
+
+        return TileConfigHandler.init.baseTiles["Sea"]; //return the largest
     }
 
 }

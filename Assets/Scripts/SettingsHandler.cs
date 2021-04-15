@@ -31,7 +31,7 @@ public class SettingsHandler : MonoBehaviour
         try
         {
             SettingsConfig settingsConfig = Convert(JsonUtility.FromJson<SettingsConfig>(json));
-                    Tools.WriteConfig(settingsConfig, settingsPath);
+            Tools.WriteConfig(settingsConfig, settingsPath);
         }
         catch (System.Exception e)
         {

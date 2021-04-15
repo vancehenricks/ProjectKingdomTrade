@@ -22,8 +22,9 @@ public class TileInfo : MonoBehaviour
     public Vector2 tileLocation;
     public float localTemp;
     public float travelTime; //seconds
-    public int minChance;
-    public int maxChance;
+    public float spawnHeightMin;
+    public float spawnHeightMax;
+    public float spawnChance;
     public List<UnitInfo> unitInfos;
     public int units;
     public bool selected;

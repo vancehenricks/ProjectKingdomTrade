@@ -26,7 +26,7 @@ public class LanguageHandler : MonoBehaviour
 
     public string secondaryLanguage;
 
-    private Regex regex;
+    private static Regex regex;
 
     private void Awake()
     {
@@ -35,7 +35,11 @@ public class LanguageHandler : MonoBehaviour
         secondaryLanguage = "English";
         texts = new Dictionary<string, string>();
         language = new Dictionary<string, string>();
-        regex = new Regex(@"\[(.*)\]", RegexOptions.Compiled);
+
+        if (regex == null)
+        {
+            regex = new Regex(@"\[(.*)\]", RegexOptions.Compiled);
+        }
     }
 
     public void Load()
@@ -50,13 +54,18 @@ public class LanguageHandler : MonoBehaviour
 
         string defaultFileName = language[defaultLanguage];
 
+        Debug.Log($"Default Language {defaultLanguage} {defaultFileName}");
+
         AddToDictionary(File.ReadAllLines(Path.Combine(path, defaultFileName)), defaultFileName, texts);
 
         if (defaultLanguage == secondaryLanguage) return;
 
         string secondaryFileName = language[secondaryLanguage];
 
+        Debug.Log($"Secondary Language {secondaryLanguage} {secondaryFileName}");
+
         AddToDictionary(File.ReadAllLines(Path.Combine(path, secondaryFileName)), secondaryFileName, texts);
+
     }
 
     public bool Text(Text text, string id = "")
@@ -80,6 +89,9 @@ public class LanguageHandler : MonoBehaviour
         }
 
         text.text = text.text.Replace("[" + id + "]", texts[id]);
+
+        Debug.Log($"{id } = {text.text}");
+
         return true;
     }
 

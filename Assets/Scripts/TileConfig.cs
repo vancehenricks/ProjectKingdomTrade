@@ -16,8 +16,9 @@ public struct TileConfig
     public float autumnTemp;
     public float summerTemp;
     public float travelTime;
-    public int minChance;
-    public int maxChance;
+    public float spawnHeightMin;
+    public float spawnHeightMax;
+    public float spawnChance;
     public int units;
     public float travelSpeed;
     public int attackDistance;

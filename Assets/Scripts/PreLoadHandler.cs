@@ -34,12 +34,13 @@ public class PreLoadHandler : MonoBehaviour
     {
         LoadingHandler.init.SetActive(true);
         TextureHandler.init.Load();
-        LoadingHandler.init.Set(0.5f, "Loading Textures...");
+        LoadingHandler.init.Set(0.3f, "Loading Textures...");
         yield return new WaitForSeconds(2f);
 
         TileConfigHandler.init.Load();
         SettingsHandler.init.Load();
-        LoadingHandler.init.Set(1f, "Loading Configs...");
+        LoadingHandler.init.Set(0.8f, "Loading Configs...");
+        yield return new WaitForSeconds(2f);
         LanguageHandler.init.Load();
         TextHandler.init.Load();
         LoadingHandler.init.Set(1f, "Loading Texts...");
