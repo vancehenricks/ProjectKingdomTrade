@@ -47,6 +47,8 @@ public class SettingsHandler : MonoBehaviour
 
         TextHandler.init.SetAsFont(settingsConfig.font);
         LanguageHandler.init.secondaryLanguage = settingsConfig.language;
+        FrameRateHandler.init.maxFps = settingsConfig.maxFps;
+        FrameRateHandler.init.vSync = settingsConfig.vSync;
 
         return settingsConfig;
     }
@@ -61,6 +63,16 @@ public class SettingsHandler : MonoBehaviour
         if (settingConfig.language == null)
         {
             settingConfig.language = LanguageHandler.init.defaultLanguage;
+        }
+
+        if (settingConfig.maxFps == 0)
+        {
+            settingConfig.maxFps = FrameRateHandler.init.maxFps;
+        }
+
+        if(settingConfig.vSync == false)
+        {
+            settingConfig.vSync = FrameRateHandler.init.vSync;
         }
 
         return settingConfig;

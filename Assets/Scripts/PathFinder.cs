@@ -19,7 +19,8 @@ public class PathFinder
     public delegate void AlgorthimicCounter(int executeAlgorithmCounter);
     public AlgorthimicCounter algorthimicCounter;
 
-    public PathFinder(TileInfo _currentPoint, TileInfo _finalPoint, List<TileInfo> _tempCache, PathFindingHandler.IsWalkable _isWalkable, OnDoneCalculate _onDoneCalculate, AlgorthimicCounter _algorthimicCounter)
+    public PathFinder(TileInfo _currentPoint, TileInfo _finalPoint, List<TileInfo> _tempCache, PathFindingHandler.IsWalkable _isWalkable,
+        OnDoneCalculate _onDoneCalculate, AlgorthimicCounter _algorthimicCounter)
     {
 
         currentPoint = _currentPoint;

@@ -1,4 +1,6 @@
 {
  "font":"Arial",
- "language":"English"
+ "language":"English",
+ "maxFps":60,
+ "vSync":false
 }

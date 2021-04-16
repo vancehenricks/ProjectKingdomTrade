@@ -25,10 +25,10 @@ public class MapGenerator : MonoBehaviour
     public RectTransform grid;
     public float distanceOfEachTile;
     public bool useGridSize;
-    public float width;
-    public float height;
-    public float xSeed;
-    public float ySeed;
+    public int width;
+    public int height;
+    public float xOffset;
+    public float yOffset;
     public float scale;
     //public int spawnDownChance;
     //public int homogeneousChance;
@@ -82,8 +82,8 @@ public class MapGenerator : MonoBehaviour
         if (useGridSize)
         {
             RectTransform rectPlaceHolder = placeHolderTile.GetComponent<RectTransform>();
-            width = grid.rect.width / rectPlaceHolder.rect.width;
-            height = grid.rect.height / rectPlaceHolder.rect.height;
+            width = (int)(grid.rect.width / rectPlaceHolder.rect.width);
+            height = (int)(grid.rect.height / rectPlaceHolder.rect.height);
         }
         //placeHolderTile.SetActive(true); no point activating it
 
@@ -98,6 +98,31 @@ public class MapGenerator : MonoBehaviour
         onDoneGenerate = null;
     }
 
+    private void GenerateMapLogic()
+    {
+        Vector3 placeHolder = placeHolderTile.transform.position;
+        Vector3 originPos = placeHolder;
+
+        float [,] noiseMap = GenerateNoise();
+
+        for (int y = 0; y < height;y++)
+        {
+            for (int x = 0; x < width;x++)
+            {
+                TileInfo newTile = Instantiate(GetBaseTile(noiseMap[x,y]), grid);
+                newTile.transform.position = placeHolder;
+                newTile.tileLocation = new Vector2(x, y);
+                newTile.Initialize();
+                newTile.gameObject.SetActive(true);
+
+                placeHolder = new Vector3(placeHolder.x + 25f, placeHolder.y, placeHolder.z);
+
+                //pix[(int)y * noiseTex.width + (int)x] = new Color(sample, sample, sample);
+            }
+
+            placeHolder = new Vector3(originPos.x, placeHolder.y - 25, originPos.z);
+        }
+    }
     private int GetBaseTileIndex(TileInfo tileInfo)
     {
         for (int i = 0; i < baseTiles.Count; i++)
@@ -113,32 +138,20 @@ public class MapGenerator : MonoBehaviour
         return 0;
     }
 
-    private void GenerateMapLogic()
+    private float[,] GenerateNoise()
     {
-        Vector3 placeHolder = placeHolderTile.transform.position;
-        Vector3 originPos = placeHolder;
-
-        for (float y = 0f; y < height;y++)
+        float[,] noiseMap = new float[width,height];
+        for (int y = 0; y < height; y++)
         {
-            for (float x = 0f; x < width;x++)
+            for (int x = 0; x < width; x++)
             {
-                float xCoord = xSeed + x / width * scale;
-                float yCoord = ySeed + y / height * scale;
-                float spawnHeight = Mathf.PerlinNoise(xCoord, yCoord);
-
-                TileInfo newTile = Instantiate(GetBaseTile(spawnHeight), grid);
-                newTile.transform.position = placeHolder;
-                newTile.tileLocation = new Vector2(x, y);
-                newTile.Initialize();
-                newTile.gameObject.SetActive(true);
-
-                placeHolder = new Vector3(placeHolder.x + 25f, placeHolder.y, placeHolder.z);
-
-                //pix[(int)y * noiseTex.width + (int)x] = new Color(sample, sample, sample);
+                float xCoord = xOffset + ((x / (float)width) * scale);
+                float yCoord = yOffset + ((y / (float)height) * scale);
+                noiseMap[x, y] = Mathf.PerlinNoise(xCoord, yCoord) * 2 - 1;
             }
-
-            placeHolder = new Vector3(originPos.x, placeHolder.y - 25, originPos.z);
         }
+
+        return noiseMap;
     }
 
     private TileInfo GetBaseTile(float spawnHeight)
@@ -159,7 +172,7 @@ public class MapGenerator : MonoBehaviour
                 RECHECK:
                 if (candidateTiles.ContainsKey(spawnChance))
                 {
-                    if (Random.Range(0f,1f) > 0.5f)
+                    if (Random.Range(0f, 1f) > 0.5f)
                     {
                         candidateTiles[baseTile.spawnChance] = baseTile;
                     }
@@ -180,7 +193,7 @@ public class MapGenerator : MonoBehaviour
             }
         }
 
-        return TileConfigHandler.init.baseTiles["Sea"]; //return the largest
+        return TileConfigHandler.init.baseTiles["Sea"];
     }
 
 }
