@@ -33,17 +33,18 @@ public class PreLoadHandler : MonoBehaviour
     private IEnumerator LoadFilesCoroutine()
     {
         LoadingHandler.init.SetActive(true);
+        LanguageHandler.init.Load();
+        TextHandler.init.Load();
+        LoadingHandler.init.Set(0.3f, "[LOADING-TEXTS]");
+        yield return new WaitForSeconds(1f);
+
         TextureHandler.init.Load();
-        LoadingHandler.init.Set(0.3f, "Loading Textures...");
+        LoadingHandler.init.Set(0.6f, "[LOADING-TEXTURES]");
         yield return new WaitForSeconds(2f);
 
         TileConfigHandler.init.Load();
         SettingsHandler.init.Load();
-        LoadingHandler.init.Set(0.8f, "Loading Configs...");
-        yield return new WaitForSeconds(2f);
-        LanguageHandler.init.Load();
-        TextHandler.init.Load();
-        LoadingHandler.init.Set(1f, "Loading Texts...");
+        LoadingHandler.init.Set(1f, "[LOADING-CONFIGS]");
         yield return new WaitForSeconds(2f);
         LoadingHandler.init.SetActive(false);
     }

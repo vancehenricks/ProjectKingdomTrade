@@ -48,6 +48,8 @@ public class LoadingHandler : MonoBehaviour
 
     private IEnumerator LoadingAnimation(float target, float current, string message)
     {
+        LanguageHandler.init.Text(ref message);
+
         for (float i = current;i <= target;i += 0.01f)
         {
             int percentage = (int)(i * 100);

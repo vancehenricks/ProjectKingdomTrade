@@ -58,8 +58,8 @@ public class TileConfigHandler : MonoBehaviour
             catch (System.Exception e)
             {
                 Debug.LogError(e);
-                ShowMessageHandler.init.infoWindow.SetMessage("Json Error - " + file,
-                    e.ToString(), "OK", null, null);
+                ShowMessageHandler.init.infoWindow.SetMessage("Json [ERROR] - " + file,
+                    e.ToString(), "[OK]", null, null);
             }
 
             try
@@ -80,8 +80,8 @@ public class TileConfigHandler : MonoBehaviour
             catch (System.Exception e)
             {
                 Debug.LogError(e);
-                ShowMessageHandler.init.infoWindow.SetMessage("Json Error - " + file,
-                    e.ToString(), "OK", null, null);
+                ShowMessageHandler.init.infoWindow.SetMessage("Json [ERROR] - " + file,
+                    e.ToString(), "[OK]", null, null);
             }
         }
     }

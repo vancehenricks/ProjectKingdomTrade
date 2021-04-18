@@ -16,6 +16,10 @@ public class NewGameAction : MonoBehaviour
     public Text kingdomName;
     public Text width;
     public Text height;
+    public Text xOffset;
+    public Text yOffset;
+    public Text scale;
+    public SeedPlaceHolder seedPlaceHolder;
     public RectTransform grid;
     public ResetCenter resetCenter;
     public OpenWindow openWindow;
@@ -27,10 +31,46 @@ public class NewGameAction : MonoBehaviour
 
     private int w;
     private int h;
+    private float x;
+    private float y;
+    private float s;
 
     public void DoAction()
     {
 
+        if (CheckSeed() && CheckMapSize())
+        {
+            StartCoroutine(DoNewGameLogic());
+        }
+
+    }
+
+    private bool CheckSeed()
+    {
+        bool xResult = float.TryParse(xOffset.text, out x);
+        bool yResult = float.TryParse(yOffset.text, out y);
+        bool sResult = float.TryParse(scale.text, out s);
+
+        if (xResult && yResult && sResult || xOffset.text == "" && yOffset.text == "" && scale.text == "")
+        {
+            if (xOffset.text == "" && yOffset.text == "" && scale.text == "")
+            {
+                x = seedPlaceHolder.xOffset;
+                y = seedPlaceHolder.yOffset;
+                s = seedPlaceHolder.scale;
+            }
+
+            return true;
+        }
+        else
+        {
+            ShowMessageHandler.init.infoWindow.SetMessage("[INVALID-INPUT]", "[FLOAT-VALUES-ONLY-IN-SEED]", "[OK]", null, null);
+            return false;
+        }
+    }
+
+    private bool CheckMapSize()
+    {
         bool wResult = int.TryParse(width.text, out w);
         bool hResult = int.TryParse(height.text, out h);
 
@@ -46,21 +86,21 @@ public class NewGameAction : MonoBehaviour
 
             if (Tools.GetNumberOfTiles(w, h, 25, 25) > Tools.GetNumberOfTiles(1000, 1000, 25, 25))
             {
-                ShowMessage show = ShowMessageHandler.init.confirmWindow.SetMessage("Warning",
-                    "Map size is greater than 1000x1000. This could cause the game to be unresponsive. Would you like to continue?",
-                    "Yes", "No", null, OnResponse);
+                ShowMessage show = ShowMessageHandler.init.confirmWindow.SetMessage("[WARNING]",
+                    "[MAP-SIZE-GREATER-THAN-1000X1000] [THIS-COULD-CAUSE-THE-GAME-TO-BE-UNRESPONSIVE] [WOULD-YOU-LIKE-TO-CONTINUE]",
+                    "[YES]", "[NO]", null, OnResponse);
 
-                if (!show.response) return;
+                if (!show.response) return false;
             }
 
-            StartCoroutine(DoNewGameLogic());
+            return true;
 
         }
         else
         {
-            ShowMessageHandler.init.infoWindow.SetMessage("Invalid Input", "Integer values only in map size", "OK", null, null);
+            ShowMessageHandler.init.infoWindow.SetMessage("[INVALID-INPUT]", "[INTEGER-VALUES-ONLY-IN-MAP-SIZE]", "[OK]", null, null);
+            return false;
         }
-
     }
 
     private void OnResponse(bool response)
@@ -79,10 +119,10 @@ public class NewGameAction : MonoBehaviour
         grid.sizeDelta = new Vector2(w, h);
         SyncSize.doSync();
         resetCenter.DoAction();
-        LoadingHandler.init.Set(0.3f, "Generating Tiles...");
+        LoadingHandler.init.Set(0.3f, "[GENERATING-TILES]");
         yield return new WaitForSeconds(0.5f);
-        MapGenerator.init.Initialize();
-        LoadingHandler.init.Set(0.5f, "Generating Tiles...");
+        MapGenerator.init.Initialize(x,y,s);
+        LoadingHandler.init.Set(0.5f, "[GENERATING-TILES]");
         yield return new WaitForSeconds(0.5f);
         //cloudCycle.Initialize();
         cloudCycle2.Initialize();
@@ -92,11 +132,11 @@ public class NewGameAction : MonoBehaviour
         float speed = ((w / 10) / 10);
 
         Tick.speed = (int)speed + 30;
-        LoadingHandler.init.Set(0.8f, "Generating Clouds...");
+        LoadingHandler.init.Set(0.8f, "[GENERATING-CLOUDS]");
         yield return new WaitForSeconds((speed/10)+3f);
         Tick.speed = 1;
         tick.Initialize();
-        LoadingHandler.init.Set(1f, "Setting up Time...");
+        LoadingHandler.init.Set(1f, "[SETTING-UP-TIME]");
         yield return new WaitForSeconds(1.5f);
         LoadingHandler.init.SetActive(false);
         openWindow.DoOpen();

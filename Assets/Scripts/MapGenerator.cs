@@ -66,8 +66,12 @@ public class MapGenerator : MonoBehaviour
         //borderTile = new List<GameObject>();
     }
 
-    public void Initialize()
+    public void Initialize(float _xOffset, float _yOffset, float _scale)
     {
+        xOffset = _xOffset;
+        yOffset = _yOffset;
+        scale = _scale;
+
         baseTiles = TileConfigHandler.init.baseTiles.Values.ToList<TileInfo>();
 
         foreach (TileInfo tile in TileList.generatedTiles.Values)

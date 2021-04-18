@@ -26,8 +26,6 @@ public class LanguageHandler : MonoBehaviour
 
     public string secondaryLanguage;
 
-    private static Regex regex;
-
     private void Awake()
     {
         init = this;
@@ -35,11 +33,6 @@ public class LanguageHandler : MonoBehaviour
         secondaryLanguage = "English";
         texts = new Dictionary<string, string>();
         language = new Dictionary<string, string>();
-
-        if (regex == null)
-        {
-            regex = new Regex(@"\[(.*)\]", RegexOptions.Compiled);
-        }
     }
 
     public void Load()
@@ -56,7 +49,7 @@ public class LanguageHandler : MonoBehaviour
 
         Debug.Log($"Default Language {defaultLanguage} {defaultFileName}");
 
-        AddToDictionary(File.ReadAllLines(Path.Combine(path, defaultFileName)), defaultFileName, texts);
+        AddToDictionary(File.ReadAllLines(Path.Combine(path, "Language", defaultFileName)), defaultFileName, texts);
 
         if (defaultLanguage == secondaryLanguage) return;
 
@@ -64,48 +57,85 @@ public class LanguageHandler : MonoBehaviour
 
         Debug.Log($"Secondary Language {secondaryLanguage} {secondaryFileName}");
 
-        AddToDictionary(File.ReadAllLines(Path.Combine(path, secondaryFileName)), secondaryFileName, texts);
+        AddToDictionary(File.ReadAllLines(Path.Combine(path, "Language", secondaryFileName)), secondaryFileName, texts);
 
+    }
+
+    public bool Text(ref string source, string id = "")
+    {
+        if (id == "")
+        {
+            id = source;
+        }
+
+        string tempId = id;
+        List<string> ids = new List<string>();
+
+        if (id.Contains("[") && id.Contains("]"))
+        {
+            FormatId(id, ids);
+        }
+
+        foreach (string _id in ids)
+        {
+            if (!texts.ContainsKey(_id))
+            {
+                source = tempId;
+                return false;
+            }
+
+            source = source.Replace("[" + _id + "]", texts[_id]);
+
+            Debug.Log($"{_id} = {source}");
+        }
+
+        return true;
     }
 
     public bool Text(Text text, string id = "")
     {
-        if (id == "")
-        {
-            id = text.text;
-        }
+        string t = id == "" ? text.text : id;
+        bool result = Text(ref t, id);
+        text.text = t;
 
-        string tempId = id;
-
-        if (id.Contains("[") && id.Contains("]"))
-        {
-            id = regex.Match(id).Groups[1].Value;
-        }
-
-        if (!texts.ContainsKey(id))
-        {
-            text.text = tempId;
-            return false;
-        }
-
-        text.text = text.text.Replace("[" + id + "]", texts[id]);
-
-        Debug.Log($"{id } = {text.text}");
-
-        return true;
+        return result;
     }
+
+    private void FormatId(string _id, List<string> finalize)
+    {
+        string[] ids = _id.Split('[');
+
+        foreach (string id in ids)
+        {
+            if (!id.Contains("]")) continue;
+            finalize.Add(id.Substring(0, id.IndexOf(']')));
+        }
+    }
+
 
     private void AddToDictionary(string[] lang, string fileName, Dictionary<string, string> _language)
     {
         try
         {
+            string currentId = "";
+
             foreach (string raw in lang)
             {
                 if (raw.Contains("//") || raw.Length == 1) continue;
 
-                string[] pairs = raw.Split('=');
+                string[] pairs = raw.Split(new char[]{'='}, 2);
 
-                if (pairs[0] != " " && pairs[1] == " ") continue;
+                if (pairs[0] != " " && pairs[1] == " " && pairs[1] == "") continue;
+
+                if (pairs[0] == "" && currentId != "")
+                {
+                    _language[currentId] += pairs[1];
+                    continue;
+                }
+                else
+                {
+                    currentId = pairs[0];
+                }
 
                 if (_language.ContainsKey(pairs[0]))
                 {
@@ -120,8 +150,8 @@ public class LanguageHandler : MonoBehaviour
         catch (System.Exception e)
         {
             Debug.LogError(e);
-            ShowMessageHandler.init.infoWindow.SetMessage("Error - " + fileName,
-                e.ToString(), "OK", null, null);
+            ShowMessageHandler.init.infoWindow.SetMessage("[ERROR] - " + fileName,
+                e.ToString(), "[OK]", null, null);
         }
     }
 }

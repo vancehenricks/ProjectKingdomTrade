@@ -1,5 +1,9 @@
-//id=translation
+//Format: "id=translation" per-line, or for multi-line "id=translation" nextline "=translation"
 //Avoid [ ] and make sure to follow the formatting on id side
+//e.g. 
+//NEW-GAME=New 
+//= Game
+//This equivalent to NEW-GAME=New Game
 NEW-GAME=New Game
 SAVE-GAME=Save Game
 SETTINGS=Settings
@@ -41,3 +45,21 @@ LEATHER=Leather
 METAL=Metal
 STONE=Stone
 WOOD=Wood
+SEED=Seed
+INVALID-INPUT=Invalid Input
+INTEGER-VALUES-ONLY-IN-MAP-SIZE=Integer values only in map size input.
+OK=OK
+ERROR=Error
+FLOAT-VALUES-ONLY-IN-SEED=Float values only in seed input.
+WARNING=Warning
+MAP-SIZE-GREATER-THAN-1000X1000=Map size is greater than 1000x1000.
+THIS-COULD-CAUSE-THE-GAME-TO-BE-UNRESPONSIVE=This could cause the game to be unresponsive.
+WOULD-YOU-LIKE-TO-CONTINUE=Would you like to continue?
+GENERATING-TILES=Generating Tiles...
+GENERATING-CLOUDS=Generating Clouds...
+SETTING-UP-TIME=Setting up Time...
+LOADING-TEXTURES=Loading Textures...
+LOADING-CONFIGS=Loading Configs...
+LOADING-TEXTS=Loading Texts...
+YES=Yes
+NO=No

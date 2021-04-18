@@ -36,7 +36,7 @@ public class SettingsHandler : MonoBehaviour
         catch (System.Exception e)
         {
             Debug.LogError(e);
-            ShowMessageHandler.init.infoWindow.SetMessage("Json Error - settings.json",
+            ShowMessageHandler.init.infoWindow.SetMessage("Json [ERROR] - settings.json",
                 e.ToString(), "OK", null, null);
         }
     }
