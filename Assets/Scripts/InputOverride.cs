@@ -17,12 +17,21 @@ public class InputOverride : MonoBehaviour
     {
         get
         {
-            return _currentFocus;
+
+            if (_currentFocus != null && _currentFocus.activeInHierarchy)
+            {
+                return _currentFocus;
+            }
+            else
+            {
+                _currentFocus = null;
+                return null;
+            }
         }
 
         set
         {
-            if (value != null && value.activeSelf)
+            if (value != null && value.activeInHierarchy)
             {
                 _currentFocus = value;
             }

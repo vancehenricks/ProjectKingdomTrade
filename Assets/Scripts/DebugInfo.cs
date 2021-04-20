@@ -28,7 +28,7 @@ public class DebugInfo : MonoBehaviour
     private TileInfo tile;
     private PlayerInfo playerInfo;
 
-    private void Start()
+    private void Awake()
     {
         MultiSelect.onSelectedChange += OnSelectedChange;
     }
@@ -44,10 +44,6 @@ public class DebugInfo : MonoBehaviour
         tileId.text = tile.tileId + "";
         subType.text = tile.subType + "";
         tileType.text = tile.tileType + "";
-        xOffset.text = MapGenerator.init.xOffset.ToString("0.00");
-        yOffset.text = MapGenerator.init.yOffset.ToString("0.00");
-        scale.text = MapGenerator.init.scale.ToString("0.00");
-        mapSize.text = MapGenerator.init.grid.rect.width + "," + MapGenerator.init.grid.rect.height;
 
         if (playerInfo == null)
         {
@@ -59,6 +55,11 @@ public class DebugInfo : MonoBehaviour
             playerId.text = playerInfo.playerId + "";
             playerName.text = playerInfo.playerName + "";
         }
+
+        xOffset.text = MapGenerator.init.xOffset.ToString("0.00");
+        yOffset.text = MapGenerator.init.yOffset.ToString("0.00");
+        scale.text = MapGenerator.init.scale.ToString("0.00");
+        mapSize.text = "(" + MapGenerator.init.grid.rect.width + ", " + MapGenerator.init.grid.rect.height + ")";
     }
 
     private void Update()
@@ -67,6 +68,7 @@ public class DebugInfo : MonoBehaviour
         {
             tileLocation.text = tile.tileLocation + "";
         }
+
         ms.text = string.Format("{0:0.##}", Time.deltaTime * 1000.0f);
         fps.text = string.Format("{0:0}", 1.0f / Time.deltaTime);
     }

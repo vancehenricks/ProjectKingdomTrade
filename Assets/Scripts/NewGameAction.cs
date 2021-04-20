@@ -47,19 +47,9 @@ public class NewGameAction : MonoBehaviour
 
     private bool CheckSeed()
     {
-        bool xResult = float.TryParse(xOffset.text, out x);
-        bool yResult = float.TryParse(yOffset.text, out y);
-        bool sResult = float.TryParse(scale.text, out s);
-
-        if (xResult && yResult && sResult || xOffset.text == "" && yOffset.text == "" && scale.text == "")
+        if (IsNormalize(xOffset, out x, seedPlaceHolder.xOffset) && IsNormalize(yOffset, out y, seedPlaceHolder.yOffset)
+            && IsNormalize(scale, out s, seedPlaceHolder.scale))
         {
-            if (xOffset.text == "" && yOffset.text == "" && scale.text == "")
-            {
-                x = seedPlaceHolder.xOffset;
-                y = seedPlaceHolder.yOffset;
-                s = seedPlaceHolder.scale;
-            }
-
             return true;
         }
         else
@@ -71,18 +61,8 @@ public class NewGameAction : MonoBehaviour
 
     private bool CheckMapSize()
     {
-        bool wResult = int.TryParse(width.text, out w);
-        bool hResult = int.TryParse(height.text, out h);
-
-        grid.sizeDelta = new Vector2(500f, 500f);
-
-        if (wResult && hResult || width.text == "" && height.text == "")
+        if (IsNormalize(width, out w, 500) && IsNormalize(height, out h, 500))
         {
-
-            if (width.text == "" && height.text == "")
-            {
-                w = h = 500;
-            }
 
             if (Tools.GetNumberOfTiles(w, h, 25, 25) > Tools.GetNumberOfTiles(1000, 1000, 25, 25))
             {
@@ -101,6 +81,36 @@ public class NewGameAction : MonoBehaviour
             ShowMessageHandler.init.infoWindow.SetMessage("[INVALID-INPUT]", "[INTEGER-VALUES-ONLY-IN-MAP-SIZE]", "[OK]", null, null);
             return false;
         }
+    }
+
+    private bool IsNormalize(Text text, out float value, float fallback)
+    {
+            if (float.TryParse(text.text, out value))
+            {
+                return true;
+            }
+            else if (text.text == "")
+            {
+                value = fallback;
+                return true;
+            }
+
+        return false;
+    }
+
+    private bool IsNormalize(Text text, out int value, int fallback)
+    {
+        if (int.TryParse(text.text, out value))
+        {
+            return true;
+        }
+        else if (text.text == "")
+        {
+            value = fallback;
+            return true;
+        }
+
+        return false;
     }
 
     private void OnResponse(bool response)
