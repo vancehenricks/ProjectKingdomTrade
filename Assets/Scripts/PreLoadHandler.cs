@@ -10,7 +10,14 @@ using UnityEngine;
 
 public class PreLoadHandler : MonoBehaviour
 {
-    public static PreLoadHandler init;
+    private static PreLoadHandler _init;
+
+    public static PreLoadHandler init
+    {
+        get { return _init; }
+        private set { _init = value; }
+    }
+
     public List<GameObject> gameObjects;
 
     private void Awake()

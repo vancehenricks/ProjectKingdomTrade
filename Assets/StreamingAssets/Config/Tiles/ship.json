@@ -12,6 +12,9 @@
  "spawnHeightMin":0.0,
  "spawnHeightMax":0.0,
  "spawnChance":0.0,
+ "spawnableTile":
+ [
+ ],
  "units":10,
  "travelSpeed":2.5,
  "attackDistance":0,
@@ -25,25 +28,34 @@
  "nonWalkable":
  [
   {
+   "tile":"Sea",
+   "minTemperature":-1000.0,
+   "maxTemperature":1.0
+  },
+  {
    "tile":"Land",
-   "temperature":-100.0
+   "minTemperature":-1000.0,
+   "maxTemperature":1000.0
   },
   {
    "tile":"Grass",
-   "temperature":-100.0
+   "minTemperature":-1000.0,
+   "maxTemperature":1000.0
   },
   {
    "tile":"Mountain",
-   "temperature":-100.0
+   "minTemperature":-1000.0,
+   "maxTemperature":1000.0
   },
   {
    "tile":"Forest",
-   "temperature":-100.0
+   "minTemperature":-1000.0,
+   "maxTemperature":1000.0
   },
   {
    "tile":"Town",
-   "temperature":-100.0
+   "minTemperature":-1000.0,
+   "maxTemperature":1000.0
   }
- ],
- "isTownAllowed":false
+ ]
 }

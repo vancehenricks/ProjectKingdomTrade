@@ -10,28 +10,28 @@ using UnityEngine;
 
 public class TileList : MonoBehaviour
 {
-    public static Dictionary<long, TileInfo> tileInfos;
-    public static Dictionary<long, TileInfo> generatedUnits;
-    public static Dictionary<Vector2, TileInfo> generatedTowns;
-    public static Dictionary<Vector2, TileInfo> generatedTiles;
+    private static TileList _init;
+    public static TileList init
+    {
+        get { return _init; }
+        private set { _init = value; }
+    }
+
+    public Dictionary<long, TileInfo> tileInfos;
+    public Dictionary<long, TileInfo> generatedUnits;
+    public Dictionary<Vector2, TileInfo> generatedTowns;
+    public Dictionary<Vector2, TileInfo> generatedTiles;
 
     private void Awake()
     {
+        init = this;
         tileInfos = new Dictionary<long, TileInfo>();
         generatedTowns = new Dictionary<Vector2, TileInfo>();
         generatedTiles = new Dictionary<Vector2, TileInfo>();
         generatedUnits = new Dictionary<long, TileInfo>();
     }
 
-    private void OnDestroy()
-    {
-        tileInfos.Clear();
-        generatedTowns.Clear();
-        generatedTiles.Clear();
-        generatedUnits.Clear();
-    }
-
-    public static void Add(TileInfo tileInfo)
+    public void Add(TileInfo tileInfo)
     {
 
         if (tileInfo.tileType == "Town")
@@ -51,7 +51,7 @@ public class TileList : MonoBehaviour
         tileInfos.Add(tileInfo.tileId, tileInfo);
     }
 
-    public static void Remove(TileInfo tileInfo)
+    public void Remove(TileInfo tileInfo)
     {
         if (tileInfo.tileType == "Town")
         {
@@ -70,7 +70,7 @@ public class TileList : MonoBehaviour
         tileInfos.Remove(tileInfo.tileId);
     }
 
-    private static void ReplaceTile(TileInfo tileInfo)
+    private void ReplaceTile(TileInfo tileInfo)
     {
         try
         {
@@ -84,7 +84,7 @@ public class TileList : MonoBehaviour
         generatedTiles.Add(tileInfo.tileLocation, tileInfo);
     }
 
-    private static void ReplaceTown(TileInfo tileInfo)
+    private void ReplaceTown(TileInfo tileInfo)
     {
         try
         {
@@ -98,7 +98,7 @@ public class TileList : MonoBehaviour
         generatedTowns.Add(tileInfo.tileLocation, tileInfo);
     }
 
-    public static List<TileInfo> GetNeighbours(TileInfo tile)
+    public List<TileInfo> GetNeighbours(TileInfo tile)
     {
         List<TileInfo> tiles = new List<TileInfo>();
 
@@ -113,7 +113,7 @@ public class TileList : MonoBehaviour
         return tiles;
     }
 
-    public static TileInfo GetObjectFrom(Vector2 tileLocation, Direction direction)
+    public TileInfo GetObjectFrom(Vector2 tileLocation, Direction direction)
     {
         Vector2 key = Vector2.zero;
         switch (direction)

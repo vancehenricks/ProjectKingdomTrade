@@ -25,10 +25,10 @@ public class ConsoleMoveUnit : ConsoleCommand
 
     private void ExecuteCommand()
     {
-        UnitInfo unitInfo = (UnitInfo)TileList.generatedUnits[tileId];
+        UnitInfo unitInfo = (UnitInfo)TileList.init.generatedUnits[tileId];
         unitInfo.unitEffect.combatHandler.DisEngage();
         unitInfo.merge = null;
-        unitInfo.waypoints.Add(TileList.generatedTiles[tileLocation]);
+        unitInfo.waypoints.Add(TileList.init.generatedTiles[tileLocation]);
 
         ConsoleHandler.init.AddLine("Moving unit " + tileId + " to tile " + tileLocation);
         ConsoleHandler.init.AddCache(ConsoleHandler.init.previousCommand);
@@ -38,7 +38,7 @@ public class ConsoleMoveUnit : ConsoleCommand
     {
         if (command == "move-unit")
         {
-            Dictionary<string, string> subCommands = ConsoleParser.ArgumentsToSubCommands(arguments);
+            Dictionary<string, string> subCommands = ConsoleParser.init.ArgumentsToSubCommands(arguments);
 
             tileId = 0;
             tileLocation = Vector2.zero;

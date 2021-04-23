@@ -12,6 +12,9 @@
  "spawnHeightMin":0.20000000298023225,
  "spawnHeightMax":1.0,
  "spawnChance":1.100000023841858,
+ "spawnableTile":
+ [
+ ],
  "units":0,
  "travelSpeed":0.0,
  "attackDistance":0,
@@ -23,6 +26,5 @@
  "deathChance":0.0,
  "nonWalkable":
  [
- ],
- "isTownAllowed":true
+ ]
 }

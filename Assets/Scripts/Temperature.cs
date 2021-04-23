@@ -10,15 +10,23 @@ using UnityEngine;
 
 public class Temperature : MonoBehaviour
 {
+    private static Temperature _init;
 
-    public static float temperature { get; private set; }
+    public static Temperature init
+    {
+        get { return _init; }
+        private set { _init = value; }
+    }
 
-    public static float minTemp;
-    public static float maxTemp;
+    public float temperature { get; private set; }
+
+    public float minTemp;
+    public float maxTemp;
 
     private void Awake()
     {
-        Tick.tickUpdate += TickUpdate;
+        init = this;
+        Tick.init.tickUpdate += TickUpdate;
     }
 
     private void Start()
@@ -34,11 +42,11 @@ public class Temperature : MonoBehaviour
     {
         //Debug.Log("temp:" + temperature);
 
-        if (NightDay.isNight() && temperature >= minTemp)
+        if (NightDay.init.isNight() && temperature >= minTemp)
         {
             temperature = temperature - 1;
         }
-        else if (!NightDay.isNight() && temperature <= maxTemp)
+        else if (!NightDay.init.isNight() && temperature <= maxTemp)
         {
             temperature = temperature + 1;
         }

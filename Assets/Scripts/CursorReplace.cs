@@ -18,24 +18,31 @@ public enum CursorType
     Attack
 }
 
-public class CursorReplace : MonoBehaviour
+public class CursorReplace: MonoBehaviour
 {
+    private static CursorReplace _init;
+
+    public static CursorReplace init
+    {
+        get { return _init; }
+        private set { _init = value; }
+    }
 
 
     public List<Texture2D> _cursorArray;
     public CursorMode _cursorMode;
     public Vector2 _hotSpot;
 
-    public static List<Texture2D> cursorArray;
-    public static CursorMode cursorMode;
-    public static Vector2 hotSpot;
+    public List<Texture2D> cursorArray;
+    public CursorMode cursorMode;
+    public Vector2 hotSpot;
     //public CursorLockMode lockState = CursorLockMode.Locked;
 
-    private static Texture2D currentTexture2D;
-    private static Texture2D previousTexture2D;
+    private Texture2D currentTexture2D;
+    private Texture2D previousTexture2D;
 
-    private static CursorType _currentCursor;
-    public static CursorType currentCursor
+    private CursorType _currentCursor;
+    public CursorType currentCursor
     {
         get
         {
@@ -68,6 +75,7 @@ public class CursorReplace : MonoBehaviour
 
     private void Awake()
     {
+        init = this;
         cursorArray = _cursorArray;
         cursorMode = _cursorMode;
         hotSpot = _hotSpot;
@@ -75,7 +83,7 @@ public class CursorReplace : MonoBehaviour
         previousTexture2D = cursorArray[0];
     }
 
-    public static void SetCurrentCursorAsPrevious()
+    public void SetCurrentCursorAsPrevious()
     {
         previousTexture2D = currentTexture2D;
     }

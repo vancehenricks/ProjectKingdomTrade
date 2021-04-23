@@ -10,20 +10,32 @@ using UnityEngine;
 
 public class Tick : MonoBehaviour
 {
+    private static Tick _init;
 
-    public static int speed;
-    public static float realSpeed { get; private set; }
-    public static float dayToSecond { get; private set; }
-    public static double realSeconds { get; private set; }
-    public static float seconds { get; private set; }
-    public static int day { get; private set; }
-    public static long realDays { get; private set; }
-    public static int month { get; private set; }
-    public static long realMonths { get; private set; }
-    public static int year { get; private set; }
+    public static Tick init
+    {
+        get { return _init; }
+        private set { _init = value; }
+    }
+
+    public int speed;
+    public float realSpeed { get; private set; }
+    public float dayToSecond { get; private set; }
+    public double realSeconds { get; private set; }
+    public float seconds { get; private set; }
+    public int day { get; private set; }
+    public long realDays { get; private set; }
+    public int month { get; private set; }
+    public long realMonths { get; private set; }
+    public int year { get; private set; }
 
     public delegate void TickUpdate();
-    public static TickUpdate tickUpdate;
+    public TickUpdate tickUpdate;
+
+    private void Awake()
+    {
+        init = this;
+    }
 
     public void Initialize()
     {
@@ -57,8 +69,9 @@ public class Tick : MonoBehaviour
                 realSeconds++;
 
                 if (Tick.tickUpdate != null)
+                if (Tick.init.tickUpdate != null)
                 {
-                    Tick.tickUpdate();
+                    Tick.init.tickUpdate();
                 }
 
                 seconds++;

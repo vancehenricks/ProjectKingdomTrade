@@ -16,7 +16,7 @@ public class MoveUnit : PlayerCommand
     protected override void Start()
     {
         base.Start();
-        DragHandler.overrideOnBeginDrag += OverrideOnBeginDrag;
+        DragHandler.init.overrideOnBeginDrag += OverrideOnBeginDrag;
     }
 
     protected override void Command()
@@ -25,14 +25,14 @@ public class MoveUnit : PlayerCommand
 
         if (unitInfos.Count == 0) return;
 
-        if (Input.GetButtonDown("Fire1") && MultiSelect.shiftPressed)
+        if (Input.GetButtonDown("Fire1") && MultiSelect.init.shiftPressed)
         {
             openRightClick.openLeftClick.Ignore();
             Debug.Log("Creating multiple waypoint...");
             AssignsToList(tileInfoRaycaster.GetTileInfoFromPos(Input.mousePosition), waypointsList);
         }
 
-        if (Input.GetButtonDown("Fire1") && !MultiSelect.shiftPressed)
+        if (Input.GetButtonDown("Fire1") && !MultiSelect.init.shiftPressed)
         {
             openRightClick.openLeftClick.Ignore();
             Debug.Log("Creating one waypoint... unitInfos.Count=" + unitInfos.Count);
@@ -55,7 +55,7 @@ public class MoveUnit : PlayerCommand
 
     public override void DoAction()
     {
-        CursorReplace.currentCursor = CursorType.Move;
+        CursorReplace.init.currentCursor = CursorType.Move;
 
         base.DoAction();
 

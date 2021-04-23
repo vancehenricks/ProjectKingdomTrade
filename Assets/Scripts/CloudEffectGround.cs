@@ -29,7 +29,7 @@ public class CloudEffectGround : MonoBehaviour
             }
 
             tileInfo = tileEffect.tileInfo;
-            tileInfo.localTemp = Temperature.temperature;
+            tileInfo.localTemp = Temperature.init.temperature;
             tileEffect.UpdateTileEffect();
         }
 

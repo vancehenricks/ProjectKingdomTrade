@@ -101,7 +101,7 @@ public class Destroy : ConsoleCommand
 
     private void ExecuteCommand()
     {
-        TileInfo tile = TileList.tileInfos[tileId];
+        TileInfo tile = TileList.init.tileInfos[tileId];
 
         if (type == "Unit")
         {
@@ -120,7 +120,7 @@ public class Destroy : ConsoleCommand
     {
         if (command == "destroy")
         {
-            Dictionary<string, string> subCommands = ConsoleParser.ArgumentsToSubCommands(arguments);
+            Dictionary<string, string> subCommands = ConsoleParser.init.ArgumentsToSubCommands(arguments);
 
             tileId = 0;
             type = "Unit";

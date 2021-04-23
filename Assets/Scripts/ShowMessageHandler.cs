@@ -11,7 +11,13 @@ using UnityEngine.UI;
 
 public class ShowMessageHandler : MonoBehaviour
 {
-    public static ShowMessageHandler init;
+    private static ShowMessageHandler _init;
+
+    public static ShowMessageHandler init
+    {
+        get { return _init; }
+        private set { _init = value; }
+    }
 
     public ShowMessage confirmWindow;
     public ShowMessage infoWindow;

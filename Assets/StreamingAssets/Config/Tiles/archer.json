@@ -12,6 +12,9 @@
  "spawnHeightMin":0.0,
  "spawnHeightMax":0.0,
  "spawnChance":0.0,
+ "spawnableTile":
+ [
+ ],
  "units":10,
  "travelSpeed":0.5,
  "attackDistance":2,
@@ -29,8 +32,8 @@
  [
   {
    "tile":"Sea",
-   "temperature":0.0
+   "minTemperature":0.0,
+   "maxTemperature":0.0
   }
- ],
- "isTownAllowed":false
+ ]
 }

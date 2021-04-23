@@ -35,7 +35,7 @@ public class ConsoleLoadTextures : ConsoleCommand
     {
         if (command == "load-textures")
         {
-            Dictionary<string, string> subCommands = ConsoleParser.ArgumentsToSubCommands(arguments);
+            Dictionary<string, string> subCommands = ConsoleParser.init.ArgumentsToSubCommands(arguments);
 
             foreach (string subCommand in subCommands.Keys)
             {

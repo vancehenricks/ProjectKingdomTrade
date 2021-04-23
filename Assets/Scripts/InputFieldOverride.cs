@@ -14,19 +14,19 @@ public class InputFieldOverride : InputField
 {
     public override void OnPointerDown(PointerEventData eventData)
     {
-        InputOverride.currentFocus = gameObject;
+        InputOverride.init.currentFocus = gameObject;
         base.OnPointerDown(eventData);
     }
 
     public new void ActivateInputField()
     {
-        InputOverride.currentFocus = gameObject;
+        InputOverride.init.currentFocus = gameObject;
         base.ActivateInputField();
     }
 
     public new void DeactivateInputField()
     {
-        InputOverride.currentFocus = null;
+        InputOverride.init.currentFocus = null;
         base.DeactivateInputField();
     }
 }

@@ -24,17 +24,17 @@ public class TimeWindowAction : MonoBehaviour
     private void Update()
     {
 
-        if (InputOverride.GetKeyUp(pauseKey))
+        if (InputOverride.init.GetKeyUp(pauseKey))
         {
             PauseAction();
         }
 
-        if (InputOverride.GetKeyUp(forwardKey))
+        if (InputOverride.init.GetKeyUp(forwardKey))
         {
             ForwardAction();
         }
 
-        if (InputOverride.GetKeyUp(backwardKey))
+        if (InputOverride.init.GetKeyUp(backwardKey))
         {
             BackwardAction();
         }
@@ -46,20 +46,20 @@ public class TimeWindowAction : MonoBehaviour
         if (isPaused)
         {
             isPaused = false;
-            Tick.speed = savedSpeed;
+            Tick.init.speed = savedSpeed;
 
         }
         else
         {
 
-            if (Tick.speed <= minSpeed)
+            if (Tick.init.speed <= minSpeed)
             {
-                Tick.speed = 1;
+                Tick.init.speed = 1;
             }
             else
             {
-                savedSpeed = Tick.speed;
-                Tick.speed = minSpeed;
+                savedSpeed = Tick.init.speed;
+                Tick.init.speed = minSpeed;
                 isPaused = true;
             }
         }
@@ -68,9 +68,9 @@ public class TimeWindowAction : MonoBehaviour
     public void ForwardAction()
     {
 
-        if (Tick.speed + speed <= maxSpeed)
+        if (Tick.init.speed + speed <= maxSpeed)
         {
-            Tick.speed += speed;
+            Tick.init.speed += speed;
             isPaused = false;
         }
     }
@@ -78,9 +78,9 @@ public class TimeWindowAction : MonoBehaviour
     public void BackwardAction()
     {
 
-        if (Tick.speed - speed >= minSpeed)
+        if (Tick.init.speed - speed >= minSpeed)
         {
-            Tick.speed -= speed;
+            Tick.init.speed -= speed;
             isPaused = false;
         }
     }

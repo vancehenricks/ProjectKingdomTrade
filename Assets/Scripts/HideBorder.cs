@@ -19,10 +19,10 @@ public class HideBorder : MonoBehaviour
     private void Update()
     {
 
-        if (InputOverride.GetKeyUp(key))
+        if (InputOverride.init.GetKeyUp(key))
         {
 
-            foreach (TileInfo tileInfo in TileList.generatedTiles.Values)
+            foreach (TileInfo tileInfo in TileList.init.generatedTiles.Values)
             {
 
                 if (tileInfo.tileCaller.shade != null)

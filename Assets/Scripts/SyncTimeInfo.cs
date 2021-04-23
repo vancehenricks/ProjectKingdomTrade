@@ -21,18 +21,18 @@ public class SyncTimeInfo : MonoBehaviour
     // Update is called once per frame
     private void Awake()
     {
-        Tick.tickUpdate += TickUpdate;
+        Tick.init.tickUpdate += TickUpdate;
     }
 
     private void Update()
     {
-        speed.text = "x" + Tick.speed;
+        speed.text = "x" + Tick.init.speed;
     }
 
     private void TickUpdate()
     {
-        time.text = "" + Tick.seconds;
-        temperature.text = "" + (int)Temperature.temperature;
-        date.text = Tick.day + "/" + Tick.month + "/" + Tick.year;
+        time.text = "" + Tick.init.seconds;
+        temperature.text = "" + (int)Temperature.init.temperature;
+        date.text = Tick.init.day + "/" + Tick.init.month + "/" + Tick.init.year;
     }
 }

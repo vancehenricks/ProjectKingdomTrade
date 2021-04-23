@@ -12,9 +12,16 @@ using UnityEngine.EventSystems;
 
 public class NightDay : MonoBehaviour
 {
+    private static NightDay _init;
 
-    public static int sunrise;
-    public static int sunset;
+    public static NightDay init
+    {
+        get { return _init; }
+        private set { _init = value; }
+    }
+
+    public int sunrise;
+    public int sunset;
 
     public Image image;
     public float maxAlpha;
@@ -27,6 +34,7 @@ public class NightDay : MonoBehaviour
 
     private void Start()
     {
+        init = this;
         sunset = 17;
         sunrise = 5;
         sunriseSaved = sunrise;
@@ -38,7 +46,7 @@ public class NightDay : MonoBehaviour
 
         //Debug.Log("Sunset: " + sunset + " Sunrise: " + sunrise);
 
-        if (ClimateControl.isSpring)
+        if (ClimateControl.init.isSpring)
         {
             sunrise = sunriseSaved;
             sunset = sunsetSaved;
@@ -46,14 +54,14 @@ public class NightDay : MonoBehaviour
             isAutumn = false;
         }
 
-        if (ClimateControl.isSummer && !isSummer)
+        if (ClimateControl.init.isSummer && !isSummer)
         {
             sunrise -= 3;
             sunrise += 2;
             isSummer = true;
         }
 
-        if ((ClimateControl.isAutumn || ClimateControl.isWinter) && !isAutumn)
+        if ((ClimateControl.init.isAutumn || ClimateControl.init.isWinter) && !isAutumn)
         {
             sunrise += 3;
             sunset -= 2;
@@ -74,14 +82,14 @@ public class NightDay : MonoBehaviour
         }
     }
 
-    public static bool isNight()
+    public bool isNight()
     {
 
-        if (Tick.seconds >= sunset)
+        if (Tick.init.seconds >= sunset)
         {
             return true;
         }
-        else if (Tick.seconds >= sunrise)
+        else if (Tick.init.seconds >= sunrise)
         {
             return false;
         }

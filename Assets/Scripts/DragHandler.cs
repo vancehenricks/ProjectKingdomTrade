@@ -14,22 +14,33 @@ using UnityEngine.EventSystems;
 
 public class DragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
+    private static DragHandler _init;
+
+    public static DragHandler init
+    {
+        get { return _init; }
+        private set { _init = value; }
+    }
+
     public delegate void OverrideOnBeginDrag(PointerEventData eventData);
     public delegate void OverrideOnDrag(PointerEventData eventData);
     public delegate void OverrideOnEndDrag(PointerEventData eventData);
 
-    public static OverrideOnBeginDrag overrideOnBeginDrag;
-    public static OverrideOnDrag overrideOnDrag;
-    public static OverrideOnEndDrag overrideOnEndDrag;
+    public OverrideOnBeginDrag overrideOnBeginDrag;
+    public OverrideOnDrag overrideOnDrag;
+    public OverrideOnEndDrag overrideOnEndDrag;
 
     private bool onBeginDrag, onDrag, onEndDrag;
     private PointerEventData pOnBeginDrag, pOnDrag, pOnEndDrag;
 
+    private void Awake()
+    {
+        init = this;
+    }
 
     private void Start()
     {
-        ExecuteCommands command = Command;
-        CommandPipeline.Add(command, 999);
+        CommandPipeline.init.Add(Command, 999);
     }
 
     private void OnDestroy()

@@ -43,7 +43,7 @@ public class WindowData
 
 public class TransitionHandler : MonoBehaviour
 {
-    public static TransitionHandler _init;
+    private static TransitionHandler _init;
     private static bool onFirstLoad = true;
 
     public static TransitionHandler init
@@ -52,7 +52,7 @@ public class TransitionHandler : MonoBehaviour
         private set { _init = value; }
     }
 
-    public static WindowData mainMenuData;
+    public static WindowData mainMenuData; //setting this static will retain during transitions
     public static WindowData consoleData;
     public static WindowData devInfoData;
 

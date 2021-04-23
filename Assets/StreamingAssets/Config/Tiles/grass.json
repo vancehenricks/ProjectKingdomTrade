@@ -9,9 +9,12 @@
  "autumnTemp":20.0,
  "summerTemp":30.0,
  "travelTime":2.0,
- "spawnHeightMin":0.10000000149011612,
- "spawnHeightMax":1.0,
+ "spawnHeightMin":-2.0,
+ "spawnHeightMax":-2.0,
  "spawnChance":0.5,
+ "spawnableTile":
+ [
+ ],
  "units":0,
  "travelSpeed":0.0,
  "attackDistance":0,
@@ -23,6 +26,5 @@
  "deathChance":0.0,
  "nonWalkable":
  [
- ],
- "isTownAllowed":true
+ ]
 }

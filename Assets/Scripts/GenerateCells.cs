@@ -41,7 +41,7 @@ public class GenerateCells : MonoBehaviour
 
     public void Display()
     {
-        Display(TileInfoRaycaster.tileInfos);
+        Display(TileInfoRaycaster.init.tileInfos);
     }
 
     public void Display(List<TileInfo> _tiles)
@@ -97,7 +97,7 @@ public class GenerateCells : MonoBehaviour
 
     public void SelectAll(TileInfo tile)
     {
-        MultiSelect.Add(tile);
+        MultiSelect.init.Add(tile);
         foreach (GameObject cell in cells)
         {
             CellInfo cellInfo = cell.GetComponent<CellInfo>();
@@ -107,7 +107,7 @@ public class GenerateCells : MonoBehaviour
                 && cellInfo.tileInfo.tileId != tile.tileId)
             {
                 cellInfo.select.gameObject.SetActive(true);
-                MultiSelect.Add(cellInfo.tileInfo);
+                MultiSelect.init.Add(cellInfo.tileInfo);
             }
         }
     }

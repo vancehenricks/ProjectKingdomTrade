@@ -11,7 +11,14 @@ using UnityEngine.UI;
 
 public class TextHandler : MonoBehaviour
 {
-    public static TextHandler init;
+    private static TextHandler _init;
+
+    public static TextHandler init
+    {
+        get { return _init; }
+        private set { _init = value; }
+    }
+
     public List<Text> texts;
     public Font font;
 

@@ -34,10 +34,8 @@ public class OpenRightClick : MonoBehaviour
     private void Start()
     {
         generateCells.Initialize();
-        ExecuteCommands execute = Command;
-        ExecuteCommands pre = PreCommand;
-        CommandPipeline.Add(execute, 1000);
-        CommandPipeline.Add(pre, 50);
+        CommandPipeline.init.Add(Command, 1000);
+        CommandPipeline.init.Add(PreCommand, 50);
     }
 
     private void PreCommand()
@@ -64,7 +62,7 @@ public class OpenRightClick : MonoBehaviour
 
             if (UseDefaultCursor)
             {
-                CursorReplace.currentCursor = CursorType.Default;
+                CursorReplace.init.currentCursor = CursorType.Default;
             }
 
             //Debug.Log("Fire2");
@@ -85,13 +83,13 @@ public class OpenRightClick : MonoBehaviour
             }
 
             openLeftClick.Ignore();
-            if (TileInfoRaycaster.tileInfos.Count == 1)
+            if (TileInfoRaycaster.init.tileInfos.Count == 1)
             {
                 optionGenerator.Initialize();
                 optionGenerator.transform.position = Input.mousePosition + offset;
-                optionGenerator.Display(TileInfoRaycaster.tileInfos[0]);
-                MultiSelect.Clear(true);
-                MultiSelect.Add(TileInfoRaycaster.tileInfos[0], true);
+                optionGenerator.Display(TileInfoRaycaster.init.tileInfos[0]);
+                MultiSelect.init.Clear(true);
+                MultiSelect.init.Add(TileInfoRaycaster.init.tileInfos[0], true);
                 return;
             }
 

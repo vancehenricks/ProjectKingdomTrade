@@ -10,17 +10,29 @@ using UnityEngine;
 
 public class MultiSelect : MonoBehaviour
 {
+    private static MultiSelect _init;
+
+    public static MultiSelect init
+    {
+        get { return _init; }
+        private set { _init = value; }
+    }
+
     public delegate void OnSelectedChange(List<TileInfo> tiles);
-    public static OnSelectedChange onSelectedChange;
-    public static List<TileInfo> selectedTiles;
-    public static bool shiftPressed;
+    public OnSelectedChange onSelectedChange;
+    public List<TileInfo> selectedTiles;
+    public bool shiftPressed;
+
+    private void Awake()
+    {
+        init = this;
+    }
 
     private void Start()
     {
         shiftPressed = false;
         selectedTiles = new List<TileInfo>();
-        ExecuteCommands command = Command;
-        CommandPipeline.Add(command, 200);
+        CommandPipeline.init.Add(Command, 200);
     }
 
 	private void OnDestroy()
@@ -30,43 +42,43 @@ public class MultiSelect : MonoBehaviour
 
     private void Command()
     {
-        if (InputOverride.GetKeyDown(KeyCode.LeftShift) ||
-            InputOverride.GetKeyDown(KeyCode.RightShift))
+        if (InputOverride.init.GetKeyDown(KeyCode.LeftShift) ||
+            InputOverride.init.GetKeyDown(KeyCode.RightShift))
         {
             shiftPressed = true;
         }
 
-        if (InputOverride.GetKeyUp(KeyCode.LeftShift) ||
-            InputOverride.GetKeyUp(KeyCode.RightShift))
+        if (InputOverride.init.GetKeyUp(KeyCode.LeftShift) ||
+            InputOverride.init.GetKeyUp(KeyCode.RightShift))
         {
             shiftPressed = false;
         }
     }
 
-    public static void Add(TileInfo tileInfo, bool relay = false)
+    public void Add(TileInfo tileInfo, bool relay = false)
     {
-        MultiSelect.selectedTiles.Add(tileInfo);
+        selectedTiles.Add(tileInfo);
         if (!relay) return;
         Relay();
     }
 
-    public static void AddRange(List<TileInfo> tileInfos, bool relay = false)
+    public void AddRange(List<TileInfo> tileInfos, bool relay = false)
     {
-        MultiSelect.selectedTiles.AddRange(tileInfos);
+        selectedTiles.AddRange(tileInfos);
         if (!relay) return;
         Relay();
     }
 
-    public static void Clear(bool relay = false)
+    public void Clear(bool relay = false)
     {
-        MultiSelect.selectedTiles.Clear();
+        selectedTiles.Clear();
         if (!relay) return;
         Relay();
     }
 
-    public static void Relay()
+    public void Relay()
     {
         if (onSelectedChange == null) return;
-        onSelectedChange(MultiSelect.selectedTiles);
+        onSelectedChange(selectedTiles);
     }
 }

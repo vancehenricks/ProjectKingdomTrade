@@ -12,15 +12,23 @@ using UnityEngine.EventSystems;
 
 public class SyncSize : MonoBehaviour
 {
+    private static SyncSize _init;
+
+    public static SyncSize init
+    {
+        get { return _init; }
+        private set { _init = value; }
+    }
 
     public RectTransform basedRect;
     public List<RectTransform> rectList;
 
     public delegate void DelegateDoSync();
-    public static DelegateDoSync doSync;
+    public DelegateDoSync doSync;
 
     private void Awake()
     {
+        init = this;
         doSync += DoSync;
     }
 

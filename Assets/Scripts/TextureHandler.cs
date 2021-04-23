@@ -11,7 +11,14 @@ using UnityEngine;
 
 public class TextureHandler : MonoBehaviour
 {
-    public static TextureHandler init;
+    private static TextureHandler _init;
+
+    public static TextureHandler init
+    {
+        get { return _init; }
+        private set { _init = value; }
+    }
+
     public List<Texture2D> _textures;
     public Dictionary<string, Texture2D> textures;
 

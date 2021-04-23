@@ -25,26 +25,26 @@ public class TileInfo : MonoBehaviour
     public float spawnHeightMin;
     public float spawnHeightMax;
     public float spawnChance;
+    public List<string> spawnableTile;
     public List<UnitInfo> unitInfos;
     public int units;
     public bool selected;
     public List<string> options;
-    public bool isTownAllowed;
 
     public virtual void Initialize()
     {
         claimants = new HashSet<PlayerInfo>();
-        localTemp = Temperature.temperature;
+        localTemp = Temperature.init.temperature;
         unitInfos = new List<UnitInfo>();
         tileId = Tools.UniqueId;
-        TileList.Add(this);
+        TileList.init.Add(this);
     }
 
     public void OnDestroy()
     {
         if (unitInfos != null) unitInfos.Clear();
         if (claimants != null) claimants.Clear();
-        TileList.Remove(this);
+        TileList.init.Remove(this);
     }
 
     public void Destroy()

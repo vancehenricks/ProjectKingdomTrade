@@ -40,24 +40,24 @@ public class TileEffect : MonoBehaviour
 
         if (tileInfo.tileType == "Edge") return;
 
-        //daysResult = Tick.realDays-startedDay;
-        if (tileInfo.localTemp <= summerTemp && ClimateControl.isSpring)
+        //daysResult = Tick.init.realDays-startedDay;
+        if (tileInfo.localTemp <= summerTemp && ClimateControl.init.isSpring)
         {
             image.sprite = springTile;
             //image.sprite = Temperature.temperature;
         }
 
-        if (tileInfo.localTemp >= summerTemp && ClimateControl.isSummer)
+        if (tileInfo.localTemp >= summerTemp && ClimateControl.init.isSummer)
         {
             image.sprite = summerTile;
         }
 
-        if (tileInfo.localTemp <= autumnTemp && ClimateControl.isAutumn)
+        if (tileInfo.localTemp <= autumnTemp && ClimateControl.init.isAutumn)
         {
             image.sprite = autumnTile;
         }
 
-        if (tileInfo.localTemp <= freezingTemp && ClimateControl.isWinter)
+        if (tileInfo.localTemp <= freezingTemp && ClimateControl.init.isWinter)
         {
             image.sprite = freezingTile;
         }

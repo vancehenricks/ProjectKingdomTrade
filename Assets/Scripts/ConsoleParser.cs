@@ -10,22 +10,30 @@ using UnityEngine;
 
 public class ConsoleParser : MonoBehaviour
 {
+    private static ConsoleParser _init;
+
+    public static ConsoleParser init
+    {
+        get { return _init; }
+        private set { _init = value; }
+    }
+
+    private void Awake()
+    {
+        init = this;
+    }
+
     public delegate void OnParsedConsoleEvent(string command, string[] arguments);
-    public static OnParsedConsoleEvent onParsedConsoleEvent;
+    public OnParsedConsoleEvent onParsedConsoleEvent;
 
     private void Start()
     {
-        ConsoleHandler.onConsoleEvent += OnConsoleEvent;
-    }
-
-    private void OnDestroy()
-    {
-        onParsedConsoleEvent = null;
+        ConsoleHandler.init.onConsoleEvent += OnConsoleEvent;
     }
 
     //spawn_unit type:archer amount:1000 loc:mousePosition
 
-    public static void OnConsoleEvent(string rawCommands)
+    public void OnConsoleEvent(string rawCommands)
     {
         string[] commandArray = rawCommands.Split(' ');
         string command = commandArray[0];
@@ -35,7 +43,7 @@ public class ConsoleParser : MonoBehaviour
         onParsedConsoleEvent(command, arguments);
     }
 
-    public static Dictionary<string, string> ArgumentsToSubCommands(string[] arguments)
+    public Dictionary<string, string> ArgumentsToSubCommands(string[] arguments)
     {
         Dictionary<string, string> subCommands = new Dictionary<string, string>();
 

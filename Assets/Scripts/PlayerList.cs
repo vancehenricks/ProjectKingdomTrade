@@ -10,14 +10,24 @@ using UnityEngine;
 
 public class PlayerList : MonoBehaviour
 {
-    public static PlayerList init;
+    private static PlayerList _init;
+
+    public static PlayerList init
+    {
+        get { return _init; }
+        private set { _init = value; }
+    }
 
     public PlayerInfo playerInfo;
     public Dictionary<long, PlayerInfo> players;
 
-    private void Start()
+    private void Awake()
     {
         init = this;
+    }
+
+    private void Start()
+    {
         players = new Dictionary<long, PlayerInfo>();
     }
 

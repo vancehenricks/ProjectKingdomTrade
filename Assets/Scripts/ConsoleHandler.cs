@@ -25,7 +25,7 @@ public class ConsoleHandler : MonoBehaviour
     //public static Initialize initialize;
 
     public delegate void OnConsoleEvent(string command);
-    public static OnConsoleEvent onConsoleEvent;
+    public OnConsoleEvent onConsoleEvent;
 
     public GameObject window;
     public Text console;
@@ -38,6 +38,7 @@ public class ConsoleHandler : MonoBehaviour
 
     public string previousCommand;
 
+    //+this will remain on scene change
     private static int index;
     private static Dictionary<string, Dictionary<string, string>> commandList;
     private static string cacheInput;
@@ -45,6 +46,7 @@ public class ConsoleHandler : MonoBehaviour
     private static List<string> cacheCommands;
     private static int numberOfLines;
     private static int remainOnIndex;
+    //-
 
     private void Awake()
     {
@@ -215,7 +217,7 @@ public class ConsoleHandler : MonoBehaviour
 
     private bool OverrideGetKeyUp(KeyCode key)
     {
-        if (InputOverride.GetKeyUp(key, command.gameObject, true))
+        if (InputOverride.init.GetKeyUp(key, command.gameObject, true))
         {
             return true;
         }
@@ -225,7 +227,7 @@ public class ConsoleHandler : MonoBehaviour
 
     private bool OverrideGetKeyDown(KeyCode key)
     {
-        if (InputOverride.GetKeyDown(key, command.gameObject, true))
+        if (InputOverride.init.GetKeyDown(key, command.gameObject, true))
         {
             return true;
         }

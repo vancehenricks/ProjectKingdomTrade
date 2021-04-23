@@ -29,7 +29,7 @@ public class CombatHandler : MonoBehaviour
     private void Start()
     {
         defaultCombatSession = combatSession;
-        Tick.tickUpdate += TickUpdate;
+        Tick.init.tickUpdate += TickUpdate;
         firstTarget = unitInfo;
     }
 
@@ -39,7 +39,7 @@ public class CombatHandler : MonoBehaviour
 
         //DisEngage(targetUnit);
         DisEngage();
-        Tick.tickUpdate -= TickUpdate;
+        Tick.init.tickUpdate -= TickUpdate;
         targetCountChange = null;
         firstTargetChange = null;
     }

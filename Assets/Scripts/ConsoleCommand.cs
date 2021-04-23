@@ -12,14 +12,14 @@ public abstract class ConsoleCommand : MonoBehaviour
 {
     private void Start()
     {
-        ConsoleParser.onParsedConsoleEvent += OnParsedConsoleEvent;
+        ConsoleParser.init.onParsedConsoleEvent += OnParsedConsoleEvent;
         Initialize();
     }
 
     private void OnDestroy()
     {
         //if console object is not active at all it will not call OnDestroy on those thus not clearing the delegates
-        ConsoleParser.onParsedConsoleEvent -= OnParsedConsoleEvent;
+        ConsoleParser.init.onParsedConsoleEvent -= OnParsedConsoleEvent;
     }
 
     public abstract void Initialize();

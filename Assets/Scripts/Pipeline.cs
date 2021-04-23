@@ -12,10 +12,18 @@ public delegate void ExecuteCommands();
 
 public class Pipeline : MonoBehaviour
 {
-    public static SortedList<float, ExecuteCommands> commandList;
-
-    protected void Awake()
+    private static Pipeline _init;
+    public static Pipeline init
     {
+        get { return _init; }
+        private set { _init = value; }
+    }
+
+    public SortedList<float, ExecuteCommands> commandList;
+
+    protected virtual void Awake()
+    {
+        init = this;
         commandList = new SortedList<float, ExecuteCommands>();
     }
 
@@ -34,8 +42,13 @@ public class Pipeline : MonoBehaviour
         }
     }
 
-    public static void Add(ExecuteCommands command, float priority)
+    public void Add(ExecuteCommands command, float priority)
     {
+        if (commandList == null)
+        {
+            commandList = new SortedList<float, ExecuteCommands>();
+        }
+
         while (true)
         {
             if (commandList.ContainsKey(priority))

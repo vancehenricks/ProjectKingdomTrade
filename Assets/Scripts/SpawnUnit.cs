@@ -69,14 +69,14 @@ public class SpawnUnit : ConsoleCommand
 
     private void ExecuteCommand()
     {
-        Spawn(TileList.generatedTiles[tileLocation].transform.position);
+        Spawn(TileList.init.generatedTiles[tileLocation].transform.position);
     }
 
     public override void OnParsedConsoleEvent(string command, string[] arguments)
     {
         if (command == "spawn-unit")
         {
-            Dictionary<string, string> subCommands = ConsoleParser.ArgumentsToSubCommands(arguments);
+            Dictionary<string, string> subCommands = ConsoleParser.init.ArgumentsToSubCommands(arguments);
             SetDefaults();
 
             foreach (string subCommand in subCommands.Keys)

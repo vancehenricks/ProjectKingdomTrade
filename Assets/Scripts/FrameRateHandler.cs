@@ -10,7 +10,13 @@ using UnityEngine;
 
 public class FrameRateHandler : MonoBehaviour
 {
-    public static FrameRateHandler init;
+    private static FrameRateHandler _init;
+
+    public static FrameRateHandler init
+    {
+        get { return _init; }
+        private set { _init = value; }
+    }
 
     public bool _vSync;
     public int _maxFps;

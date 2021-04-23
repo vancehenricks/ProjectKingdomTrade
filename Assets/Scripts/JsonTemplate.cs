@@ -24,7 +24,8 @@ public class JsonTemplate : MonoBehaviour
 
         TileConfig tileConfig = new TileConfig();
         tileConfig.options = options.ToArray();
-        tileConfig.nonWalkable = new Walkable[] { new Walkable("Sea", 0f) };
+        tileConfig.spawnableTile = new string[] { "Land" };
+        tileConfig.nonWalkable = new Walkable[] { new Walkable("Sea", 0f, 0f) };
         
         Tools.WriteTileConfig(tileConfig, "template.json");
     }

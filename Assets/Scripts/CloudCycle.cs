@@ -31,14 +31,9 @@ public class CloudCycle : MonoBehaviour
     private bool hasStarted;
     private bool hide;
 
-
-    private void Awake()
-    {
-        Tick.tickUpdate += TickUpdate;
-    }
-
     private void Start()
     {
+        Tick.init.tickUpdate += TickUpdate;
         clouds = new List<GameObject>();
         obsoluteMaxSpawn = maxSpawn;
         hide = true;
@@ -46,7 +41,7 @@ public class CloudCycle : MonoBehaviour
 
     private void Update()
     {
-        if (InputOverride.GetKeyUp(hideClouds))
+        if (InputOverride.init.GetKeyUp(hideClouds))
         {
             hide = !hide;
             foreach (GameObject cloud in clouds)
@@ -93,13 +88,13 @@ public class CloudCycle : MonoBehaviour
     private void GenerateClouds()
     {
 
-        if ((ClimateControl.isAutumn || ClimateControl.isWinter) && !hasSpawnDoubled)
+        if ((ClimateControl.init.isAutumn || ClimateControl.init.isWinter) && !hasSpawnDoubled)
         {
             maxSpawn *= 2;
             hasSpawnDoubled = true;
         }
 
-        if (ClimateControl.isSpring || ClimateControl.isSummer)
+        if (ClimateControl.init.isSpring || ClimateControl.init.isSummer)
         {
             maxSpawn = maxSpawnSaved;
             hasSpawnDoubled = false;

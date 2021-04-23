@@ -16,12 +16,12 @@ public class UnitDirection : MonoBehaviour
 
     private void Start()
     {
-        Tick.tickUpdate += TickUpdate;
+        Tick.init.tickUpdate += TickUpdate;
     }
 
     private void OnDestroy()
     {
-        Tick.tickUpdate -= TickUpdate;
+        Tick.init.tickUpdate -= TickUpdate;
     }
 
     private void TickUpdate()

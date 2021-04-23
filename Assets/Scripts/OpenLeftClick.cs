@@ -25,11 +25,8 @@ public class OpenLeftClick : MonoBehaviour
 
     private void Start()
     {
-        ExecuteCommands command = Command;
-        ExecuteCommands preCommand = PreCommand;
-
-        CommandPipeline.Add(command, 1001);
-        CommandPipeline.Add(preCommand, 49);
+        CommandPipeline.init.Add(Command, 1001);
+        CommandPipeline.init.Add(PreCommand, 49);
     }
 
     private void PreCommand()
@@ -58,24 +55,24 @@ public class OpenLeftClick : MonoBehaviour
                 return;
             }
 
-            int count = TileInfoRaycaster.tileInfos.Count;
+            int count = TileInfoRaycaster.init.tileInfos.Count;
 
             if (count > 1)
             {
-                MultiSelect.Clear(true);
+                MultiSelect.init.Clear(true);
 
-                foreach (TileInfo tile in TileInfoRaycaster.tileInfos)
+                foreach (TileInfo tile in TileInfoRaycaster.init.tileInfos)
                 {
                     if (tile.tileType != "Unit") continue;
-                    MultiSelect.Add(tile);
+                    MultiSelect.init.Add(tile);
                 }
 
-                MultiSelect.Relay();
+                MultiSelect.init.Relay();
             }
             else if (count == 1)
             {
-                MultiSelect.Clear(true);
-                MultiSelect.AddRange(TileInfoRaycaster.tileInfos, true);
+                MultiSelect.init.Clear(true);
+                MultiSelect.init.AddRange(TileInfoRaycaster.init.tileInfos, true);
             }
         }
     }

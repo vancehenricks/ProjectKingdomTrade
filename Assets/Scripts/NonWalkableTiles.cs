@@ -12,12 +12,14 @@ using UnityEngine;
 public struct Walkable
 {
     public string tile;
-    public float temperature;
+    public float minTemperature;
+    public float maxTemperature;
 
-    public Walkable (string _tile, float _temperature)
+    public Walkable (string _tile, float _minTemperature, float _maxTemperature)
     {
         tile = _tile;
-        temperature = _temperature;
+        minTemperature = _minTemperature;
+        maxTemperature = _maxTemperature;
     }
 }
 
@@ -38,7 +40,8 @@ public class NonWalkableTiles : MonoBehaviour
 
         for (int i = 0; i < nonWalkable.Count;i++)
         {
-            if (tile.tileType == nonWalkable[i].tile && tile.localTemp > nonWalkable[i].temperature)
+            if (tile.tileType == nonWalkable[i].tile && tile.localTemp > nonWalkable[i].minTemperature &&
+                tile.localTemp < nonWalkable[i].maxTemperature)
             {
                 isWalkable = false;
             }

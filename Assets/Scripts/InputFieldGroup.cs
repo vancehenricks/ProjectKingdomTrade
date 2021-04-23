@@ -16,7 +16,7 @@ public class InputFieldGroup : MonoBehaviour
 
     public void Update()
     {
-        if (InputOverride.GetKeyUp(key,InputOverride.currentFocus))
+        if (InputOverride.init.GetKeyUp(key,InputOverride.init.currentFocus))
         {
             bool isNextIndex = false;
 

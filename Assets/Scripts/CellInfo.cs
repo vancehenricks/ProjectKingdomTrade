@@ -81,24 +81,24 @@ public class CellInfo : MonoBehaviour
 
     public void OpenOptions()
     {
-        if (MultiSelect.shiftPressed && multiSelect)
+        if (MultiSelect.init.shiftPressed && multiSelect)
         {
-            MultiSelect.Add(tileInfo, true);
+            MultiSelect.init.Add(tileInfo, true);
             isSelectedTwice = false;
         }
         else if (!isSelectedTwice)
         {
             generateCells.ResetSelectedCells();
             generateCells.DisableSelectCells();
-            MultiSelect.Clear(true);
-            MultiSelect.Add(tileInfo, true);
+            MultiSelect.init.Clear(true);
+            MultiSelect.init.Add(tileInfo, true);
             isSelectedTwice = true;
         }
-        else if (!MultiSelect.shiftPressed)
+        else if (!MultiSelect.init.shiftPressed)
         {
-            MultiSelect.Clear(true);
+            MultiSelect.init.Clear(true);
             generateCells.SelectAll(tileInfo);
-            MultiSelect.Relay();
+            MultiSelect.init.Relay();
             isSelectedTwice = false;
         }
 
@@ -108,7 +108,7 @@ public class CellInfo : MonoBehaviour
         {
             optionGenerator.transform.position = corner.position + offset;
             //generate approriate option where it will only show that is common on all selected tiles
-            optionGenerator.Display(tileInfo, GetCommonOptions(MultiSelect.selectedTiles));
+            optionGenerator.Display(tileInfo, GetCommonOptions(MultiSelect.init.selectedTiles));
 
         }
 

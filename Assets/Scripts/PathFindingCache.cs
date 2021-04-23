@@ -10,7 +10,21 @@ using UnityEngine;
 
 public class PathFindingCache : MonoBehaviour
 {
-    private static Dictionary<string, List<TileInfo>> cache;
+    private static PathFindingCache _init;
+
+    public static PathFindingCache init
+    {
+        get { return _init; }
+        private set { _init = value; }
+    }
+
+
+    private Dictionary<string, List<TileInfo>> cache;
+
+    private void Awake()
+    {
+        init = this;
+    }
 
     private void Start()
     {
@@ -22,7 +36,7 @@ public class PathFindingCache : MonoBehaviour
         cache.Clear();
     }
 
-    public static List<TileInfo> RetrieveTileInfos(TileInfo startPoint, TileInfo endPoint)
+    public List<TileInfo> RetrieveTileInfos(TileInfo startPoint, TileInfo endPoint)
     {
         string keyword = startPoint.transform.position + "," + endPoint.transform.position;
 
@@ -37,13 +51,13 @@ public class PathFindingCache : MonoBehaviour
         return null;
     }
 
-    public static bool ContainsKey(TileInfo startPoint , TileInfo endPoint)
+    public bool ContainsKey(TileInfo startPoint , TileInfo endPoint)
     {
         return cache.ContainsKey(startPoint.transform.position + "," + endPoint.transform.position) ||
             cache.ContainsKey(endPoint.transform.position + "," + startPoint.transform.position);
     }
 
-    public static void Add(TileInfo startPoint, TileInfo endPoint, List<TileInfo> generatedPoints)
+    public void Add(TileInfo startPoint, TileInfo endPoint, List<TileInfo> generatedPoints)
     {
         if (cache.ContainsKey(startPoint.transform.position + "," + endPoint.transform.position))
         {

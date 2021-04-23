@@ -15,7 +15,13 @@ public class TileConfigHandler : MonoBehaviour
     public Dictionary<string, TileInfo> baseTiles;
     public Dictionary<string, TileInfo> baseUnits;
     public Dictionary<string, TileInfo> baseTowns;
-    public static TileConfigHandler init;
+    private static TileConfigHandler _init;
+    public static TileConfigHandler init
+    {
+        get { return _init; }
+        private set { _init = value; }
+    }
+
     public TileInfo baseTile;
     public UnitInfo baseTown;
     public UnitInfo baseUnit;
@@ -112,6 +118,7 @@ public class TileConfigHandler : MonoBehaviour
             config.spawnHeightMin = tileInfo.spawnHeightMin;
             config.spawnHeightMax = tileInfo.spawnHeightMax;
             config.spawnChance = tileInfo.spawnChance;
+            config.spawnableTile = tileInfo.spawnableTile.ToArray();
 
             config.sprite = tileInfo.tileEffect.image.sprite.name;
             config.freezingSprite = tileInfo.tileEffect.freezingTile.name;
@@ -121,7 +128,6 @@ public class TileConfigHandler : MonoBehaviour
             config.autumnTemp = tileInfo.tileEffect.autumnTemp;
             config.summerTemp = tileInfo.tileEffect.summerTemp;
             config.options = tileInfo.options.ToArray();
-            config.isTownAllowed = tileInfo.isTownAllowed;
         }
         else if (tileInfo.tileType == "Town")
         {
@@ -129,14 +135,16 @@ public class TileConfigHandler : MonoBehaviour
             config.tileType = unitInfo.tileType;
             config.subType = unitInfo.subType;
             config.units = unitInfo.units;
-            //config.travelSpeed = unitInfo.travelSpeed;
+            //config.travelSpeed = unitInfo.travelSpeed; not needed as Town are static units
             config.attackDistance = unitInfo.attackDistance;
             config.killChance = unitInfo.killChance;
             config.deathChance = unitInfo.deathChance;
             config.options = unitInfo.options.ToArray();
             config.travelTime = unitInfo.travelTime;
-            //config.minChance = unitInfo.minChance;
-            //config.maxChance = unitInfo.maxChance;
+            config.spawnableTile = unitInfo.spawnableTile.ToArray();
+            config.spawnHeightMin = unitInfo.spawnHeightMin;
+            config.spawnHeightMax = unitInfo.spawnHeightMax;
+            config.spawnChance = unitInfo.spawnChance;
 
             config.sprite = unitInfo.tileEffect.image.sprite.name;
             config.freezingSprite = unitInfo.tileEffect.freezingTile.name;
@@ -190,6 +198,11 @@ public class TileConfigHandler : MonoBehaviour
             tileInfo.spawnHeightMax = config.spawnHeightMax;
             tileInfo.spawnChance = config.spawnChance;
 
+            if (config.spawnableTile != null)
+            {
+                tileInfo.spawnableTile = new List<string>(config.spawnableTile);
+            }
+
             if (config.options != null)
             {
                 tileInfo.options = new List<string>(config.options);
@@ -204,7 +217,6 @@ public class TileConfigHandler : MonoBehaviour
             tileInfo.tileEffect.freezingTemp = config.freezingTemp;
             tileInfo.tileEffect.autumnTemp = config.autumnTemp;
             tileInfo.tileEffect.summerTemp = config.summerTemp;
-            tileInfo.isTownAllowed = config.isTownAllowed;
 
             return tileInfo;
         }
@@ -220,8 +232,9 @@ public class TileConfigHandler : MonoBehaviour
             unitInfo.killChance = config.killChance;
             unitInfo.deathChance = config.deathChance;
             unitInfo.travelTime = config.travelTime;
-            //unitInfo.minChance = config.minChance;
-            //unitInfo.maxChance = config.maxChance;
+            unitInfo.spawnHeightMin = config.spawnHeightMin;
+            unitInfo.spawnHeightMax = config.spawnHeightMax;
+            unitInfo.spawnChance = config.spawnChance;
 
             Sprite sprite = TextureHandler.init.GetSprite(config.sprite);
             //unitInfo.sprite = sprite;
@@ -234,6 +247,11 @@ public class TileConfigHandler : MonoBehaviour
             unitInfo.tileEffect.autumnTemp = config.autumnTemp;
             unitInfo.tileEffect.summerTemp = config.summerTemp;
 
+            if (config.spawnableTile != null)
+            {
+                unitInfo.spawnableTile = new List<string>(config.spawnableTile);
+            }
+
             if (config.options != null)
             {
                 unitInfo.options = new List<string>(config.options);
@@ -243,7 +261,6 @@ public class TileConfigHandler : MonoBehaviour
             {
                 unitInfo.nonWalkable = new List<Walkable>(config.nonWalkable);
             }
-
 
             return unitInfo;
         }

@@ -16,7 +16,7 @@ public class CommandTest : MonoBehaviour
     {
         if (Input.GetKeyDown(keyCode))
         {
-            ConsoleParser.OnConsoleEvent("spawn-unit amount:3");
+            ConsoleParser.init.OnConsoleEvent("spawn-unit amount:3");
         }
     }
 }

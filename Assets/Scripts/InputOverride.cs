@@ -11,9 +11,21 @@ using UnityEngine;
 
 public class InputOverride : MonoBehaviour
 {
-    private static GameObject _currentFocus;
+    private static InputOverride _init;
+    public static InputOverride init
+    {
+        get { return _init; }
+        private set { _init = value; }
+    }
 
-    public static GameObject currentFocus
+    private void Awake()
+    {
+        init = this;
+    }
+
+    private GameObject _currentFocus;
+
+    public GameObject currentFocus
     {
         get
         {
@@ -43,7 +55,7 @@ public class InputOverride : MonoBehaviour
     }
 
 
-    public static bool GetKey(KeyCode key, GameObject focus = null, bool doNothingIfNull = false)
+    public bool GetKey(KeyCode key, GameObject focus = null, bool doNothingIfNull = false)
     {
         //Debug.Log(currentFocus.GetInstanceID());
 
@@ -55,7 +67,7 @@ public class InputOverride : MonoBehaviour
         return false;
     }
 
-    public static bool GetKeyUp(KeyCode key, GameObject focus = null, bool doNothingIfNull = false)
+    public bool GetKeyUp(KeyCode key, GameObject focus = null, bool doNothingIfNull = false)
     {
 
         if (CheckFocus(focus, doNothingIfNull))
@@ -66,7 +78,7 @@ public class InputOverride : MonoBehaviour
         return false;
     }
 
-    public static bool GetKeyDown(KeyCode key, GameObject focus = null, bool doNothingIfNull = false)
+    public bool GetKeyDown(KeyCode key, GameObject focus = null, bool doNothingIfNull = false)
     {
         if (CheckFocus(focus, doNothingIfNull))
         {
@@ -76,7 +88,7 @@ public class InputOverride : MonoBehaviour
         return false;
     }
 
-    public static float GetAxis(string axis, GameObject focus = null, bool doNothingIfNull = false)
+    public float GetAxis(string axis, GameObject focus = null, bool doNothingIfNull = false)
     {
         if (CheckFocus(focus, doNothingIfNull))
         {
@@ -86,7 +98,7 @@ public class InputOverride : MonoBehaviour
         return 0f;
     }
 
-    private static bool CheckFocus(GameObject focus, bool doNothingIfNull)
+    private bool CheckFocus(GameObject focus, bool doNothingIfNull)
     {
         if ((!doNothingIfNull && currentFocus == null) ||
             currentFocus != null && focus != null && currentFocus.GetInstanceID() == focus.GetInstanceID())

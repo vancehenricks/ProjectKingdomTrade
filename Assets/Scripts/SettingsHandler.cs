@@ -11,7 +11,12 @@ using UnityEngine;
 
 public class SettingsHandler : MonoBehaviour
 {
-    public static SettingsHandler init;
+    private static SettingsHandler _init;
+    public static SettingsHandler init
+    {
+        get { return _init; }
+        private set { _init = value; }
+    }
 
     private void Awake()
     {

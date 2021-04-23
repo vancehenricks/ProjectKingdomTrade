@@ -127,7 +127,7 @@ public class NewGameAction : MonoBehaviour
         LoadingHandler.init.SetActive(true);
         yield return new WaitForSeconds(0.5f);
         grid.sizeDelta = new Vector2(w, h);
-        SyncSize.doSync();
+        SyncSize.init.doSync();
         resetCenter.DoAction();
         LoadingHandler.init.Set(0.3f, "[GENERATING-TILES]");
         yield return new WaitForSeconds(0.5f);
@@ -141,10 +141,10 @@ public class NewGameAction : MonoBehaviour
 
         float speed = ((w / 10) / 10);
 
-        Tick.speed = (int)speed + 30;
+        Tick.init.speed = (int)speed + 30;
         LoadingHandler.init.Set(0.8f, "[GENERATING-CLOUDS]");
         yield return new WaitForSeconds((speed/10)+3f);
-        Tick.speed = 1;
+        Tick.init.speed = 1;
         tick.Initialize();
         LoadingHandler.init.Set(1f, "[SETTING-UP-TIME]");
         yield return new WaitForSeconds(1.5f);

@@ -30,7 +30,7 @@ public class DebugInfo : MonoBehaviour
 
     private void Awake()
     {
-        MultiSelect.onSelectedChange += OnSelectedChange;
+        MultiSelect.init.onSelectedChange += OnSelectedChange;
     }
 
     public void OnSelectedChange(List<TileInfo> tiles)

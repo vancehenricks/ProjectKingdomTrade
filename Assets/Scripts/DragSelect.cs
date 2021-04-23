@@ -34,9 +34,9 @@ public class DragSelect : MonoBehaviour
         _selectorObjCollider = selectorObj.GetComponent<BoxCollider2D>();
         tileInfoGetterArray = selectorObj.GetComponent<TileInfoGetterArray>();
 
-        DragHandler.overrideOnBeginDrag += OverrideOnBeginDrag;
-        DragHandler.overrideOnDrag += OverrideOnDrag;
-        DragHandler.overrideOnEndDrag += OverrideOnEndDrag;
+        DragHandler.init.overrideOnBeginDrag += OverrideOnBeginDrag;
+        DragHandler.init.overrideOnDrag += OverrideOnDrag;
+        DragHandler.init.overrideOnEndDrag += OverrideOnEndDrag;
     }
 
     private void Update()
@@ -49,7 +49,7 @@ public class DragSelect : MonoBehaviour
         if (Input.GetButton("Fire1"))
         {
             selectorObj.SetActive(true);
-            initialMousePos = TranslatePosToWorldPoint.SetPos(Input.mousePosition, out p1);
+            initialMousePos = TranslatePosToWorldPoint.init.SetPos(Input.mousePosition, out p1);
             selectorObj.transform.position = new Vector3(p1.x, p1.y, zLevel);
             tileInfoGetterArray.Clear();
         }
@@ -61,7 +61,7 @@ public class DragSelect : MonoBehaviour
         {
             //tileInfoGetterArray.holdList = false;
 
-            TranslatePosToWorldPoint.SetPos(Input.mousePosition, out p2);
+            TranslatePosToWorldPoint.init.SetPos(Input.mousePosition, out p2);
             //Debug.Log("initialMousePos="+initialMousePos+"CurrentMos="+Input.mousePosition);
 
             if (Input.mousePosition.x > initialMousePos.x && Input.mousePosition.y < initialMousePos.y)
@@ -103,7 +103,7 @@ public class DragSelect : MonoBehaviour
         openRightClick.ResetValues();
         openRightClick.forceDisplay = true;
 
-        TileInfoRaycaster.tileInfos = tileInfoGetterArray.tileInfos;
+        TileInfoRaycaster.init.tileInfos = tileInfoGetterArray.tileInfos;
 
         selectorObj.SetActive(false);
         _selectorObjRect.sizeDelta = Vector2.one;

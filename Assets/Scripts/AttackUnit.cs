@@ -21,15 +21,15 @@ public class AttackUnit : MoveUnit
     protected override void Start()
     {
         base.Start();
-        MultiSelect.onSelectedChange += OnSelectedChangeProxy;
+        MultiSelect.init.onSelectedChange += OnSelectedChangeProxy;
         ExecuteCommands command = OnSelectedChange;
-        CommandPipeline.Add(command, 500);
+        CommandPipeline.init.Add(command, 500);
     }
 
     public override void DoAction()
     {
         base.DoAction();
-        CursorReplace.currentCursor = CursorType.Attack;
+        CursorReplace.init.currentCursor = CursorType.Attack;
     }
 
     private void OnSelectedChange()
@@ -43,7 +43,7 @@ public class AttackUnit : MoveUnit
         {
             openRightClick.openLeftClick.Ignore();
 
-            if (MultiSelect.shiftPressed)
+            if (MultiSelect.init.shiftPressed)
             {
                 //this assumes every data contain in selectedTiles are just duplicate
                 //make sure to check if DoAction calls ClearAllWaypoints or this wont be true anymore
@@ -98,7 +98,7 @@ public class AttackUnit : MoveUnit
             if (tileInfos.Count == 1)
             {
 
-                if (!MultiSelect.shiftPressed)
+                if (!MultiSelect.init.shiftPressed)
                 {
                     ClearAllWaypoints();
                 }

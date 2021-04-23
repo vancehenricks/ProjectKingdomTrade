@@ -23,14 +23,14 @@ public class HideObject : MonoBehaviour
     {
         if (priorityWindow != null)
         {
-            if (InputOverride.GetKeyUp(key) && !priorityWindow.activeSelf)
+            if (InputOverride.init.GetKeyUp(key) && !priorityWindow.activeSelf)
             {
                 DoAction();
             }
         }
         else
         {
-            if (InputOverride.GetKeyUp(key))
+            if (InputOverride.init.GetKeyUp(key))
             {
                 DoAction();
             }

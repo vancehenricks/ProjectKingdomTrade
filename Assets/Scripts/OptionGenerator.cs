@@ -15,7 +15,6 @@ public class OptionGenerator : MonoBehaviour
     public Image image;
     public List<GameObject> options;
     public Dictionary<string, GameObject> optionDictionary;
-    //public static bool blockDisplay;
 
     public void Initialize()
     {
@@ -50,8 +49,8 @@ public class OptionGenerator : MonoBehaviour
 
     private void Show(string name, TileInfo tileInfo)
     {
-        List<TileInfo> raycastTile = TileInfoRaycaster.tileInfos;
-        List<TileInfo> multiSelect = MultiSelect.selectedTiles;
+        List<TileInfo> raycastTile = TileInfoRaycaster.init.tileInfos;
+        List<TileInfo> multiSelect = MultiSelect.init.selectedTiles;
 
         string[] n = name.Split('_');
         name = n[0] + "_" + n[1];

@@ -25,7 +25,7 @@ public class SelectTiles : MonoBehaviour
 
     protected void Start()
     {
-        MultiSelect.onSelectedChange += OnSelectedChange;
+        MultiSelect.init.onSelectedChange += OnSelectedChange;
         Initialize();
     }
 

@@ -25,7 +25,7 @@ public class ResetCenter : MonoBehaviour
     private void Update()
     {
 
-        if (InputOverride.GetKeyUp(key))
+        if (InputOverride.init.GetKeyUp(key))
         {
             DoAction();
         }

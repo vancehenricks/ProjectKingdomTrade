@@ -52,15 +52,15 @@ public class CloudAction : MonoBehaviour
 
     private void Update()
     {
-        if (Tick.speed > 0)
+        if (Tick.init.speed > 0)
         {
 
             pos = obj.transform.position;
             diffXA = obj.transform.position.x - posA.transform.position.x;
             diffXB = obj.transform.position.x - posB.transform.position.x;
 
-            obj.transform.position = new Vector3(pos.x + (Tick.speed * speedModifier) * Time.deltaTime, pos.y, cloudCycle.zLevel);
-            liveTimeCounter = liveTimeCounter + (Tick.speed * Time.deltaTime);
+            obj.transform.position = new Vector3(pos.x + (Tick.init.speed * speedModifier) * Time.deltaTime, pos.y, cloudCycle.zLevel);
+            liveTimeCounter = liveTimeCounter + (Tick.init.speed * Time.deltaTime);
 
             //Debug.Log(diffXA);
             if (diffXA >= -offsetDespawn && diffXA <= offsetDespawn
@@ -79,7 +79,7 @@ public class CloudAction : MonoBehaviour
 
         for (int i = 0; i < durationBeforeDisplay; i++)
         {
-            if (Tick.speed == 0)
+            if (Tick.init.speed == 0)
             {
                 i--;
             }

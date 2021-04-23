@@ -19,6 +19,7 @@ public struct TileConfig
     public float spawnHeightMin;
     public float spawnHeightMax;
     public float spawnChance;
+    public string[] spawnableTile;
     public int units;
     public float travelSpeed;
     public int attackDistance;
@@ -26,5 +27,4 @@ public struct TileConfig
     public float killChance;
     public float deathChance;
     public Walkable[] nonWalkable;
-    public bool isTownAllowed;
 }

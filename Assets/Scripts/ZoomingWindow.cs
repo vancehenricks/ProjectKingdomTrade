@@ -30,32 +30,32 @@ public class ZoomingWindow : MonoBehaviour, IScrollHandler
             speed = (defaultSpeed + (grid.rect.width / divideWidth));
         }
 
-        Vector3 preZoom = TranslatePosToWorldPoint.pos;
+        Vector3 preZoom = TranslatePosToWorldPoint.init.pos;
         scale = cm.transform.position.z;
 
-        if (InputOverride.GetAxis("Mouse ScrollWheel") > 0 && scale <= maxScale)
+        if (InputOverride.init.GetAxis("Mouse ScrollWheel") > 0 && scale <= maxScale)
         {
             scale += speed;
         }
 
-        if (InputOverride.GetAxis("Mouse ScrollWheel") < 0 && scale >= minScale)
+        if (InputOverride.init.GetAxis("Mouse ScrollWheel") < 0 && scale >= minScale)
         {
             scale -= speed;
         }
 
         cm.transform.position = new Vector3(preZoom.x, preZoom.y, preZoom.z+scale);
 
-        Vector3 postZoom = TranslatePosToWorldPoint.pos;
+        Vector3 postZoom = TranslatePosToWorldPoint.init.pos;
         Vector3 diffZoom = preZoom - postZoom;
 
         cm.transform.position = new Vector3(preZoom.x+diffZoom.x, preZoom.y+diffZoom.y, preZoom.z+scale);
 
-        if(CursorReplace.currentCursor != CursorType.Zoom)
+        if(CursorReplace.init.currentCursor != CursorType.Zoom)
         {
-            CursorReplace.SetCurrentCursorAsPrevious();
+            CursorReplace.init.SetCurrentCursorAsPrevious();
         }
 
-        CursorReplace.currentCursor = CursorType.Zoom;
+        CursorReplace.init.currentCursor = CursorType.Zoom;
 
         StopAllCoroutines();
         StartCoroutine(DelayStop());
@@ -64,7 +64,7 @@ public class ZoomingWindow : MonoBehaviour, IScrollHandler
     IEnumerator DelayStop()
     {
         yield return new WaitForSeconds(0.5f);
-        CursorReplace.currentCursor = CursorType.Previous;
+        CursorReplace.init.currentCursor = CursorType.Previous;
     }
 
 }

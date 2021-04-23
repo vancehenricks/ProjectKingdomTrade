@@ -17,9 +17,9 @@ public class SyncSizeToBoxCollider2D : MonoBehaviour
     public bool updateHeight;
     public Vector2 padding;
 
-    private void Awake()
+    private void Start()
     {
-        SyncSize.doSync += DoSync;
+        SyncSize.init.doSync += DoSync;
     }
 
     private void DoSync()

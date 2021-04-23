@@ -14,9 +14,9 @@ public class SyncSizeToScreen : MonoBehaviour
     public RectTransform window;
     public Camera cm;
 
-    private void Awake()
+    private void Start()
     {
-        SyncSize.doSync += DoSync;
+        SyncSize.init.doSync += DoSync;
     }
 
     private void DoSync()

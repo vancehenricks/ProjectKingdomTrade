@@ -12,10 +12,16 @@ using UnityEngine.UI;
 
 public class TileInfoRaycaster : MonoBehaviour
 {
+    private static TileInfoRaycaster _init;
+    public static TileInfoRaycaster init
+    {
+        get { return _init; }
+        private set { _init = value; }
+    }
 
     public Camera cm;
     public int maxHits;
-    public static List<TileInfo> tileInfos;
+    public List<TileInfo> tileInfos;
 
     public GraphicRaycaster graphicsRaycaster;
     public EventSystem eventSystem;
@@ -24,7 +30,7 @@ public class TileInfoRaycaster : MonoBehaviour
 
     private void Awake()
     {
-        tileInfos = new List<TileInfo>();
+        init = this;
     }
 
     public void GetTileInfosFromPos(Vector3 pos)

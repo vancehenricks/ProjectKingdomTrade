@@ -50,7 +50,7 @@ public class PathFindingHandler : MonoBehaviour
         destination = new Destination();
         destination.tile = unitInfo;
         destination.arrivalTime = -1;
-        Tick.tickUpdate += TickUpdate;
+        Tick.init.tickUpdate += TickUpdate;
         unitEffect = unitInfo.unitEffect;
         generatedWayPoints = new List<TileInfo>();
         firstWayPoint = unitInfo;
@@ -58,7 +58,7 @@ public class PathFindingHandler : MonoBehaviour
 
     public void OnDestroy()
     {
-        Tick.tickUpdate -= TickUpdate;
+        Tick.init.tickUpdate -= TickUpdate;
         isWalkable = null;
         wayPointReached = null;
         wayPointCountChange = null;
@@ -74,7 +74,7 @@ public class PathFindingHandler : MonoBehaviour
         }
         else if (destination.arrivalTime <= 0)
         {
-            transform.position = Vector2.Lerp(transform.position, destination.tile.transform.position, (10f * Tick.speed) * Time.deltaTime);
+            transform.position = Vector2.Lerp(transform.position, destination.tile.transform.position, (10f * Tick.init.speed) * Time.deltaTime);
 
             if (Vector2.Distance(transform.position, destination.tile.transform.position) < 0.5f)
             {
@@ -194,7 +194,7 @@ public class PathFindingHandler : MonoBehaviour
         //Debug.Log("136");
         if (currentTileId == "" && gwPointsIndex == 0 && task == null && pointTileInfo.tileLocation != unitInfo.tileLocation)
         {
-            List<TileInfo> tempCache = PathFindingCache.RetrieveTileInfos(standingTile, pointTileInfo);
+            List<TileInfo> tempCache = PathFindingCache.init.RetrieveTileInfos(standingTile, pointTileInfo);
             PathFinder pathFinder = new PathFinder(standingTile, pointTileInfo, tempCache, isWalkable, OnDoneCalculate, AlgorithmicCounter);
             task = new Task(pathFinder.Calculate);
             task.Start();
@@ -208,13 +208,13 @@ public class PathFindingHandler : MonoBehaviour
 
         //Debug.Log("generatedWayPoints.Count=" + generatedWayPoints.Count);
 
-        if (saveCache && generatedWayPoints.Count > 0 && !PathFindingCache.ContainsKey(standingTile, pointTileInfo))
+        if (saveCache && generatedWayPoints.Count > 0 && !PathFindingCache.init.ContainsKey(standingTile, pointTileInfo))
         {
             saveCache = false;
 
             Debug.Log("Adding " + generatedWayPoints.Count);
             List<TileInfo> temp = new List<TileInfo>(generatedWayPoints);
-            PathFindingCache.Add(standingTile, pointTileInfo, temp);
+            PathFindingCache.init.Add(standingTile, pointTileInfo, temp);
         }
 
         if (currentTileId != "") return;

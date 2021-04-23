@@ -14,7 +14,14 @@ using UnityEngine.UI;
 
 public class LanguageHandler : MonoBehaviour
 {
-    public static LanguageHandler init;
+    private static LanguageHandler _init;
+
+    public static LanguageHandler init
+    {
+        get { return _init; }
+        private set { _init = value; }
+    }
+
     public Dictionary<string, string> texts;
     public Dictionary<string, string> language;
     public string _defaultLanguage;
