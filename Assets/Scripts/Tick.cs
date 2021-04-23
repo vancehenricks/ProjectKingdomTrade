@@ -68,7 +68,6 @@ public class Tick : MonoBehaviour
 
                 realSeconds++;
 
-                if (Tick.tickUpdate != null)
                 if (Tick.init.tickUpdate != null)
                 {
                     Tick.init.tickUpdate();
