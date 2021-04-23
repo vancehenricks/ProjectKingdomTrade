@@ -39,6 +39,8 @@ public class OpenLeftClick : MonoBehaviour
 
     private void Command()
     {
+        //Debug.Log("OpenLeftClick");
+
         if (ignore) return;
 
         if (Input.GetButtonDown("Fire1"))

@@ -12,10 +12,10 @@ public class FoilageGenerator : MonoBehaviour
 {
     private void Start()
     {
-        MapGenerator.init.Add(Generate, 20f);
+        MapGenerator.init.Add(Generate, 10f);
     }
     public void Generate()
     {
-        Debug.Log("FoilageGenerator");
+        Debug.Log("Foilage Generator");
     }
 }

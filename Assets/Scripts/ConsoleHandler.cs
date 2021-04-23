@@ -28,10 +28,11 @@ public class ConsoleHandler : MonoBehaviour
     public OnConsoleEvent onConsoleEvent;
 
     public GameObject window;
-    public Text console;
+    public InputFieldOverride baseConsole;
+    public List<InputFieldOverride> consoles;
     public InputFieldOverride command;
     public Scrollbar scrollBar;
-    public RectTransform context;
+    //public RectTransform context;
 
     public int maxNumberOfLines;
     public float textHeight;
@@ -48,7 +49,7 @@ public class ConsoleHandler : MonoBehaviour
     private static int remainOnIndex;
     //-
 
-    private void Awake()
+    public void Awake()
     {
         if (commandList == null)
         {
@@ -168,7 +169,8 @@ public class ConsoleHandler : MonoBehaviour
 
     public void DisplayCommands()
     {
-        AddLine("Commands:");
+        AddLine("");
+        AddLine("COMMANDS:");
         foreach (var cmd in commandList)
         {
             AddLine("\t" + cmd.Key);
@@ -178,18 +180,19 @@ public class ConsoleHandler : MonoBehaviour
     public void DisplaySubCommands(string text)
     {
         Dictionary<string, string> subCommands = commandList[text];
-        AddLine("Command:");
-        AddLine("\t" + text);
-        AddLine("Parameters:");
+        AddLine("");
+        AddLine("COMMAND:");
+        AddLine($"{text}");
+        AddLine("PARAMETERS:");
         foreach (var subCommand in subCommands)
         {
             if (subCommand.Value != "")
             {
-                AddLine(string.Format("\t {0}:{1}", subCommand.Key, subCommand.Value));
+                AddLine($"{subCommand.Key}:{subCommand.Value}");
             }
             else
             {
-                AddLine("\t" + subCommand.Key);
+                AddLine($"{subCommand.Key}");
             }
         }
     }
@@ -251,12 +254,17 @@ public class ConsoleHandler : MonoBehaviour
             Clear();
         }
 
+        InputFieldOverride console = Instantiate<InputFieldOverride>(baseConsole);
+        console.transform.SetParent(baseConsole.transform.parent);
+        console.gameObject.SetActive(true);
         console.text += line + Environment.NewLine;
+        consoles.Add(console);
+
         if (record)
         {
             cacheConsole.Add(line);
         }
-        context.sizeDelta = new Vector2(0f, context.rect.height + textHeight);
+        //context.sizeDelta = new Vector2(0f, context.rect.height + textHeight);
         ScrollZero();
     }
 
@@ -270,10 +278,15 @@ public class ConsoleHandler : MonoBehaviour
 
     public void Clear()
     {
-        console.text = "";
+        foreach (InputFieldOverride inputField in consoles)
+        {
+            Destroy(inputField.gameObject);
+        }
+
+        consoles.Clear();
         cacheConsole.Clear();
         numberOfLines = 0;
-        context.sizeDelta = new Vector2(0f, textHeight);
+        //context.sizeDelta = new Vector2(0f, textHeight);
     }
 
     public void Focus()

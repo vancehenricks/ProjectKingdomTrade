@@ -15,11 +15,11 @@ public class IslandGenerator : MonoBehaviour
 
     private void Start()
     {
-        MapGenerator.init.Add(Generate, 0);
+        MapGenerator.init.Add(Generate, 0f);
     }
     public void Generate()
     {
-        Debug.Log("FoilageGenerator");
+        Debug.Log("Island Generator");
 
         baseTiles = TileConfigHandler.init.baseTiles.Values.ToList<TileInfo>();
 

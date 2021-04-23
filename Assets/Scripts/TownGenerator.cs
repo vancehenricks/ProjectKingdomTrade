@@ -17,12 +17,12 @@ public class TownGenerator : MonoBehaviour
 
     private void Start()
     {
-        MapGenerator.init.Add(Generate, 10f);
+        MapGenerator.init.Add(Generate, 8f);
     }
 
     public void Generate()
     {
-        Debug.Log("TownGenerator");
+        Debug.Log("Town Generator");
         //Loop through the generated towns and activate border
 
         /*List<Color> colors = new List<Color>();

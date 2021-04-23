@@ -15,7 +15,7 @@ public class MapGenerator : Pipeline
 {
     private static MapGenerator _init;
 
-    public new static MapGenerator init
+    public static MapGenerator init
     {
         get { return _init; }
         private set { _init = value; }

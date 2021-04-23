@@ -28,10 +28,7 @@ public class DebugInfo : MonoBehaviour
     private TileInfo tile;
     private PlayerInfo playerInfo;
 
-    private void Awake()
-    {
-        MultiSelect.init.onSelectedChange += OnSelectedChange;
-    }
+    private bool initialize;
 
     public void OnSelectedChange(List<TileInfo> tiles)
     {
@@ -67,6 +64,11 @@ public class DebugInfo : MonoBehaviour
         if (tile != null)
         {
             tileLocation.text = tile.tileLocation + "";
+        }
+        else if (!initialize && MultiSelect.init != null)
+        {
+            MultiSelect.init.onSelectedChange += OnSelectedChange;
+            initialize = true;
         }
 
         ms.text = string.Format("{0:0.##}", Time.deltaTime * 1000.0f);

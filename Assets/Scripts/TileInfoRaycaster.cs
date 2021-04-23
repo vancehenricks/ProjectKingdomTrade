@@ -31,6 +31,7 @@ public class TileInfoRaycaster : MonoBehaviour
     private void Awake()
     {
         init = this;
+        //tileInfos = new List<TileInfo>();
     }
 
     public void GetTileInfosFromPos(Vector3 pos)

@@ -10,6 +10,19 @@ using UnityEngine;
 
 public class CommandPipeline : Pipeline
 {
+    private static CommandPipeline _init;
+    public static CommandPipeline init
+    {
+        get { return _init; }
+        private set { _init = value; }
+    }
+
+    protected override void Awake()
+    {
+        init = this;
+        base.Awake();
+    }
+
     private void Update()
     {
         base.Execute();
