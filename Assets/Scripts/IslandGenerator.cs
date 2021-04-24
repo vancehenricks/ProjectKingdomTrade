@@ -72,23 +72,7 @@ public class IslandGenerator : MonoBehaviour
         {
             if (spawnHeight >= baseTile.spawnHeightMin && spawnHeight <= baseTile.spawnHeightMax)
             {
-                float spawnChance = baseTile.spawnChance;
-
-            //guarantees no duplication causing exception
-
-            RECHECK:
-                if (candidateTiles.ContainsKey(spawnChance))
-                {
-                    if (Random.Range(0f, 1f) > 0.5f)
-                    {
-                        candidateTiles[baseTile.spawnChance] = baseTile;
-                    }
-
-                    spawnChance = baseTile.spawnChance + Random.Range(0f, 1f);
-                    goto RECHECK;
-                }
-
-                candidateTiles.Add(spawnChance, baseTile);
+                candidateTiles.Add(MapGenerator.init.GetUniqueSpawnChance(candidateTiles, baseTile), baseTile);
             }
         }
 

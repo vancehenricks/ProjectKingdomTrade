@@ -180,10 +180,21 @@ public class Tools : MonoBehaviour
         int result1 = baseTile.units / 2;
         int result2 = baseTile.units - result1;
         // same with merge need to calculate other stats also;
-
         unitInfo.units = result1;
         baseTile.units = result2;
         unitInfo.Initialize();
+    }
+
+    public static TileInfo ReplaceTile(TileInfo baseTile, TileInfo target)
+    {
+        TileInfo newTile = Instantiate(baseTile, target.transform.parent);
+        newTile.transform.position = target.transform.position;
+        newTile.tileLocation = target.tileLocation;
+        //transfer all stats from target to newTile probably a function in TileInfo or do it here
+        newTile.Initialize();
+        newTile.gameObject.SetActive(true);
+
+        return newTile;
     }
 
     public static string ConvertToSymbols(int value)

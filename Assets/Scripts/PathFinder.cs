@@ -31,6 +31,15 @@ public class PathFinder
         tempCache = _tempCache;
     }
 
+    //f = h + g
+    //g = distance from starting node
+    //h = distance from end node
+    //check for lowest f cost
+    //if all f cost is equal find lowest h cost
+    //if selected node has greater than equal f and g cost find lowest f cost
+    //mark as explored any nodes which were already explored
+    //h g f cost are always calculated the moment parent node is selected
+
     public void Calculate()
     {
         List<TileInfo> generatedWayPoints = new List<TileInfo>();
@@ -48,15 +57,6 @@ public class PathFinder
         Dictionary<Vector2, Node> closed = new Dictionary<Vector2, Node>();
 
         open.Add(currentPoint.tileLocation, new Node(currentPoint, currentPoint, finalPoint, closed, true));
-
-        //f = h + g
-        //g = distance from starting node
-        //h = distance from end node
-        //check for lowest f cost
-        //if all f cost is equal find lowest h cost
-        //if selected node has greater than equal f and g cost find lowest f cost
-        //mark as explored any nodes which were already explored
-        //h g f cost are always calculated the moment parent node is selected
 
         //Debug.Log("213 open.Count=" + open.Count);
 

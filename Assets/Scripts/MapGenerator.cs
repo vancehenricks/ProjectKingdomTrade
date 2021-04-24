@@ -57,4 +57,21 @@ public class MapGenerator : Pipeline
 
         base.Execute();
     }
+
+    public float GetUniqueSpawnChance(SortedList<float, TileInfo> candidateTiles, TileInfo baseTile)
+    {
+        float spawnChance = baseTile.spawnChance;
+
+        while (candidateTiles.ContainsKey(spawnChance))
+        {
+            if (Random.Range(0f, 1f) > 0.5f)
+            {
+                candidateTiles[spawnChance] = baseTile;
+            }
+
+            spawnChance = baseTile.spawnChance + Random.Range(0f, 1f);
+        }
+
+        return spawnChance;
+    }
 }
