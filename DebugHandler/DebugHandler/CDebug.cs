@@ -13,7 +13,7 @@ namespace DebugHandler
     {
         public static void Log(System.Object obj, object debug, LogType logtype = LogType.Log)
         {
-            string output = DateTime.UtcNow.ToUniversalTime() + "|";
+            string output = logtype + "|" + DateTime.UtcNow.ToUniversalTime() + "|";
             string objName = "Undefined";
 
             if (obj != null)
@@ -21,7 +21,7 @@ namespace DebugHandler
                 objName = obj.ToString();
             }
 
-            output += logtype + "|" + objName + "|" + debug;
+            output += objName + "|" + debug;
 
             switch (logtype)
             {
