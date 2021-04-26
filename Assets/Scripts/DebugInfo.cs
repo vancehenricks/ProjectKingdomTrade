@@ -12,6 +12,7 @@ using UnityEngine.UI;
 
 public class DebugInfo : MonoBehaviour
 {
+    public Text version;
     public Text fps;
     public Text ms;
     public Text playerName;
@@ -29,6 +30,11 @@ public class DebugInfo : MonoBehaviour
     private PlayerInfo playerInfo;
 
     private bool initialize;
+
+    private void Awake()
+    {
+        version.text = Application.version;
+    }
 
     public void OnSelectedChange(List<TileInfo> tiles)
     {

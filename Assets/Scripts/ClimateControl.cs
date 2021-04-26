@@ -84,4 +84,24 @@ public class ClimateControl : MonoBehaviour
             isSummer = true;
         }
     }
+
+    public string Climate()
+    {
+        if (isSpring)
+        {
+            return LanguageHandler.init.texts["SPRING"];
+        }
+        else if (isSummer)
+        {
+            return LanguageHandler.init.texts["SUMMER"];
+        }
+        else if (isAutumn)
+        {
+            return LanguageHandler.init.texts["AUTUMN"];
+        }
+        else
+        {
+            return LanguageHandler.init.texts["WINTER"];
+        }
+    }
 }

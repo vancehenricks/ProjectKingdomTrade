@@ -4,6 +4,7 @@
  * Written by Vance Henricks Patual <vpatual@gmail.com>, February 2019
  */
 
+using DebugHandler;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -42,7 +43,6 @@ public class TimeWindowAction : MonoBehaviour
 
     public void PauseAction()
     {
-
         if (isPaused)
         {
             isPaused = false;
@@ -63,25 +63,29 @@ public class TimeWindowAction : MonoBehaviour
                 isPaused = true;
             }
         }
+
+        CDebug.Log(this, "PauseAction Tick.speed=" + Tick.init.speed);
     }
 
     public void ForwardAction()
     {
-
         if (Tick.init.speed + speed <= maxSpeed)
         {
             Tick.init.speed += speed;
             isPaused = false;
         }
+
+        CDebug.Log(this, "ForwardAction Tick.speed=" + Tick.init.speed);
     }
 
     public void BackwardAction()
     {
-
         if (Tick.init.speed - speed >= minSpeed)
         {
             Tick.init.speed -= speed;
             isPaused = false;
         }
+
+        CDebug.Log(this, "BackwardAction Tick.speed=" + Tick.init.speed);
     }
 }

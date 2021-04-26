@@ -11,9 +11,12 @@ namespace DebugHandler
 {
     public static class CDebug
     {
+        public delegate string ExtraParams();
+        public static ExtraParams extraParams;
+
         public static void Log(System.Object obj, object debug, LogType logtype = LogType.Log)
         {
-            string output = logtype + "|" + DateTime.UtcNow.ToUniversalTime() + "|";
+            string output = logtype + "|" + DateTime.UtcNow + "|";
             string objName = "Undefined";
 
             if (obj != null)
@@ -21,7 +24,15 @@ namespace DebugHandler
                 objName = obj.ToString();
             }
 
-            output += objName + "|" + debug;
+            string exParam = "";
+
+            if (extraParams != null)
+            {
+                exParam = extraParams() + "|";
+            }
+
+            output += exParam + objName + "|" + debug;
+
 
             switch (logtype)
             {

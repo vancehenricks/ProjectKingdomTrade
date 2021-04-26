@@ -21,7 +21,9 @@ public class SettingsHandler : MonoBehaviour
 
     private void Awake()
     {
-        Debug.unityLogger.filterLogType = LogType.Warning;
+        Debug.unityLogger.filterLogType = LogType.Log;
+        CDebug.Log(this, "version=" + Application.version, LogType.Warning);
+        
         init = this;
     }
 

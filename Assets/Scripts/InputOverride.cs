@@ -8,6 +8,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
+using DebugHandler;
 
 public class InputOverride : MonoBehaviour
 {
@@ -57,11 +58,10 @@ public class InputOverride : MonoBehaviour
 
     public bool GetKey(KeyCode key, GameObject focus = null, bool doNothingIfNull = false)
     {
-        //CDebug.Log(this, currentFocus.GetInstanceID());
-
-        if (CheckFocus(focus, doNothingIfNull))
+        if (CheckFocus(focus, doNothingIfNull) && Input.GetKey(key))
         {
-            return Input.GetKey(key);
+            CDebug.Log(this, "GetKey=" + key);
+            return true;
         }
 
         return false;
@@ -69,11 +69,10 @@ public class InputOverride : MonoBehaviour
 
     public bool GetKeyUp(KeyCode key, GameObject focus = null, bool doNothingIfNull = false)
     {
-        //CDebug.Log(this, currentFocus.GetInstanceID());
-
-        if (CheckFocus(focus, doNothingIfNull))
+        if (CheckFocus(focus, doNothingIfNull) && Input.GetKeyUp(key))
         {
-            return Input.GetKeyUp(key);
+            CDebug.Log(this, "GetKeyUp=" + key);
+            return true;
         }
 
         return false;
@@ -81,11 +80,10 @@ public class InputOverride : MonoBehaviour
 
     public bool GetKeyDown(KeyCode key, GameObject focus = null, bool doNothingIfNull = false)
     {
-        //CDebug.Log(this, currentFocus.GetInstanceID());
-
-        if (CheckFocus(focus, doNothingIfNull))
+        if (CheckFocus(focus, doNothingIfNull) && Input.GetKeyDown(key))
         {
-            return Input.GetKeyDown(key);
+            CDebug.Log(this, "GetKeyDown=" + key);
+            return true;
         }
 
         return false;
@@ -93,11 +91,16 @@ public class InputOverride : MonoBehaviour
 
     public float GetAxis(string axis, GameObject focus = null, bool doNothingIfNull = false)
     {
-        //CDebug.Log(this, currentFocus.GetInstanceID());
-
         if (CheckFocus(focus, doNothingIfNull))
         {
-            return Input.GetAxis(axis);
+            float result = Input.GetAxis(axis);
+
+            if (result > 0f || result < 0f)
+            {
+                CDebug.Log(this, "GetAxis=" + axis + " result=" + result);
+            }
+
+            return result;
         }
 
         return 0f;

@@ -14,7 +14,7 @@ public class FoilageGenerator : MonoBehaviour
 {
     private void Start()
     {
-        MapGenerator.init.Add(Generate, 10f);
+        MapGenerator.init.Add(Generate, 7f);
     }
     public void Generate()
     {

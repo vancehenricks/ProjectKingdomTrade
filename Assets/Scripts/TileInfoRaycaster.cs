@@ -62,7 +62,7 @@ public class TileInfoRaycaster : MonoBehaviour
 
         if (results.Count > 0)
         {
-            CDebug.Log(this, "results.Count=" + results.Count, LogType.Warning);
+            CDebug.Log(this, "results.Count=" + results.Count);
             return;
         }
 

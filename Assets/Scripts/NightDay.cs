@@ -40,13 +40,12 @@ public class NightDay : MonoBehaviour
         sunrise = 5;
         sunriseSaved = sunrise;
         sunsetSaved = sunset;
+
+        CDebug.Log(this, "sunset=" + sunset + " sunrise=" + sunrise);
     }
 
     private void Update()
     {
-
-        CDebug.Log(this,"Sunset: " + sunset + " Sunrise: " + sunrise);
-
         if (ClimateControl.init.isSpring)
         {
             sunrise = sunriseSaved;

@@ -79,7 +79,7 @@ public class TextureHandler : MonoBehaviour
 
             texture.LoadImage(File.ReadAllBytes(path));
 
-            CDebug.Log(this, $"Loaded {texture.name}");
+            CDebug.Log(this, $"Loaded={texture.name}");
         }
 
     }

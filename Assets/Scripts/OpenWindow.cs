@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using DebugHandler;
 
 public class OpenWindow : MonoBehaviour
 {
@@ -20,6 +21,8 @@ public class OpenWindow : MonoBehaviour
 
         foreach (GameObject window in windowList)
         {
+            CDebug.Log(this, "Opening window=" + window.name, LogType.Log);
+
             window.SetActive(!window.activeSelf);
             window.transform.SetAsLastSibling();
         }
