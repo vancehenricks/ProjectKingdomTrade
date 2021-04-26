@@ -53,7 +53,7 @@ public class CombatHandler : MonoBehaviour
             {
                 foreach (UnitInfo target in unitInfo.targets)
                 {
-                    Debug.Log("41");
+                    //Debug.Log("41");
 
                     if (target == null)
                     {
@@ -78,8 +78,8 @@ public class CombatHandler : MonoBehaviour
             }
             catch (System.Exception e)
             {
-                Debug.LogError(e);
-                Debug.LogError("unitInfo.targets got modified...");
+                Tools.Log(this,e,LogType.Error);
+                Tools.Log(this,"unitInfo.targets got modified...",LogType.Error);
             }
         }
 
@@ -127,11 +127,11 @@ public class CombatHandler : MonoBehaviour
         int distance = Tools.TileLocationDistance(unitInfo, targetUnit);
         int attackDistance = unitInfo.attackDistance <= 1 ? 0 : unitInfo.attackDistance;
 
-        Debug.Log("120DISTANCE=" + distance);
+        Tools.Log(this,"DISTANCE=" + distance);
 
         if (distance <= attackDistance && !unitInfo.isEngaged)
         {
-            Debug.Log("NEARBY DISTANCE" + distance);
+            Tools.Log(this,"NEARBY DISTANCE" + distance);
 
             AddToIndex(targetUnit.targets, unitInfo, 0);
             targetUnit.currentTarget = unitInfo;
@@ -143,7 +143,7 @@ public class CombatHandler : MonoBehaviour
         }
         else if (distance <= attackDistance && unitInfo.isEngaged)
         {
-            Debug.Log("Unit [" + unitInfo.tileId + "] attacking Unit [" + targetUnit.tileId + "]");
+            Tools.Log(this, "Unit [" + unitInfo.tileId + "] attacking Unit [" + targetUnit.tileId + "]", LogType.Warning);
         }
         else if (distance > attackDistance && unitInfo.isEngaged)
         {
@@ -191,7 +191,7 @@ public class CombatHandler : MonoBehaviour
 
     public void DisEngage()
     {
-        Debug.Log("Unit[" + unitInfo.tileId + "] Disengaging!");
+        Tools.Log(this, "Unit[" + unitInfo.tileId + "] Disengaging!", LogType.Warning);
 
         if (unitInfo.isEngaged || unitInfo.currentTarget != null)
         {

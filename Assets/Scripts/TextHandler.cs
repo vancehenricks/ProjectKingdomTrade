@@ -33,7 +33,7 @@ public class TextHandler : MonoBehaviour
         texts.Clear();
         texts.AddRange(Resources.FindObjectsOfTypeAll<Text>());
 
-        Debug.Log($"Font {font.name}");
+        Tools.Log(this,$"Font={font.name}");
 
         foreach (Text text in texts)
         {

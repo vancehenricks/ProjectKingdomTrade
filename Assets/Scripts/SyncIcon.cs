@@ -24,7 +24,7 @@ public class SyncIcon : MonoBehaviour
 
     public void Initialize(TileInfo tile, float xPadding = 0f, float yPadding = 0f, float zLevelFlag = 0f)
     {
-        image = tile.tileCaller.image;
+        image = tile.tileEffect.image;
         _zLevelFlag = zLevelFlag;
         _xPadding = xPadding;
         _yPadding = yPadding;
@@ -79,7 +79,7 @@ public class SyncIcon : MonoBehaviour
         }
         catch (System.Exception e)
         {
-            Debug.LogWarning(e);
+            Tools.Log(this,e,LogType.Warning);
             Destroy(gameObject);
         }
 

@@ -48,7 +48,7 @@ public class PathFinder
 
         if (tempCache != null)
         {
-           Debug.Log("Found global cache re-using it tempCache.Count " + tempCache.Count);
+           Tools.Log(this,"Found global cache re-using it tempCache.Count " + tempCache.Count);
         }
 
 
@@ -83,7 +83,7 @@ public class PathFinder
 
                     if (!HasSameLastTileInfo(generatedWayPoints, tempCache))
                     {
-                        Debug.Log("CHECKING FAIL " + generatedWayPoints[generatedWayPoints.Count - 1].tileLocation + "!=" + finalPoint.tileLocation);
+                        Tools.Log(this,"CHECKING FAIL " + generatedWayPoints[generatedWayPoints.Count - 1].tileLocation + "!=" + finalPoint.tileLocation);
                         tempCache = generatedWayPoints;
                         generatedWayPoints = new List<TileInfo>();
                         currentPoint = generatedWayPoints[generatedWayPoints.Count - 1];

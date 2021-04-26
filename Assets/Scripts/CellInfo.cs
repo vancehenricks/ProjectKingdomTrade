@@ -42,12 +42,12 @@ public class CellInfo : MonoBehaviour
 
         if (tileInfo.tileEffect != null)
         {
-            image.sprite = tileInfo.tileEffect.image.sprite;
+            image.sprite = tileInfo.sprite;
         }
         else
         {
-            Image img = tileInfo.tileCaller.image.GetComponent<Image>();
-            shade = tileInfo.tileCaller.shade.GetComponent<Image>();
+            Image img = tileInfo.tileEffect.imageImage;
+            shade = tileInfo.tileEffect.shadeImage;
             image.sprite = img.sprite;
         }
 

@@ -20,6 +20,7 @@ public class SettingsHandler : MonoBehaviour
 
     private void Awake()
     {
+        Debug.unityLogger.filterLogType = LogType.Warning;
         init = this;
     }
 
@@ -40,7 +41,7 @@ public class SettingsHandler : MonoBehaviour
         }
         catch (System.Exception e)
         {
-            Debug.LogError(e);
+            Tools.Log(this,e,LogType.Error);
             ShowMessageHandler.init.infoWindow.SetMessage("Json [ERROR] - settings.json",
                 e.ToString(), "OK", null, null);
         }
@@ -54,32 +55,38 @@ public class SettingsHandler : MonoBehaviour
         LanguageHandler.init.secondaryLanguage = settingsConfig.language;
         FrameRateHandler.init.maxFps = settingsConfig.maxFps;
         FrameRateHandler.init.vSync = settingsConfig.vSync;
+        Debug.unityLogger.filterLogType = (LogType)settingsConfig.logLevel;
 
         return settingsConfig;
     }
 
-    public SettingsConfig GetDefaults(SettingsConfig settingConfig)
+    public SettingsConfig GetDefaults(SettingsConfig settingsConfig)
     {
-        if (settingConfig.font == null)
+        if (settingsConfig.font == null)
         {
-            settingConfig.font = TextHandler.init.font.name;
+            settingsConfig.font = TextHandler.init.font.name;
         }
 
-        if (settingConfig.language == null)
+        if (settingsConfig.language == null)
         {
-            settingConfig.language = LanguageHandler.init.defaultLanguage;
+            settingsConfig.language = LanguageHandler.init.defaultLanguage;
         }
 
-        if (settingConfig.maxFps == 0)
+        if (settingsConfig.maxFps == 0)
         {
-            settingConfig.maxFps = FrameRateHandler.init.maxFps;
+            settingsConfig.maxFps = FrameRateHandler.init.maxFps;
         }
 
-        if(settingConfig.vSync == false)
+        if(settingsConfig.vSync == false)
         {
-            settingConfig.vSync = FrameRateHandler.init.vSync;
+            settingsConfig.vSync = FrameRateHandler.init.vSync;
         }
 
-        return settingConfig;
+        if (settingsConfig.logLevel == 0)
+        {
+            settingsConfig.logLevel = (int)LogType.Warning;
+        }
+
+        return settingsConfig;
     }
 }

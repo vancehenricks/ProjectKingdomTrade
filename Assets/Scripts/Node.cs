@@ -85,7 +85,7 @@ public class Node
             }
             catch (System.Exception e)
             {
-                Debug.LogWarning(e);
+                Tools.Log(nameof(Node),e,LogType.Warning);
             }
         }
 

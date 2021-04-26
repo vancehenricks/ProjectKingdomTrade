@@ -38,10 +38,10 @@ public class PanelDuplicator : MonoBehaviour
     public void AddPanel()
     {
         GameObject tempPanel = Instantiate(panel, panel.transform);
-        Debug.Log("Creating " + tempPanel.name + " based of " + panel.name);
+        Tools.Log(this,"Creating " + tempPanel.name + " based of " + panel.name, LogType.Warning);
         tempPanel.transform.SetParent(panel.transform.parent);
-        Debug.Log("Current Cloned Count: " + lPanel.Count);
-        Debug.Log("Setting " + tempPanel.name + " visibility to true");
+        Tools.Log(this,"Current Cloned Count: " + lPanel.Count);
+        Tools.Log(this,"Setting " + tempPanel.name + " visibility to true");
         tempPanel.SetActive(true);
         lPanel.Add(tempPanel);
     }

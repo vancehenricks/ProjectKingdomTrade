@@ -7,9 +7,23 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TileInfo : MonoBehaviour
 {
+    protected Sprite _sprite;
+    public Sprite sprite
+    {
+        get
+        {
+            return GetSprite();
+        }
+        set
+        {
+            _sprite = SetSprite(value);
+        }
+    }
+
     public string tileType;
     public string subType;
     public long tileId;
@@ -17,7 +31,6 @@ public class TileInfo : MonoBehaviour
     public PlayerInfo playerInfo;
     public HashSet<PlayerInfo> claimants;
     public TileEffect tileEffect;
-    public TileCaller tileCaller;
     //Tilelocation already has tile size accomodated to it no need for dividing 25 again
     public Vector2 tileLocation;
     public float localTemp;
@@ -50,5 +63,21 @@ public class TileInfo : MonoBehaviour
     public void Destroy()
     {
         Destroy(gameObject);
+    }
+
+    protected virtual Sprite SetSprite(Sprite sp)
+    {
+        if (sp != null)
+        {
+            Image image = tileEffect.imageImage;
+            image.sprite = sp;
+        }
+
+        return sp;
+    }
+
+    protected virtual Sprite GetSprite()
+    {
+        return _sprite;
     }
 }

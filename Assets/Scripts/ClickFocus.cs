@@ -14,7 +14,7 @@ public class ClickFocus : MonoBehaviour, IPointerDownHandler
 {
     public void OnPointerDown(PointerEventData eventData)
     {
-        Debug.Log("SiblingIndex:" + this.transform.GetSiblingIndex());
+        Tools.Log(this,"SiblingIndex:" + this.transform.GetSiblingIndex());
         this.transform.SetAsLastSibling();
     }
 }

@@ -41,7 +41,7 @@ public class HideObject : MonoBehaviour
     {
         window.SetActive(!window.activeSelf);
 
-        //Debug.Log("WINDOW: " + window.activeSelf);
+        Tools.Log(this,"WINDOW=" + window.activeSelf,LogType.Warning);
 
         if (window.activeSelf)
         {

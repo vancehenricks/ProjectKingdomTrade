@@ -19,7 +19,7 @@ public class IslandGenerator : MonoBehaviour
     }
     public void Generate()
     {
-        Debug.Log("Island Generator");
+        Tools.Log(this, "Generating Island");
 
         baseTiles = TileConfigHandler.init.baseTiles.Values.ToList<TileInfo>();
 

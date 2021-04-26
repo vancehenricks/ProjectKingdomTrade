@@ -143,7 +143,7 @@ public class PathFindingHandler : MonoBehaviour
             {
                 if (wayPointReached != null)
                 {
-                    Debug.Log("Waypoint reached");
+                    Tools.Log(this,"Waypoint reached");
                     wayPointReached(point);
                 }
 
@@ -198,7 +198,7 @@ public class PathFindingHandler : MonoBehaviour
             PathFinder pathFinder = new PathFinder(standingTile, pointTileInfo, tempCache, isWalkable, OnDoneCalculate, AlgorithmicCounter);
             task = new Task(pathFinder.Calculate);
             task.Start();
-            Debug.Log("generatedWayPoints.Count:" + generatedWayPoints.Count);
+            Tools.Log(this,"generatedWayPoints.Count:" + generatedWayPoints.Count,LogType.Warning);
             currentTileId = standingTile.tileId + "";
         }
         else if (currentTileId == (standingTile.tileId + "") && generatedWayPoints.Count > 0)
@@ -212,7 +212,7 @@ public class PathFindingHandler : MonoBehaviour
         {
             saveCache = false;
 
-            Debug.Log("Adding " + generatedWayPoints.Count);
+            Tools.Log(this,"Adding " + generatedWayPoints.Count,LogType.Warning);
             List<TileInfo> temp = new List<TileInfo>(generatedWayPoints);
             PathFindingCache.init.Add(standingTile, pointTileInfo, temp);
         }
@@ -229,13 +229,13 @@ public class PathFindingHandler : MonoBehaviour
         }
         else if (executeAlgorithmCounter > executeAlgorithmThreshold && generatedWayPoints.Count == 0)
         {
-            Debug.Log("178 executeAlgorithmCounter=" + executeAlgorithmCounter);
+            Tools.Log(this,"executeAlgorithmCounter=" + executeAlgorithmCounter);
             executeAlgorithmCounter = 0;
             index++;
         }
         else if (generatedWayPoints.Count == 0)
         {
-            Debug.Log("173 executeAlgorithmCounter=" + executeAlgorithmCounter);
+            Tools.Log(this,"executeAlgorithmCounter=" + executeAlgorithmCounter);
             executeAlgorithmCounter++;
         }
     }

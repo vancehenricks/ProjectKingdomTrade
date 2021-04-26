@@ -14,8 +14,9 @@ public class TileEffect : MonoBehaviour
 {
 
     public TileInfo tileInfo;
-    public Image image;
-    public Image border;
+    public GameObject border;
+    public GameObject image;
+    public GameObject shade;
     public Sprite borderClaimed;
     public Sprite borderUnClaimed;
     public Sprite borderConflict;
@@ -35,55 +36,111 @@ public class TileEffect : MonoBehaviour
 
     //private int startedDay;
 
+    private Image _borderImage;
+    public Image borderImage
+    {
+        get
+        {
+            if (_borderImage == null)
+            {
+                _borderImage = border.GetComponent<Image>();
+            }
+
+            return _borderImage;
+        }
+        private set
+        {
+            _borderImage = value;
+        }
+    }
+
+    private Image _imageImage;
+    public Image imageImage
+    {
+        get
+        {
+            if (_imageImage == null)
+            {
+                _imageImage = border.GetComponent<Image>();
+            }
+
+            return _imageImage;
+        }
+        private set
+        {
+            _imageImage = value;
+        }
+    }
+
+    private Image _shadeImage;
+    public Image shadeImage
+    {
+        get
+        {
+            if (_shadeImage == null)
+            {
+                _shadeImage = border.GetComponent<Image>();
+            }
+
+            return _shadeImage;
+        }
+        private set
+        {
+            _shadeImage = value;
+        }
+    }
+
     public void UpdateTileEffect()
     {
 
         if (tileInfo.tileType == "Edge") return;
 
         //daysResult = Tick.init.realDays-startedDay;
-        if (tileInfo.localTemp <= summerTemp && ClimateControl.init.isSpring)
+        if (springTile.name != null && tileInfo.localTemp <= summerTemp && ClimateControl.init.isSpring)
         {
-            image.sprite = springTile;
+            tileInfo.sprite = springTile;
             //image.sprite = Temperature.temperature;
         }
 
-        if (tileInfo.localTemp >= summerTemp && ClimateControl.init.isSummer)
+        if (summerTile.name != null && tileInfo.localTemp >= summerTemp && ClimateControl.init.isSummer)
         {
-            image.sprite = summerTile;
+            tileInfo.sprite = summerTile;
         }
 
-        if (tileInfo.localTemp <= autumnTemp && ClimateControl.init.isAutumn)
+        if (autumnTile.name != null && tileInfo.localTemp <= autumnTemp && ClimateControl.init.isAutumn)
         {
-            image.sprite = autumnTile;
+            tileInfo.sprite = autumnTile;
         }
 
-        if (tileInfo.localTemp <= freezingTemp && ClimateControl.init.isWinter)
+        if (freezingTile.name != null && tileInfo.localTemp <= freezingTemp && ClimateControl.init.isWinter)
         {
-            image.sprite = freezingTile;
+            tileInfo.sprite = freezingTile;
         }
     }
 
     public void UpdateTerritoryColor()
     {
+        if (border == null) return;
+
         if (tileInfo.tileType == "Edge") return;
 
-        border.color = tileInfo.playerInfo.color;
+        borderImage.color = tileInfo.playerInfo.color;
         if (tileInfo.claimants.Count == 1)
         {
-            border.sprite = borderClaimed;
+            borderImage.sprite = borderClaimed;
         }
         else if (tileInfo.claimants.Count > 1)
         {
-            border.sprite = borderConflict;
+            borderImage.sprite = borderConflict;
         }
         else
         {
-            border.sprite = borderUnClaimed;
+            borderImage.sprite = borderUnClaimed;
         }
 
         if (tileInfo.tileType == "Town") return;
 
-        border.color /= tileInfo.claimants.Count;
-        border.color = new Color(border.color.r, border.color.g, border.color.b);
+        borderImage.color /= tileInfo.claimants.Count;
+        borderImage.color = new Color(borderImage.color.r, borderImage.color.g, borderImage.color.b);
     }
 }

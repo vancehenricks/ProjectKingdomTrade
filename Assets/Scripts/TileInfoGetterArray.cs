@@ -42,7 +42,7 @@ public class TileInfoGetterArray : MonoBehaviour
             }
             else if (tile.tileType == temp.tileType && tileInfos.Count == (maxHits - 1))
             {
-                Debug.Log((maxHits - 1) + " == " + tileInfos.Count);
+                Tools.Log(this, (maxHits - 1) + " = " + tileInfos.Count, LogType.Warning);
                 tileInfos.Add(temp);
                 //overflowCount = tileInfos.Count;
                 boxCollider2D.enabled = false;

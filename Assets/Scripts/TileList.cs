@@ -78,7 +78,7 @@ public class TileList : MonoBehaviour
         }
         catch (System.Exception e)
         {
-            Debug.LogError(e);
+            Tools.Log(this,e,LogType.Error);
         }
 
         generatedTiles.Add(tileInfo.tileLocation, tileInfo);
@@ -92,7 +92,7 @@ public class TileList : MonoBehaviour
         }
         catch (System.Exception e)
         {
-            Debug.LogError(e);
+            Tools.Log(this, e, LogType.Error);
         }
 
         generatedTowns.Add(tileInfo.tileLocation, tileInfo);

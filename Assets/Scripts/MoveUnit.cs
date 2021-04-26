@@ -21,21 +21,20 @@ public class MoveUnit : PlayerCommand
 
     protected override void Command()
     {
-        //Debug.Log("MoveUnit");
 
         if (unitInfos.Count == 0) return;
 
         if (Input.GetButtonDown("Fire1") && MultiSelect.init.shiftPressed)
         {
             openRightClick.openLeftClick.Ignore();
-            Debug.Log("Creating multiple waypoint...");
+            Tools.Log(this,"Creating multiple waypoint...");
             AssignsToList(tileInfoRaycaster.GetTileInfoFromPos(Input.mousePosition), waypointsList);
         }
 
         if (Input.GetButtonDown("Fire1") && !MultiSelect.init.shiftPressed)
         {
             openRightClick.openLeftClick.Ignore();
-            Debug.Log("Creating one waypoint... unitInfos.Count=" + unitInfos.Count);
+            Tools.Log(this,"Creating one waypoint... unitInfos.Count=" + unitInfos.Count);
             TileInfo tileInfo = tileInfoRaycaster.GetTileInfoFromPos(Input.mousePosition);
             ClearAllWaypoints();
             AssignsToList(tileInfo, waypointsList);

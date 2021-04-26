@@ -33,25 +33,25 @@ public class CameraDraggableWindow : MonoBehaviour/*,IDragHandler*/
         {
             if (Input.mousePosition.x < 0 + boundary)
             {
-                //Debug.Log("Moving left");
+                Tools.Log(this,"Moving left");
                 MoveXCamera(-1);
             }
 
             if (Input.mousePosition.x > Screen.width - boundary)
             {
-                //Debug.Log("Moving right");
+                Tools.Log(this,"Moving right");
                 MoveXCamera(1);
             }
 
             if (Input.mousePosition.y > Screen.height - boundary)
             {
-                //Debug.Log("Moving up");
+                Tools.Log(this,"Moving up");
                 MoveYCamera(1);
             }
 
             if (Input.mousePosition.y < 0 + boundary)
             {
-                //Debug.Log("Moving down");
+                Tools.Log(this,"Moving down");
                 MoveYCamera(-1);
             }
         }

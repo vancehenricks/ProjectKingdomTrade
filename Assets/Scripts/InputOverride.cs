@@ -57,7 +57,7 @@ public class InputOverride : MonoBehaviour
 
     public bool GetKey(KeyCode key, GameObject focus = null, bool doNothingIfNull = false)
     {
-        //Debug.Log(currentFocus.GetInstanceID());
+        //Tools.Log(this, currentFocus.GetInstanceID());
 
         if (CheckFocus(focus, doNothingIfNull))
         {
@@ -69,6 +69,7 @@ public class InputOverride : MonoBehaviour
 
     public bool GetKeyUp(KeyCode key, GameObject focus = null, bool doNothingIfNull = false)
     {
+        //Tools.Log(this, currentFocus.GetInstanceID());
 
         if (CheckFocus(focus, doNothingIfNull))
         {
@@ -80,6 +81,8 @@ public class InputOverride : MonoBehaviour
 
     public bool GetKeyDown(KeyCode key, GameObject focus = null, bool doNothingIfNull = false)
     {
+        //Tools.Log(this, currentFocus.GetInstanceID());
+
         if (CheckFocus(focus, doNothingIfNull))
         {
             return Input.GetKeyDown(key);
@@ -90,6 +93,8 @@ public class InputOverride : MonoBehaviour
 
     public float GetAxis(string axis, GameObject focus = null, bool doNothingIfNull = false)
     {
+        //Tools.Log(this, currentFocus.GetInstanceID());
+
         if (CheckFocus(focus, doNothingIfNull))
         {
             return Input.GetAxis(axis);

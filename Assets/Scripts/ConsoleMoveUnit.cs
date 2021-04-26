@@ -45,7 +45,7 @@ public class ConsoleMoveUnit : ConsoleCommand
 
             foreach (string subCommand in subCommands.Keys)
             {
-                Debug.Log(subCommand);
+                Tools.Log(this, $"Command={subCommand}", LogType.Warning);
 
                 switch (subCommand)
                 {

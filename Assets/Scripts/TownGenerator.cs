@@ -22,7 +22,7 @@ public class TownGenerator : MonoBehaviour
 
     public void Generate()
     {
-        Debug.Log("Town Generator");
+        Tools.Log(this, "Generating Town");
         //Loop through the generated towns and activate border
 
         /*List<Color> colors = new List<Color>();

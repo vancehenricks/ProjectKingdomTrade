@@ -17,7 +17,7 @@ public class FoilageGenerator : MonoBehaviour
     }
     public void Generate()
     {
-        Debug.Log("Foilage Generator");
+        Tools.Log(this,"Generating Foilage");
 
         Dictionary<string, SortedList<float, TileInfo>> foilageGroup = GetFoilageGroup();
 

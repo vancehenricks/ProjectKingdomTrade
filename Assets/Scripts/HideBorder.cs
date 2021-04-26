@@ -25,7 +25,7 @@ public class HideBorder : MonoBehaviour
             foreach (TileInfo tileInfo in TileList.init.generatedTiles.Values)
             {
 
-                if (tileInfo.tileCaller.shade != null)
+                if (tileInfo.tileEffect.shadeImage != null)
                 {
 
                     bool isException = false;
@@ -41,7 +41,7 @@ public class HideBorder : MonoBehaviour
 
                     if (!isException)
                     {
-                        Image image = tileInfo.tileCaller.shade.GetComponent<Image>();
+                        Image image = tileInfo.tileEffect.shadeImage;
                         image.enabled = !image.enabled;
                     }
                 }

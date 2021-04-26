@@ -77,7 +77,7 @@ public class AttackUnit : MoveUnit
         if (Input.GetButtonDown("Fire2"))
         {
             openRightClick.doNotDisplay = true;
-            //Debug.Log("AttackUnit set doNotDisplay" + openRightClick.doNotDisplay);
+            Tools.Log(this,"AttackUnit set doNotDisplay" + openRightClick.doNotDisplay);
             openRightClick.ResetValues();
             EndAction();
         }
@@ -89,7 +89,7 @@ public class AttackUnit : MoveUnit
 
             List<TileInfo> tileInfos = Tools.WhiteList(_tileInfos, include);
 
-            Debug.Log("DEBUG-----" + tileInfos.Count);
+            Tools.Log(this,"TileInfo.Count=" + tileInfos.Count);
 
             if (tileInfos.Count == 0) return;
 
@@ -114,7 +114,7 @@ public class AttackUnit : MoveUnit
             //openRightClick.multiSelect = false;
             openRightClick.tileInfoRaycaster.GetTileInfosFromPos(Input.mousePosition);
             openRightClick.forceDisplay = true;
-            Debug.Log("SELECTED");
+            Tools.Log(this, "Unit Selected!");
         }
 
     }

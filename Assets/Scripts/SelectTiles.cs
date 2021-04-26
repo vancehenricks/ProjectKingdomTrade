@@ -128,7 +128,7 @@ public class SelectTiles : MonoBehaviour
 
     public void RemoveFlag(TileInfo hostTile, TileInfo tile)
     {
-        Debug.Log("110 Destroy");
+        Tools.Log(this, "Flag Destroy");
 
         List<string> keys = new List<string>(flags.Keys);
 
@@ -155,7 +155,7 @@ public class SelectTiles : MonoBehaviour
 
     public void RemoveAllFlag()
     {
-        Debug.Log("flags.Count=" + flags.Count);
+        Tools.Log(this, "flags.Count=" + flags.Count);
         foreach (var flag in flags.Values)
         {
             Destroy(flag);

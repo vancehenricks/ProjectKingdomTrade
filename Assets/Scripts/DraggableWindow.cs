@@ -35,7 +35,7 @@ public class DraggableWindow : MonoBehaviour, IBeginDragHandler, IDragHandler
     {
         normalizedPos = eventData.position + offSet;
 
-        Debug.Log("Offset_Pos:" + offSet + " rMouse_Pos:" + eventData.position + " nMouse_Pos:" + normalizedPos);
+        Tools.Log(this, "Offset_Pos:" + offSet + " rMouse_Pos:" + eventData.position + " nMouse_Pos:" + normalizedPos);
         window.transform.position = normalizedPos;
     }
 }

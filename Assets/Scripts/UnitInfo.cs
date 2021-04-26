@@ -11,8 +11,25 @@ using UnityEngine;
 
 public class UnitInfo : TileInfo
 {
-    public Sprite sprite;
-    public UnitEffect unitEffect;
+    private UnitEffect _unitEffect;
+
+    public UnitEffect unitEffect
+    {
+        get 
+        {
+            if (_unitEffect == null)
+            {
+                _unitEffect = (UnitEffect)tileEffect;
+            }
+
+            return _unitEffect;
+        }
+        private set
+        {
+            _unitEffect = value;
+        }
+    }
+
     public float travelSpeed;
     public List<TileInfo> waypoints;
     public List<TileInfo> targets;
@@ -31,15 +48,7 @@ public class UnitInfo : TileInfo
         targets = new List<TileInfo>();
         targetted = new List<TileInfo>();
 
-        if (sprite != null)
-        {
-            Image shade = tileCaller.shade.GetComponent<Image>();
-            Image image = tileCaller.image.GetComponent<Image>();
-
-            image.sprite = sprite;
-            shade.color = new Color(playerInfo.color.r, playerInfo.color.g, playerInfo.color.b, shade.color.a);
-            shade.sprite = sprite;
-        }
+        SetSprite(sprite);
 
         base.Initialize();
     }
@@ -51,5 +60,20 @@ public class UnitInfo : TileInfo
        if (waypoints != null) waypoints.Clear();
 
         base.OnDestroy();
+    }
+
+    protected override Sprite SetSprite(Sprite sp)
+    {
+        if (sp != null && playerInfo != null)
+        {
+            Image shade = unitEffect.shadeImage;
+            Image image = unitEffect.imageImage;
+
+            image.sprite = sp;
+            shade.color = new Color(playerInfo.color.r, playerInfo.color.g, playerInfo.color.b, shade.color.a);
+            shade.sprite = sp;
+        }
+
+        return sp;
     }
 }

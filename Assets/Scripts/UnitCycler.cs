@@ -32,7 +32,7 @@ public class UnitCycler : MonoBehaviour
 
                 if (unitInfos[i] == null) continue;
 
-                GameObject unit = unitInfos[i].tileCaller.image;
+                GameObject unit = unitInfos[i].unitEffect.image;
 
                 if (visibleIndex != i)
                 {
@@ -79,13 +79,13 @@ public class UnitCycler : MonoBehaviour
             if (tileInfo.unitInfos[i].tileId == unit.tileId)
             {
  
-                GameObject visibleUnit = tileInfo.unitInfos[i].tileCaller.image;
+                GameObject visibleUnit = tileInfo.unitInfos[i].unitEffect.image;
                 visibleUnit.SetActive(true);
                 tileInfo.unitInfos.RemoveAt(i);
 
                 if (tileInfo.unitInfos.Count > 0)
                 {
-                    GameObject visibleUnit2 = tileInfo.unitInfos[0].tileCaller.image;
+                    GameObject visibleUnit2 = tileInfo.unitInfos[0].unitEffect.image;
                     visibleUnit2.SetActive(true);
                 }
 

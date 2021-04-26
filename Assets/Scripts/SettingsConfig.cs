@@ -8,6 +8,7 @@ public struct SettingsConfig
 {
     public string font;
     public string language;
+    public int logLevel;
     public int maxFps;
     public bool vSync;
 }

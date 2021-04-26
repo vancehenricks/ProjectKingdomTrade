@@ -44,7 +44,7 @@ public class NightDay : MonoBehaviour
     private void Update()
     {
 
-        //Debug.Log("Sunset: " + sunset + " Sunrise: " + sunrise);
+        Tools.Log(this,"Sunset: " + sunset + " Sunrise: " + sunrise);
 
         if (ClimateControl.init.isSpring)
         {

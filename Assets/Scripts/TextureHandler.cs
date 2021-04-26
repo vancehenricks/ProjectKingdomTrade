@@ -29,6 +29,8 @@ public class TextureHandler : MonoBehaviour
 
     public Sprite GetSprite(string name)
     {
+        if (name == "") return null;
+
         string template = "empty";
 
         if (template.Contains("-icon"))
@@ -76,7 +78,7 @@ public class TextureHandler : MonoBehaviour
 
             texture.LoadImage(File.ReadAllBytes(path));
 
-            Debug.Log($"Loaded {texture.name}");
+            Tools.Log(this, $"Loaded {texture.name}");
         }
 
     }

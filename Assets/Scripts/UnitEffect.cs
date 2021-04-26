@@ -8,16 +8,31 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UnitEffect : MonoBehaviour
+public class UnitEffect : TileEffect
 {
+    private UnitInfo _unitInfo;
+    public UnitInfo unitInfo
+    {
+        get
+        {
+            if (_unitInfo == null)
+            {
+                _unitInfo = (UnitInfo)tileInfo;
+            }
 
-    public UnitInfo unitInfo;
+            return _unitInfo;
+        }
+        private set
+        {
+            tileInfo = value;
+        }
+    }
+
     public TileInfo standingTile;
     public PathFindingHandler pathFinder;
     public CombatHandler combatHandler;
     public MergeHandler mergeHandler;
     //public TileInfo previousTile;
-    public UnitCycler unitCycler;
     public UnitDirection unitDirection;
     public UnitDisplay unitDisplay;
     public UnitWayPoint unitWayPoint;

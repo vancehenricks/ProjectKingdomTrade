@@ -32,8 +32,8 @@ public class UnitDirection : MonoBehaviour
 
     public void SetDirection(Vector3 currentPosition, Vector3 newPosition)
     {
-        Quaternion rotation = unitInfo.tileCaller.image.transform.rotation;
-        Transform currentTransform = unitInfo.tileCaller.image.transform;
+        Quaternion rotation = unitInfo.unitEffect.image.transform.rotation;
+        Transform currentTransform = unitInfo.unitEffect.image.transform;
 
         //left
         if (newPosition.x == 0) return;

@@ -47,9 +47,7 @@ public class Destroy : ConsoleCommand
             if (Input.GetButtonDown("Fire1") || (fire1Clicked && executeAll))
             {
                 fire1Clicked = true;
-                //Debug.Log("test");
 
-                //make the units random color
                 List<TileInfo> tiles = new List<TileInfo>();
                 tileInfoRaycaster.GetTileInfosFromPos(Input.mousePosition, tiles);
 
