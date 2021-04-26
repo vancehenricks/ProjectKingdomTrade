@@ -4,6 +4,7 @@
  * Written by Vance Henricks Patual <vpatual@gmail.com>, November 2020
  */
 
+using DebugHandler;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -128,7 +129,7 @@ public class SelectTiles : MonoBehaviour
 
     public void RemoveFlag(TileInfo hostTile, TileInfo tile)
     {
-        Tools.Log(this, "Flag Destroy");
+        CDebug.Log(this, "Flag Destroy");
 
         List<string> keys = new List<string>(flags.Keys);
 
@@ -155,7 +156,7 @@ public class SelectTiles : MonoBehaviour
 
     public void RemoveAllFlag()
     {
-        Tools.Log(this, "flags.Count=" + flags.Count);
+        CDebug.Log(this, "flags.Count=" + flags.Count);
         foreach (var flag in flags.Values)
         {
             Destroy(flag);

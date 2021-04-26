@@ -4,6 +4,7 @@
  * Written by Vance Henricks Patual <vpatual@gmail.com>, June 2019
  */
 
+using DebugHandler;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -61,7 +62,7 @@ public class TileInfoRaycaster : MonoBehaviour
 
         if (results.Count > 0)
         {
-            Tools.Log(this, "results.Count=" + results.Count, LogType.Warning);
+            CDebug.Log(this, "results.Count=" + results.Count, LogType.Warning);
             return;
         }
 

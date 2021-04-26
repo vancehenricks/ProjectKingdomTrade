@@ -81,7 +81,7 @@ public class SpawnUnit : ConsoleCommand
 
             foreach (string subCommand in subCommands.Keys)
             {
-                //Tools.Log(subCommand);
+                //CDebug.Log(subCommand);
 
                 switch (subCommand)
                 {

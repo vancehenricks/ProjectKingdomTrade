@@ -4,6 +4,7 @@
  * Written by Vance Henricks Patual <vpatual@gmail.com>, June 2020
  */
 
+using DebugHandler;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -78,8 +79,8 @@ public class CombatHandler : MonoBehaviour
             }
             catch (System.Exception e)
             {
-                Tools.Log(this,e,LogType.Error);
-                Tools.Log(this,"unitInfo.targets got modified...",LogType.Error);
+                CDebug.Log(this,e,LogType.Error);
+                CDebug.Log(this,"unitInfo.targets got modified...",LogType.Error);
             }
         }
 
@@ -127,11 +128,11 @@ public class CombatHandler : MonoBehaviour
         int distance = Tools.TileLocationDistance(unitInfo, targetUnit);
         int attackDistance = unitInfo.attackDistance <= 1 ? 0 : unitInfo.attackDistance;
 
-        Tools.Log(this,"DISTANCE=" + distance);
+        CDebug.Log(this,"DISTANCE=" + distance);
 
         if (distance <= attackDistance && !unitInfo.isEngaged)
         {
-            Tools.Log(this,"NEARBY DISTANCE" + distance);
+            CDebug.Log(this,"NEARBY DISTANCE" + distance);
 
             AddToIndex(targetUnit.targets, unitInfo, 0);
             targetUnit.currentTarget = unitInfo;
@@ -143,7 +144,7 @@ public class CombatHandler : MonoBehaviour
         }
         else if (distance <= attackDistance && unitInfo.isEngaged)
         {
-            Tools.Log(this, "Unit [" + unitInfo.tileId + "] attacking Unit [" + targetUnit.tileId + "]", LogType.Warning);
+            CDebug.Log(this, "Unit [" + unitInfo.tileId + "] attacking Unit [" + targetUnit.tileId + "]", LogType.Warning);
         }
         else if (distance > attackDistance && unitInfo.isEngaged)
         {
@@ -191,7 +192,7 @@ public class CombatHandler : MonoBehaviour
 
     public void DisEngage()
     {
-        Tools.Log(this, "Unit[" + unitInfo.tileId + "] Disengaging!", LogType.Warning);
+        CDebug.Log(this, "Unit[" + unitInfo.tileId + "] Disengaging!", LogType.Warning);
 
         if (unitInfo.isEngaged || unitInfo.currentTarget != null)
         {

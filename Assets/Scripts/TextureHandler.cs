@@ -4,6 +4,7 @@
  * Written by Vance Henricks Patual <vpatual@gmail.com>, February 2021
  */
 
+using DebugHandler;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -78,7 +79,7 @@ public class TextureHandler : MonoBehaviour
 
             texture.LoadImage(File.ReadAllBytes(path));
 
-            Tools.Log(this, $"Loaded {texture.name}");
+            CDebug.Log(this, $"Loaded {texture.name}");
         }
 
     }

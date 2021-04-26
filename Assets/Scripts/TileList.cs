@@ -4,6 +4,7 @@
  * Written by Vance Henricks Patual <vpatual@gmail.com>, February 2021
  */
 
+using DebugHandler;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -78,7 +79,7 @@ public class TileList : MonoBehaviour
         }
         catch (System.Exception e)
         {
-            Tools.Log(this,e,LogType.Error);
+            CDebug.Log(this,e,LogType.Error);
         }
 
         generatedTiles.Add(tileInfo.tileLocation, tileInfo);
@@ -92,7 +93,7 @@ public class TileList : MonoBehaviour
         }
         catch (System.Exception e)
         {
-            Tools.Log(this, e, LogType.Error);
+            CDebug.Log(this, e, LogType.Error);
         }
 
         generatedTowns.Add(tileInfo.tileLocation, tileInfo);

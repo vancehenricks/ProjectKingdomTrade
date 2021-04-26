@@ -4,6 +4,7 @@
  * Written by Vance Henricks Patual <vpatual@gmail.com>, April 2021
  */
 
+using DebugHandler;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +20,7 @@ public class IslandGenerator : MonoBehaviour
     }
     public void Generate()
     {
-        Tools.Log(this, "Generating Island");
+        CDebug.Log(this, "Generating Island");
 
         baseTiles = TileConfigHandler.init.baseTiles.Values.ToList<TileInfo>();
 

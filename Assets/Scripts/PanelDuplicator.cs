@@ -4,6 +4,7 @@
  * Written by Vance Henricks Patual <vpatual@gmail.com>, January 2019
  */
 
+using DebugHandler;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -38,10 +39,10 @@ public class PanelDuplicator : MonoBehaviour
     public void AddPanel()
     {
         GameObject tempPanel = Instantiate(panel, panel.transform);
-        Tools.Log(this,"Creating " + tempPanel.name + " based of " + panel.name, LogType.Warning);
+        CDebug.Log(this,"Creating " + tempPanel.name + " based of " + panel.name, LogType.Warning);
         tempPanel.transform.SetParent(panel.transform.parent);
-        Tools.Log(this,"Current Cloned Count: " + lPanel.Count);
-        Tools.Log(this,"Setting " + tempPanel.name + " visibility to true");
+        CDebug.Log(this,"Current Cloned Count: " + lPanel.Count);
+        CDebug.Log(this,"Setting " + tempPanel.name + " visibility to true");
         tempPanel.SetActive(true);
         lPanel.Add(tempPanel);
     }

@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using DebugHandler;
 
 public class DraggableWindow : MonoBehaviour, IBeginDragHandler, IDragHandler
 {
@@ -35,7 +36,7 @@ public class DraggableWindow : MonoBehaviour, IBeginDragHandler, IDragHandler
     {
         normalizedPos = eventData.position + offSet;
 
-        Tools.Log(this, "Offset_Pos:" + offSet + " rMouse_Pos:" + eventData.position + " nMouse_Pos:" + normalizedPos);
+        CDebug.Log(this, "Offset_Pos:" + offSet + " rMouse_Pos:" + eventData.position + " nMouse_Pos:" + normalizedPos);
         window.transform.position = normalizedPos;
     }
 }

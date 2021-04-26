@@ -4,6 +4,7 @@
  * Written by Vance Henricks Patual <vpatual@gmail.com>, April 2021
  */
 
+using DebugHandler;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +18,7 @@ public class FoilageGenerator : MonoBehaviour
     }
     public void Generate()
     {
-        Tools.Log(this,"Generating Foilage");
+        CDebug.Log(this,"Generating Foilage");
 
         Dictionary<string, SortedList<float, TileInfo>> foilageGroup = GetFoilageGroup();
 

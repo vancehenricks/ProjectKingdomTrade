@@ -4,6 +4,7 @@
  * Written by Vance Henricks Patual <vpatual@gmail.com>, August 2020
  */
 
+using DebugHandler;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -63,13 +64,13 @@ public class Tools : MonoBehaviour
     {
         try
         {
-            Tools.Log(nameof(Tools), "Attempting to Downcast");
+            CDebug.Log(nameof(Tools), "Attempting to Downcast");
             T info = (T)System.Convert.ChangeType(tileInfo, typeof(B));
             return info;
         }
         catch (System.Exception e)
         {
-            Tools.Log(nameof(Tools), e, LogType.Warning);
+            CDebug.Log(nameof(Tools), e, LogType.Warning);
             T info = (T)System.Convert.ChangeType(tileInfo, typeof(T));
             return info;
         }
@@ -149,7 +150,7 @@ public class Tools : MonoBehaviour
         }
         catch (System.Exception e)
         {
-            Tools.Log(nameof(Tools), e,LogType.Warning);
+            CDebug.Log(nameof(Tools), e,LogType.Warning);
             distance = (int)Math.Round(Vector2.Distance(tile1.transform.position, tile2.transform.position) / 25, MidpointRounding.AwayFromZero);
         }
 
@@ -293,38 +294,5 @@ public class Tools : MonoBehaviour
         }
 
         return final;
-    }
-
-    public static void Log(System.Object obj, object debug, LogType logtype = LogType.Log)
-    {
-        string output = DateTime.UtcNow.ToUniversalTime() + "|";
-        string objName = "Undefined";
-
-        if (obj != null)
-        {
-            objName = obj.ToString();
-        }
-
-        output += logtype + "|" + objName + "|" + debug;
-
-        switch (logtype)
-        {
-            case LogType.Assert:
-                Debug.LogAssertion(debug);
-                break;
-            case LogType.Exception:
-                Debug.LogException((Exception)debug);
-                break;
-            case LogType.Error:
-                Debug.LogError(output);
-                break;
-            case LogType.Warning:
-                Debug.LogWarning(output);
-                break;
-            default:
-                Debug.Log(output);
-                break;
-        }
-
     }
 }

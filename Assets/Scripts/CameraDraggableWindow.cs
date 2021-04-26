@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using DebugHandler;
 
 public class CameraDraggableWindow : MonoBehaviour/*,IDragHandler*/
 {
@@ -33,25 +34,25 @@ public class CameraDraggableWindow : MonoBehaviour/*,IDragHandler*/
         {
             if (Input.mousePosition.x < 0 + boundary)
             {
-                Tools.Log(this,"Moving left");
+                CDebug.Log(this,"Moving left");
                 MoveXCamera(-1);
             }
 
             if (Input.mousePosition.x > Screen.width - boundary)
             {
-                Tools.Log(this,"Moving right");
+                CDebug.Log(this,"Moving right");
                 MoveXCamera(1);
             }
 
             if (Input.mousePosition.y > Screen.height - boundary)
             {
-                Tools.Log(this,"Moving up");
+                CDebug.Log(this,"Moving up");
                 MoveYCamera(1);
             }
 
             if (Input.mousePosition.y < 0 + boundary)
             {
-                Tools.Log(this,"Moving down");
+                CDebug.Log(this,"Moving down");
                 MoveYCamera(-1);
             }
         }

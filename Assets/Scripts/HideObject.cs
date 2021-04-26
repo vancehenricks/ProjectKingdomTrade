@@ -4,6 +4,7 @@
  * Written by Vance Henricks Patual <vpatual@gmail.com>, February 2019
  */
 
+using DebugHandler;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -41,7 +42,7 @@ public class HideObject : MonoBehaviour
     {
         window.SetActive(!window.activeSelf);
 
-        Tools.Log(this,"WINDOW=" + window.activeSelf,LogType.Warning);
+        CDebug.Log(this,"WINDOW=" + window.activeSelf,LogType.Warning);
 
         if (window.activeSelf)
         {

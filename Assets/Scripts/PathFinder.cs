@@ -4,6 +4,7 @@
  * Written by Vance Henricks Patual <vpatual@gmail.com>, March 2021
  */
 
+using DebugHandler;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -48,7 +49,7 @@ public class PathFinder
 
         if (tempCache != null)
         {
-           Tools.Log(this,"Found global cache re-using it tempCache.Count " + tempCache.Count);
+           CDebug.Log(this,"Found global cache re-using it tempCache.Count " + tempCache.Count);
         }
 
 
@@ -83,7 +84,7 @@ public class PathFinder
 
                     if (!HasSameLastTileInfo(generatedWayPoints, tempCache))
                     {
-                        Tools.Log(this,"CHECKING FAIL " + generatedWayPoints[generatedWayPoints.Count - 1].tileLocation + "!=" + finalPoint.tileLocation);
+                        CDebug.Log(this,"CHECKING FAIL " + generatedWayPoints[generatedWayPoints.Count - 1].tileLocation + "!=" + finalPoint.tileLocation);
                         tempCache = generatedWayPoints;
                         generatedWayPoints = new List<TileInfo>();
                         currentPoint = generatedWayPoints[generatedWayPoints.Count - 1];

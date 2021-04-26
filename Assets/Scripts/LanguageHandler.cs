@@ -5,6 +5,7 @@
  */
 
 
+using DebugHandler;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -54,7 +55,7 @@ public class LanguageHandler : MonoBehaviour
 
         string defaultFileName = language[defaultLanguage];
 
-        Tools.Log(this, $"Default Language={defaultLanguage}:{defaultFileName}");
+        CDebug.Log(this, $"Default Language={defaultLanguage}:{defaultFileName}");
 
         AddToDictionary(File.ReadAllLines(Path.Combine(path, "Language", defaultFileName)), defaultFileName, texts);
 
@@ -62,7 +63,7 @@ public class LanguageHandler : MonoBehaviour
 
         string secondaryFileName = language[secondaryLanguage];
 
-        Tools.Log(this, $"Secondary Language={secondaryLanguage}:{secondaryFileName}");
+        CDebug.Log(this, $"Secondary Language={secondaryLanguage}:{secondaryFileName}");
 
         AddToDictionary(File.ReadAllLines(Path.Combine(path, "Language", secondaryFileName)), secondaryFileName, texts);
 
@@ -93,7 +94,7 @@ public class LanguageHandler : MonoBehaviour
 
             source = source.Replace("[" + _id + "]", texts[_id]);
 
-            Tools.Log(this,$"{_id}={source}");
+            CDebug.Log(this,$"{_id}={source}");
         }
 
         return true;
@@ -156,7 +157,7 @@ public class LanguageHandler : MonoBehaviour
         }
         catch (System.Exception e)
         {
-            Tools.Log(this,e,LogType.Error);
+            CDebug.Log(this,e,LogType.Error);
             ShowMessageHandler.init.infoWindow.SetMessage("[ERROR] - " + fileName,
                 e.ToString(), "[OK]", null, null);
         }

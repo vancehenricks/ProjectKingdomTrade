@@ -4,6 +4,7 @@
  * Written by Vance Henricks Patual <vpatual@gmail.com>, April 2021
  */
 
+using DebugHandler;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -41,7 +42,7 @@ public class SettingsHandler : MonoBehaviour
         }
         catch (System.Exception e)
         {
-            Tools.Log(this,e,LogType.Error);
+            CDebug.Log(this,e,LogType.Error);
             ShowMessageHandler.init.infoWindow.SetMessage("Json [ERROR] - settings.json",
                 e.ToString(), "OK", null, null);
         }

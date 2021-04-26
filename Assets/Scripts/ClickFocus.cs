@@ -9,12 +9,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using DebugHandler;
 
 public class ClickFocus : MonoBehaviour, IPointerDownHandler
 {
     public void OnPointerDown(PointerEventData eventData)
     {
-        Tools.Log(this,"SiblingIndex:" + this.transform.GetSiblingIndex());
+        CDebug.Log(this,"SiblingIndex:" + this.transform.GetSiblingIndex());
         this.transform.SetAsLastSibling();
     }
 }

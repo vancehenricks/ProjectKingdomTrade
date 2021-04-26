@@ -4,6 +4,7 @@
  * Written by Vance Henricks Patual <vpatual@gmail.com>, September 2020
  */
 
+using DebugHandler;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -79,7 +80,7 @@ public class SyncIcon : MonoBehaviour
         }
         catch (System.Exception e)
         {
-            Tools.Log(this,e,LogType.Warning);
+            CDebug.Log(this,e,LogType.Warning);
             Destroy(gameObject);
         }
 

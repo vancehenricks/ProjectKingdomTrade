@@ -39,7 +39,7 @@ public class OpenLeftClick : MonoBehaviour
 
     private void Command()
     {
-        //Tools.Log(this,"OpenLeftClick");
+        //CDebug.Log(this,"OpenLeftClick");
 
         if (ignore) return;
 

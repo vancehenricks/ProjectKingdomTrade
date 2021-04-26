@@ -4,6 +4,7 @@
  * Written by Vance Henricks Patual <vpatual@gmail.com>, August 2019
  */
 
+using DebugHandler;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
@@ -143,7 +144,7 @@ public class PathFindingHandler : MonoBehaviour
             {
                 if (wayPointReached != null)
                 {
-                    Tools.Log(this,"Waypoint reached");
+                    CDebug.Log(this,"Waypoint reached");
                     wayPointReached(point);
                 }
 
@@ -198,7 +199,7 @@ public class PathFindingHandler : MonoBehaviour
             PathFinder pathFinder = new PathFinder(standingTile, pointTileInfo, tempCache, isWalkable, OnDoneCalculate, AlgorithmicCounter);
             task = new Task(pathFinder.Calculate);
             task.Start();
-            Tools.Log(this,"generatedWayPoints.Count:" + generatedWayPoints.Count,LogType.Warning);
+            CDebug.Log(this,"generatedWayPoints.Count:" + generatedWayPoints.Count,LogType.Warning);
             currentTileId = standingTile.tileId + "";
         }
         else if (currentTileId == (standingTile.tileId + "") && generatedWayPoints.Count > 0)
@@ -212,7 +213,7 @@ public class PathFindingHandler : MonoBehaviour
         {
             saveCache = false;
 
-            Tools.Log(this,"Adding " + generatedWayPoints.Count,LogType.Warning);
+            CDebug.Log(this,"Adding " + generatedWayPoints.Count,LogType.Warning);
             List<TileInfo> temp = new List<TileInfo>(generatedWayPoints);
             PathFindingCache.init.Add(standingTile, pointTileInfo, temp);
         }
@@ -229,13 +230,13 @@ public class PathFindingHandler : MonoBehaviour
         }
         else if (executeAlgorithmCounter > executeAlgorithmThreshold && generatedWayPoints.Count == 0)
         {
-            Tools.Log(this,"executeAlgorithmCounter=" + executeAlgorithmCounter);
+            CDebug.Log(this,"executeAlgorithmCounter=" + executeAlgorithmCounter);
             executeAlgorithmCounter = 0;
             index++;
         }
         else if (generatedWayPoints.Count == 0)
         {
-            Tools.Log(this,"executeAlgorithmCounter=" + executeAlgorithmCounter);
+            CDebug.Log(this,"executeAlgorithmCounter=" + executeAlgorithmCounter);
             executeAlgorithmCounter++;
         }
     }

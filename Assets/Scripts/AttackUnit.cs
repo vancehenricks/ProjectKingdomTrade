@@ -10,6 +10,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Linq;
+using DebugHandler;
 
 public class AttackUnit : MoveUnit
 {
@@ -77,7 +78,7 @@ public class AttackUnit : MoveUnit
         if (Input.GetButtonDown("Fire2"))
         {
             openRightClick.doNotDisplay = true;
-            Tools.Log(this,"AttackUnit set doNotDisplay" + openRightClick.doNotDisplay);
+            CDebug.Log(this,"AttackUnit set doNotDisplay" + openRightClick.doNotDisplay);
             openRightClick.ResetValues();
             EndAction();
         }
@@ -89,7 +90,7 @@ public class AttackUnit : MoveUnit
 
             List<TileInfo> tileInfos = Tools.WhiteList(_tileInfos, include);
 
-            Tools.Log(this,"TileInfo.Count=" + tileInfos.Count);
+            CDebug.Log(this,"TileInfo.Count=" + tileInfos.Count);
 
             if (tileInfos.Count == 0) return;
 
@@ -114,7 +115,7 @@ public class AttackUnit : MoveUnit
             //openRightClick.multiSelect = false;
             openRightClick.tileInfoRaycaster.GetTileInfosFromPos(Input.mousePosition);
             openRightClick.forceDisplay = true;
-            Tools.Log(this, "Unit Selected!");
+            CDebug.Log(this, "Unit Selected!");
         }
 
     }

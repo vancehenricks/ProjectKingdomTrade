@@ -4,6 +4,7 @@
  * Written by Vance Henricks Patual <vpatual@gmail.com>, February 2021
  */
 
+using DebugHandler;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -45,7 +46,7 @@ public class ConsoleMoveUnit : ConsoleCommand
 
             foreach (string subCommand in subCommands.Keys)
             {
-                Tools.Log(this, $"Command={subCommand}", LogType.Warning);
+                CDebug.Log(this, $"Command={subCommand}", LogType.Warning);
 
                 switch (subCommand)
                 {

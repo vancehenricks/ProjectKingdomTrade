@@ -4,6 +4,7 @@
  * Written by Vance Henricks Patual <vpatual@gmail.com>, February 2021
  */
 
+using DebugHandler;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -63,7 +64,7 @@ public class TileConfigHandler : MonoBehaviour
             }
             catch (System.Exception e)
             {
-                Tools.Log(this,e,LogType.Error);
+                CDebug.Log(this,e,LogType.Error);
                 ShowMessageHandler.init.infoWindow.SetMessage("Json [ERROR] - " + file,
                     e.ToString(), "[OK]", null, null);
             }
@@ -85,7 +86,7 @@ public class TileConfigHandler : MonoBehaviour
             }
             catch (System.Exception e)
             {
-                Tools.Log(this,e,LogType.Error);
+                CDebug.Log(this,e,LogType.Error);
                 ShowMessageHandler.init.infoWindow.SetMessage("Json [ERROR] - " + file,
                     e.ToString(), "[OK]", null, null);
             }

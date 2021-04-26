@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using DebugHandler;
 
 public class NightDay : MonoBehaviour
 {
@@ -44,7 +45,7 @@ public class NightDay : MonoBehaviour
     private void Update()
     {
 
-        Tools.Log(this,"Sunset: " + sunset + " Sunrise: " + sunrise);
+        CDebug.Log(this,"Sunset: " + sunset + " Sunrise: " + sunrise);
 
         if (ClimateControl.init.isSpring)
         {

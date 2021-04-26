@@ -4,6 +4,7 @@
  * Written by Vance Henricks Patual <vpatual@gmail.com>, April 2021
  */
 
+using DebugHandler;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -33,7 +34,7 @@ public class TextHandler : MonoBehaviour
         texts.Clear();
         texts.AddRange(Resources.FindObjectsOfTypeAll<Text>());
 
-        Tools.Log(this,$"Font={font.name}");
+        CDebug.Log(this,$"Font={font.name}");
 
         foreach (Text text in texts)
         {

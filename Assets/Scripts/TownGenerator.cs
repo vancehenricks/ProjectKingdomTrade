@@ -10,6 +10,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Linq;
+using DebugHandler;
 
 public class TownGenerator : MonoBehaviour
 {
@@ -22,7 +23,7 @@ public class TownGenerator : MonoBehaviour
 
     public void Generate()
     {
-        Tools.Log(this, "Generating Town");
+        CDebug.Log(this, "Generating Town");
         //Loop through the generated towns and activate border
 
         /*List<Color> colors = new List<Color>();

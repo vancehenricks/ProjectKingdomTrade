@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using DebugHandler;
 
 public class MoveUnit : PlayerCommand
 {
@@ -27,14 +28,14 @@ public class MoveUnit : PlayerCommand
         if (Input.GetButtonDown("Fire1") && MultiSelect.init.shiftPressed)
         {
             openRightClick.openLeftClick.Ignore();
-            Tools.Log(this,"Creating multiple waypoint...");
+            CDebug.Log(this,"Creating multiple waypoint...");
             AssignsToList(tileInfoRaycaster.GetTileInfoFromPos(Input.mousePosition), waypointsList);
         }
 
         if (Input.GetButtonDown("Fire1") && !MultiSelect.init.shiftPressed)
         {
             openRightClick.openLeftClick.Ignore();
-            Tools.Log(this,"Creating one waypoint... unitInfos.Count=" + unitInfos.Count);
+            CDebug.Log(this,"Creating one waypoint... unitInfos.Count=" + unitInfos.Count);
             TileInfo tileInfo = tileInfoRaycaster.GetTileInfoFromPos(Input.mousePosition);
             ClearAllWaypoints();
             AssignsToList(tileInfo, waypointsList);

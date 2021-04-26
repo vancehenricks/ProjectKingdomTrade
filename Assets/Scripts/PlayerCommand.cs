@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
-
+using DebugHandler;
 
 public class PlayerCommand : MonoBehaviour
 {
@@ -50,7 +50,7 @@ public class PlayerCommand : MonoBehaviour
 
     public virtual void EndAction()
     {
-        Tools.Log(this,"END ACTION");
+        CDebug.Log(this,"END ACTION");
         CursorReplace.init.currentCursor = CursorType.Default;
         CursorReplace.init.SetCurrentCursorAsPrevious();
         unitInfos.Clear();

@@ -10,6 +10,7 @@ using UnityEngine.UI;
 using UnityEngine;
 using System;
 using System.Linq;
+using DebugHandler;
 
 public class ConsoleHandler : MonoBehaviour
 {
@@ -90,14 +91,14 @@ public class ConsoleHandler : MonoBehaviour
     {
         if (OverrideGetKeyUp(KeyCode.UpArrow))
         {
-            Tools.Log(this, "CONSOLE UP");
+            CDebug.Log(this, "CONSOLE UP");
             IncrementIndex(1);
             DisplayCache();
         }
 
         if (OverrideGetKeyUp(KeyCode.DownArrow))
         {
-            Tools.Log(this, "CONSOLE DOWN");
+            CDebug.Log(this, "CONSOLE DOWN");
             IncrementIndex(-1);
             DisplayCache();
         }
@@ -258,7 +259,7 @@ public class ConsoleHandler : MonoBehaviour
         console.transform.SetParent(baseConsole.transform.parent);
         console.gameObject.SetActive(true);
         console.text += line + Environment.NewLine;
-        Tools.Log(this, $"Command={line}", LogType.Warning);
+        CDebug.Log(this, $"Command={line}", LogType.Warning);
         consoles.Add(console);
 
         if (record)
@@ -293,7 +294,7 @@ public class ConsoleHandler : MonoBehaviour
     public void Focus()
     {
 
-        Tools.Log(this, "CONSOLE FOCUS");
+        CDebug.Log(this, "CONSOLE FOCUS");
         ScrollZero();
 
         if (window.activeSelf)
@@ -386,7 +387,7 @@ public class ConsoleHandler : MonoBehaviour
 
         if (cacheCommands.Count > 0 && index < cacheCommands.Count)
         {
-            Tools.Log(this, "cache[index]=" + cacheCommands[index] + " index=" + index);
+            CDebug.Log(this, "cache[index]=" + cacheCommands[index] + " index=" + index);
             command.text = cacheCommands[index];
         }
 

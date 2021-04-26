@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using DebugHandler;
 
 public class DragSelect : MonoBehaviour
 {
@@ -62,32 +63,32 @@ public class DragSelect : MonoBehaviour
             //tileInfoGetterArray.holdList = false;
 
             TranslatePosToWorldPoint.init.SetPos(Input.mousePosition, out p2);
-            Tools.Log(this,"initialMousePos="+initialMousePos+"CurrentMos="+Input.mousePosition);
+            CDebug.Log(this,"initialMousePos="+initialMousePos+"CurrentMos="+Input.mousePosition);
 
             if (Input.mousePosition.x > initialMousePos.x && Input.mousePosition.y < initialMousePos.y)
             {
-                Tools.Log(this,"LEFT TOP > RIGHT DOWN");
+                CDebug.Log(this,"LEFT TOP > RIGHT DOWN");
                 _selectorObjRect.pivot = new Vector2(0, 1);
                 _selectorObjRect.sizeDelta = new Vector2(p2.x - p1.x, p1.y - p2.y);
                 _selectorObjCollider.offset = new Vector2(_selectorObjRect.sizeDelta.x * 0.5f, _selectorObjRect.sizeDelta.y * -0.5f);
             }
             else if (Input.mousePosition.x < initialMousePos.x && Input.mousePosition.y > initialMousePos.y)
             {
-                Tools.Log(this,"RIGHT DOWN > LEFT TOP");
+                CDebug.Log(this,"RIGHT DOWN > LEFT TOP");
                 _selectorObjRect.pivot = new Vector2(1, 0);
                 _selectorObjRect.sizeDelta = new Vector2(p1.x - p2.x, p2.y - p1.y);
                 _selectorObjCollider.offset = new Vector2(_selectorObjRect.sizeDelta.x * -0.5f, _selectorObjRect.sizeDelta.y * 0.5f);
             }
             else if (Input.mousePosition.x > initialMousePos.x && Input.mousePosition.y > initialMousePos.y)
             {
-                Tools.Log(this,"LEFT DOWN > RIGHT TOP");
+                CDebug.Log(this,"LEFT DOWN > RIGHT TOP");
                 _selectorObjRect.pivot = new Vector2(0, 0);
                 _selectorObjRect.sizeDelta = new Vector2(p2.x - p1.x, p2.y - p1.y);
                 _selectorObjCollider.offset = new Vector2(_selectorObjRect.sizeDelta.x * 0.5f, _selectorObjRect.sizeDelta.y * 0.5f);
             }
             else
             {
-                Tools.Log(this,"RIGHT TOP > LEFT DOWN");
+                CDebug.Log(this,"RIGHT TOP > LEFT DOWN");
                 _selectorObjRect.pivot = new Vector2(1, 1);
                 _selectorObjRect.sizeDelta = new Vector2(p1.x - p2.x, p1.y - p2.y);
                 _selectorObjCollider.offset = new Vector2(_selectorObjRect.sizeDelta.x * -0.5f, _selectorObjRect.sizeDelta.y * -0.5f);

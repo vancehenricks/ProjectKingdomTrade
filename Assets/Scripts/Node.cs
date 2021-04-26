@@ -4,6 +4,7 @@
  * Written by Vance Henricks Patual <vpatual@gmail.com>, April 2020
  */
 
+using DebugHandler;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -85,7 +86,7 @@ public class Node
             }
             catch (System.Exception e)
             {
-                Tools.Log(nameof(Node),e,LogType.Warning);
+                CDebug.Log(nameof(Node),e,LogType.Warning);
             }
         }
 
