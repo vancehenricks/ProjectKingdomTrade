@@ -62,7 +62,7 @@ public class TileInfoRaycaster : MonoBehaviour
 
         if (results.Count > 0)
         {
-            CDebug.Log(this, "results.Count=" + results.Count);
+            CDebug.Log(this, "UI hit=" + results[results.Count-1].gameObject.name);
             return;
         }
 
@@ -79,6 +79,7 @@ public class TileInfoRaycaster : MonoBehaviour
             if (hitCount <= maxHits && tile != null && tile.tileType != "Edge")
             {
                 hitCount++;
+                CDebug.Log(this, "Tile hit=" + tile.tileId + "," + tile.tileType + "," + tile.subType + "," + tile.tileLocation);
                 _tileInfos.Add(tile);
             }
         }

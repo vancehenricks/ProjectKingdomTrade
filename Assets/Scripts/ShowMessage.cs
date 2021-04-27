@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
-
+using DebugHandler;
 
 public class ShowMessage : MonoBehaviour
 {
@@ -64,6 +64,8 @@ public class ShowMessage : MonoBehaviour
 
     public void SetReponse(bool _response)
     {
+        CDebug.Log(this,"Response="+_response);
+
         background.SetActive(false);
         response = _response;
         if (exeAction != null)

@@ -125,11 +125,12 @@ public class SelectTiles : MonoBehaviour
         syncIcon.SetActive(hostTile.selected);
 
         flags.Add(id, flag);
+        CDebug.Log(this, "flags added=" + flags.Count);
     }
 
     public void RemoveFlag(TileInfo hostTile, TileInfo tile)
     {
-        CDebug.Log(this, "Flag Destroy");
+        CDebug.Log(this, "flags removed=" + flags.Count);
 
         List<string> keys = new List<string>(flags.Keys);
 
@@ -156,7 +157,7 @@ public class SelectTiles : MonoBehaviour
 
     public void RemoveAllFlag()
     {
-        CDebug.Log(this, "flags.Count=" + flags.Count);
+        CDebug.Log(this, "flags removed=" + flags.Count);
         foreach (var flag in flags.Values)
         {
             Destroy(flag);

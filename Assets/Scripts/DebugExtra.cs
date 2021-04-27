@@ -18,8 +18,10 @@ public class DebugExtra : MonoBehaviour
 
     private string ExtraParams()
     {
-        return "TickDate="+Tick.init.day + "/" + Tick.init.month + "/" + Tick.init.year + 
-            " Tick=" + Tick.init.seconds + " Temp=" + Temperature.init.temperature + " " + ClimateControl.init.Climate();
+        return MapGenerator.init.width + "x" + MapGenerator.init.height + " " + MapGenerator.init.xOffset.ToString("0.00") + "," +
+            MapGenerator.init.yOffset.ToString("0.00") + "," + MapGenerator.init.scale.ToString("0.00") + " " +
+            Tick.init.day + "/" + Tick.init.month + "/" + Tick.init.year + " " +
+            Tick.init.seconds + " " + Temperature.init.temperature + "c " + ClimateControl.init.Climate();
     }
 
     private void OnDestroy()
