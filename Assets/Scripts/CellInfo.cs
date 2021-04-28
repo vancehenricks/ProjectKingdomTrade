@@ -33,9 +33,9 @@ public class CellInfo : MonoBehaviour
         optionGenerator = generateCells.optionGenerator;
         tileInfo = tile;
 
-        if (tile.units > 0)
+        if (tile.unit > 0)
         {
-            value.text = Tools.ConvertToSymbols(tile.units);
+            value.text = Tools.ConvertToSymbols(tile.unit);
         }
 
         Image shade = null;

@@ -15,7 +15,9 @@
  "spawnableTile":
  [
  ],
- "units":10,
+ "spawnDistance":0.0,
+ "unit":0,
+ "maxUnit":0,
  "travelSpeed":0.30000001192092898,
  "attackDistance":0,
  "options":
@@ -35,5 +37,8 @@
    "minTemperature":0.0,
    "maxTemperature":1.0
   }
+ ],
+ "upgrades":
+ [
  ]
 }

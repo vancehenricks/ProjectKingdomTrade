@@ -16,6 +16,7 @@ public class TileConfigHandler : MonoBehaviour
     public Dictionary<string, TileInfo> baseTiles;
     public Dictionary<string, TileInfo> baseUnits;
     public Dictionary<string, TileInfo> baseTowns;
+
     private static TileConfigHandler _init;
     public static TileConfigHandler init
     {
@@ -107,7 +108,7 @@ public class TileConfigHandler : MonoBehaviour
             config.nonWalkable = unitInfo.nonWalkable.ToArray();
         }
 
-        config.units = tileInfo.units;
+        config.unit = tileInfo.unit;
         config.tileType = tileInfo.tileType;
         config.subType = tileInfo.subType;
         config.travelTime = tileInfo.travelTime;
@@ -137,6 +138,8 @@ public class TileConfigHandler : MonoBehaviour
         config.autumnTemp = tileInfo.tileEffect.autumnTemp;
         config.summerTemp = tileInfo.tileEffect.summerTemp;
         config.options = tileInfo.options.ToArray();
+        config.upgrades = tileInfo.upgrades.ToArray();
+        config.spawnDistance = tileInfo.spawnDistance;
 
         return config;
     }
@@ -146,9 +149,13 @@ public class TileConfigHandler : MonoBehaviour
     {
         UnityEngine.Object baseObj = baseTile;
 
-        if (config.tileType == "Unit" || config.tileType == "Town")
+        if (config.tileType == "Unit")
         {
             baseObj = baseUnit;
+        }
+        else if (config.tileType == "Town")
+        {
+            baseObj = baseTown;
         }
 
         TileInfo tileInfo = (TileInfo)Instantiate(baseObj);
@@ -179,13 +186,24 @@ public class TileConfigHandler : MonoBehaviour
             tileInfo.options = new List<string>(config.options);
         }
 
-        tileInfo.units = config.units;
+        if (config.upgrades != null)
+        {
+            tileInfo.upgrades = new List<Upgrade>(config.upgrades);
+
+            foreach (Upgrade upgrade in config.upgrades)
+            {
+                TextureHandler.init.GetSprite(upgrade.spriteReward); //Load sprite into cache
+            }
+        }
+
+        tileInfo.unit = config.unit;
         tileInfo.tileType = config.tileType;
         tileInfo.subType = config.subType;
         tileInfo.travelTime = config.travelTime;
         tileInfo.spawnHeightMin = config.spawnHeightMin;
         tileInfo.spawnHeightMax = config.spawnHeightMax;
         tileInfo.spawnChance = config.spawnChance;
+        tileInfo.spawnDistance = config.spawnDistance;
 
         Sprite sprite = TextureHandler.init.GetSprite(config.sprite);
 
@@ -201,6 +219,7 @@ public class TileConfigHandler : MonoBehaviour
         tileInfo.tileEffect.freezingTemp = config.freezingTemp;
         tileInfo.tileEffect.autumnTemp = config.autumnTemp;
         tileInfo.tileEffect.summerTemp = config.summerTemp;
+
 
         return tileInfo;
     }

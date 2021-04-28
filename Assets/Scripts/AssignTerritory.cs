@@ -20,16 +20,9 @@ public class AssignTerritory : MonoBehaviour
         {
             tileEffect = col.gameObject.GetComponent<TileEffect>();
 
-            if (tileEffect != null && tileEffect.tileInfo.tileType != "Edge")
+            if (tileEffect != null)
             {
-                if (tileEffect.tileInfo.playerInfo == null)
-                {
-                    tileEffect.tileInfo.playerInfo = baseTileInfo.playerInfo;
-                }
-
-                tileEffect.tileInfo.claimants.Add(baseTileInfo.playerInfo);
-                baseTileInfo.playerInfo.claims.Add(tileEffect.tileInfo);
-                tileEffect.UpdateTerritoryColor();
+                tileEffect.UpdateTerritory(baseTileInfo);
             }
         }
 

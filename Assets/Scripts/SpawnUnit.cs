@@ -102,7 +102,7 @@ public class SpawnUnit : ConsoleCommand
 
                         if (!subCommands.ContainsKey("units"))
                         {
-                            units = unitInfo.units;
+                            units = unitInfo.unit;
                         }
 
                         if (!subCommands.ContainsKey("attackDistance"))
@@ -159,7 +159,7 @@ public class SpawnUnit : ConsoleCommand
         unitInfo.playerInfo = playerInfo;
         unitInfo.playerInfo.color = color == Color.white ? playerInfo.color : color;
         unitInfo.attackDistance = attackDistance;
-        unitInfo.units = units;
+        unitInfo.unit = units;
         unitInfo.Initialize();
         unit.SetActive(true);
         ConsoleHandler.init.AddLine(string.Format("Spawning unit [{0}/{1}].", nCount + 1, nMax));
@@ -184,7 +184,7 @@ public class SpawnUnit : ConsoleCommand
         playerInfo = PlayerList.init.players.Values.ElementAt(0);
         playerId = playerInfo.playerId;
         attackDistance = unitInfo.attackDistance;
-        units = unitInfo.units;
+        units = unitInfo.unit;
         nMax = 1;
         nCount = 0;
         autoFocus = true;

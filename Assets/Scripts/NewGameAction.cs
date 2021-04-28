@@ -63,8 +63,8 @@ public class NewGameAction : MonoBehaviour
     {
         if (IsNormalize(width, out w, 500) && IsNormalize(height, out h, 500))
         {
-
-            if (Tools.GetNumberOfTiles(w, h, 25, 25) > Tools.GetNumberOfTiles(1000, 1000, 25, 25))
+            float tileSize = Tools.tileSize;
+            if (Tools.GetNumberOfTiles(w, h, tileSize, tileSize) > Tools.GetNumberOfTiles(1000, 1000, tileSize, tileSize))
             {
                 ShowMessage show = ShowMessageHandler.init.confirmWindow.SetMessage("[WARNING]",
                     "[MAP-SIZE-GREATER-THAN-1000X1000] [THIS-COULD-CAUSE-THE-GAME-TO-BE-UNRESPONSIVE] [WOULD-YOU-LIKE-TO-CONTINUE]",

@@ -12,15 +12,28 @@ using UnityEngine;
 
 public class FoilageGenerator : MonoBehaviour
 {
+    private static FoilageGenerator _init;
+
+    public static FoilageGenerator init
+    {
+        get { return _init; }
+        private set { _init = value; }
+    }
+
+    private void Awake()
+    {
+        init = this;
+    }
+
     private void Start()
     {
         MapGenerator.init.Add(Generate, 7f);
     }
-    public void Generate()
+    private void Generate()
     {
         CDebug.Log(this,"Generating Foilage");
 
-        Dictionary<string, SortedList<float, TileInfo>> foilageGroup = GetFoilageGroup();
+        Dictionary<string, SortedList<float, TileInfo>> foilageGroup = GetFoilageGroup(TileConfigHandler.init.baseTiles.Values.ToList<TileInfo>());
 
         foreach (KeyValuePair<string, SortedList<float, TileInfo>> baseTiles in foilageGroup)
         {
@@ -32,15 +45,12 @@ public class FoilageGenerator : MonoBehaviour
 
                 if (candidate == null) continue;
 
-                tileInfo.gameObject.SetActive(false);
-
                 Tools.ReplaceTile(candidate, tileInfo);
             }
         }
-
     }
 
-    private TileInfo GetBaseTile(SortedList<float, TileInfo> baseTiles)
+    public TileInfo GetBaseTile(SortedList<float, TileInfo> baseTiles)
     {
         foreach (KeyValuePair<float, TileInfo> baseTile in baseTiles)
         {
@@ -53,11 +63,11 @@ public class FoilageGenerator : MonoBehaviour
         return null;
     }
 
-    private Dictionary<string, SortedList<float, TileInfo>> GetFoilageGroup()
+    public Dictionary<string, SortedList<float, TileInfo>> GetFoilageGroup(List<TileInfo> _baseTiles)
     {
         Dictionary<string, SortedList<float, TileInfo>> foilageGroup = new Dictionary<string, SortedList<float, TileInfo>>();
 
-        foreach (TileInfo baseTile in TileConfigHandler.init.baseTiles.Values)
+        foreach (TileInfo baseTile in _baseTiles)
         {
             if (baseTile.spawnableTile.Count == 0) continue;
 

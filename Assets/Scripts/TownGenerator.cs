@@ -14,33 +14,62 @@ using DebugHandler;
 
 public class TownGenerator : MonoBehaviour
 {
-    public PlayerInfo basePlayerInfo;
+    private static TownGenerator _init;
+    public static TownGenerator init
+    {
+        get { return _init; }
+        private set { _init = value; }
+    }
+
+    private void Awake()
+    {
+        init = this;
+    }
 
     private void Start()
     {
         MapGenerator.init.Add(Generate, 8f);
     }
 
-    public void Generate()
+    private void Generate()
     {
         CDebug.Log(this, "Generating Town");
-        //Loop through the generated towns and activate border
 
-        /*List<Color> colors = new List<Color>();
-        Color a = Random.ColorHSV(0f, 1f, 1f, 1f, 1f, 1f); //This is temporary
-        colors.Add(a);
+        Dictionary<string, SortedList<float, TileInfo>> foilageGroup = FoilageGenerator.init.GetFoilageGroup(TileConfigHandler.init.baseTowns.Values.ToList<TileInfo>());
 
-        foreach (TileInfo tile in TileList.generatedTowns.Values)
+        foreach (KeyValuePair<string, SortedList<float, TileInfo>> baseTiles in foilageGroup)
         {
-            tile.tileCaller.border.SetActive(true);
-            Color temp = Random.ColorHSV(0f, 1f, 1f, 1f, 1f, 1f); //This is temporary
-
-
-            if (colors.Exists(c => c != temp))
+            foreach (TileInfo tileInfo in TileList.init.tileInfos.Values.ToList<TileInfo>())
             {
-                colors.Add(temp);
-                tile.playerInfo.color = temp;
+                if (tileInfo.subType != baseTiles.Key && tileInfo.tileType != baseTiles.Key) continue;
+
+                TileInfo candidate = FoilageGenerator.init.GetBaseTile(baseTiles.Value);
+
+                if (candidate == null) continue;
+
+                Tools.ReplaceTile(candidate, tileInfo);
             }
-        }*/
-    }
+        }
+
+            //do same thing as foilagegenerator already does but also check for distance
+
+            //Loop through the generated towns and activate border
+
+            /*List<Color> colors = new List<Color>();
+            Color a = Random.ColorHSV(0f, 1f, 1f, 1f, 1f, 1f); //This is temporary
+            colors.Add(a);
+
+            foreach (TileInfo tile in TileList.generatedTowns.Values)
+            {
+                tile.tileCaller.border.SetActive(true);
+                Color temp = Random.ColorHSV(0f, 1f, 1f, 1f, 1f, 1f); //This is temporary
+
+
+                if (colors.Exists(c => c != temp))
+                {
+                    colors.Add(temp);
+                    tile.playerInfo.color = temp;
+                }
+            }*/
+        }
 }

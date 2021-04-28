@@ -47,8 +47,7 @@ public class UnitInfo : TileInfo
         waypoints = new List<TileInfo>();
         targets = new List<TileInfo>();
         targetted = new List<TileInfo>();
-
-        SetSprite(sprite);
+        nonWalkable = new List<Walkable>();
 
         base.Initialize();
     }

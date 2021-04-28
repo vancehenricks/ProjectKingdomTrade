@@ -16,7 +16,9 @@
  [
   "Land"
  ],
- "units":0,
+ "spawnDistance":0.0,
+ "unit":0,
+ "maxUnit":0,
  "travelSpeed":0.0,
  "attackDistance":0,
  "options":
@@ -43,6 +45,15 @@
    "tile":"Sea",
    "minTemperature":0.0,
    "maxTemperature":0.0
+  }
+ ],
+ "upgrades":
+ [
+  {
+   "unitRequirement":0,
+   "spriteReward":"",
+   "unitReward":0,
+   "maxUnitReward":0
   }
  ]
 }

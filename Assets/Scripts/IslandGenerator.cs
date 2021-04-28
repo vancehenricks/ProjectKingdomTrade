@@ -12,17 +12,28 @@ using UnityEngine;
 
 public class IslandGenerator : MonoBehaviour
 {
-    private List<TileInfo> baseTiles;
+    private static IslandGenerator _init;
+
+    public static IslandGenerator init
+    {
+        get { return _init; }
+        private set { _init = value; }
+    }
+
+    private void Awake()
+    {
+        init = this;
+    }
 
     private void Start()
     {
         MapGenerator.init.Add(Generate, 0f);
     }
-    public void Generate()
+    private void Generate()
     {
         CDebug.Log(this, "Generating Island");
 
-        baseTiles = TileConfigHandler.init.baseTiles.Values.ToList<TileInfo>();
+
 
         Vector3 placeHolder = MapGenerator.init.placeHolderTile.transform.position;
         Vector3 originPos = placeHolder;
@@ -33,20 +44,21 @@ public class IslandGenerator : MonoBehaviour
         {
             for (int x = 0; x < MapGenerator.init.width; x++)
             {
-                TileInfo newTile = Instantiate(GetBaseTile(noiseMap[x, y]), MapGenerator.init.grid);
+                List<TileInfo> baseTiles = TileConfigHandler.init.baseTiles.Values.ToList<TileInfo>();
+                TileInfo newTile = Instantiate(GetBaseTile(noiseMap[x, y], baseTiles), MapGenerator.init.grid);
                 newTile.transform.position = placeHolder;
                 newTile.tileLocation = new Vector2(x, y);
                 newTile.Initialize();
                 newTile.gameObject.SetActive(true);
 
-                placeHolder = new Vector3(placeHolder.x + 25f, placeHolder.y, placeHolder.z);
+                placeHolder = new Vector3(placeHolder.x + Tools.tileSize, placeHolder.y, placeHolder.z);
             }
 
-            placeHolder = new Vector3(originPos.x, placeHolder.y - 25, originPos.z);
+            placeHolder = new Vector3(originPos.x, placeHolder.y - Tools.tileSize, originPos.z);
         }
     }
 
-    private float[,] GenerateNoise()
+    public float[,] GenerateNoise()
     {
         float[,] noiseMap = new float[MapGenerator.init.width, MapGenerator.init.height];
         for (int y = 0; y < MapGenerator.init.height; y++)
@@ -62,7 +74,7 @@ public class IslandGenerator : MonoBehaviour
         return noiseMap;
     }
 
-    private TileInfo GetBaseTile(float spawnHeight)
+    public TileInfo GetBaseTile(float spawnHeight, List<TileInfo> baseTiles)
     {
         //sortedlist is ascending order
         SortedList<float, TileInfo> candidateTiles = new SortedList<float, TileInfo>();

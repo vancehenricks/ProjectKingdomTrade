@@ -51,12 +51,12 @@ public class UnitDisplay : MonoBehaviour
 
     private void Update()
     {
-        if (instance == null || unitTrack == tile.units) return;
+        if (instance == null || unitTrack == tile.unit) return;
 
         //Debug.Log("UPDATING text");
 
-        text.text = Tools.ConvertToSymbols(tile.units);
-        unitTrack = tile.units;
+        text.text = Tools.ConvertToSymbols(tile.unit);
+        unitTrack = tile.unit;
         background.color = new Color(tile.playerInfo.color.r, tile.playerInfo.color.g, tile.playerInfo.color.b, background.color.a);
     }
 }

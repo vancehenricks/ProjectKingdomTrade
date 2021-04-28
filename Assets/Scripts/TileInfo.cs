@@ -38,19 +38,29 @@ public class TileInfo : MonoBehaviour
     public float spawnHeightMin;
     public float spawnHeightMax;
     public float spawnChance;
+    public float spawnDistance;
     public List<string> spawnableTile;
     public List<UnitInfo> unitInfos;
-    public int units;
+    public int unit;
+    public int maxUnit;
     public bool selected;
     public List<string> options;
+    public List<Upgrade> upgrades;
 
     public virtual void Initialize()
     {
+        if (playerInfo == null)
+        {
+            playerInfo = PlayerList.init.defaultPlayerInfo;
+        }
         claimants = new HashSet<PlayerInfo>();
         localTemp = Temperature.init.temperature;
         unitInfos = new List<UnitInfo>();
+        upgrades = new List<Upgrade>();
         tileId = Tools.UniqueId;
         TileList.init.Add(this);
+
+        SetSprite(sprite);
     }
 
     public void OnDestroy()

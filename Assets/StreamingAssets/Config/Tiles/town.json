@@ -9,13 +9,18 @@
  "autumnTemp":20.0,
  "summerTemp":30.0,
  "travelTime":1.5,
- "spawnHeightMin":0.0,
- "spawnHeightMax":0.0,
- "spawnChance":0.0,
+ "spawnHeightMin":-2.0,
+ "spawnHeightMax":-2.0,
+ "spawnChance":0.10000000149011612,
  "spawnableTile":
  [
+  "Land",
+  "Forest",
+  "Grass"
  ],
- "units":10,
+ "spawnDistance":0.0,
+ "unit":0,
+ "maxUnit":0,
  "travelSpeed":0.0,
  "attackDistance":0,
  "options":
@@ -25,6 +30,9 @@
  "killChance":0.0,
  "deathChance":0.0,
  "nonWalkable":
+ [
+ ],
+ "upgrades":
  [
  ]
 }

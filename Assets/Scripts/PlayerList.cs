@@ -18,23 +18,41 @@ public class PlayerList : MonoBehaviour
         private set { _init = value; }
     }
 
-    public PlayerInfo playerInfo;
+    public PlayerInfo basePlayerInfo;
+
+    private PlayerInfo _defaultPlayerInfo;
+    public PlayerInfo defaultPlayerInfo
+    {
+        get
+        {
+            return _defaultPlayerInfo;
+        }
+        private set
+        {
+            _defaultPlayerInfo = value;
+        }
+    }
+
     public Dictionary<long, PlayerInfo> players;
 
     private void Awake()
     {
+        players = new Dictionary<long, PlayerInfo>();
+        Instantiate();
         init = this;
     }
 
-    private void Start()
-    {
-        players = new Dictionary<long, PlayerInfo>();
-    }
 
     public PlayerInfo Instantiate()
     {
-        PlayerInfo temp = Instantiate<PlayerInfo>(playerInfo, playerInfo.transform.parent);
+        PlayerInfo temp = Instantiate<PlayerInfo>(basePlayerInfo, basePlayerInfo.transform.parent);
         temp.Initialize();
+
+        if (defaultPlayerInfo == null)
+        {
+            defaultPlayerInfo = temp;
+        }
+
         players.Add(temp.playerId, temp);
 
         return temp;

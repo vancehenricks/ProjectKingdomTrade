@@ -14,6 +14,19 @@ using UnityEngine;
 
 public class Tools : MonoBehaviour
 {
+    private static float _tileSize = 25f;
+
+    public static float tileSize
+    {
+        get
+        {
+            return _tileSize;
+        }
+        private set
+        {
+            _tileSize = value;
+        }
+    }
 
     //on save make sure to save this
     private static long _UniqueId;
@@ -151,7 +164,7 @@ public class Tools : MonoBehaviour
         catch (System.Exception e)
         {
             CDebug.Log(nameof(Tools), e,LogType.Warning);
-            distance = (int)Math.Round(Vector2.Distance(tile1.transform.position, tile2.transform.position) / 25, MidpointRounding.AwayFromZero);
+            distance = (int)Math.Round(Vector2.Distance(tile1.transform.position, tile2.transform.position) / Tools.tileSize, MidpointRounding.AwayFromZero);
         }
 
         return distance;
@@ -169,7 +182,7 @@ public class Tools : MonoBehaviour
 
     public static void Merge(UnitInfo unit1, UnitInfo unit2)
     {
-        unit2.units += unit1.units;
+        unit2.unit += unit1.unit;
         //need to deal how to calculate other values e.g. attackDistance, killChance and deathChance
         Destroy(unit1.gameObject);
     }
@@ -178,11 +191,11 @@ public class Tools : MonoBehaviour
     {
         GameObject clone = Instantiate(baseTile.gameObject, baseTile.transform.parent);
         UnitInfo unitInfo = clone.GetComponent<UnitInfo>();
-        int result1 = baseTile.units / 2;
-        int result2 = baseTile.units - result1;
+        int result1 = baseTile.unit / 2;
+        int result2 = baseTile.unit - result1;
         // same with merge need to calculate other stats also;
-        unitInfo.units = result1;
-        baseTile.units = result2;
+        unitInfo.unit = result1;
+        baseTile.unit = result2;
         unitInfo.Initialize();
     }
 
@@ -191,10 +204,11 @@ public class Tools : MonoBehaviour
         TileInfo newTile = Instantiate(baseTile, target.transform.parent);
         newTile.transform.position = target.transform.position;
         newTile.tileLocation = target.tileLocation;
+
         //transfer all stats from target to newTile probably a function in TileInfo or do it here
+        target.Destroy();
         newTile.Initialize();
         newTile.gameObject.SetActive(true);
-
         return newTile;
     }
 

@@ -14,6 +14,8 @@ public class TextureHandler : MonoBehaviour
 {
     private static TextureHandler _init;
 
+    public Dictionary<string, Sprite> sprites;
+
     public static TextureHandler init
     {
         get { return _init; }
@@ -25,12 +27,15 @@ public class TextureHandler : MonoBehaviour
 
     private void Awake()
     {
+        sprites = new Dictionary<string, Sprite>();
         init = this;
     }
 
-    public Sprite GetSprite(string name)
+    private Sprite GenerateSprite(string name)
     {
         if (name == "") return null;
+        if (sprites.ContainsKey(name)) return sprites[name];
+
 
         string template = "empty";
 
@@ -53,6 +58,7 @@ public class TextureHandler : MonoBehaviour
 
         Sprite sprite = Sprite.Create(texture, new Rect(0.0f, 0.0f, texture.width, texture.height), new Vector2(0.5f, 0.5f), 100.0f);
         sprite.name = texture.name;
+        sprites.Add(sprite.name, sprite);
 
         return sprite;
     }
@@ -82,5 +88,24 @@ public class TextureHandler : MonoBehaviour
             CDebug.Log(this, $"Loaded={texture.name}");
         }
 
+    }
+
+    public Sprite GetSprite(string name)
+    {
+        if (name.Contains("_0.png"))
+        {
+            string normalized = name.Remove(name.Length - 7); // this might be wrong
+
+            for (int i = 0; i < 8; i++)
+            {
+                GenerateSprite(normalized + "_" + i + ".png");
+            }
+
+            return sprites[name];
+        }
+        else
+        {
+            return GenerateSprite(name);
+        }
     }
 }

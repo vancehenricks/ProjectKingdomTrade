@@ -1,7 +1,7 @@
 {
  "font":"Arial",
  "language":"English",
- "logLevel":2,
+ "logLevel":3,
  "maxFps":60,
  "vSync":false
 }

@@ -58,7 +58,7 @@ public class OptionGenerator : MonoBehaviour
         switch (name)
         {
             case "Merge_1":
-                if ((multiSelect.Count == 1 || raycastTile.Count == 1) && tileInfo.units > 1)
+                if ((multiSelect.Count == 1 || raycastTile.Count == 1) && tileInfo.unit > 1)
                 {
                     return;
                 }

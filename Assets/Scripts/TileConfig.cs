@@ -20,11 +20,14 @@ public struct TileConfig
     public float spawnHeightMax;
     public float spawnChance;
     public string[] spawnableTile;
-    public int units;
+    public float spawnDistance;
+    public int unit;
+    public int maxUnit;
     public float travelSpeed;
     public int attackDistance;
     public string[] options;
     public float killChance;
     public float deathChance;
     public Walkable[] nonWalkable;
+    public Upgrade[] upgrades;
 }

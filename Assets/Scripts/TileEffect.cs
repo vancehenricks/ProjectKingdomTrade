@@ -41,7 +41,7 @@ public class TileEffect : MonoBehaviour
     {
         get
         {
-            if (_borderImage == null)
+            if (_borderImage == null && border != null)
             {
                 _borderImage = border.GetComponent<Image>();
             }
@@ -59,9 +59,9 @@ public class TileEffect : MonoBehaviour
     {
         get
         {
-            if (_imageImage == null)
+            if (_imageImage == null && image != null)
             {
-                _imageImage = border.GetComponent<Image>();
+                _imageImage = image.GetComponent<Image>();
             }
 
             return _imageImage;
@@ -77,9 +77,9 @@ public class TileEffect : MonoBehaviour
     {
         get
         {
-            if (_shadeImage == null)
+            if (_shadeImage == null && shade != null)
             {
-                _shadeImage = border.GetComponent<Image>();
+                _shadeImage = shade.GetComponent<Image>();
             }
 
             return _shadeImage;
@@ -118,11 +118,14 @@ public class TileEffect : MonoBehaviour
         }
     }
 
-    public void UpdateTerritoryColor()
+    public void UpdateTerritory(TileInfo tile)
     {
-        if (border == null) return;
-
         if (tileInfo.tileType == "Edge") return;
+
+        tileInfo.claimants.Add(tile.playerInfo);
+        tile.playerInfo.claims.Add(tileInfo);
+
+        if (border == null) return;
 
         borderImage.color = tileInfo.playerInfo.color;
         if (tileInfo.claimants.Count == 1)
