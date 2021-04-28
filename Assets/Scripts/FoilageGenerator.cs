@@ -37,7 +37,7 @@ public class FoilageGenerator : MonoBehaviour
 
         foreach (KeyValuePair<string, SortedList<float, TileInfo>> baseTiles in foilageGroup)
         {
-            foreach (TileInfo tileInfo in TileList.init.tileInfos.Values.ToList<TileInfo>())
+            foreach (TileInfo tileInfo in TileList.init.generatedTiles.Values.ToList<TileInfo>())
             {
                 if (tileInfo.subType != baseTiles.Key && tileInfo.tileType != baseTiles.Key) continue;
 

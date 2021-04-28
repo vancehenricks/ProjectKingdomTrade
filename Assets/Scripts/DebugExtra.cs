@@ -18,6 +18,8 @@ public class DebugExtra : MonoBehaviour
 
     private string ExtraParams()
     {
+        if (MapGenerator.init == null || Tick.init == null || Temperature.init == null) return "";
+
         return MapGenerator.init.width + "x" + MapGenerator.init.height + " " + MapGenerator.init.xOffset.ToString("0.00") + "," +
             MapGenerator.init.yOffset.ToString("0.00") + "," + MapGenerator.init.scale.ToString("0.00") + " " +
             Tick.init.day + "/" + Tick.init.month + "/" + Tick.init.year + " " +

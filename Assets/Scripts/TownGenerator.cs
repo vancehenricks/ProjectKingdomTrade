@@ -39,7 +39,7 @@ public class TownGenerator : MonoBehaviour
 
         foreach (KeyValuePair<string, SortedList<float, TileInfo>> baseTiles in foilageGroup)
         {
-            foreach (TileInfo tileInfo in TileList.init.tileInfos.Values.ToList<TileInfo>())
+            foreach (TileInfo tileInfo in TileList.init.generatedTiles.Values.ToList<TileInfo>())
             {
                 if (tileInfo.subType != baseTiles.Key && tileInfo.tileType != baseTiles.Key) continue;
 
@@ -47,6 +47,7 @@ public class TownGenerator : MonoBehaviour
 
                 if (candidate == null) continue;
 
+                candidate.playerInfo = PlayerList.init.Instantiate();
                 Tools.ReplaceTile(candidate, tileInfo);
             }
         }
@@ -71,5 +72,5 @@ public class TownGenerator : MonoBehaviour
                     tile.playerInfo.color = temp;
                 }
             }*/
-        }
+    }
 }

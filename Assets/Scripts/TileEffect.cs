@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using DebugHandler;
 
 public class TileEffect : MonoBehaviour
 {
@@ -90,6 +91,24 @@ public class TileEffect : MonoBehaviour
         }
     }
 
+    private SpriteMask _shadeMask;
+    public SpriteMask shadeMask
+    {
+        get
+        {
+            if (_shadeMask == null && shade != null)
+            {
+                _shadeMask = shade.GetComponent<SpriteMask>();
+            }
+
+            return _shadeMask;
+        }
+        private set
+        {
+            _shadeMask = value;
+        }
+    }
+
     public void UpdateTileEffect()
     {
 
@@ -126,6 +145,8 @@ public class TileEffect : MonoBehaviour
         tile.playerInfo.claims.Add(tileInfo);
 
         if (border == null) return;
+
+        //CDebug.Log(this, "source tileInfo=" + tile.tileId + "target tileInfo=" + tileInfo.tileId);
 
         borderImage.color = tileInfo.playerInfo.color;
         if (tileInfo.claimants.Count == 1)

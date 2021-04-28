@@ -60,6 +60,8 @@ public class TextureHandler : MonoBehaviour
         sprite.name = texture.name;
         sprites.Add(sprite.name, sprite);
 
+        CDebug.Log(this, $"Loaded={sprite.name}");
+
         return sprite;
     }
 
@@ -80,8 +82,10 @@ public class TextureHandler : MonoBehaviour
             {
                 path = alternative;
             }
-
-            if (!File.Exists(path)) continue;
+            else if (!File.Exists(path))
+            {
+                continue;
+            }
 
             texture.LoadImage(File.ReadAllBytes(path));
 

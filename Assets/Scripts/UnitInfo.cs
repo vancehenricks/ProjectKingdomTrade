@@ -63,14 +63,20 @@ public class UnitInfo : TileInfo
 
     protected override Sprite SetSprite(Sprite sp)
     {
-        if (sp != null && playerInfo != null)
+        if (sp != null)
         {
-            Image shade = unitEffect.shadeImage;
-            Image image = unitEffect.imageImage;
+            unitEffect.imageImage.sprite = sp;
 
-            image.sprite = sp;
-            shade.color = new Color(playerInfo.color.r, playerInfo.color.g, playerInfo.color.b, shade.color.a);
-            shade.sprite = sp;
+            if (unitEffect.shadeMask != null)
+            {
+                unitEffect.shadeMask.sprite = sp;
+            }
+            //shade.sprite = sp;
+        }
+
+        if (playerInfo != null)
+        {
+            unitEffect.shadeImage.color = new Color(playerInfo.color.r, playerInfo.color.g, playerInfo.color.b, unitEffect.shadeImage.color.a);
         }
 
         return sp;

@@ -4,6 +4,7 @@
  * Written by Vance Henricks Patual <vpatual@gmail.com>, January 2019
  */
 
+using DebugHandler;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -28,11 +29,6 @@ public class CursorReplace: MonoBehaviour
         private set { _init = value; }
     }
 
-
-    public List<Texture2D> _cursorArray;
-    public CursorMode _cursorMode;
-    public Vector2 _hotSpot;
-
     public List<Texture2D> cursorArray;
     public CursorMode cursorMode;
     public Vector2 hotSpot;
@@ -42,6 +38,7 @@ public class CursorReplace: MonoBehaviour
     private Texture2D previousTexture2D;
 
     private CursorType _currentCursor;
+
     public CursorType currentCursor
     {
         get
@@ -58,7 +55,10 @@ public class CursorReplace: MonoBehaviour
             else
             {
                 //had to go with this complex way of passing same Texture2D to avoid Cursor warning despite using same config
-                
+                //issue with unity editor where it mixes different texture2D despite getting from the right array
+
+                CDebug.Log(this, "CursorType=" + value + "," + (int)value);
+
                 Texture2D texture = cursorArray[(int)value];
                 currentTexture2D = new Texture2D(texture.width, texture.height, TextureFormat.RGBA32, false);
                 #if UNITY_EDITOR
@@ -76,11 +76,8 @@ public class CursorReplace: MonoBehaviour
     private void Awake()
     {
         init = this;
-        cursorArray = _cursorArray;
-        cursorMode = _cursorMode;
-        hotSpot = _hotSpot;
         currentCursor = CursorType.Default;
-        previousTexture2D = cursorArray[0];
+        SetCurrentCursorAsPrevious();
     }
 
     public void SetCurrentCursorAsPrevious()

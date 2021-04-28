@@ -79,8 +79,7 @@ public class TileInfo : MonoBehaviour
     {
         if (sp != null)
         {
-            Image image = tileEffect.imageImage;
-            image.sprite = sp;
+            tileEffect.imageImage.sprite = sp;
         }
 
         return sp;

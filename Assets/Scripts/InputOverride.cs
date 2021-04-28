@@ -97,7 +97,7 @@ public class InputOverride : MonoBehaviour
 
             if (result > 0f || result < 0f)
             {
-                CDebug.Log(this, "GetAxis=" + axis + " result=" + result);
+                CDebug.Log(this, "GetAxis=" + axis + " result=" + (result > 0f ? "Up" : "Down"));
             }
 
             return result;

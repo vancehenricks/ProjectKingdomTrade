@@ -52,6 +52,8 @@ public class ConsoleHandler : MonoBehaviour
 
     public void Awake()
     {
+        init = this;
+
         if (commandList == null)
         {
             index = 0;
@@ -67,16 +69,14 @@ public class ConsoleHandler : MonoBehaviour
             commandList.Add("help", new Dictionary<string, string>());
             commandList.Add("clear", new Dictionary<string, string>());
 
-            init = this;
-
-           // initialize();
+            Welcome();
+            // initialize();
         }
         else
         {
-            AddLine("Queued commands cancelled!");
             command.text = cacheInput;
             AddLines(cacheConsole.ToArray(), false);
-            init = this;
+            AddLine("Queued commands cancelled!");
         }
     }
 
@@ -278,6 +278,12 @@ public class ConsoleHandler : MonoBehaviour
         }
     }
 
+    private void Welcome()
+    {
+        AddLine("Version: " + Application.version);
+        AddLine("Type \"help\" or press TAB for more info.");
+    }
+
     public void Clear()
     {
         foreach (InputFieldOverride inputField in consoles)
@@ -289,6 +295,7 @@ public class ConsoleHandler : MonoBehaviour
         cacheConsole.Clear();
         numberOfLines = 0;
         //context.sizeDelta = new Vector2(0f, textHeight);
+        Welcome();
     }
 
     public void Focus()

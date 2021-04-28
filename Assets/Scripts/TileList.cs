@@ -37,12 +37,12 @@ public class TileList : MonoBehaviour
 
         if (tileInfo.tileType == "Town")
         {
-            ReplaceTown(tileInfo);
-            ReplaceTile(tileInfo);
+            ReplaceTile(tileInfo, generatedTowns);
+            ReplaceTile(tileInfo, generatedTiles);
         }
         else if (tileInfo.tileType != "Unit")
         {
-            ReplaceTile(tileInfo);
+            ReplaceTile(tileInfo, generatedTiles);
         }
         else if (tileInfo.tileType == "Unit")
         {
@@ -71,32 +71,18 @@ public class TileList : MonoBehaviour
         tileInfos.Remove(tileInfo.tileId);
     }
 
-    private void ReplaceTile(TileInfo tileInfo)
+    private void ReplaceTile(TileInfo tileInfo, Dictionary<Vector2, TileInfo> generatedList)
     {
         try
         {
-            generatedTiles.Remove(tileInfo.tileLocation);
+            generatedList.Remove(tileInfo.tileLocation);
         }
         catch (System.Exception e)
         {
             CDebug.Log(this,e,LogType.Error);
         }
 
-        generatedTiles.Add(tileInfo.tileLocation, tileInfo);
-    }
-
-    private void ReplaceTown(TileInfo tileInfo)
-    {
-        try
-        {
-            generatedTowns.Remove(tileInfo.tileLocation);
-        }
-        catch (System.Exception e)
-        {
-            CDebug.Log(this, e, LogType.Error);
-        }
-
-        generatedTowns.Add(tileInfo.tileLocation, tileInfo);
+        generatedList.Add(tileInfo.tileLocation, tileInfo);
     }
 
     public List<TileInfo> GetNeighbours(TileInfo tile)
