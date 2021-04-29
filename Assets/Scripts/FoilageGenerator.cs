@@ -12,6 +12,8 @@ using UnityEngine;
 
 public class FoilageGenerator : MonoBehaviour
 {
+    public delegate List<T> LiveList<T>();
+
     private static FoilageGenerator _init;
 
     public static FoilageGenerator init
@@ -33,11 +35,20 @@ public class FoilageGenerator : MonoBehaviour
     {
         CDebug.Log(this,"Generating Foilage");
 
-        Dictionary<string, SortedList<float, TileInfo>> foilageGroup = GetFoilageGroup(TileConfigHandler.init.baseTiles.Values.ToList<TileInfo>());
+        List<TileInfo> generatedTiles = TileList.init.generatedTiles.Values.ToList<TileInfo>();
+
+        Generate(TileConfigHandler.init.baseTiles.Values.ToList<TileInfo>(), generatedTiles, () => {
+            return TileList.init.generatedTiles.Values.ToList<TileInfo>(); 
+        });
+    }
+
+    public void Generate(List<TileInfo> foilageTiles, List<TileInfo> replaceTiles, LiveList<TileInfo> checkDistance, bool newPlayer = false)
+    {
+        Dictionary<string, SortedList<float, TileInfo>> foilageGroup = GetFoilageGroup(foilageTiles);
 
         foreach (KeyValuePair<string, SortedList<float, TileInfo>> baseTiles in foilageGroup)
         {
-            foreach (TileInfo tileInfo in TileList.init.generatedTiles.Values.ToList<TileInfo>())
+            foreach (TileInfo tileInfo in replaceTiles)
             {
                 if (tileInfo.subType != baseTiles.Key && tileInfo.tileType != baseTiles.Key) continue;
 
@@ -45,7 +56,9 @@ public class FoilageGenerator : MonoBehaviour
 
                 if (candidate == null) continue;
 
-                Tools.ReplaceTile(candidate, tileInfo);
+                if (!CheckForDistance(candidate, tileInfo, checkDistance())) continue;
+
+                Tools.ReplaceTile(candidate, tileInfo, newPlayer);
             }
         }
     }
@@ -87,5 +100,26 @@ public class FoilageGenerator : MonoBehaviour
         }
 
         return foilageGroup;
+    }
+
+    public bool CheckForDistance(TileInfo candidate, TileInfo tileInfo, List<TileInfo> generatedTiles)
+    {
+
+        foreach (TileInfo tileInfo2 in generatedTiles)
+        {
+            int spawnX = (int)(MapGenerator.init.width * candidate.spawnDistance);
+            int spawnY = (int)(MapGenerator.init.height * candidate.spawnDistance);
+
+            int distance = Tools.TileLocationDistance(tileInfo, tileInfo2);
+
+            //CDebug.Log(this, "distance=" + distance + " spawnX=" + spawnX + " spawnY=" + spawnY + " candidate=" + candidate.tileId + " tileInfo=" + tileInfo.tileId + " tileInfo2=" + tileInfo2.tileId);
+
+            if (distance < spawnX || distance < spawnY)
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

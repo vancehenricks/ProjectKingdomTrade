@@ -199,7 +199,7 @@ public class Tools : MonoBehaviour
         unitInfo.Initialize();
     }
 
-    public static TileInfo ReplaceTile(TileInfo baseTile, TileInfo target)
+    public static TileInfo ReplaceTile(TileInfo baseTile, TileInfo target, bool newPlayer = false)
     {
         TileInfo newTile = Instantiate(baseTile, target.transform.parent);
         newTile.transform.position = target.transform.position;
@@ -207,6 +207,12 @@ public class Tools : MonoBehaviour
 
         //transfer all stats from target to newTile probably a function in TileInfo or do it here
         target.Destroy();
+
+        if (newPlayer)
+        {
+            newTile.playerInfo = PlayerList.init.Instantiate();
+        }
+
         newTile.Initialize();
         newTile.gameObject.SetActive(true);
         return newTile;

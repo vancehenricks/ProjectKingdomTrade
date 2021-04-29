@@ -35,22 +35,12 @@ public class TownGenerator : MonoBehaviour
     {
         CDebug.Log(this, "Generating Town");
 
-        Dictionary<string, SortedList<float, TileInfo>> foilageGroup = FoilageGenerator.init.GetFoilageGroup(TileConfigHandler.init.baseTowns.Values.ToList<TileInfo>());
+        List<TileInfo> baseTowns = TileConfigHandler.init.baseTowns.Values.ToList<TileInfo>();
+        List<TileInfo> generatedTiles = TileList.init.generatedTiles.Values.ToList<TileInfo>();
 
-        foreach (KeyValuePair<string, SortedList<float, TileInfo>> baseTiles in foilageGroup)
-        {
-            foreach (TileInfo tileInfo in TileList.init.generatedTiles.Values.ToList<TileInfo>())
-            {
-                if (tileInfo.subType != baseTiles.Key && tileInfo.tileType != baseTiles.Key) continue;
-
-                TileInfo candidate = FoilageGenerator.init.GetBaseTile(baseTiles.Value);
-
-                if (candidate == null) continue;
-
-                candidate.playerInfo = PlayerList.init.Instantiate();
-                Tools.ReplaceTile(candidate, tileInfo);
-            }
-        }
+        FoilageGenerator.init.Generate(baseTowns, generatedTiles, () => {
+            return TileList.init.generatedTowns.Values.ToList<TileInfo>();
+            }, true);
 
             //do same thing as foilagegenerator already does but also check for distance
 

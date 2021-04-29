@@ -11,14 +11,14 @@
  "travelTime":1.5,
  "spawnHeightMin":-2.0,
  "spawnHeightMax":-2.0,
- "spawnChance":0.10000000149011612,
+ "spawnChance":1.0,
  "spawnableTile":
  [
   "Land",
   "Forest",
   "Grass"
  ],
- "spawnDistance":0.0,
+ "spawnDistance":0.5,
  "unit":0,
  "maxUnit":0,
  "travelSpeed":0.0,
