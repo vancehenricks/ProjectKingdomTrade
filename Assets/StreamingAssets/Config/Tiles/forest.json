@@ -9,6 +9,8 @@
  "autumnTemp":20.0,
  "summerTemp":30.0,
  "travelTime":3.0,
+ "isPlayer":false,
+ "spawnLayer":1,
  "spawnHeightMin":-2.0,
  "spawnHeightMax":-2.0,
  "spawnChance":0.4000000059604645,
@@ -16,7 +18,9 @@
  [
   "Land"
  ],
- "spawnDistance":0.0,
+ "spawnDistance":
+ [
+ ],
  "unit":0,
  "maxUnit":0,
  "travelSpeed":0.0,

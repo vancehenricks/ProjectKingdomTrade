@@ -9,13 +9,17 @@
  "autumnTemp":0.0,
  "summerTemp":0.0,
  "travelTime":0.0,
+ "isPlayer":false,
+ "spawnLayer":0,
  "spawnHeightMin":0.0,
  "spawnHeightMax":0.0,
  "spawnChance":0.0,
  "spawnableTile":
  [
  ],
- "spawnDistance":0.0,
+ "spawnDistance":
+ [
+ ],
  "unit":0,
  "maxUnit":0,
  "travelSpeed":0.5,

@@ -83,6 +83,8 @@ public class IslandGenerator : MonoBehaviour
 
         foreach (TileInfo baseTile in baseTiles)
         {
+            if (baseTile.spawnLayer != 0) continue;
+
             if (spawnHeight >= baseTile.spawnHeightMin && spawnHeight <= baseTile.spawnHeightMax)
             {
                 candidateTiles.Add(MapGenerator.init.GetUniqueSpawnChance(candidateTiles, baseTile), baseTile);

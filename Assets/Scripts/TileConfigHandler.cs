@@ -139,7 +139,9 @@ public class TileConfigHandler : MonoBehaviour
         config.summerTemp = tileInfo.tileEffect.summerTemp;
         config.options = tileInfo.options.ToArray();
         config.upgrades = tileInfo.upgrades.ToArray();
-        config.spawnDistance = tileInfo.spawnDistance;
+        config.spawnDistance = tileInfo.spawnDistance.ToArray();
+        config.isPlayer = tileInfo.isPlayer;
+        config.spawnLayer = tileInfo.spawnLayer;
 
         return config;
     }
@@ -186,6 +188,11 @@ public class TileConfigHandler : MonoBehaviour
             tileInfo.options = new List<string>(config.options);
         }
 
+        if (config.spawnDistance != null)
+        {
+            tileInfo.spawnDistance = new List<SpawnDistance>(config.spawnDistance);
+        }
+
         if (config.upgrades != null)
         {
             tileInfo.upgrades = new List<Upgrade>(config.upgrades);
@@ -203,7 +210,8 @@ public class TileConfigHandler : MonoBehaviour
         tileInfo.spawnHeightMin = config.spawnHeightMin;
         tileInfo.spawnHeightMax = config.spawnHeightMax;
         tileInfo.spawnChance = config.spawnChance;
-        tileInfo.spawnDistance = config.spawnDistance;
+        tileInfo.isPlayer = config.isPlayer;
+        tileInfo.spawnLayer = config.spawnLayer;
 
         Sprite sprite = TextureHandler.init.GetSprite(config.sprite);
 

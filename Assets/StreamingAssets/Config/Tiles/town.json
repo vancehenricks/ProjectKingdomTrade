@@ -9,6 +9,8 @@
  "autumnTemp":20.0,
  "summerTemp":30.0,
  "travelTime":1.5,
+ "isPlayer":true,
+ "spawnLayer":4,
  "spawnHeightMin":-2.0,
  "spawnHeightMax":-2.0,
  "spawnChance":1.0,
@@ -18,7 +20,13 @@
   "Forest",
   "Grass"
  ],
- "spawnDistance":0.5,
+ "spawnDistance":
+ [
+  {
+   "tile":"Town",
+   "distance":0.5
+  }
+ ],
  "unit":0,
  "maxUnit":0,
  "travelSpeed":0.0,

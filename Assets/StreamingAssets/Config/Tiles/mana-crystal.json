@@ -1,25 +1,35 @@
 {
- "tileType":"Grass",
+ "tileType":"ManaCrystal",
  "subType":"",
- "sprite":"tiles_27.png",
- "freezingSprite":"tiles_3.png",
- "autumnSprite":"tiles_17.png",
- "summerSprite":"tiles_15.png",
+ "sprite":"tiles_38.png",
+ "freezingSprite":"tiles_36.png",
+ "autumnSprite":"tiles_37.png",
+ "summerSprite":"tiles_37.png",
  "freezingTemp":0.0,
  "autumnTemp":20.0,
  "summerTemp":30.0,
  "travelTime":2.0,
  "isPlayer":false,
- "spawnLayer":1,
+ "spawnLayer":5,
  "spawnHeightMin":-2.0,
  "spawnHeightMax":-2.0,
- "spawnChance":0.5,
+ "spawnChance":0.30000001192092898,
  "spawnableTile":
  [
-  "Land"
+  "Land",
+  "Forest",
+  "Grass"
  ],
  "spawnDistance":
  [
+  {
+   "tile":"ManaCrystal",
+   "distance":0.20000000298023225
+  },
+  {
+   "tile":"Town",
+   "distance":0.30000001192092898
+  }
  ],
  "unit":0,
  "maxUnit":0,

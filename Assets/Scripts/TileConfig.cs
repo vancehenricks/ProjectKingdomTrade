@@ -16,11 +16,13 @@ public struct TileConfig
     public float autumnTemp;
     public float summerTemp;
     public float travelTime;
+    public bool isPlayer;
+    public int spawnLayer;
     public float spawnHeightMin;
     public float spawnHeightMax;
     public float spawnChance;
     public string[] spawnableTile;
-    public float spawnDistance;
+    public SpawnDistance[] spawnDistance;
     public int unit;
     public int maxUnit;
     public float travelSpeed;

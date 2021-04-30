@@ -35,10 +35,12 @@ public class TileInfo : MonoBehaviour
     public Vector2 tileLocation;
     public float localTemp;
     public float travelTime; //seconds
+    public bool isPlayer;
+    public int spawnLayer;
     public float spawnHeightMin;
     public float spawnHeightMax;
     public float spawnChance;
-    public float spawnDistance;
+    public List<SpawnDistance> spawnDistance;
     public List<string> spawnableTile;
     public List<UnitInfo> unitInfos;
     public int unit;
@@ -46,6 +48,7 @@ public class TileInfo : MonoBehaviour
     public bool selected;
     public List<string> options;
     public List<Upgrade> upgrades;
+
 
     public virtual void Initialize()
     {
@@ -57,6 +60,7 @@ public class TileInfo : MonoBehaviour
         localTemp = Temperature.init.temperature;
         unitInfos = new List<UnitInfo>();
         upgrades = new List<Upgrade>();
+        spawnDistance = new List<SpawnDistance>();
         tileId = Tools.UniqueId;
         TileList.init.Add(this);
 
