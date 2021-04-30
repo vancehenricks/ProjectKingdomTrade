@@ -91,24 +91,6 @@ public class TileEffect : MonoBehaviour
         }
     }
 
-    private SpriteMask _shadeMask;
-    public SpriteMask shadeMask
-    {
-        get
-        {
-            if (_shadeMask == null && shade != null)
-            {
-                _shadeMask = shade.GetComponent<SpriteMask>();
-            }
-
-            return _shadeMask;
-        }
-        private set
-        {
-            _shadeMask = value;
-        }
-    }
-
     public void UpdateTileEffect()
     {
 

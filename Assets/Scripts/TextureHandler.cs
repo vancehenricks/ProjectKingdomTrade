@@ -112,4 +112,28 @@ public class TextureHandler : MonoBehaviour
             return GenerateSprite(name);
         }
     }
+
+    public Sprite GetOutline(Sprite _sprite)
+    {
+        if (sprites.ContainsKey(_sprite.name + ".outline"))
+        {
+            return sprites[_sprite.name + ".outline"];
+        }
+
+        Color32[] finalize = _sprite.texture.GetPixels32();
+
+        for (int i = 0;i < finalize.Length;i++)
+        {
+            if (finalize[i].a != 255)
+            {
+                finalize[i] = Color.white;
+            }
+        }
+
+        Sprite sprite = Sprite.Create(_sprite.texture, new Rect(0.0f, 0.0f, _sprite.texture.width, _sprite.texture.height), new Vector2(0.5f, 0.5f), 100.0f);
+        sprite.name = _sprite.texture.name + ".outline";
+        sprites.Add(sprite.name, sprite);
+
+        return sprite;
+    }
 }

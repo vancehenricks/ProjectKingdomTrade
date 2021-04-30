@@ -67,9 +67,9 @@ public class UnitInfo : TileInfo
         {
             unitEffect.imageImage.sprite = sp;
 
-            if (unitEffect.shadeMask != null)
+            if (unitEffect.shadeImage != null)
             {
-                unitEffect.shadeMask.sprite = sp;
+                unitEffect.shadeImage.sprite = TextureHandler.init.GetOutline(sp);
             }
             //shade.sprite = sp;
         }
