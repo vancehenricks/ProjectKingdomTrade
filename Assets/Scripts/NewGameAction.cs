@@ -62,15 +62,15 @@ public class NewGameAction : MonoBehaviour
 
     private bool CheckMapSize()
     {
-        if (IsNormalize(width, out w, 500) && IsNormalize(height, out h, 500))
+        if (IsNormalize(width, out w, 20) && IsNormalize(height, out h, 20))
         {
             float tileSize = Tools.tileSize;
-            if (Tools.GetNumberOfTiles(w, h, tileSize, tileSize) > Tools.GetNumberOfTiles(1000, 1000, tileSize, tileSize))
+            if (Tools.GetNumberOfTiles(w, h) > Tools.GetNumberOfTiles(40, 40))
             {
                 unitIndicatorBase.SetActive(false); //setting the base as false enables occlusion likely a bug will take advantage for now
 
                 ShowMessage show = ShowMessageHandler.init.confirmWindow.SetMessage("[WARNING]",
-                    "[MAP-SIZE-GREATER-THAN-1000X1000] [THIS-COULD-CAUSE-THE-GAME-TO-BE-UNRESPONSIVE] [WOULD-YOU-LIKE-TO-CONTINUE]",
+                    "[MAP-SIZE-GREATER-THAN-40X40] [THIS-COULD-CAUSE-THE-GAME-TO-BE-UNRESPONSIVE] [WOULD-YOU-LIKE-TO-CONTINUE]",
                     "[YES]", "[NO]", null, OnResponse);
 
                 if (!show.response) return false;
@@ -129,7 +129,7 @@ public class NewGameAction : MonoBehaviour
         closeWindow.DoClose();
         LoadingHandler.init.SetActive(true);
         yield return new WaitForSeconds(0.5f);
-        grid.sizeDelta = new Vector2(w, h);
+        grid.sizeDelta = new Vector2(w * Tools.tileSize, h * Tools.tileSize);
         SyncSize.init.doSync();
         resetCenter.DoAction();
         LoadingHandler.init.Set(0.3f, "[GENERATING-TILES]");
@@ -142,7 +142,7 @@ public class NewGameAction : MonoBehaviour
         celestialCycle.Initialize();
         tick.Initialize();
 
-        float speed = ((w / 10) / 10);
+        float speed = w / 2;
 
         Tick.init.speed = (int)speed + 30;
         LoadingHandler.init.Set(0.8f, "[GENERATING-CLOUDS]");

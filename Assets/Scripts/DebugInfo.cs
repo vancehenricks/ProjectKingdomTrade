@@ -62,7 +62,7 @@ public class DebugInfo : MonoBehaviour
         xOffset.text = MapGenerator.init.xOffset.ToString("0.00");
         yOffset.text = MapGenerator.init.yOffset.ToString("0.00");
         scale.text = MapGenerator.init.scale.ToString("0.00");
-        mapSize.text = "(" + MapGenerator.init.grid.rect.width + ", " + MapGenerator.init.grid.rect.height + ")";
+        mapSize.text = "(" + MapGenerator.init.width + ", " + MapGenerator.init.height + ")";
     }
 
     private void Update()
