@@ -10,7 +10,7 @@
  "summerTemp":30.0,
  "travelTime":3.0,
  "isPlayer":false,
- "spawnLayer":1,
+ "spawnLayer":2,
  "spawnHeightMin":-2.0,
  "spawnHeightMax":-2.0,
  "spawnChance":0.4000000059604645,
@@ -20,6 +20,10 @@
  ],
  "spawnDistance":
  [
+  {
+   "tile":"Mountain",
+   "distance":0.0
+  }
  ],
  "unit":0,
  "maxUnit":0,
@@ -31,6 +35,8 @@
  ],
  "killChance":0.0,
  "deathChance":0.0,
+ "cloudDrag":0.0,
+ "dragAffectedByCloud":0.0,
  "nonWalkable":
  [
  ],

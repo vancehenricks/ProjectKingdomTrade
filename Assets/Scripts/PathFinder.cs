@@ -49,7 +49,7 @@ public class PathFinder
 
         if (tempCache != null)
         {
-           CDebug.Log(this,"Found global cache re-using it tempCache.Count " + tempCache.Count);
+           CDebug.Log(this,"Found global cache re-using it tempCache.Count " + tempCache.Count, LogType.Warning);
         }
 
 
@@ -64,7 +64,7 @@ public class PathFinder
         while (open.Count > 0)
         {
 
-            //Debug.Log("241 open.Count=");
+            CDebug.Log(this,"Open.Count=" + open.Count, LogType.Warning);
 
             Node current = Node.GetLowestFCost(open);
             open.Remove(current._tile.tileLocation);
@@ -84,7 +84,7 @@ public class PathFinder
 
                     if (!HasSameLastTileInfo(generatedWayPoints, tempCache))
                     {
-                        CDebug.Log(this,"CHECKING FAIL " + generatedWayPoints[generatedWayPoints.Count - 1].tileLocation + "!=" + finalPoint.tileLocation);
+                        CDebug.Log(this,"CHECKING FAIL " + generatedWayPoints[generatedWayPoints.Count - 1].tileLocation + "!=" + finalPoint.tileLocation, LogType.Warning);
                         tempCache = generatedWayPoints;
                         generatedWayPoints = new List<TileInfo>();
                         currentPoint = generatedWayPoints[generatedWayPoints.Count - 1];
@@ -107,7 +107,7 @@ public class PathFinder
                 if (!open.ContainsKey(n._tile.tileLocation))
                 {
                     n._g = current._g + Vector2.Distance(current._tile.tileLocation, n._tile.tileLocation);
-                    n._h = Vector2.Distance(n._tile.tileLocation, finalPoint.tileLocation);
+                    n._h = Tools.TileLocationDistance(n._tile, finalPoint);
                     n.parent = current;
                     open.Add(n._tile.tileLocation, n);
                 }

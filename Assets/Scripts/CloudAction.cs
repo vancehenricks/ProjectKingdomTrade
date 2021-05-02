@@ -12,7 +12,8 @@ using UnityEngine.EventSystems;
 
 public class CloudAction : MonoBehaviour
 {
-    public GameObject obj;
+    public string type;
+    public float spawnChance;
     public CloudCycle cloudCycle;
     public RectTransform grid;
     public float divideWidth;
@@ -31,10 +32,11 @@ public class CloudAction : MonoBehaviour
     public float durationBeforeDisplay;
     public bool markedForDestroy;
 
-    private float liveTimeCounter;
+    public float collidePoints;
+    public float liveTimeCounter;
     private float liveTime;
     private Vector3 pos;
-    private Image objImage;
+    public Image image;
 
     private void Start()
     {
@@ -43,9 +45,8 @@ public class CloudAction : MonoBehaviour
         {
             maxLiveTime *= (grid.rect.width / divideWidth);
         }
-        liveTime = Random.Range(minLiveTime, maxLiveTime);
 
-        objImage = obj.GetComponent<Image>();
+        liveTime = Random.Range(minLiveTime, maxLiveTime);
 
         StartCoroutine(FadeIn(0.1f));
     }
@@ -55,19 +56,22 @@ public class CloudAction : MonoBehaviour
         if (Tick.init.speed > 0)
         {
 
-            pos = obj.transform.position;
-            diffXA = obj.transform.position.x - posA.transform.position.x;
-            diffXB = obj.transform.position.x - posB.transform.position.x;
+            pos = transform.position;
+            diffXA = transform.position.x - posA.transform.position.x;
+            diffXB = transform.position.x - posB.transform.position.x;
 
-            obj.transform.position = new Vector3(pos.x + (Tick.init.speed * speedModifier) * Time.deltaTime, pos.y, cloudCycle.zLevel);
+            float posX = pos.x + (Tick.init.speed * speedModifier) * Time.deltaTime;
+
+            Tools.SetDirection(transform, new Vector3(posX,0f));
+
+            gameObject.transform.position = new Vector3(pos.x + (Tick.init.speed * speedModifier) * Time.deltaTime, pos.y, cloudCycle.zLevel);
             liveTimeCounter = liveTimeCounter + (Tick.init.speed * Time.deltaTime);
 
             //Debug.Log(diffXA);
             if (diffXA >= -offsetDespawn && diffXA <= offsetDespawn
                 || diffXB >= -offsetDespawn && diffXB <= offsetDespawn
-                || liveTimeCounter >= liveTime || markedForDestroy)
+                || liveTimeCounter >= liveTime || markedForDestroy || speedModifier == 0f)
             {
-
                 StartCoroutine(FadeOut(0.1f));
             }
         }
@@ -75,7 +79,7 @@ public class CloudAction : MonoBehaviour
 
     private IEnumerator FadeIn(float value)
     {
-        Color color = objImage.color;
+        Color color = image.color;
 
         for (int i = 0; i < durationBeforeDisplay; i++)
         {
@@ -90,26 +94,30 @@ public class CloudAction : MonoBehaviour
         while (color.a < maxAlpha)
         {
             color.a += value;
-            objImage.color = color;
+            image.color = color;
 
             yield return new WaitForSeconds(0.1f);
         }
     }
 
+    private void OnDestroy()
+    {
+        cloudCycle.clouds.Remove(this);
+        cloudCycle.counter--;
+    }
+
     private IEnumerator FadeOut(float value)
     {
-        Color color = objImage.color;
+        Color color = image.color;
 
         while (color.a > 0)
         {
             color.a -= value;
-            objImage.color = color;
+            image.color = color;
 
             yield return new WaitForSeconds(0.1f);
         }
 
-        cloudCycle.clouds.Remove(obj);
-        cloudCycle.counter--;
-        Destroy(obj);
+        Destroy(gameObject);
     }
 }

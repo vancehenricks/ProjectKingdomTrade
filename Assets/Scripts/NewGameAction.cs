@@ -24,8 +24,7 @@ public class NewGameAction : MonoBehaviour
     public ResetCenter resetCenter;
     public OpenWindow openWindow;
     public CloseWindow closeWindow;
-    /*public CloudCycle cloudCycle;*/
-    public CloudCycle cloudCycle2;
+    public CloudCycle cloudCycle;
     public CelestialCycle celestialCycle;
     public GameObject unitIndicatorBase;
     public Tick tick;
@@ -137,20 +136,13 @@ public class NewGameAction : MonoBehaviour
         MapGenerator.init.Initialize(x,y,s);
         LoadingHandler.init.Set(0.5f, "[GENERATING-TILES]");
         yield return new WaitForSeconds(0.5f);
-        //cloudCycle.Initialize();
-        cloudCycle2.Initialize();
+        LoadingHandler.init.Set(0.8f, "[SETTING-UP-TIME]");
+        yield return new WaitForSeconds(0.5f);
+        tick.Initialize();
+        LoadingHandler.init.Set(1f, "[GENERATING-CLOUDS]");
+        yield return new WaitForSeconds(0.5f);
+        cloudCycle.Initialize();
         celestialCycle.Initialize();
-        tick.Initialize();
-
-        float speed = w / 2;
-
-        Tick.init.speed = (int)speed + 30;
-        LoadingHandler.init.Set(0.8f, "[GENERATING-CLOUDS]");
-        yield return new WaitForSeconds((speed/10)+3f);
-        Tick.init.speed = 1;
-        tick.Initialize();
-        LoadingHandler.init.Set(1f, "[SETTING-UP-TIME]");
-        yield return new WaitForSeconds(1.5f);
         LoadingHandler.init.SetActive(false);
         openWindow.DoOpen();
     }

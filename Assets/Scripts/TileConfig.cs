@@ -30,6 +30,8 @@ public struct TileConfig
     public string[] options;
     public float killChance;
     public float deathChance;
+    public float cloudDrag;
+    public float dragAffectedByCloud;
     public Walkable[] nonWalkable;
     public Upgrade[] upgrades;
 }

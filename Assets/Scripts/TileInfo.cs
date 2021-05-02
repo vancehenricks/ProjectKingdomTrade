@@ -46,6 +46,8 @@ public class TileInfo : MonoBehaviour
     public int unit;
     public int maxUnit;
     public bool selected;
+    public float cloudDrag;
+    public float dragAffectedByCloud;
     public List<string> options;
     public List<Upgrade> upgrades;
 
@@ -63,6 +65,7 @@ public class TileInfo : MonoBehaviour
         spawnDistance = new List<SpawnDistance>();
         tileId = Tools.UniqueId;
         TileList.init.Add(this);
+        localTemp = Temperature.init.temperature;
 
         SetSprite(sprite);
     }

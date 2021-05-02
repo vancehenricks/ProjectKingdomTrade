@@ -34,12 +34,14 @@
  ],
  "killChance":0.800000011920929,
  "deathChance":0.5,
+ "cloudDrag":0.0,
+ "dragAffectedByCloud":0.0,
  "nonWalkable":
  [
   {
    "tile":"Sea",
-   "minTemperature":0.0,
-   "maxTemperature":1.0
+   "minTemperature":1.0,
+   "maxTemperature":1000.0
   }
  ],
  "upgrades":

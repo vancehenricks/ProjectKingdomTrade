@@ -142,6 +142,8 @@ public class TileConfigHandler : MonoBehaviour
         config.spawnDistance = tileInfo.spawnDistance.ToArray();
         config.isPlayer = tileInfo.isPlayer;
         config.spawnLayer = tileInfo.spawnLayer;
+        config.cloudDrag = tileInfo.cloudDrag;
+        config.dragAffectedByCloud = tileInfo.dragAffectedByCloud;
 
         return config;
     }
@@ -212,6 +214,8 @@ public class TileConfigHandler : MonoBehaviour
         tileInfo.spawnChance = config.spawnChance;
         tileInfo.isPlayer = config.isPlayer;
         tileInfo.spawnLayer = config.spawnLayer;
+        tileInfo.cloudDrag = config.cloudDrag;
+        tileInfo.dragAffectedByCloud = config.dragAffectedByCloud;
 
         Sprite sprite = TextureHandler.init.GetSprite(config.sprite);
 

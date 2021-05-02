@@ -218,6 +218,26 @@ public class Tools : MonoBehaviour
         return newTile;
     }
 
+    public static void SetDirection(Transform currentTransform, Vector3 newPosition)
+    {
+        Quaternion rotation = currentTransform.rotation;
+        Vector3 currentPosition = currentTransform.position;
+
+        //left
+        if (newPosition.x == 0) return;
+
+        if (currentPosition.x > newPosition.x)
+        {
+            currentTransform.rotation = new Quaternion(rotation.x, 180, rotation.z, rotation.w);
+        }
+
+        //right
+        if (currentPosition.x < newPosition.x)
+        {
+            currentTransform.rotation = new Quaternion(rotation.x, 0, rotation.z, rotation.w);
+        }
+    }
+
     public static string ConvertToSymbols(int value)
     {
         string _value = value.ToString("N");

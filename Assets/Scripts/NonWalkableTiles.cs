@@ -32,6 +32,11 @@ public class NonWalkableTiles : MonoBehaviour
         pathFinding.isWalkable += isWalkable;
     }
 
+    private void OnDestroy()
+    {
+        pathFinding.isWalkable -= isWalkable;
+    }
+
     private bool isWalkable(TileInfo tile)
     {
         bool isWalkable = true;
@@ -40,8 +45,8 @@ public class NonWalkableTiles : MonoBehaviour
 
         for (int i = 0; i < nonWalkable.Count;i++)
         {
-            if (tile.tileType == nonWalkable[i].tile && tile.localTemp > nonWalkable[i].minTemperature &&
-                tile.localTemp < nonWalkable[i].maxTemperature)
+            if ((tile.tileType == nonWalkable[i].tile || tile.subType == nonWalkable[i].tile) && tile.localTemp >= nonWalkable[i].minTemperature &&
+                tile.localTemp <= nonWalkable[i].maxTemperature)
             {
                 isWalkable = false;
             }

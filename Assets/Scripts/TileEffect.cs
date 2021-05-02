@@ -91,31 +91,58 @@ public class TileEffect : MonoBehaviour
         }
     }
 
-    public void UpdateTileEffect()
+    public void UpdateTileEffect(CloudAction cloud, bool isExit)
     {
-
-        if (tileInfo.tileType == "Edge") return;
-
-        //daysResult = Tick.init.realDays-startedDay;
-        if (springTile.name != null && tileInfo.localTemp <= summerTemp && ClimateControl.init.isSpring)
+        if (isExit)
         {
-            tileInfo.sprite = springTile;
-            //image.sprite = Temperature.temperature;
+            tileInfo.travelTime += tileInfo.dragAffectedByCloud;
+
+            if (cloud.speedModifier < 0f)
+            {
+                cloud.speedModifier -= tileInfo.cloudDrag;
+            }
+            else
+            {
+                cloud.speedModifier += tileInfo.cloudDrag;
+            }
         }
-
-        if (summerTile.name != null && tileInfo.localTemp >= summerTemp && ClimateControl.init.isSummer)
+        else
         {
-            tileInfo.sprite = summerTile;
-        }
+            if (tileInfo.tileType == "Edge") return;
 
-        if (autumnTile.name != null && tileInfo.localTemp <= autumnTemp && ClimateControl.init.isAutumn)
-        {
-            tileInfo.sprite = autumnTile;
-        }
+            //daysResult = Tick.init.realDays-startedDay;
+            if (springTile.name != null && tileInfo.localTemp <= summerTemp && ClimateControl.init.isSpring)
+            {
+                tileInfo.sprite = springTile;
+                //image.sprite = Temperature.temperature;
+            }
 
-        if (freezingTile.name != null && tileInfo.localTemp <= freezingTemp && ClimateControl.init.isWinter)
-        {
-            tileInfo.sprite = freezingTile;
+            if (summerTile.name != null && tileInfo.localTemp >= summerTemp && ClimateControl.init.isSummer)
+            {
+                tileInfo.sprite = summerTile;
+            }
+
+            if (autumnTile.name != null && tileInfo.localTemp <= autumnTemp && ClimateControl.init.isAutumn)
+            {
+                tileInfo.sprite = autumnTile;
+            }
+
+            if (freezingTile.name != null && tileInfo.localTemp <= freezingTemp && ClimateControl.init.isWinter)
+            {
+                tileInfo.sprite = freezingTile;
+            }
+
+            tileInfo.localTemp = Temperature.init.temperature;
+            tileInfo.travelTime -= tileInfo.dragAffectedByCloud;
+
+            if (cloud.speedModifier > 0f)
+            {
+                cloud.speedModifier -= tileInfo.cloudDrag;
+            }
+            else
+            {
+                cloud.speedModifier += tileInfo.cloudDrag;
+            }
         }
     }
 

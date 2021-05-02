@@ -27,30 +27,6 @@ public class UnitDirection : MonoBehaviour
     private void TickUpdate()
     {
         if (pathfinding.destination.tile == null) return;
-        SetDirection(transform.position, pathfinding.destination.tile.transform.position);
-    }
-
-    public void SetDirection(Vector3 currentPosition, Vector3 newPosition)
-    {
-        Quaternion rotation = unitInfo.unitEffect.image.transform.rotation;
-        Transform currentTransform = unitInfo.unitEffect.image.transform;
-
-        //left
-        if (newPosition.x == 0) return;
-
-        //Debug.Log(currentPosition.x + ":" + newPosition.x);
-
-        if (currentPosition.x > newPosition.x)
-        {
-            //Debug.Log("LEFT FACING");
-            currentTransform.rotation = new Quaternion(rotation.x, 180, rotation.z, rotation.w);
-        }
-
-        //right
-        if (currentPosition.x < newPosition.x)
-        {
-            //Debug.Log("RIGHT FACING");
-            currentTransform.rotation = new Quaternion(rotation.x, 0, rotation.z, rotation.w);
-        }
+        Tools.SetDirection(transform, pathfinding.destination.tile.transform.position);
     }
 }

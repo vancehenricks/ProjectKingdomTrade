@@ -31,6 +31,8 @@
  ],
  "killChance":0.0,
  "deathChance":8.0,
+ "cloudDrag":0.0,
+ "dragAffectedByCloud":0.0,
  "nonWalkable":
  [
   {

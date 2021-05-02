@@ -5,6 +5,8 @@ TextureImporter:
     21300000: misc_3_0
     21300002: misc_3_1
     21300004: misc_3_2
+    21300006: misc_3_3
+    21300008: misc_3_4
   externalObjects: {}
   serializedVersion: 9
   mipmaps:
@@ -119,10 +121,10 @@ TextureImporter:
       name: misc_3_2
       rect:
         serializedVersion: 2
-        x: 128
-        y: 0
-        width: 133
-        height: 133
+        x: 134
+        y: 4
+        width: 132
+        height: 132
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -131,6 +133,26 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: fc311b21185d8ef49bf1e41588193c28
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: misc_3_3
+      rect:
+        serializedVersion: 2
+        x: 266
+        y: 4
+        width: 132
+        height: 132
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8e32b6e728f096f4a83bea2a6710d829
       vertices: []
       indices: 
       edges: []

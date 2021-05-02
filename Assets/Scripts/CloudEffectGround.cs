@@ -10,10 +10,8 @@ using UnityEngine;
 
 public class CloudEffectGround : MonoBehaviour
 {
-
     public TileInfo tileInfo;
     public TileEffect tileEffect;
-    public BackgroundInfo backgroundInfo;
     public CloudAction cloudAction;
 
     private void OnTriggerEnter2D(Collider2D col)
@@ -28,18 +26,44 @@ public class CloudEffectGround : MonoBehaviour
                 return;
             }
 
-            tileInfo = tileEffect.tileInfo;
-            tileInfo.localTemp = Temperature.init.temperature;
-            tileEffect.UpdateTileEffect();
+            tileEffect.UpdateTileEffect(cloudAction, false);
+
         }
 
-        BackgroundInfo info = col.GetComponent<BackgroundInfo>();
+        CloudAction cloud = col.GetComponent<CloudAction>();
 
-        if (info == null) return;
+        if (cloud == null) return;
 
-        if (info.type == backgroundInfo.type)
+        if (tileEffect != null && tileEffect.tileInfo.tileType != "Edge" && cloudAction.type == "Cloud" && cloud.type == "Cloud")
+        {
+            CloudCycle.init.GenerateTornado(cloudAction, cloud);
+        }
+        else if (cloudAction.type == "Cloud")
         {
             cloudAction.markedForDestroy = true;
+        }
+        else if (cloudAction.type == "Tornado" && cloud.type == "Cloud")
+        {
+            cloudAction.liveTimeCounter -= cloud.collidePoints;
+        }
+        else if (cloudAction.type == "Tornado" && cloud.type == "Tornado")
+        {
+            CloudCycle.init.GenerateTornado(cloudAction, cloud);
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D col)
+    {
+        if (col.gameObject.layer != this.gameObject.layer)
+        {
+            tileEffect = col.gameObject.GetComponent<TileEffect>();
+
+            if (tileEffect == null)
+            {
+                return;
+            }
+
+            tileEffect.UpdateTileEffect(cloudAction, true);
         }
     }
 
