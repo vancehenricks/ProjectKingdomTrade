@@ -14,12 +14,24 @@ class VersionHandler : IPreprocessBuildWithReport
     public void OnPreprocessBuild(BuildReport report)
     {
         string path = Application.dataPath.Remove(Application.dataPath.IndexOf("Assets"),@"Assets".Length);
+        string fileName = "get-revision.bat";
+        CDebug.Log(this,"Executing " + fileName + " path=" +  path, LogType.Warning);
 
-        CDebug.Log(this, "get-revision.bat path=" +  path, LogType.Warning);
+        string revision;
 
-        Process.Start("cmd.exe", "/C " + path +  @"\get-revision.bat");
+        using (Process process = new Process())
+        {
+            process.StartInfo.FileName = "cmd.exe";
+            process.StartInfo.Arguments = @"/c " + Path.Combine(path, fileName);
+            process.StartInfo.UseShellExecute = false;
+            process.StartInfo.RedirectStandardOutput = true;
+            process.Start();
 
-        string revision = File.ReadAllText("revision");
+            revision = process.StandardOutput.ReadToEnd();
+
+            process.WaitForExit();
+        }
+
         string date = DateTime.UtcNow.ToString("ddMMyyyy");
         string version = date + "." + revision;
 
