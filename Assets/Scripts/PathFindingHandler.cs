@@ -75,12 +75,19 @@ public class PathFindingHandler : MonoBehaviour
         }
         else if (destination.arrivalTime <= 0)
         {
-            transform.position = Vector2.Lerp(transform.position, destination.tile.transform.position, (10f * Tick.init.speed) * Time.deltaTime);
+            transform.position = Vector2.Lerp(transform.position, destination.tile.transform.position, 10f * Time.deltaTime);
 
             if (Vector2.Distance(transform.position, destination.tile.transform.position) < 0.5f)
             {
+                transform.SetParent(unitInfo.unitEffect.standingTile.transform.parent);
                 destination.arrivalTime = -1;
             }
+            else
+            {
+                transform.SetParent(MapGenerator.init.grid);
+            }
+
+            transform.SetAsLastSibling();
         }
 
         if (unitInfo.waypoints.Count > 0 && unitInfo.waypoints[0] != null && firstWayPoint.tileId != unitInfo.waypoints[0].tileId)
@@ -200,7 +207,7 @@ public class PathFindingHandler : MonoBehaviour
             task = new Task(pathFinder.Calculate);
             task.Start();
             CDebug.Log(this, "unitInfo.tileId=" + unitInfo.tileId + " start=" + standingTile.tileLocation + "end=" + pointTileInfo.tileLocation + "Generating Pathfinding.");
-            currentTileId = standingTile.tileId + "";
+            currentTileId = standingTile.tileId + ""; //this will force to only execute one calculation with same standingtile
         }
         else if (currentTileId == (standingTile.tileId + "") && generatedWayPoints.Count > 0)
         {

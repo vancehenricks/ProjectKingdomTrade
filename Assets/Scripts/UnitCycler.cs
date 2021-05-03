@@ -10,68 +10,48 @@ using UnityEngine;
 
 public class UnitCycler : MonoBehaviour
 {
+    private TileInfo tileInfo;
+    private bool stopCoroutine, startCoroutine;
 
-    public TileInfo tileInfo;
-
-    private IEnumerator Cycle(List<UnitInfo> unitInfos)
+    private void OnDestroy()
     {
-        yield return new WaitForSeconds(2f);
+        StopAllCoroutines();
+    }
 
-        while (true)
+    private void Awake()
+    {
+        tileInfo = GetComponent<TileInfo>();
+    }
+
+    private void FixedUpdate()
+    {
+        if (!stopCoroutine && transform.parent.childCount == 1)
         {
-            //reset:
-            for (int i = 0; i < unitInfos.Count; i++)
-            {
-                /*if (unitInfos[i] == null)
-                {
-                    unitInfos.RemoveAt(i);
-                    goto reset;
-                }*/
-
-                if (unitInfos[i] == null) continue;
-                    unitInfos[i].transform.SetAsLastSibling();
-            }
-
-            //Debug.Log("Cycling...");
-
-            yield return new WaitForSeconds(2);
+            stopCoroutine = true;
+            startCoroutine = false;
+            StopAllCoroutines();
+        }
+        else if(!startCoroutine && transform.parent.childCount > 1)
+        {
+            stopCoroutine = false;
+            startCoroutine = true;
+            StartCoroutine(Cycle());
         }
     }
 
-    public void StartCycle(UnitInfo unit)
+    private IEnumerator Cycle()
     {
-        StopAllCoroutines();
-        tileInfo.unitInfos.Add(unit);
-
-        if (tileInfo.unitInfos.Count <= 1) return;
-        StartCoroutine(Cycle(tileInfo.unitInfos));
-    }
-
-    public void StopCycle(UnitInfo unit)
-    {
-        StopAllCoroutines();
-
-        /*for (int i = 0; i < tileInfo.unitInfos.Count; i++)
+        while (true)
         {
-            if (tileInfo.unitInfos[i] == null) continue;
-
-            if (tileInfo.unitInfos[i].tileId == unit.tileId)
+            for (int i = 0; i < transform.parent.childCount; i++)
             {
+                if (tileInfo.transform.GetSiblingIndex() == i) continue;
 
-               tileInfo.unitInfos[i].transform.SetAsLastSibling();
-
-                if (tileInfo.unitInfos.Count > 0)
-                {
-                    tileInfo.unitInfos[0].transform.SetAsLastSibling();
-                }
-
-                break;
+                transform.parent.GetChild(i).SetAsLastSibling();
+                yield return new WaitForSeconds(0.5f);
+                tileInfo.transform.SetAsLastSibling();
+                yield return new WaitForSeconds(0.5f);
             }
-        }*/
-
-        if (tileInfo.unitInfos.Count > 1)
-        {
-            StartCoroutine(Cycle(tileInfo.unitInfos));
         }
     }
 }

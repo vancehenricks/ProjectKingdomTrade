@@ -96,7 +96,7 @@ public class CloudAction : MonoBehaviour
             color.a += value;
             image.color = color;
 
-            yield return new WaitForSeconds(0.1f);
+            yield return null;
         }
     }
 
@@ -115,7 +115,7 @@ public class CloudAction : MonoBehaviour
             color.a -= value;
             image.color = color;
 
-            yield return new WaitForSeconds(0.1f);
+            yield return null;
         }
 
         Destroy(gameObject);

@@ -152,7 +152,7 @@ public class SpawnUnit : ConsoleCommand
 
     private void Spawn(Vector3 loc)
     {
-        GameObject unit = Instantiate(TileConfigHandler.init.baseUnits[subType].gameObject, TileList.init.subGrids[Vector3Int.FloorToInt(loc)].transform.parent);
+        GameObject unit = Instantiate(TileConfigHandler.init.baseUnits[subType].gameObject, TileList.init.subGrids[Vector3Int.FloorToInt(loc)]);
         unit.transform.position = loc;
         UnitInfo unitInfo = unit.GetComponent<UnitInfo>();
         //unitInfo.tileId = Tools.UniqueId + "";

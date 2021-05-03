@@ -42,7 +42,6 @@ public class TileInfo : MonoBehaviour
     public float spawnChance;
     public List<SpawnDistance> spawnDistance;
     public List<string> spawnableTile;
-    public List<UnitInfo> unitInfos;
     public int unit;
     public int maxUnit;
     public bool selected;
@@ -75,7 +74,6 @@ public class TileInfo : MonoBehaviour
 
     public void OnDestroy()
     {
-        if (unitInfos != null) unitInfos.Clear();
         if (claimants != null) claimants.Clear();
         //TileList.init.Remove(this); this causes timing issue with dictionary moved to UnitInfo instead
     }

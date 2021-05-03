@@ -20,11 +20,11 @@ public class UnitOcclusion : MonoBehaviour
     private void Update()
     {
 
-        if (transform.GetSiblingIndex() >= transform.parent.childCount - 2)
+        if (transform.GetSiblingIndex() == transform.parent.childCount - 1)
         {
             unitInfo.unitEffect.image.SetActive(true);
         }
-        else
+        else if (transform.parent.name != "Grid")
         {
             unitInfo.unitEffect.image.SetActive(false);
         }
