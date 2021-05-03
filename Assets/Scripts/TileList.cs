@@ -20,15 +20,15 @@ public class TileList : MonoBehaviour
 
     public Dictionary<long, TileInfo> tileInfos;
     public Dictionary<long, TileInfo> generatedUnits;
-    public Dictionary<Vector2, TileInfo> generatedTowns;
-    public Dictionary<Vector2, TileInfo> generatedTiles;
+    public Dictionary<Vector2Int, TileInfo> generatedTowns;
+    public Dictionary<Vector2Int, TileInfo> generatedTiles;
 
     private void Awake()
     {
         init = this;
         tileInfos = new Dictionary<long, TileInfo>();
-        generatedTowns = new Dictionary<Vector2, TileInfo>();
-        generatedTiles = new Dictionary<Vector2, TileInfo>();
+        generatedTowns = new Dictionary<Vector2Int, TileInfo>();
+        generatedTiles = new Dictionary<Vector2Int, TileInfo>();
         generatedUnits = new Dictionary<long, TileInfo>();
     }
 
@@ -71,18 +71,17 @@ public class TileList : MonoBehaviour
         tileInfos.Remove(tileInfo.tileId);
     }
 
-    private void ReplaceTile(TileInfo tileInfo, Dictionary<Vector2, TileInfo> generatedList)
+    private void ReplaceTile(TileInfo tileInfo, Dictionary<Vector2Int, TileInfo> generatedList)
     {
-        try
-        {
-            generatedList.Remove(tileInfo.tileLocation);
-        }
-        catch (System.Exception e)
-        {
-            CDebug.Log(this,e,LogType.Error);
-        }
 
-        generatedList.Add(tileInfo.tileLocation, tileInfo);
+        if (generatedList.ContainsKey(tileInfo.tileLocation))
+        {
+            generatedList[tileInfo.tileLocation] = tileInfo;
+        }
+        else
+        {
+            generatedList.Add(tileInfo.tileLocation, tileInfo);
+        }
     }
 
     public List<TileInfo> GetNeighbours(TileInfo tile)
@@ -100,34 +99,34 @@ public class TileList : MonoBehaviour
         return tiles;
     }
 
-    public TileInfo GetObjectFrom(Vector2 tileLocation, Direction direction)
+    public TileInfo GetObjectFrom(Vector2Int tileLocation, Direction direction)
     {
-        Vector2 key = Vector2.zero;
+        Vector2Int key = Vector2Int.zero;
         switch (direction)
         {
             case Direction.Up:
-                key = new Vector2(tileLocation.x - 1, tileLocation.y);
+                key = new Vector2Int(tileLocation.x, tileLocation.y-1);
                 break;
             case Direction.UpRight:
-                key = new Vector2(tileLocation.x - 1, tileLocation.y + 1);
+                key = new Vector2Int(tileLocation.x+1, tileLocation.y-1);
                 break;
             case Direction.Right:
-                key = new Vector2(tileLocation.x, tileLocation.y + 1);
+                key = new Vector2Int(tileLocation.x+1, tileLocation.y);
                 break;
             case Direction.DownRight:
-                key = new Vector2(tileLocation.x + 1, tileLocation.y + 1);
+                key = new Vector2Int(tileLocation.x+1, tileLocation.y+1);
                 break;
             case Direction.Down:
-                key = new Vector2(tileLocation.x + 1, tileLocation.y);
+                key = new Vector2Int(tileLocation.x, tileLocation.y+1);
                 break;
             case Direction.DownLeft:
-                key = new Vector2(tileLocation.x + 1, tileLocation.y - 1);
+                key = new Vector2Int(tileLocation.x-1, tileLocation.y+1);
                 break;
             case Direction.Left:
-                key = new Vector2(tileLocation.x, tileLocation.y - 1);
+                key = new Vector2Int(tileLocation.x-1, tileLocation.y);
                 break;
             case Direction.UpLeft:
-                key = new Vector2(tileLocation.x - 1, tileLocation.y - 1);
+                key = new Vector2Int(tileLocation.x-1, tileLocation.y-1);
                 break;
         }
 

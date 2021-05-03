@@ -32,7 +32,7 @@ public class TileInfo : MonoBehaviour
     public HashSet<PlayerInfo> claimants;
     public TileEffect tileEffect;
     //Tilelocation already has tile size accomodated to it no need for dividing 25 again
-    public Vector2 tileLocation;
+    public Vector2Int tileLocation;
     public float localTemp;
     public float travelTime; //seconds
     public bool isPlayer;
@@ -74,7 +74,7 @@ public class TileInfo : MonoBehaviour
     {
         if (unitInfos != null) unitInfos.Clear();
         if (claimants != null) claimants.Clear();
-        TileList.init.Remove(this);
+        //TileList.init.Remove(this); this causes timing issue with dictionary moved to UnitInfo instead
     }
 
     public void Destroy()

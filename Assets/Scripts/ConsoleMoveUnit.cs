@@ -11,7 +11,7 @@ using UnityEngine;
 
 public class ConsoleMoveUnit : ConsoleCommand
 {
-    public Vector2 tileLocation;
+    public Vector2Int tileLocation;
     public long tileId;
 
     public override void Initialize()
@@ -42,7 +42,7 @@ public class ConsoleMoveUnit : ConsoleCommand
             Dictionary<string, string> subCommands = ConsoleParser.init.ArgumentsToSubCommands(arguments);
 
             tileId = 0;
-            tileLocation = Vector2.zero;
+            tileLocation = Vector2Int.zero;
 
             foreach (string subCommand in subCommands.Keys)
             {

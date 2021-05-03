@@ -58,6 +58,8 @@ public class UnitInfo : TileInfo
        if (targets != null) targets.Clear();
        if (waypoints != null) waypoints.Clear();
 
+        TileList.init.Remove(this);
+
         base.OnDestroy();
     }
 

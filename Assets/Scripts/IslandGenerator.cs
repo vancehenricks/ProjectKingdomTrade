@@ -47,7 +47,7 @@ public class IslandGenerator : MonoBehaviour
                 List<TileInfo> baseTiles = TileConfigHandler.init.baseTiles.Values.ToList<TileInfo>();
                 TileInfo newTile = Instantiate(GetBaseTile(noiseMap[x, y], baseTiles), MapGenerator.init.grid);
                 newTile.transform.position = placeHolder;
-                newTile.tileLocation = new Vector2(x, y);
+                newTile.tileLocation = new Vector2Int(x, y);
                 newTile.Initialize();
                 newTile.gameObject.SetActive(true);
 

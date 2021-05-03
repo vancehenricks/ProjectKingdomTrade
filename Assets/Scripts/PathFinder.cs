@@ -49,22 +49,22 @@ public class PathFinder
 
         if (tempCache != null)
         {
-           CDebug.Log(this,"Found global cache re-using it tempCache.Count " + tempCache.Count, LogType.Warning);
+           CDebug.Log(this,"Found global cache re-using it tempCache.Count " + tempCache.Count);
         }
 
 
     REDO:
-        Dictionary<Vector2, Node> open = new Dictionary<Vector2, Node>();
-        Dictionary<Vector2, Node> closed = new Dictionary<Vector2, Node>();
+        Dictionary<Vector2Int, Node> open = new Dictionary<Vector2Int, Node>();
+        Dictionary<Vector2Int, Node> closed = new Dictionary<Vector2Int, Node>();
 
         open.Add(currentPoint.tileLocation, new Node(currentPoint, currentPoint, finalPoint, closed, true));
 
-        //Debug.Log("213 open.Count=" + open.Count);
+        //CDebug.Log(this, "finalPoint.tileType=" + finalPoint.tileType, LogType.Warning);
 
         while (open.Count > 0)
         {
 
-            CDebug.Log(this,"Open.Count=" + open.Count, LogType.Warning);
+            //CDebug.Log(this,"Open.Count=" + open.Count, LogType.Warning);
 
             Node current = Node.GetLowestFCost(open);
             open.Remove(current._tile.tileLocation);
@@ -72,6 +72,8 @@ public class PathFinder
             //Debug.Log("220 open.Count:"+open.Count);
 
             closed.Add(current._tile.tileLocation, current);
+
+            //CDebug.Log(this, "current._tile.tileLocation=" + current._tile.tileLocation + "finalPoint.tileLocation=" + finalPoint.tileLocation, LogType.Warning);
 
             if (current._tile.tileLocation == finalPoint.tileLocation /*|| tempCache != null*/)
             {
@@ -92,12 +94,14 @@ public class PathFinder
                     }
                 }
 
+                CDebug.Log(this, "Done Pathfinding! generatedWaypoints.Count=" + generatedWayPoints.Count);
+
                 break;
             }
 
             foreach (Node n in current.GetNeighbours())
             {
-                //Debug.Log("checking neighbours");
+                //CDebug.Log(this,"Checking neighbours",LogType.Warning);
 
                 if (isWalkable != null)
                 {

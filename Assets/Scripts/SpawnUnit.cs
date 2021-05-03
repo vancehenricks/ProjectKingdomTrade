@@ -24,7 +24,7 @@ public class SpawnUnit : ConsoleCommand
     public long playerId;
     public PlayerInfo playerInfo;
     public bool noMouseRequired;
-    public Vector2 tileLocation;
+    public Vector2Int tileLocation;
 
     private bool fire1Clicked;
 
@@ -178,7 +178,7 @@ public class SpawnUnit : ConsoleCommand
 
     private void SetDefaults()
     {
-        tileLocation = Vector2.zero;
+        tileLocation = Vector2Int.zero;
         subType = "Worker";
         UnitInfo unitInfo = TileConfigHandler.init.baseUnits[subType].GetComponent<UnitInfo>();
         playerInfo = PlayerList.init.players.Values.ElementAt(0);

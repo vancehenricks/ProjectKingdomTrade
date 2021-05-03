@@ -144,7 +144,7 @@ public class PathFindingHandler : MonoBehaviour
             {
                 if (wayPointReached != null)
                 {
-                    CDebug.Log(this,"Waypoint reached");
+                    CDebug.Log(this, "unitInfo.tileId =" + unitInfo.tileId + "end= " + point.tileLocation + "Waypoint reached!");
                     wayPointReached(point);
                 }
 
@@ -199,7 +199,7 @@ public class PathFindingHandler : MonoBehaviour
             PathFinder pathFinder = new PathFinder(standingTile, pointTileInfo, tempCache, isWalkable, OnDoneCalculate, AlgorithmicCounter);
             task = new Task(pathFinder.Calculate);
             task.Start();
-            CDebug.Log(this,"generatedWayPoints.Count:" + generatedWayPoints.Count,LogType.Warning);
+            CDebug.Log(this, "unitInfo.tileId=" + unitInfo.tileId + " start=" + standingTile.tileLocation + "end=" + pointTileInfo.tileLocation + "Generating Pathfinding.");
             currentTileId = standingTile.tileId + "";
         }
         else if (currentTileId == (standingTile.tileId + "") && generatedWayPoints.Count > 0)
@@ -213,7 +213,7 @@ public class PathFindingHandler : MonoBehaviour
         {
             saveCache = false;
 
-            CDebug.Log(this,"Adding " + generatedWayPoints.Count,LogType.Warning);
+            CDebug.Log(this,"Adding Cache start=" + generatedWayPoints[0].tileLocation + " end=" + generatedWayPoints[generatedWayPoints.Count-1].tileLocation);
             List<TileInfo> temp = new List<TileInfo>(generatedWayPoints);
             PathFindingCache.init.Add(standingTile, pointTileInfo, temp);
         }

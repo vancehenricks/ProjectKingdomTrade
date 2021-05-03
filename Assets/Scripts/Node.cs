@@ -16,14 +16,14 @@ public class Node
     public float _h, _g;
     public Node parent;
     //public List<Node> neighbours;
-    public Dictionary<Vector2, Node> _closed;
+    public Dictionary<Vector2Int, Node> _closed;
 
     public float f
     {
         get { return _g + _h + _tile.travelTime; }
     }
 
-    public Node(TileInfo tile, TileInfo origin, TileInfo target, Dictionary<Vector2, Node> closed, bool firstNode = false)
+    public Node(TileInfo tile, TileInfo origin, TileInfo target, Dictionary<Vector2Int, Node> closed, bool firstNode = false)
     {
         _origin = origin;
         _target = target;
@@ -74,7 +74,7 @@ public class Node
         return neighbours;
     }
 
-    public static Node GetLowestFCost(Dictionary<Vector2, Node> dNodes)
+    public static Node GetLowestFCost(Dictionary<Vector2Int, Node> dNodes)
     {
         SortedDictionary<float, Node> sortedNodes = new SortedDictionary<float, Node>();
 
