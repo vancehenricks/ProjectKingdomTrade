@@ -15,9 +15,7 @@ public class UnitCycler : MonoBehaviour
 
     private IEnumerator Cycle(List<UnitInfo> unitInfos)
     {
-        yield return new WaitForSeconds(2);
-
-        int visibleIndex = 0;
+        yield return new WaitForSeconds(2f);
 
         while (true)
         {
@@ -31,26 +29,7 @@ public class UnitCycler : MonoBehaviour
                 }*/
 
                 if (unitInfos[i] == null) continue;
-
-                GameObject unit = unitInfos[i].unitEffect.image;
-
-                if (visibleIndex != i)
-                {
-                    unit.SetActive(false);
-                }
-                else
-                {
-                    unit.SetActive(true);
-                }
-            }
-
-            if (visibleIndex + 1 < unitInfos.Count)
-            {
-                visibleIndex++;
-            }
-            else
-            {
-                visibleIndex = 0;
+                    unitInfos[i].transform.SetAsLastSibling();
             }
 
             //Debug.Log("Cycling...");
@@ -72,26 +51,23 @@ public class UnitCycler : MonoBehaviour
     {
         StopAllCoroutines();
 
-        for (int i = 0; i < tileInfo.unitInfos.Count; i++)
+        /*for (int i = 0; i < tileInfo.unitInfos.Count; i++)
         {
             if (tileInfo.unitInfos[i] == null) continue;
 
             if (tileInfo.unitInfos[i].tileId == unit.tileId)
             {
- 
-                GameObject visibleUnit = tileInfo.unitInfos[i].unitEffect.image;
-                visibleUnit.SetActive(true);
-                tileInfo.unitInfos.RemoveAt(i);
+
+               tileInfo.unitInfos[i].transform.SetAsLastSibling();
 
                 if (tileInfo.unitInfos.Count > 0)
                 {
-                    GameObject visibleUnit2 = tileInfo.unitInfos[0].unitEffect.image;
-                    visibleUnit2.SetActive(true);
+                    tileInfo.unitInfos[0].transform.SetAsLastSibling();
                 }
 
                 break;
             }
-        }
+        }*/
 
         if (tileInfo.unitInfos.Count > 1)
         {

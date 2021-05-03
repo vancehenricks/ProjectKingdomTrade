@@ -83,7 +83,7 @@ public class Tools : MonoBehaviour
         }
         catch (System.Exception e)
         {
-            CDebug.Log(nameof(Tools), e, LogType.Warning);
+            CDebug.Log(nameof(Tools), e);
             T info = (T)System.Convert.ChangeType(tileInfo, typeof(T));
             return info;
         }

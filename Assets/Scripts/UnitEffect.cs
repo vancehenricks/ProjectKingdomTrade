@@ -62,6 +62,8 @@ public class UnitEffect : TileEffect
         if (tempTile.tileType != unitInfo.tileType)
         {
             standingTile = tempTile;
+            transform.SetParent(tempTile.transform.parent);
+            transform.SetAsLastSibling();
             //Debug.Log("32 Activate!");
         }
 

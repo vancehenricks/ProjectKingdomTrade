@@ -18,6 +18,7 @@ public class TileList : MonoBehaviour
         private set { _init = value; }
     }
 
+    public Dictionary<Vector3Int, Transform> subGrids;
     public Dictionary<long, TileInfo> tileInfos;
     public Dictionary<long, TileInfo> generatedUnits;
     public Dictionary<Vector2Int, TileInfo> generatedTowns;
@@ -26,6 +27,7 @@ public class TileList : MonoBehaviour
     private void Awake()
     {
         init = this;
+        subGrids = new Dictionary<Vector3Int, Transform>();
         tileInfos = new Dictionary<long, TileInfo>();
         generatedTowns = new Dictionary<Vector2Int, TileInfo>();
         generatedTiles = new Dictionary<Vector2Int, TileInfo>();
@@ -49,8 +51,15 @@ public class TileList : MonoBehaviour
             generatedUnits.Add(tileInfo.tileId, tileInfo);
         }
 
+        Vector3Int pos = Vector3Int.FloorToInt(tileInfo.transform.position);
+        if (!subGrids.ContainsKey(pos))
+        {
+            subGrids.Add(pos, tileInfo.transform.parent);
+        }
+
         tileInfos.Add(tileInfo.tileId, tileInfo);
     }
+
 
     public void Remove(TileInfo tileInfo)
     {

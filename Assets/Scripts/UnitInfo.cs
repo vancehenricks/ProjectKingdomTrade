@@ -42,16 +42,6 @@ public class UnitInfo : TileInfo
     public float deathChance;
     public List<Walkable> nonWalkable;
 
-    public override void Initialize()
-    {
-        waypoints = new List<TileInfo>();
-        targets = new List<TileInfo>();
-        targetted = new List<TileInfo>();
-        nonWalkable = new List<Walkable>();
-
-        base.Initialize();
-    }
-
     public new void OnDestroy()
     {
        if (targetted != null) targetted.Clear();

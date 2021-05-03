@@ -51,6 +51,10 @@ public class TileInfo : MonoBehaviour
     public List<string> options;
     public List<Upgrade> upgrades;
 
+    protected void Awake()
+    {
+        claimants = new HashSet<PlayerInfo>();
+    }
 
     public virtual void Initialize()
     {
@@ -58,11 +62,10 @@ public class TileInfo : MonoBehaviour
         {
             playerInfo = PlayerList.init.defaultPlayerInfo;
         }
-        claimants = new HashSet<PlayerInfo>();
         localTemp = Temperature.init.temperature;
-        unitInfos = new List<UnitInfo>();
-        upgrades = new List<Upgrade>();
-        spawnDistance = new List<SpawnDistance>();
+        //unitInfos = new List<UnitInfo>();
+        //upgrades = new List<Upgrade>();
+        //spawnDistance = new List<SpawnDistance>();
         tileId = Tools.UniqueId;
         TileList.init.Add(this);
         localTemp = Temperature.init.temperature;

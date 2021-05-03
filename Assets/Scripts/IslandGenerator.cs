@@ -44,10 +44,14 @@ public class IslandGenerator : MonoBehaviour
         {
             for (int x = 0; x < MapGenerator.init.width; x++)
             {
+                GameObject subGrid = Instantiate<GameObject>(MapGenerator.init.placeHolderTile, MapGenerator.init.grid);
+                subGrid.SetActive(true);
+
                 List<TileInfo> baseTiles = TileConfigHandler.init.baseTiles.Values.ToList<TileInfo>();
-                TileInfo newTile = Instantiate(GetBaseTile(noiseMap[x, y], baseTiles), MapGenerator.init.grid);
+                TileInfo newTile = Instantiate(GetBaseTile(noiseMap[x, y], baseTiles), subGrid.transform);
                 newTile.transform.position = placeHolder;
                 newTile.tileLocation = new Vector2Int(x, y);
+                subGrid.name = x + "_" + y;
                 newTile.Initialize();
                 newTile.gameObject.SetActive(true);
 
