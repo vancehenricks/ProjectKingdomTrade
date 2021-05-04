@@ -11,7 +11,10 @@ using UnityEngine;
 public class UnitCycler : MonoBehaviour
 {
     private TileInfo tileInfo;
-    private bool stopCoroutine, startCoroutine;
+    private bool stopCoroutine;
+    private bool startCoroutine;
+    private Transform previous;
+
 
     private void OnDestroy()
     {
@@ -21,11 +24,12 @@ public class UnitCycler : MonoBehaviour
     private void Awake()
     {
         tileInfo = GetComponent<TileInfo>();
+        previous = transform;
     }
 
     private void FixedUpdate()
     {
-        if (!stopCoroutine && transform.parent.childCount == 1)
+        if (!stopCoroutine && transform.parent.childCount <= 1)
         {
             stopCoroutine = true;
             startCoroutine = false;
@@ -45,12 +49,22 @@ public class UnitCycler : MonoBehaviour
         {
             for (int i = 0; i < transform.parent.childCount; i++)
             {
-                if (tileInfo.transform.GetSiblingIndex() == i) continue;
 
-                transform.parent.GetChild(i).SetAsLastSibling();
-                yield return new WaitForSeconds(0.5f);
                 tileInfo.transform.SetAsLastSibling();
-                yield return new WaitForSeconds(0.5f);
+                yield return new WaitForSeconds(0.3f);
+
+                if (transform.parent.childCount > i && previous == transform.parent.GetChild(i) && transform.parent.childCount > 2)
+                {
+                    i++;
+                }
+
+                if (transform.parent.childCount > i && transform.parent.GetChild(i) != tileInfo.transform)
+                {
+                    previous = transform.parent.GetChild(i);
+                    previous.SetAsLastSibling();
+
+                    yield return new WaitForSeconds(0.5f);
+                }
             }
         }
     }
