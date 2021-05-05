@@ -131,15 +131,17 @@ public class UnitDisplay : MonoBehaviour
             units += standingTile.unit;
         }
 
+        if (units == 0) return;
+
         unitText.text = Tools.ConvertToSymbols(units);
 
-        if (multiUnit == 1)
+        if (multiUnit > 1)
         {
-            multiUnitText.text = "";
+            multiUnitText.text = Tools.ConvertToSymbols(multiUnit);
         }
         else
         {
-            multiUnitText.text = Tools.ConvertToSymbols(multiUnit);
+            multiUnitText.text = "";
         }
     }
 }

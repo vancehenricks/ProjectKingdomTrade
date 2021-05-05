@@ -35,7 +35,7 @@ public class PathFindingHandler : MonoBehaviour
     public int gwPointsIndex;
     public int executeAlgorithmThreshold;
 
-    public BoxCollider2D collider;
+    public BoxCollider2D tileCollider;
 
     private UnitEffect unitEffect;
     private Task task;
@@ -47,6 +47,7 @@ public class PathFindingHandler : MonoBehaviour
     private bool saveCache;
 
     private static string currentTileId;
+    private PathFinder pathFinder;
 
     private void Start()
     {
@@ -57,6 +58,7 @@ public class PathFindingHandler : MonoBehaviour
         unitEffect = unitInfo.unitEffect;
         generatedWayPoints = new List<TileInfo>();
         firstWayPoint = unitInfo;
+        pathFinder = new PathFinder();
     }
 
     public void OnDestroy()
@@ -81,12 +83,12 @@ public class PathFindingHandler : MonoBehaviour
 
             if (Vector2.Distance(transform.position, destination.tile.transform.position) < 0.5f)
             {
-                collider.enabled = true;
+                tileCollider.enabled = true;
                 destination.arrivalTime = -1;
             }
             else
             {
-                collider.enabled = false;
+                tileCollider.enabled = false;
                 unitEffect.OnExit();
             }
 
@@ -207,7 +209,7 @@ public class PathFindingHandler : MonoBehaviour
         if (currentTileId == "" && gwPointsIndex == 0 && task == null && pointTileInfo.tileLocation != unitInfo.tileLocation)
         {
             List<TileInfo> tempCache = PathFindingCache.init.RetrieveTileInfos(standingTile, pointTileInfo);
-            PathFinder pathFinder = new PathFinder(standingTile, pointTileInfo, tempCache, isWalkable, OnDoneCalculate, AlgorithmicCounter);
+            pathFinder.Set(standingTile, pointTileInfo, tempCache, isWalkable, OnDoneCalculate, AlgorithmicCounter);
             task = new Task(pathFinder.Calculate);
             task.Start();
             CDebug.Log(this, "unitInfo.tileId=" + unitInfo.tileId + " start=" + standingTile.tileLocation + "end=" + pointTileInfo.tileLocation + "Generating Pathfinding.");

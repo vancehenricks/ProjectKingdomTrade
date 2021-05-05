@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using System.Threading.Tasks;
 
 public class CloudAction : MonoBehaviour
 {
@@ -25,8 +26,6 @@ public class CloudAction : MonoBehaviour
     public Transform posA;
     public Transform posB;
     public float offsetDespawn;
-    public float diffXA;
-    public float diffXB;
 
     public float maxAlpha;
     public float durationBeforeDisplay;
@@ -35,8 +34,10 @@ public class CloudAction : MonoBehaviour
     public float collidePoints;
     public float liveTimeCounter;
     private float liveTime;
-    private Vector3 pos;
     public Image image;
+
+    private Cloud cloud;
+    private CloudInstance cloudInstance;
 
     private void Start()
     {
@@ -48,6 +49,9 @@ public class CloudAction : MonoBehaviour
 
         liveTime = Random.Range(minLiveTime, maxLiveTime);
 
+        cloudInstance = new CloudInstance(Result);
+        cloud = new Cloud();
+
         StartCoroutine(FadeIn(0.1f));
     }
 
@@ -55,27 +59,37 @@ public class CloudAction : MonoBehaviour
     {
         if (Tick.init.speed > 0)
         {
+            cloud.deltaTime = Time.deltaTime;
+            cloud.liveTime = liveTime;
+            cloud.speedModifier = speedModifier;
+            cloud.markedForDestroy = markedForDestroy;
+            cloud.tickSpeed = Tick.init.speed;
+            cloud.zLevel = cloudCycle.zLevel;
+            cloud.pos = transform.position;
+            cloud.offsetDespawn = offsetDespawn;
+            cloud.posA = posA.transform.position;
+            cloud.posB = posB.transform.position;
+            cloudInstance.Set(cloud);
+            Task task = new Task(cloudInstance.Calculate);
+            task.Start();
+            task.Wait();
 
-            pos = transform.position;
-            diffXA = transform.position.x - posA.transform.position.x;
-            diffXB = transform.position.x - posB.transform.position.x;
-
-            float posX = pos.x + (Tick.init.speed * speedModifier) * Time.deltaTime;
-
-            Tools.SetDirection(transform, new Vector3(posX,0f));
-
-            gameObject.transform.position = new Vector3(pos.x + (Tick.init.speed * speedModifier) * Time.deltaTime, pos.y, cloudCycle.zLevel);
-            liveTimeCounter = liveTimeCounter + (Tick.init.speed * Time.deltaTime);
-
-            //Debug.Log(diffXA);
-            if (diffXA >= -offsetDespawn && diffXA <= offsetDespawn
-                || diffXB >= -offsetDespawn && diffXB <= offsetDespawn
-                || liveTimeCounter >= liveTime || markedForDestroy || speedModifier == 0f)
+            liveTimeCounter = cloud.liveTimeCounter;
+            Tools.SetDirection(transform, new Vector3(cloud.posX, 0f));
+            gameObject.transform.position = cloud.newPos;
+            if (cloud.outOfBounds)
             {
                 StartCoroutine(FadeOut(0.1f));
             }
         }
     }
+
+    //Seperate thread+
+    private void Result(Cloud _cloud)
+    {
+        cloud = _cloud;
+    }
+    //Seperate thread-
 
     private IEnumerator FadeIn(float value)
     {
