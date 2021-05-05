@@ -35,6 +35,8 @@ public class PathFindingHandler : MonoBehaviour
     public int gwPointsIndex;
     public int executeAlgorithmThreshold;
 
+    public BoxCollider2D collider;
+
     private UnitEffect unitEffect;
     private Task task;
 
@@ -79,15 +81,17 @@ public class PathFindingHandler : MonoBehaviour
 
             if (Vector2.Distance(transform.position, destination.tile.transform.position) < 0.5f)
             {
-                transform.SetParent(unitInfo.unitEffect.standingTile.transform.parent);
+                collider.enabled = true;
                 destination.arrivalTime = -1;
             }
             else
             {
-                transform.SetParent(MapGenerator.init.grid);
+                collider.enabled = false;
+                unitEffect.OnExit();
             }
 
             transform.SetAsLastSibling();
+
         }
 
         if (unitInfo.waypoints.Count > 0 && unitInfo.waypoints[0] != null && firstWayPoint.tileId != unitInfo.waypoints[0].tileId)
@@ -123,11 +127,11 @@ public class PathFindingHandler : MonoBehaviour
     {
 
         if (unitEffect == null && destination == null) return;
-        if (unitEffect.standingTile == null) return;
+        if (unitInfo.standingTile == null) return;
 
-        if (destination.arrivalTime == -1 && destination.tile.tileLocation != unitEffect.standingTile.tileLocation)
+        if (destination.arrivalTime == -1 && destination.tile.tileLocation != unitInfo.standingTile.tileLocation)
         {
-            transform.position = unitEffect.standingTile.transform.position;
+            transform.position = unitInfo.standingTile.transform.position;
             //Debug.Log("82");
         }
 
@@ -147,7 +151,7 @@ public class PathFindingHandler : MonoBehaviour
             TileInfo point = unitInfo.waypoints[index];
             if (point == null) return;
 
-            if (unitEffect.standingTile.tileLocation == point.tileLocation || isWalkable != null && !isWalkable(point))
+            if (unitInfo.standingTile.tileLocation == point.tileLocation || isWalkable != null && !isWalkable(point))
             {
                 if (wayPointReached != null)
                 {
@@ -169,7 +173,7 @@ public class PathFindingHandler : MonoBehaviour
 
             if (isWalkable != null && isWalkable(point))
             {
-                ExecuteAlgorithm(unitEffect.standingTile, point, destination);
+                ExecuteAlgorithm(unitInfo.standingTile, point, destination);
             }
 
             //Debug.Log("133");

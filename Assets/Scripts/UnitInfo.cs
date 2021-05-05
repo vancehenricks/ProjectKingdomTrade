@@ -41,6 +41,24 @@ public class UnitInfo : TileInfo
     public float killChance;
     public float deathChance;
     public List<Walkable> nonWalkable;
+    public TileInfo standingTile
+    {
+        get
+        {
+            return standingTiles.Count > 0 ? standingTiles[0] : null;
+        }
+        set
+        {
+            if (standingTiles.Count > 0)
+            {
+                standingTiles[0] = value;
+            }
+            else
+            {
+                standingTiles.Add(value);    
+            }
+        }
+    }
 
     public new void OnDestroy()
     {

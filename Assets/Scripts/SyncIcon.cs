@@ -17,7 +17,6 @@ public class SyncIcon : MonoBehaviour
     public float _xPadding;
     public float _yPadding;
     public bool alwaysOn;
-    public bool syncThroughSibling;
 
     public GenericObjectHolder genericObjectHolder;
 
@@ -62,14 +61,7 @@ public class SyncIcon : MonoBehaviour
     {
         while (true)
         {
-            if (syncThroughSibling)
-            {
-                SyncThroughSibling();
-            }
-            else
-            {
-                Sync();
-            }
+            Sync();
 
             yield return null;
         }
@@ -89,32 +81,6 @@ public class SyncIcon : MonoBehaviour
         catch (System.Exception e)
         {
             CDebug.Log(this,e,LogType.Warning);
-            Destroy(gameObject);
-        }
-
-    }
-
-    private void SyncThroughSibling()
-    {
-        try
-        {
-            gameObject.transform.position = new Vector3(_tile.transform.position.x + _xPadding, _tile.transform.position.y + _yPadding, _zLevelFlag);
-
-            foreach (GameObject obj in genericObjectHolder.objects)
-            {
-                if (_tile.transform.GetSiblingIndex() == _tile.transform.parent.childCount - 1)
-                {
-                    obj.SetActive(true);
-                }
-                else if (_tile.transform.parent.name != "Grid")
-                {
-                    obj.SetActive(false);
-                }
-            }
-        }
-        catch (System.Exception e)
-        {
-            CDebug.Log(this, e, LogType.Warning);
             Destroy(gameObject);
         }
 

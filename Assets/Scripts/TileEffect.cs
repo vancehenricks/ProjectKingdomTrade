@@ -28,8 +28,8 @@ public class TileEffect : MonoBehaviour
     public float freezingTemp;
     public float autumnTemp;
     public float summerTemp;
-    public UnitCycler unitCycler;
     public UnitWayPoint UnitWayPoint;
+    public UnitDisplay unitDisplay;
     //public int maxDaysBeforeRevert;
 
     //private int daysResultWinter;

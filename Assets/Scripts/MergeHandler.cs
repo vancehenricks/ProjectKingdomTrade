@@ -29,7 +29,7 @@ public class MergeHandler : MonoBehaviour
     public void GenerateWayPoint()
     {
         //MergeReset();
-        unitInfo.waypoints.Add(unitInfo.merge.unitEffect.standingTile);
+        unitInfo.waypoints.Add(unitInfo.merge.standingTile);
         isMerging = true;
     }
 

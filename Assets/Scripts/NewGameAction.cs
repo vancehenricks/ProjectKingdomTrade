@@ -26,7 +26,7 @@ public class NewGameAction : MonoBehaviour
     public CloseWindow closeWindow;
     public CloudCycle cloudCycle;
     public CelestialCycle celestialCycle;
-    public GameObject unitIndicatorBase;
+    //public GameObject unitIndicatorBase;
     public Tick tick;
 
     private int w;
@@ -66,7 +66,7 @@ public class NewGameAction : MonoBehaviour
             float tileSize = Tools.tileSize;
             if (Tools.GetNumberOfTiles(w, h) > Tools.GetNumberOfTiles(40, 40))
             {
-                unitIndicatorBase.SetActive(false); //setting the base as false enables occlusion likely a bug will take advantage for now
+                //unitIndicatorBase.SetActive(false); //setting the base as false enables occlusion likely a bug will take advantage for now
 
                 ShowMessage show = ShowMessageHandler.init.confirmWindow.SetMessage("[WARNING]",
                     "[MAP-SIZE-GREATER-THAN-40X40] [THIS-COULD-CAUSE-THE-GAME-TO-BE-UNRESPONSIVE] [WOULD-YOU-LIKE-TO-CONTINUE]",

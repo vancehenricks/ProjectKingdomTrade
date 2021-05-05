@@ -27,7 +27,7 @@
    "distance":0.5
   }
  ],
- "unit":0,
+ "unit":100,
  "maxUnit":0,
  "travelSpeed":0.0,
  "attackDistance":0,

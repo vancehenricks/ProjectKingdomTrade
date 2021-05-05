@@ -64,10 +64,12 @@ public class SelectTiles : MonoBehaviour
         if (tile.tileType == "Unit")
         {
             DrawAndSyncFlag(tile, tile, baseSelect, false);
+            //tile.transform.SetAsLastSibling();
         }
         else
         {
             DrawFlag(tile, tile, baseSelect, false);
+            //tile.transform.SetAsLastSibling();
         }
     }
 

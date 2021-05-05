@@ -154,19 +154,19 @@ public class CombatHandler : MonoBehaviour
         {
             ResetCombatPathing();
             unitInfo.waypoints.Add(waypoint);
-            targetStandingTile = targetUnit.unitEffect.standingTile;
+            targetStandingTile = targetUnit.standingTile;
         }
         else if (!unitInfo.isEngaged &&
             distance > attackDistance &&
             pathFinding.gwPointsIndex >= pathFinding.generatedWayPoints.Count/2)
         {
             if (targetStandingTile == null) return;
-            if (targetUnit.unitEffect.standingTile != null && targetUnit.unitEffect.standingTile.tileId == targetStandingTile.tileId) return;
+            if (targetUnit.standingTile != null && targetUnit.standingTile.tileId == targetStandingTile.tileId) return;
             if (targetUnit.currentTarget != null && targetUnit.currentTarget.tileId == unitInfo.tileId) return;
 
             ResetCombatPathing();
             unitInfo.waypoints.Add(targetUnit);
-            targetStandingTile = targetUnit.unitEffect.standingTile;
+            targetStandingTile = targetUnit.standingTile;
         }
     }
 

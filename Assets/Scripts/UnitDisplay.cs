@@ -9,55 +9,137 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class UnitDisplay : MonoBehaviour
 {
 
-    public TileInfo tile;
-    public GameObject indicator;
 
+    public bool stop;
+    public SyncIcon syncIconBase;
     public float xLevel;
     public float yLevel;
     public float zLevel;
 
-    public GameObject instance;
-
     private SyncIcon syncIcon;
-    private GenericObjectHolder genericObjectHolder;
-    private Text text;
-    private Image background;
-    private int unitTrack;
+    private TextMeshProUGUI unitText;
+    private TextMeshProUGUI multiUnitText;
+    private TileInfo tile;
 
     private enum Obj
     {
-        Panel = 0, Value
+       Morale = 0, Wall, Unit, Aqueduct, MultiUnit
+    }
+
+    private void Awake()
+    {
+        tile = GetComponent<TileInfo>();
     }
 
     private void Start()
     {
-        //Debug.Log("STARTING!!!");
-
-        instance = Instantiate(indicator);
-        instance.transform.SetParent(indicator.transform.parent);
-        genericObjectHolder = instance.GetComponent<GenericObjectHolder>();
-
-        syncIcon = instance.GetComponent<SyncIcon>();
-        text = genericObjectHolder.GetComponent<Text>((int)Obj.Value);
-        syncIcon.syncThroughSibling = true;
-        syncIcon.Initialize(tile, xLevel, yLevel, zLevel);
-        background = genericObjectHolder.GetComponent<Image>((int)Obj.Panel);
-        instance.gameObject.SetActive(true);
-        syncIcon.Sync(true);
+        if (!stop)
+        {
+            Initialize();
+        }
     }
 
-    private void Update()
+    public void Initialize()
     {
-        if (instance == null || unitTrack == tile.unit) return;
+        syncIcon = Instantiate(syncIconBase, syncIconBase.transform.parent);
+        unitText = syncIcon.genericObjectHolder.GetComponent<TextMeshProUGUI>((int)Obj.Unit);
+        multiUnitText = syncIcon.genericObjectHolder.GetComponent<TextMeshProUGUI>((int)Obj.MultiUnit);
+        syncIcon.Initialize(tile, xLevel, yLevel, zLevel);
+        syncIcon.gameObject.SetActive(true);
+        syncIcon.Sync(true);
 
-        //Debug.Log("UPDATING text");
+        if (tile.tileType == "Unit")
+        {
+            StartCoroutine(Sync(UnitUpdate));
+        }
+        else
+        {
+            StartCoroutine(Sync(TileUpdate));
+        }
+    }
 
-        text.text = Tools.ConvertToSymbols(tile.unit);
-        unitTrack = tile.unit;
-        background.color = new Color(tile.playerInfo.color.r, tile.playerInfo.color.g, tile.playerInfo.color.b, background.color.a);
+    public void Sync()
+    {
+        if (syncIcon == null) return;
+
+        if (!tile.tileEffect.image.activeSelf || (tile.tileType != "Unit" && tile.standingTiles.Count > 0))
+        {
+            StopAllCoroutines();
+            syncIcon.Sync(false);
+            syncIcon.SetActive(false);
+        }
+        else
+        {
+            StopAllCoroutines();
+            if (tile.tileType == "Unit")
+            {
+                StartCoroutine(Sync(UnitUpdate));
+            }
+            else
+            {
+                StartCoroutine(Sync(TileUpdate));
+            }
+
+            syncIcon.Sync(true);
+        }
+    }
+
+    private void OnDestroy()
+    {
+        StopAllCoroutines();
+    }
+
+    private IEnumerator Sync(System.Action action)
+    {
+        while (true)
+        {
+            action();
+            yield return null;
+        }
+    }
+
+    private void TileUpdate()
+    {
+        if (tile.unit == 0) return;
+
+        unitText.text = Tools.ConvertToSymbols(tile.unit);
+        multiUnitText.text = "";
+    }
+
+    private void UnitUpdate()
+    {
+        UnitInfo unit = tile as UnitInfo;
+
+        if (unit == null) return;
+        if (unit.standingTile == null) return;
+
+        int units = unit.standingTile.unit;
+        int multiUnit = unit.standingTile.standingTiles.Count;
+
+        if (unit.standingTile.unit > 0)
+        {
+            multiUnit += 1;
+        }
+
+        foreach (TileInfo standingTile in unit.standingTile.standingTiles)
+        {
+            units += standingTile.unit;
+        }
+
+        unitText.text = Tools.ConvertToSymbols(units);
+
+        if (multiUnit == 1)
+        {
+            multiUnitText.text = "";
+        }
+        else
+        {
+            multiUnitText.text = Tools.ConvertToSymbols(multiUnit);
+        }
     }
 }

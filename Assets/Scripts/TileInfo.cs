@@ -48,6 +48,7 @@ public class TileInfo : MonoBehaviour
     public float cloudDrag;
     public float dragAffectedByCloud;
     public List<string> options;
+    public List<TileInfo> standingTiles;
     public List<Upgrade> upgrades;
 
     protected void Awake()

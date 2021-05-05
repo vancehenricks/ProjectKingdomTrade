@@ -28,14 +28,38 @@ public class UnitEffect : TileEffect
         }
     }
 
-    public TileInfo standingTile;
     public PathFindingHandler pathFinder;
     public CombatHandler combatHandler;
     public MergeHandler mergeHandler;
     public UnitDirection unitDirection;
-    public UnitDisplay unitDisplay;
     public UnitWayPoint unitWayPoint;
     public NonWalkableTiles nonWalkableTiles;
+
+    private void OnDestroy()
+    {
+        if (unitInfo.standingTile != null)
+        {
+            unitInfo.standingTile.standingTiles.Remove(unitInfo);
+            ResetDisplay(unitInfo.standingTile);
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (unitInfo.tileType == "Town") return;
+
+        TileInfo tempTile = collision.GetComponent<TileInfo>();
+
+        if (tempTile == null) return;
+
+        if (tempTile.tileType != unitInfo.tileType)
+        {
+            transform.SetParent(tempTile.transform.parent);
+            tempTile.standingTiles.Add(unitInfo);
+            ResetDisplay(tempTile);
+        }
+
+    }
 
     private void OnTriggerStay2D(Collider2D collision)
     {
@@ -43,18 +67,33 @@ public class UnitEffect : TileEffect
 
         TileInfo tempTile = collision.GetComponent<TileInfo>();
 
-        if (tempTile == null)
-        {
-            return;
-        }
+        if (tempTile == null) return;
 
         if (tempTile.tileType != unitInfo.tileType)
         {
-            standingTile = tempTile;
+            unitInfo.standingTile = tempTile;
+            unitInfo.tileLocation = tempTile.tileLocation;
+            unitInfo.travelTime = tempTile.travelTime;
         }
 
-        unitInfo.tileLocation = tempTile.tileLocation;
         unitInfo.localTemp = tempTile.localTemp;
-        unitInfo.travelTime = tempTile.travelTime;
+    }
+
+
+    public void OnExit()
+    {
+        unitInfo.standingTile.standingTiles.Remove(unitInfo);
+        transform.SetParent(MapGenerator.init.grid);
+        ResetDisplay(unitInfo.standingTile);
+    }
+
+
+    public void ResetDisplay(TileInfo standingTile)
+    {
+        standingTile.tileEffect.unitDisplay.Sync();
+        foreach (TileInfo tile in standingTile.standingTiles)
+        {
+            tile.tileEffect.unitDisplay.Sync();
+        }
     }
 }
