@@ -208,10 +208,19 @@ public class PathFindingHandler : MonoBehaviour
         //Debug.Log("136");
         if (currentTileId == "" && gwPointsIndex == 0 && task == null && pointTileInfo.tileLocation != unitInfo.tileLocation)
         {
-            List<TileInfo> tempCache = PathFindingCache.init.RetrieveTileInfos(standingTile, pointTileInfo);
-            pathFinder.Set(standingTile, pointTileInfo, tempCache, isWalkable, OnDoneCalculate, AlgorithmicCounter);
+            PathFindValues pathFindValues = new PathFindValues();
+
+            pathFindValues.currentPoint = standingTile;
+            pathFindValues.finalPoint = pointTileInfo;
+            pathFindValues.isWalkable = isWalkable;
+            pathFindValues.onDoneCalculate = OnDoneCalculate;
+            pathFindValues.algorthimicCounter = AlgorithmicCounter;
+            pathFindValues.tempCache = PathFindingCache.init.RetrieveTileInfos(standingTile, pointTileInfo);
+
+            pathFinder.Set(pathFindValues);
             task = new Task(pathFinder.Calculate);
             task.Start();
+
             CDebug.Log(this, "unitInfo.tileId=" + unitInfo.tileId + " start=" + standingTile.tileLocation + "end=" + pointTileInfo.tileLocation + "Generating Pathfinding.");
             currentTileId = standingTile.tileId + ""; //this will force to only execute one calculation with same standingtile
         }

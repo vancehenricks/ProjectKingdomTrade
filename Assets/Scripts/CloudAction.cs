@@ -11,6 +11,24 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Threading.Tasks;
 
+public struct Cloud
+{
+    public Vector3 pos;
+    public Vector3 posA;
+    public Vector3 posB;
+    public float offsetDespawn;
+    public float liveTime;
+    public float liveTimeCounter;
+    public float zLevel;
+    public float speedModifier;
+    public int tickSpeed;
+    public float deltaTime;
+    public Vector3 newPos;
+    public bool outOfBounds;
+    public bool markedForDestroy;
+    public Vector3 direction;
+}
+
 public class CloudAction : MonoBehaviour
 {
     public string type;
@@ -37,7 +55,7 @@ public class CloudAction : MonoBehaviour
     public Image image;
 
     private Cloud cloud;
-    private CloudInstance cloudInstance;
+    private ParallelInstance<Cloud> parallellInstance;
 
     private void Start()
     {
@@ -49,45 +67,72 @@ public class CloudAction : MonoBehaviour
 
         liveTime = Random.Range(minLiveTime, maxLiveTime);
 
-        cloudInstance = new CloudInstance(Result);
         cloud = new Cloud();
+        parallellInstance = new ParallelInstance<Cloud>(Calculate, (Cloud _cloud, Cloud original) => {cloud = _cloud;});
 
         StartCoroutine(FadeIn(0.1f));
+        StartCoroutine(Move());
     }
 
-    private void Update()
+    private IEnumerator Move()
     {
-        if (Tick.init.speed > 0)
+        while (true)
         {
-            cloud.deltaTime = Time.deltaTime;
-            cloud.liveTime = liveTime;
-            cloud.speedModifier = speedModifier;
-            cloud.markedForDestroy = markedForDestroy;
-            cloud.tickSpeed = Tick.init.speed;
-            cloud.zLevel = cloudCycle.zLevel;
-            cloud.pos = transform.position;
-            cloud.offsetDespawn = offsetDespawn;
-            cloud.posA = posA.transform.position;
-            cloud.posB = posB.transform.position;
-            cloudInstance.Set(cloud);
-            Task task = new Task(cloudInstance.Calculate);
-            task.Start();
-            task.Wait();
-
-            liveTimeCounter = cloud.liveTimeCounter;
-            Tools.SetDirection(transform, new Vector3(cloud.posX, 0f));
-            gameObject.transform.position = cloud.newPos;
-            if (cloud.outOfBounds)
+            if (Tick.init.speed > 0)
             {
-                StartCoroutine(FadeOut(0.1f));
+                cloud.deltaTime = Time.deltaTime;
+                cloud.liveTime = liveTime;
+                cloud.speedModifier = speedModifier;
+                cloud.markedForDestroy = markedForDestroy;
+                cloud.tickSpeed = Tick.init.speed;
+                cloud.zLevel = cloudCycle.zLevel;
+                cloud.pos = transform.position;
+                cloud.offsetDespawn = offsetDespawn;
+                cloud.posA = posA.transform.position;
+                cloud.posB = posB.transform.position;
+
+                parallellInstance.Set(cloud);
+                Task task = new Task(parallellInstance.Calculate);
+                task.Start();
+
+                yield return null;
+
+                //task.Wait();
+
+                liveTimeCounter = cloud.liveTimeCounter;
+                Tools.SetDirection(transform, cloud.direction);
+                gameObject.transform.position = cloud.newPos;
+                if (cloud.outOfBounds)
+                {
+                    StartCoroutine(FadeOut(0.1f));
+                }
             }
+
+            yield return null;
         }
     }
 
     //Seperate thread+
-    private void Result(Cloud _cloud)
+    private void Calculate(System.Action<Cloud,Cloud> result, Cloud _cloud)
     {
-        cloud = _cloud;
+        Cloud newCloud = new Cloud();
+
+        float diffXA = _cloud.pos.x - cloud.posA.x;
+        float diffXB = _cloud.pos.x - cloud.posB.x;
+
+        newCloud.direction.x = _cloud.pos.x + (_cloud.tickSpeed * _cloud.speedModifier) * _cloud.deltaTime;
+
+        newCloud.newPos = new Vector3(_cloud.pos.x + (_cloud.tickSpeed * _cloud.speedModifier) * _cloud.deltaTime, _cloud.pos.y, _cloud.zLevel);
+        newCloud.liveTimeCounter = _cloud.liveTimeCounter + (_cloud.tickSpeed * _cloud.deltaTime);
+
+        if (diffXA >= -_cloud.offsetDespawn && diffXA <= _cloud.offsetDespawn
+            || diffXB >= -_cloud.offsetDespawn && diffXB <= _cloud.offsetDespawn
+            || _cloud.liveTimeCounter >= _cloud.liveTime || _cloud.markedForDestroy || _cloud.speedModifier == 0f)
+        {
+            newCloud.outOfBounds = true;
+        }
+
+        result(newCloud, _cloud);
     }
     //Seperate thread-
 
@@ -116,6 +161,7 @@ public class CloudAction : MonoBehaviour
 
     private void OnDestroy()
     {
+        StopAllCoroutines();
         cloudCycle.clouds.Remove(this);
         cloudCycle.counter--;
     }

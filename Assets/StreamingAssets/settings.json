@@ -3,5 +3,6 @@
  "language":"English",
  "logLevel":2,
  "maxFps":60,
- "vSync":false
+ "vSync":false,
+ "tileOcclusion":40
 }

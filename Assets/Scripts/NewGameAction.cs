@@ -143,6 +143,7 @@ public class NewGameAction : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         cloudCycle.Initialize();
         celestialCycle.Initialize();
+        TileOcclusion.init.Initialize();
         LoadingHandler.init.SetActive(false);
         openWindow.DoOpen();
     }

@@ -58,6 +58,7 @@ public class SettingsHandler : MonoBehaviour
         LanguageHandler.init.secondaryLanguage = settingsConfig.language;
         FrameRateHandler.init.maxFps = settingsConfig.maxFps;
         FrameRateHandler.init.vSync = settingsConfig.vSync;
+        TileOcclusion.init.overflow = settingsConfig.tileOcclusion;
         Debug.unityLogger.filterLogType = (LogType)settingsConfig.logLevel;
 
         return settingsConfig;
@@ -88,6 +89,11 @@ public class SettingsHandler : MonoBehaviour
         if (settingsConfig.logLevel == 0)
         {
             settingsConfig.logLevel = (int)LogType.Warning;
+        }
+
+        if (settingsConfig.tileOcclusion == 0)
+        {
+            settingsConfig.tileOcclusion = 40;
         }
 
         return settingsConfig;

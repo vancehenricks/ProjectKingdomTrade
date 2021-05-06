@@ -11,4 +11,5 @@ public struct SettingsConfig
     public int logLevel;
     public int maxFps;
     public bool vSync;
+    public int tileOcclusion;
 }
