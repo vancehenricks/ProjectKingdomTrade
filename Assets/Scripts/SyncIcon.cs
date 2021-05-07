@@ -7,6 +7,7 @@
 using DebugHandler;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,11 +22,11 @@ public class SyncIcon : MonoBehaviour
     public GenericObjectHolder genericObjectHolder;
 
     public TileInfo _tile;
-    private GameObject image;
+    private Image imageImage;
 
     public void Initialize(TileInfo tile, float xPadding = 0f, float yPadding = 0f, float zLevelFlag = 0f)
     {
-        image = tile.tileEffect.image;
+        imageImage = tile.tileEffect.imageImage;
         _zLevelFlag = zLevelFlag;
         _xPadding = xPadding;
         _yPadding = yPadding;
@@ -39,6 +40,7 @@ public class SyncIcon : MonoBehaviour
     {
         if (start || alwaysOn)
         {
+            StopAllCoroutines();
             StartCoroutine(SyncCoroutine());
         }
         else
@@ -51,38 +53,37 @@ public class SyncIcon : MonoBehaviour
     {
         if(alwaysOn) return;
 
-        foreach (GameObject obj in genericObjectHolder.objects)
+        foreach (Image image in genericObjectHolder.images)
         {
-            obj.SetActive(active);
+            image.enabled = active;
         }
+
+        foreach (TextMeshProUGUI text in genericObjectHolder.texts)
+        {
+            text.enabled = active;
+        }
+    }
+    public void Destroy()
+    {
+        StopAllCoroutines();
+        Destroy(gameObject);
     }
 
     private IEnumerator SyncCoroutine()
     {
-        while (true)
+        while (_tile != null)
         {
             Sync();
 
             yield return null;
         }
+
+        Destroy(gameObject);
     }
 
     private void Sync()
     {
-        try
-        {
-            gameObject.transform.position = new Vector3(_tile.transform.position.x + _xPadding, _tile.transform.position.y + _yPadding, _zLevelFlag);
-
-            foreach (GameObject obj in genericObjectHolder.objects)
-            {
-                obj.SetActive(image.activeSelf);
-            }
-        }
-        catch (System.Exception e)
-        {
-            CDebug.Log(this,e,LogType.Warning);
-            Destroy(gameObject);
-        }
-
+        gameObject.transform.position = new Vector3(_tile.transform.position.x + _xPadding, _tile.transform.position.y + _yPadding, _zLevelFlag);
+        SetActive(imageImage.enabled);
     }
 }

@@ -13,12 +13,9 @@ using UnityEngine;
 public struct TileOcclusionValues
 {
     public bool enabled;
-    public Vector3 pos;
-    public Vector3 screenPos;
     public Vector2Int tileLocation;
-    public int pixelWidth;
-    public int pixelHeight;
-    public int overflow;
+    public Vector3 worldPos;
+    public OcclusionValue occlusion;
 }
 
 public class TileOcclusion : MonoBehaviour
@@ -72,10 +69,9 @@ public class TileOcclusion : MonoBehaviour
 
             tileValue.tileLocation = tile.tileLocation;
             tileValue.enabled = tile.tileEffect.imageImage.enabled;
-            tileValue.pixelWidth = cm.pixelWidth;
-            tileValue.pixelHeight = cm.pixelHeight;
-            tileValue.pos = tile.transform.position;
-            tileValue.overflow = overflow;
+            tileValue.occlusion.screenSize = new Vector2Int(cm.pixelWidth, cm.pixelHeight);
+            tileValue.worldPos = tile.transform.position;
+            tileValue.occlusion.overflow = overflow;
 
             tileValueList.Add(tileValue);
         }
@@ -86,7 +82,6 @@ public class TileOcclusion : MonoBehaviour
 
     private IEnumerator Scan()
     {
-        yield return new WaitForSeconds(3f);
 
         while(true)
         {
@@ -95,7 +90,7 @@ public class TileOcclusion : MonoBehaviour
                 for (int i = 0; i < generatedTiles.Count; i++)
                 {
                     TileOcclusionValues tileOcclusionValues = generatedTiles[i];
-                    tileOcclusionValues.screenPos = cm.WorldToScreenPoint(generatedTiles[i].pos);
+                    tileOcclusionValues.occlusion.screenPos = cm.WorldToScreenPoint(generatedTiles[i].worldPos);
                     generatedTiles[i] = tileOcclusionValues;
                 }
 
@@ -111,7 +106,7 @@ public class TileOcclusion : MonoBehaviour
 
                     tileEffect.imageImage.enabled = tileValue.enabled;
 
-                    if (tileEffect.shadeImage != null)
+                    if (tileEffect.borderImage != null)
                     {
                         tileEffect.borderImage.enabled = tileValue.enabled;
                     }
@@ -138,18 +133,7 @@ public class TileOcclusion : MonoBehaviour
         for(int i = 0; i < tileValueList.Count;i++)
         { 
 
-            if (tileValueList[i].screenPos.x >= -tileValueList[i].overflow &&
-                tileValueList[i].screenPos.x <= tileValueList[i].pixelWidth+ tileValueList[i].overflow &&
-                tileValueList[i].screenPos.y >= -tileValueList[i].overflow &&
-                tileValueList[i].screenPos.y <= tileValueList[i].pixelHeight+ tileValueList[i].overflow)
-            {
-                newValue.enabled = true;
-            }
-            else
-            {
-                newValue.enabled = false;
-                
-            }
+            newValue.enabled = Tools.IsWithinCameraView(tileValueList[i].occlusion);
 
             if (newValue.enabled != tileValueList[i].enabled)
             {

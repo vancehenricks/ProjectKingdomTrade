@@ -35,7 +35,7 @@ public class CelestialCycle : MonoBehaviour
     private ParallelInstance<Celestial> parallelInstance;
     private Celestial celestial;
 
-    private void Start()
+    public void Initialize()
     {
         celestial = new Celestial();
         parallelInstance = new ParallelInstance<Celestial>(Calculate, (Celestial _celestial, Celestial orginal) => { celestial = _celestial; });
@@ -50,20 +50,19 @@ public class CelestialCycle : MonoBehaviour
     //Seperate thread+
     private void Calculate(System.Action<Celestial,Celestial> _result, Celestial _celestial)
     {
-        Celestial newCelestial = new Celestial();
 
         if (_celestial.isNight)
         {
-            newCelestial.sun = Vector3.Lerp(_celestial.sun, _celestial.pointB, (_celestial.TickSpeed * 0.2f) * _celestial.deltaTime);
-            newCelestial.moon = Vector3.Lerp(_celestial.moon, _celestial.pointA, (_celestial.TickSpeed * 0.8f) * _celestial.deltaTime);
+            _celestial.sun = Vector3.Lerp(_celestial.sun, _celestial.pointB, (_celestial.TickSpeed * 0.2f) * _celestial.deltaTime);
+            _celestial.moon = Vector3.Lerp(_celestial.moon, _celestial.pointA, (_celestial.TickSpeed * 0.8f) * _celestial.deltaTime);
         }
         else
         {
-            newCelestial.sun = Vector3.Lerp(_celestial.sun, _celestial.pointA, (_celestial.TickSpeed * 0.8f) * _celestial.deltaTime);
-            newCelestial.moon = Vector3.Lerp(_celestial.moon, _celestial.pointB, (_celestial.TickSpeed * 0.2f) * _celestial.deltaTime);
+            _celestial.sun = Vector3.Lerp(_celestial.sun, _celestial.pointA, (_celestial.TickSpeed * 0.8f) * _celestial.deltaTime);
+            _celestial.moon = Vector3.Lerp(_celestial.moon, _celestial.pointB, (_celestial.TickSpeed * 0.2f) * _celestial.deltaTime);
         }
 
-        _result(newCelestial,_celestial);
+        _result(_celestial, _celestial);
     }
     //Seperate thread-
 
@@ -93,20 +92,6 @@ public class CelestialCycle : MonoBehaviour
             //task.Wait();
             sun.position = celestial.sun;
             moon.position = celestial.moon;
-        }
-    }
-
-    public void Initialize()
-    {
-        if (NightDay.init.isNight())
-        {
-            sun.position = pointB.position;
-            moon.position = pointA.position;
-        }
-        else if (!NightDay.init.isNight())
-        {
-            sun.position = pointA.position;
-            moon.position = pointB.position;
         }
     }
 }

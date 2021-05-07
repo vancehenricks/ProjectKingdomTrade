@@ -20,11 +20,22 @@ public class ZoomingWindow : MonoBehaviour, IScrollHandler
     public float defaultSpeed;
     public float speed;
     public float scale;
+    public float maxScaleMultipler;
     public float maxScale;
     public float minScale;
 
+    private bool enable;
+
+    public void Initialize()
+    {
+        maxScale += (maxScale * maxScaleMultipler);
+        enable = true;
+    }
+
     public void OnScroll(PointerEventData eventData)
     {
+        if (!enable) return;
+
         if (grid.rect.width > defaultWidth)
         {
             speed = (defaultSpeed + (grid.rect.width / divideWidth));

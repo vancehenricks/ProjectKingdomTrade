@@ -334,4 +334,19 @@ public class Tools : MonoBehaviour
 
         return final;
     }
+
+    public static bool IsWithinCameraView(OcclusionValue occlusion)
+    {
+        if (occlusion.screenPos.x >= -occlusion.overflow &&
+            occlusion.screenPos.x <= occlusion.screenSize.x + occlusion.overflow &&
+            occlusion.screenPos.y >= -occlusion.overflow &&
+            occlusion.screenPos.y <= occlusion.screenSize.y + occlusion.overflow)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 }

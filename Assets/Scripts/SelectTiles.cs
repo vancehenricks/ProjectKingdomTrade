@@ -7,6 +7,7 @@
 using DebugHandler;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,7 +22,7 @@ public class SelectTiles : MonoBehaviour
 
     public enum Obj
     {
-        Image = 0, Value
+        Image = 0, Value = 0
     }
 
     protected void Start()
@@ -64,7 +65,11 @@ public class SelectTiles : MonoBehaviour
         if (tile.tileType == "Unit")
         {
             DrawAndSyncFlag(tile, tile, baseSelect, false);
-            //tile.transform.SetAsLastSibling();
+            UnitInfo unitInfo = (UnitInfo)tile;
+            unitInfo.unitEffect.ResetDisplay(unitInfo.standingTile);
+            tile.transform.SetAsLastSibling();
+            //issue with image is being treated as one instance;
+
         }
         else
         {
@@ -78,8 +83,8 @@ public class SelectTiles : MonoBehaviour
         GameObject flag = Instantiate(bFlag);
         GenericObjectHolder objectHolder = flag.GetComponent<GenericObjectHolder>();
 
-        Image image = objectHolder.GetComponent<Image>((int)Obj.Image);
-        Text value = objectHolder.GetComponent<Text>((int)Obj.Value);
+        Image image = objectHolder.images[(int)Obj.Image];
+        TextMeshProUGUI value = objectHolder.texts[(int)Obj.Value];
 
         if (syncColor)
         {

@@ -27,10 +27,13 @@ public struct Cloud
     public bool outOfBounds;
     public bool markedForDestroy;
     public Vector3 direction;
+    public bool enabledImage;
+    public OcclusionValue occlusion;
 }
 
 public class CloudAction : MonoBehaviour
 {
+    public Camera cm;
     public string type;
     public float spawnChance;
     public CloudCycle cloudCycle;
@@ -53,6 +56,7 @@ public class CloudAction : MonoBehaviour
     public float liveTimeCounter;
     private float liveTime;
     public Image image;
+    public bool hide;
 
     private Cloud cloud;
     private ParallelInstance<Cloud> parallellInstance;
@@ -68,6 +72,8 @@ public class CloudAction : MonoBehaviour
         liveTime = Random.Range(minLiveTime, maxLiveTime);
 
         cloud = new Cloud();
+        cloud.occlusion.overflow = TileOcclusion.init.overflow;
+
         parallellInstance = new ParallelInstance<Cloud>(Calculate, (Cloud _cloud, Cloud original) => {cloud = _cloud;});
 
         StartCoroutine(FadeIn(0.1f));
@@ -90,6 +96,8 @@ public class CloudAction : MonoBehaviour
                 cloud.offsetDespawn = offsetDespawn;
                 cloud.posA = posA.transform.position;
                 cloud.posB = posB.transform.position;
+                cloud.occlusion.screenPos = cm.WorldToScreenPoint(transform.position);
+                cloud.occlusion.screenSize = new Vector2Int(cm.pixelWidth, cm.pixelHeight);
 
                 parallellInstance.Set(cloud);
                 Task task = new Task(parallellInstance.Calculate);
@@ -102,6 +110,24 @@ public class CloudAction : MonoBehaviour
                 liveTimeCounter = cloud.liveTimeCounter;
                 Tools.SetDirection(transform, cloud.direction);
                 gameObject.transform.position = cloud.newPos;
+
+                if (cloud.enabledImage == true && hide == false)
+                {
+                    image.enabled = true;
+                }
+                else if (cloud.enabledImage == false && hide == true)
+                {
+                    image.enabled = false;
+                }
+                else if (cloud.enabledImage == true && hide == true)
+                {
+                    image.enabled = false;
+                }
+                else if (cloud.enabledImage == false && hide == false)
+                {
+                    image.enabled = false;
+                }
+
                 if (cloud.outOfBounds)
                 {
                     StartCoroutine(FadeOut(0.1f));
@@ -115,24 +141,24 @@ public class CloudAction : MonoBehaviour
     //Seperate thread+
     private void Calculate(System.Action<Cloud,Cloud> result, Cloud _cloud)
     {
-        Cloud newCloud = new Cloud();
-
         float diffXA = _cloud.pos.x - cloud.posA.x;
         float diffXB = _cloud.pos.x - cloud.posB.x;
 
-        newCloud.direction.x = _cloud.pos.x + (_cloud.tickSpeed * _cloud.speedModifier) * _cloud.deltaTime;
+        _cloud.direction.x = _cloud.pos.x + (_cloud.tickSpeed * _cloud.speedModifier) * _cloud.deltaTime;
 
-        newCloud.newPos = new Vector3(_cloud.pos.x + (_cloud.tickSpeed * _cloud.speedModifier) * _cloud.deltaTime, _cloud.pos.y, _cloud.zLevel);
-        newCloud.liveTimeCounter = _cloud.liveTimeCounter + (_cloud.tickSpeed * _cloud.deltaTime);
+        _cloud.newPos = new Vector3(_cloud.pos.x + (_cloud.tickSpeed * _cloud.speedModifier) * _cloud.deltaTime, _cloud.pos.y, _cloud.zLevel);
+        _cloud.liveTimeCounter = _cloud.liveTimeCounter + (_cloud.tickSpeed * _cloud.deltaTime);
 
         if (diffXA >= -_cloud.offsetDespawn && diffXA <= _cloud.offsetDespawn
             || diffXB >= -_cloud.offsetDespawn && diffXB <= _cloud.offsetDespawn
             || _cloud.liveTimeCounter >= _cloud.liveTime || _cloud.markedForDestroy || _cloud.speedModifier == 0f)
         {
-            newCloud.outOfBounds = true;
+            _cloud.outOfBounds = true;
         }
 
-        result(newCloud, _cloud);
+        _cloud.enabledImage = Tools.IsWithinCameraView(_cloud.occlusion);
+
+        result(_cloud, _cloud);
     }
     //Seperate thread-
 

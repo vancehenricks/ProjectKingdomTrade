@@ -6,15 +6,12 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GenericObjectHolder : MonoBehaviour
 {
-
-    public List<GameObject> objects;
-
-    public T GetComponent<T>(int index)
-    {
-        return objects[index].GetComponent<T>();
-    }
+    public List<Image> images;
+    public List<TextMeshProUGUI> texts;
 }

@@ -28,7 +28,7 @@ public class UnitDisplay : MonoBehaviour
 
     private enum Obj
     {
-       Morale = 0, Wall, Unit, Aqueduct, MultiUnit
+       Morale = 0, Wall, Aqueduct, Unit=0, MultiUnit
     }
 
     private void Awake()
@@ -47,8 +47,8 @@ public class UnitDisplay : MonoBehaviour
     public void Initialize()
     {
         syncIcon = Instantiate(syncIconBase, syncIconBase.transform.parent);
-        unitText = syncIcon.genericObjectHolder.GetComponent<TextMeshProUGUI>((int)Obj.Unit);
-        multiUnitText = syncIcon.genericObjectHolder.GetComponent<TextMeshProUGUI>((int)Obj.MultiUnit);
+        unitText = syncIcon.genericObjectHolder.texts[(int)Obj.Unit];
+        multiUnitText = syncIcon.genericObjectHolder.texts[(int)Obj.MultiUnit];
         syncIcon.Initialize(tile, xLevel, yLevel, zLevel);
         syncIcon.gameObject.SetActive(true);
         syncIcon.Sync(true);
@@ -76,6 +76,7 @@ public class UnitDisplay : MonoBehaviour
         else
         {
             StopAllCoroutines();
+            syncIcon.Sync(true);
             if (tile.tileType == "Unit")
             {
                 StartCoroutine(Sync(UnitUpdate));
@@ -84,14 +85,16 @@ public class UnitDisplay : MonoBehaviour
             {
                 StartCoroutine(Sync(TileUpdate));
             }
-
-            syncIcon.Sync(true);
         }
     }
 
     private void OnDestroy()
     {
         StopAllCoroutines();
+        if (syncIcon != null)
+        {
+            syncIcon.Destroy();
+        }
     }
 
     private IEnumerator Sync(System.Action action)

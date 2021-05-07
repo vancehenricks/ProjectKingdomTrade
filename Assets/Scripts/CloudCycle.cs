@@ -70,7 +70,7 @@ public class CloudCycle : MonoBehaviour
             hide = !hide;
             foreach (CloudAction cloud in clouds)
             {
-                cloud.image.enabled = hide;
+                cloud.hide = hide;
             }
         }
     }
