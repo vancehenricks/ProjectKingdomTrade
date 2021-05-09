@@ -14,7 +14,9 @@ namespace DebugHandler
         public delegate string ExtraParams();
         public static ExtraParams extraParams;
 
-        public static void Log(System.Object obj, object debug, LogType logtype = LogType.Log)
+        public static void Log(System.Object obj, object debug, LogType logtype = LogType.Log, 
+            [System.Runtime.CompilerServices.CallerLineNumber] int lineNumber = 0, 
+            [System.Runtime.CompilerServices.CallerMemberName] string methodName = "")
         {
             if (!Debug.unityLogger.IsLogTypeAllowed(logtype)) return;
 
@@ -33,7 +35,7 @@ namespace DebugHandler
                 exParam = extraParams() + "|";
             }
 
-            output += exParam + objName + "|" + debug;
+            output += exParam + objName + " " + methodName + ":" + lineNumber + "|" + debug;
 
 
             switch (logtype)
