@@ -32,6 +32,8 @@ public class Tick : MonoBehaviour
     public delegate void TickUpdate();
     public TickUpdate tickUpdate;
 
+    private Coroutine startTick;
+
     private void Awake()
     {
         init = this;
@@ -39,7 +41,6 @@ public class Tick : MonoBehaviour
 
     public void Initialize()
     {
-        StopAllCoroutines();
         realSeconds = 5f;
         seconds = 5f;
         speed = 1;
@@ -49,15 +50,19 @@ public class Tick : MonoBehaviour
         month = 8;
         realMonths = 8;
         year = 500;
-        StartCoroutine(startTick());
+        startTick = StartCoroutine(StartTick());
     }
 
     private void OnDestroy()
     {
+        if (startTick != null)
+        {
+            StopCoroutine(startTick);
+        }
         tickUpdate = null;
     }
 
-    IEnumerator startTick()
+    IEnumerator StartTick()
     {
 
         while (true)

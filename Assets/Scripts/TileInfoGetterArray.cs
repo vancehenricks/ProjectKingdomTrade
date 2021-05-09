@@ -21,6 +21,11 @@ public class TileInfoGetterArray : MonoBehaviour
 
     //private int overflowCount;
 
+    private void Start()
+    {
+        maxHits = TileInfoRaycaster.init.maxHits;
+    }
+
     private void OnTriggerEnter2D(Collider2D col)
     {
 

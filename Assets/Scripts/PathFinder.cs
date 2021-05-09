@@ -16,7 +16,6 @@ public class PathFindValues
     public List<TileInfo> tempCache;
     public PathFindingHandler.IsWalkable isWalkable;
     public System.Action<List<TileInfo>> onDoneCalculate;
-    public System.Action<int> algorthimicCounter;
 }
 
 public class PathFinder
@@ -45,33 +44,36 @@ public class PathFinder
 
         if (pathFindValues.tempCache != null)
         {
-            CDebug.Log(this, "Found global cache re-using it tempCache.Count " + pathFindValues.tempCache.Count);
+            CDebug.Log(this, "Found global cache re-using it tempCache.Count " + pathFindValues.tempCache.Count, LogType.Warning);
         }
 
+        bool isDone = false;
 
-    REDO:
-        Dictionary<Vector2Int, Node> open = new Dictionary<Vector2Int, Node>();
-        Dictionary<Vector2Int, Node> closed = new Dictionary<Vector2Int, Node>();
+        while (!isDone)
+        {
+            Dictionary<Vector2Int, Node> open = new Dictionary<Vector2Int, Node>();
+            Dictionary<Vector2Int, Node> closed = new Dictionary<Vector2Int, Node>();
 
-        open.Add(pathFindValues.currentPoint.tileLocation, new Node(pathFindValues.currentPoint, pathFindValues.currentPoint, pathFindValues.finalPoint, closed, true));
+           isDone = FindPath(open, closed, ref generatedWayPoints);
+        }
 
-        //CDebug.Log(this, "finalPoint.tileType=" + finalPoint.tileType, LogType.Warning);
+        pathFindValues.onDoneCalculate(generatedWayPoints);
+    }
+
+    private bool FindPath(Dictionary<Vector2Int, Node> open, Dictionary<Vector2Int, Node> closed, ref List<TileInfo> generatedWayPoints)
+    {
+
+        open.Add(pathFindValues.currentPoint.tileLocation, 
+            new Node(pathFindValues.currentPoint, pathFindValues.currentPoint, pathFindValues.finalPoint, closed, true));
 
         while (open.Count > 0)
         {
 
-            //CDebug.Log(this,"Open.Count=" + open.Count, LogType.Warning);
-
             Node current = Node.GetLowestFCost(open);
             open.Remove(current._tile.tileLocation);
-
-            //Debug.Log("220 open.Count:"+open.Count);
-
             closed.Add(current._tile.tileLocation, current);
 
-            //CDebug.Log(this, "current._tile.tileLocation=" + current._tile.tileLocation + "finalPoint.tileLocation=" + finalPoint.tileLocation, LogType.Warning);
-
-            if (current._tile.tileLocation == pathFindValues.finalPoint.tileLocation /*|| tempCache != null*/)
+            if (current._tile.tileLocation == pathFindValues.finalPoint.tileLocation)
             {
                 generatedWayPoints = current.GenerateWaypoints();
 
@@ -82,23 +84,23 @@ public class PathFinder
 
                     if (!HasSameLastTileInfo(generatedWayPoints, pathFindValues.tempCache))
                     {
-                        CDebug.Log(this, "CHECKING FAIL " + generatedWayPoints[generatedWayPoints.Count - 1].tileLocation + "!=" + pathFindValues.finalPoint.tileLocation, LogType.Warning);
+                        CDebug.Log(this, "Checking fail! " + generatedWayPoints[generatedWayPoints.Count - 1].tileLocation +
+                            "!=" + pathFindValues.finalPoint.tileLocation + " generating another one.", LogType.Warning);
+
                         pathFindValues.tempCache = generatedWayPoints;
-                        generatedWayPoints = new List<TileInfo>();
                         pathFindValues.currentPoint = generatedWayPoints[generatedWayPoints.Count - 1];
-                        goto REDO;
+                        generatedWayPoints = new List<TileInfo>();
+
+                        return false;
                     }
                 }
 
-                CDebug.Log(this, "Done Pathfinding! generatedWaypoints.Count=" + generatedWayPoints.Count);
-
-                break;
+                CDebug.Log(this, "Done Pathfinding! generatedWaypoints.Count=" + generatedWayPoints.Count, LogType.Warning);
+                return true;
             }
 
             foreach (Node n in current.GetNeighbours())
             {
-                //CDebug.Log(this,"Checking neighbours",LogType.Warning);
-
                 if (pathFindValues.isWalkable != null)
                 {
                     if (!pathFindValues.isWalkable(n._tile) || closed.ContainsKey(n._tile.tileLocation)) continue;
@@ -112,11 +114,9 @@ public class PathFinder
                     open.Add(n._tile.tileLocation, n);
                 }
             }
-
-            pathFindValues.algorthimicCounter(0);
         }
 
-        pathFindValues.onDoneCalculate(generatedWayPoints);
+        return true;
     }
 
     private bool HasSameLastTileInfo(List<TileInfo> tiles1, List<TileInfo> tiles2)
@@ -137,8 +137,6 @@ public class PathFinder
         {
             if (pathFindValues.isWalkable != null && !pathFindValues.isWalkable(tile)) return final;
 
-            //Debug.Log("Checking for walkables");
-            //Debug.Log("tiles.count=" + tiles.Count);
             final.Add(tile);
         }
 

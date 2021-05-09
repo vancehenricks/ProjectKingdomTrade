@@ -13,10 +13,8 @@ using UnityEngine;
 
 public class PathFindingHandler : MonoBehaviour
 {
-    //public TileInfoRaycaster tileInfoRayCaster;
-    //public TileInfoGetter pathFinder;
     public UnitInfo unitInfo;
-    public int index;
+    public int wayPointIndex;
     public Destination destination;
 
     public delegate void WayPointReached(TileInfo tileInfo);
@@ -33,20 +31,13 @@ public class PathFindingHandler : MonoBehaviour
 
     public List<TileInfo> generatedWayPoints;
     public int gwPointsIndex;
-    public int executeAlgorithmThreshold;
-
-    public BoxCollider2D tileCollider;
 
     private UnitEffect unitEffect;
-    private Task task;
-
-    private int executeAlgorithmCounter;
     private int previousWayPointCount;
-
     private TileInfo firstWayPoint;
     private bool saveCache;
 
-    private static string currentTileId;
+    private bool isPathFinding;
     private PathFinder pathFinder;
 
     private void Start()
@@ -68,34 +59,10 @@ public class PathFindingHandler : MonoBehaviour
         wayPointReached = null;
         wayPointCountChange = null;
         firstWayPointChange = null;
-        //getUpdatedWayPoints = null;
     }
 
     private void Update()
     {
-        if (destination.arrivalTime <= -1)
-        {
-            transform.position = destination.tile.transform.position;
-        }
-        else if (destination.arrivalTime <= 0)
-        {
-            transform.position = Vector2.Lerp(transform.position, destination.tile.transform.position, 10f * Time.deltaTime);
-
-            if (Vector2.Distance(transform.position, destination.tile.transform.position) < 0.5f)
-            {
-                tileCollider.enabled = true;
-                destination.arrivalTime = -1;
-            }
-            else
-            {
-                tileCollider.enabled = false;
-                unitEffect.OnExit();
-            }
-
-            transform.SetAsLastSibling();
-
-        }
-
         if (unitInfo.waypoints.Count > 0 && unitInfo.waypoints[0] != null && firstWayPoint.tileId != unitInfo.waypoints[0].tileId)
         {
             ResetGeneratedWaypoints();
@@ -127,30 +94,26 @@ public class PathFindingHandler : MonoBehaviour
 
     private void TickUpdate()
     {
-
         if (unitEffect == null && destination == null) return;
         if (unitInfo.standingTile == null) return;
 
-        if (destination.arrivalTime == -1 && destination.tile.tileLocation != unitInfo.standingTile.tileLocation)
+        if (destination.arrivalTime <= 0)
         {
-            transform.position = unitInfo.standingTile.transform.position;
-            //Debug.Log("82");
+            transform.position = destination.tile.transform.position;
         }
 
         if (destination.arrivalTime > -1)
         {
-            //Debug.Log("91");
             destination.arrivalTime -= 0.25f;
         }
         else if (unitInfo.waypoints.Count > 0)
         {
-            if (index >= unitInfo.waypoints.Count)
+            if (wayPointIndex >= unitInfo.waypoints.Count)
             {
-                //Debug.Log("98");
-                index = 0;
+                wayPointIndex = 0;
             }
 
-            TileInfo point = unitInfo.waypoints[index];
+            TileInfo point = unitInfo.waypoints[wayPointIndex];
             if (point == null) return;
 
             if (unitInfo.standingTile.tileLocation == point.tileLocation || isWalkable != null && !isWalkable(point))
@@ -163,114 +126,79 @@ public class PathFindingHandler : MonoBehaviour
 
                 if (unitInfo.waypoints.Count > 1)
                 {
-                    index++;
+                    wayPointIndex++;
                 }
                 else
                 {
                     unitInfo.waypoints.Clear();
                 }
                 ResetGeneratedWaypoints();
-                //Debug.Log("120");
             }
 
             if (isWalkable != null && isWalkable(point))
             {
-                ExecuteAlgorithm(unitInfo.standingTile, point, destination);
+                GeneratePath(unitInfo.standingTile, point, destination);
             }
 
-            //Debug.Log("133");
-
-            if (index >= unitInfo.waypoints.Count)
+            if (wayPointIndex >= unitInfo.waypoints.Count)
             {
-                //Debug.Log("138");
                 unitInfo.waypoints.Clear();
-                index = 0;
+                wayPointIndex = 0;
             }
         }
     }
 
-    //+Not main thread
-    private void OnDoneCalculate(List<TileInfo> _generatedWayPoints)
-    {
-        generatedWayPoints = _generatedWayPoints;
-        saveCache = true;
-    }
 
-    private void AlgorithmicCounter(int counter)
-    {
-        executeAlgorithmCounter = counter;
-    }
-    //-Not main Thread
-
-    private void ExecuteAlgorithm(TileInfo standingTile, TileInfo pointTileInfo, Destination destination)
+    private void GeneratePath(TileInfo standingTile, TileInfo pointTileInfo, Destination destination)
     {
 
-        //Debug.Log("136");
-        if (currentTileId == "" && gwPointsIndex == 0 && task == null && pointTileInfo.tileLocation != unitInfo.tileLocation)
+        if (gwPointsIndex == 0 && !isPathFinding && pointTileInfo.tileLocation != unitInfo.tileLocation)
         {
             PathFindValues pathFindValues = new PathFindValues();
-
             pathFindValues.currentPoint = standingTile;
             pathFindValues.finalPoint = pointTileInfo;
             pathFindValues.isWalkable = isWalkable;
-            pathFindValues.onDoneCalculate = OnDoneCalculate;
-            pathFindValues.algorthimicCounter = AlgorithmicCounter;
+
+            pathFindValues.onDoneCalculate = (List<TileInfo> _generatedWayPoints) => {
+                generatedWayPoints = _generatedWayPoints;
+                saveCache = true; 
+            };
+
             pathFindValues.tempCache = PathFindingCache.init.RetrieveTileInfos(standingTile, pointTileInfo);
-
             pathFinder.Set(pathFindValues);
-            task = new Task(pathFinder.Calculate);
-            task.Start();
 
-            CDebug.Log(this, "unitInfo.tileId=" + unitInfo.tileId + " start=" + standingTile.tileLocation + "end=" + pointTileInfo.tileLocation + "Generating Pathfinding.");
-            currentTileId = standingTile.tileId + ""; //this will force to only execute one calculation with same standingtile
-        }
-        else if (currentTileId == (standingTile.tileId + "") && generatedWayPoints.Count > 0)
-        {
-            currentTileId = "";
+            PathFindingQueue.init.Push(pathFinder);
+
+            isPathFinding = true;
+
+            CDebug.Log(this, "unitInfo.tileId=" + unitInfo.tileId + " start=" + standingTile.tileLocation + 
+                "end=" + pointTileInfo.tileLocation + "Generating Pathfinding.");
         }
 
-        //Debug.Log("generatedWayPoints.Count=" + generatedWayPoints.Count);
-
-        if (saveCache && generatedWayPoints.Count > 0 && !PathFindingCache.init.ContainsKey(standingTile, pointTileInfo))
+        if (saveCache && generatedWayPoints.Count > 0)
         {
             saveCache = false;
 
-            CDebug.Log(this,"Adding Cache start=" + generatedWayPoints[0].tileLocation + " end=" + generatedWayPoints[generatedWayPoints.Count-1].tileLocation);
+            CDebug.Log(this,"Adding Cache start=" + generatedWayPoints[0].tileLocation + " end=" +
+                generatedWayPoints[generatedWayPoints.Count-1].tileLocation);
+
             List<TileInfo> temp = new List<TileInfo>(generatedWayPoints);
             PathFindingCache.init.Add(standingTile, pointTileInfo, temp);
         }
 
-        if (currentTileId != "") return;
-
         if (gwPointsIndex < generatedWayPoints.Count)
         {
-            //Debug.Log("145");
             destination.tile = generatedWayPoints[gwPointsIndex];
             destination.arrivalTime = destination.tile.travelTime - unitEffect.unitInfo.travelSpeed;
             gwPointsIndex++;
-            //Debug.Log("146");
-        }
-        else if (executeAlgorithmCounter > executeAlgorithmThreshold && generatedWayPoints.Count == 0)
-        {
-            CDebug.Log(this,"executeAlgorithmCounter=" + executeAlgorithmCounter);
-            executeAlgorithmCounter = 0;
-            index++;
-        }
-        else if (generatedWayPoints.Count == 0)
-        {
-            CDebug.Log(this,"executeAlgorithmCounter=" + executeAlgorithmCounter);
-            executeAlgorithmCounter++;
         }
     }
 
     public void ResetGeneratedWaypoints()
     {
-        currentTileId = "";
         gwPointsIndex = 0;
-        StopAllCoroutines();
-        task = null; 
-        executeAlgorithmCounter = 0;
         generatedWayPoints.Clear();
+        isPathFinding = false;
     }
 
     public void ResetDestination()

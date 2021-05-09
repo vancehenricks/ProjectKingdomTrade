@@ -4,6 +4,8 @@
  * Written by Vance Henricks Patual <vpatual@gmail.com>, April 2021
  */
 
+using UnityEngine;
+
 public struct SettingsConfig
 {
     public string font;
@@ -12,4 +14,15 @@ public struct SettingsConfig
     public int maxFps;
     public bool vSync;
     public int tileOcclusion;
+    public int maxPathFindingCache;
+    public int maxPathFindingQueue;
+    public int maxHits;
+    public string hideTerritoryKey;
+    public string hideCloudsKey;
+    public string hideUIKey;
+    public bool cursorEdgeMove;
+    public string cursorEdgeMoveKey;
+    public string centerCameraKey;
+    public string debugWindowKey;
+    public string showConsole;
 }

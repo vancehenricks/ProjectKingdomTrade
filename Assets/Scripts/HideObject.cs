@@ -12,12 +12,17 @@ using UnityEngine.Events;
 
 public class HideObject : MonoBehaviour
 {
-
+    public string identifier;
     public GameObject window;
     public GameObject priorityWindow;
     public KeyCode key;
     public UnityEvent onClose;
     public UnityEvent onOpen;
+
+    private void Start()
+    {
+        HideObjectHandler.init.hideObjects.Add(identifier, this);
+    }
 
     // Update is called once per frame
     private void Update()

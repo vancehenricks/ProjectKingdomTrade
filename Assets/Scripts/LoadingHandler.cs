@@ -42,7 +42,6 @@ public class LoadingHandler : MonoBehaviour
 
     public void Set(float _progress, string message = "")
     {
-        StopAllCoroutines();
         StartCoroutine(LoadingAnimation(_progress, progressBar.fillAmount, message));
     }
 

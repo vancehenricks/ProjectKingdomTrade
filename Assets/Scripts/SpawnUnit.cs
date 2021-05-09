@@ -28,6 +28,8 @@ public class SpawnUnit : ConsoleCommand
 
     private bool fire1Clicked;
 
+    private Coroutine commandStream;
+
     public override void Initialize()
     {
         Dictionary<string, string> subCommands = new Dictionary<string, string>();
@@ -145,7 +147,7 @@ public class SpawnUnit : ConsoleCommand
             else
             {
                 ConsoleHandler.init.AddLine("Click a tile to spawn.");
-                StartCoroutine(CommandStream());
+                commandStream = StartCoroutine(CommandStream());
             }
         }
     }
@@ -191,6 +193,9 @@ public class SpawnUnit : ConsoleCommand
         color = Color.white;
         executeAll = false;
         fire1Clicked = false;
-        StopAllCoroutines();
+        if (commandStream != null)
+        {
+            StopCoroutine(commandStream);
+        }
     }
 }

@@ -56,10 +56,12 @@ public class CloudAction : MonoBehaviour
     public float liveTimeCounter;
     private float liveTime;
     public Image image;
-    public bool hide;
+    public bool visible;
 
     private Cloud cloud;
     private ParallelInstance<Cloud> parallellInstance;
+
+    private Coroutine move;
 
     private void Start()
     {
@@ -77,7 +79,7 @@ public class CloudAction : MonoBehaviour
         parallellInstance = new ParallelInstance<Cloud>(Calculate, (Cloud _cloud, Cloud original) => {cloud = _cloud;});
 
         StartCoroutine(FadeIn(0.1f));
-        StartCoroutine(Move());
+        move = StartCoroutine(Move());
     }
 
     private IEnumerator Move()
@@ -104,6 +106,10 @@ public class CloudAction : MonoBehaviour
                 task.Start();
 
                 yield return null;
+                if (!task.IsCompleted)
+                {
+                    task.Wait();
+                }
 
                 //task.Wait();
 
@@ -111,19 +117,11 @@ public class CloudAction : MonoBehaviour
                 Tools.SetDirection(transform, cloud.direction);
                 gameObject.transform.position = cloud.newPos;
 
-                if (cloud.enabledImage == true && hide == false)
+                if (cloud.enabledImage == true && visible == true)
                 {
                     image.enabled = true;
                 }
-                else if (cloud.enabledImage == false && hide == true)
-                {
-                    image.enabled = false;
-                }
-                else if (cloud.enabledImage == true && hide == true)
-                {
-                    image.enabled = false;
-                }
-                else if (cloud.enabledImage == false && hide == false)
+                else
                 {
                     image.enabled = false;
                 }
@@ -187,7 +185,10 @@ public class CloudAction : MonoBehaviour
 
     private void OnDestroy()
     {
-        StopAllCoroutines();
+        if (move != null)
+        {
+            StopCoroutine(move);
+        }
         cloudCycle.clouds.Remove(this);
         cloudCycle.counter--;
     }

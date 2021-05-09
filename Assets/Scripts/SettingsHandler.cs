@@ -5,6 +5,7 @@
  */
 
 using DebugHandler;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -19,11 +20,17 @@ public class SettingsHandler : MonoBehaviour
         private set { _init = value; }
     }
 
+    public CameraDraggableWindow cameraDraggableWindow;
+    public ResetCenter resetCenter;
+    public HideBorder hideTerritory;
+    public CloudCycle cloudCycle;
+
     private void Awake()
     {
         Debug.unityLogger.filterLogType = LogType.Log;
         CDebug.Log(this, "version=" + Application.version, LogType.Warning);
         
+
         init = this;
     }
 
@@ -60,6 +67,19 @@ public class SettingsHandler : MonoBehaviour
         FrameRateHandler.init.vSync = settingsConfig.vSync;
         TileOcclusion.init.overflow = settingsConfig.tileOcclusion;
         Debug.unityLogger.filterLogType = (LogType)settingsConfig.logLevel;
+        PathFindingQueue.init.maxQueue = settingsConfig.maxPathFindingQueue;
+        PathFindingCache.init.maxCache = settingsConfig.maxPathFindingCache;
+        TileInfoRaycaster.init.maxHits = settingsConfig.maxHits;
+
+        hideTerritory.key = (KeyCode)Enum.Parse(typeof(KeyCode), settingsConfig.hideTerritoryKey);
+        cloudCycle.hideClouds = (KeyCode)Enum.Parse(typeof(KeyCode), settingsConfig.hideCloudsKey);
+        HideObjectHandler.init.hideObjects["hideUI"].key = (KeyCode)Enum.Parse(typeof(KeyCode), settingsConfig.hideUIKey);
+        cameraDraggableWindow.isMouseLock = settingsConfig.cursorEdgeMove;
+        cameraDraggableWindow.mouseLockKey = (KeyCode)Enum.Parse(typeof(KeyCode), settingsConfig.cursorEdgeMoveKey);
+        resetCenter.key = (KeyCode)Enum.Parse(typeof(KeyCode), settingsConfig.centerCameraKey);
+        HideObjectHandler.init.hideObjects["showConsole"].key = (KeyCode)Enum.Parse(typeof(KeyCode), settingsConfig.showConsole);
+        HideObjectHandler.init.hideObjects["showDebug"].key = (KeyCode)Enum.Parse(typeof(KeyCode), settingsConfig.debugWindowKey);
+
 
         return settingsConfig;
     }
@@ -93,7 +113,62 @@ public class SettingsHandler : MonoBehaviour
 
         if (settingsConfig.tileOcclusion == 0)
         {
-            settingsConfig.tileOcclusion = 40;
+            settingsConfig.tileOcclusion = TileOcclusion.init.overflow;
+        }
+
+        if (settingsConfig.maxPathFindingCache == 0)
+        {
+            settingsConfig.maxPathFindingCache = PathFindingCache.init.maxCache;
+        }
+
+        if (settingsConfig.maxPathFindingQueue == 0)
+        {
+            settingsConfig.maxPathFindingQueue = PathFindingQueue.init.maxQueue;
+        }
+
+        if (settingsConfig.maxHits == 0)
+        {
+            settingsConfig.maxHits = TileInfoRaycaster.init.maxHits;
+        }
+
+        if (settingsConfig.hideTerritoryKey == null)
+        {
+            settingsConfig.hideTerritoryKey = hideTerritory.key.ToString();
+        }
+
+        if(settingsConfig.hideCloudsKey == null)
+        {
+            settingsConfig.hideCloudsKey = cloudCycle.hideClouds.ToString();    
+        }
+
+        if (settingsConfig.hideUIKey == null)
+        {
+            settingsConfig.hideUIKey = HideObjectHandler.init.hideObjects["hideUI"].key.ToString();
+        }
+
+        if (settingsConfig.cursorEdgeMove == false)
+        {
+            settingsConfig.cursorEdgeMove = cameraDraggableWindow.isMouseLock;
+        }
+
+        if (settingsConfig.cursorEdgeMoveKey == null)
+        {
+            settingsConfig.cursorEdgeMoveKey = cameraDraggableWindow.mouseLockKey.ToString();
+        }
+
+        if (settingsConfig.centerCameraKey == null)
+        {
+            settingsConfig.centerCameraKey = resetCenter.key.ToString();
+        }
+
+        if (settingsConfig.showConsole == null)
+        {
+            settingsConfig.showConsole = HideObjectHandler.init.hideObjects["showConsole"].key.ToString();
+        }
+
+        if (settingsConfig.debugWindowKey == null)
+        {
+            settingsConfig.debugWindowKey = HideObjectHandler.init.hideObjects["showDebug"].key.ToString();
         }
 
         return settingsConfig;

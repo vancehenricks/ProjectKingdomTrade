@@ -35,16 +35,21 @@ public class CelestialCycle : MonoBehaviour
     private ParallelInstance<Celestial> parallelInstance;
     private Celestial celestial;
 
+    private Coroutine cycle;
+
     public void Initialize()
     {
         celestial = new Celestial();
         parallelInstance = new ParallelInstance<Celestial>(Calculate, (Celestial _celestial, Celestial orginal) => { celestial = _celestial; });
-        StartCoroutine(Cycle());
+        cycle = StartCoroutine(Cycle());
     }
 
     private void OnDestroy()
     {
-        StopAllCoroutines();
+        if (cycle != null)
+        {
+            StopCoroutine(cycle);
+        }
     }
 
     //Seperate thread+
@@ -88,6 +93,10 @@ public class CelestialCycle : MonoBehaviour
             task.Start();
 
             yield return null;
+            if (!task.IsCompleted)
+            {
+                task.Wait();
+            }
 
             //task.Wait();
             sun.position = celestial.sun;

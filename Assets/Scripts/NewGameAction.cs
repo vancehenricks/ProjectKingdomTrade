@@ -146,6 +146,7 @@ public class NewGameAction : MonoBehaviour
         celestialCycle.Initialize();
         zoomingWindow.Initialize();
         TileOcclusion.init.Initialize();
+        PathFindingQueue.init.Initialize();
         LoadingHandler.init.SetActive(false);
         openWindow.DoOpen();
     }

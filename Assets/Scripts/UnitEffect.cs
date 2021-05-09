@@ -80,11 +80,21 @@ public class UnitEffect : TileEffect
     }
 
 
-    public void OnExit()
+    private void OnTriggerExit2D(Collider2D collision)
     {
-        unitInfo.standingTile.standingTiles.Remove(unitInfo);
-        transform.SetParent(MapGenerator.init.grid);
-        ResetDisplay(unitInfo.standingTile);
+        if (unitInfo.tileType == "Town") return;
+
+        TileInfo tempTile = collision.GetComponent<TileInfo>();
+
+        if (tempTile == null) return;
+
+        if (tempTile.tileType != unitInfo.tileType)
+        {
+            tempTile.standingTiles.Remove(unitInfo);
+            ResetDisplay(tempTile);
+        }
+
+        //transform.SetParent(MapGenerator.init.grid);
     }
 
 

@@ -28,6 +28,8 @@ public class UnitOcclusion : MonoBehaviour
     private UnitOcclusionValues unitValues;
     private ParallelInstance<UnitOcclusionValues> parallelInstance;
 
+    private Coroutine scan;
+
     private void Start()
     {
         unitInfo = GetComponent<UnitInfo>();
@@ -41,12 +43,15 @@ public class UnitOcclusion : MonoBehaviour
             unitValues = _result;
         });
 
-        StartCoroutine(Scan());
+        scan = StartCoroutine(Scan());
     }
 
     private void OnDestroy()
     {
-        StopAllCoroutines();
+        if (scan != null)
+        {
+            StopCoroutine(scan);
+        }
     }
 
     //seperate thread+
@@ -89,6 +94,10 @@ public class UnitOcclusion : MonoBehaviour
             task.Start();
 
             yield return null;
+            if (!task.IsCompleted)
+            {
+                task.Wait();
+            }
 
             unitEffect.imageImage.enabled = unitValues.enabled;
             unitEffect.shadeImage.enabled = unitValues.enabled;

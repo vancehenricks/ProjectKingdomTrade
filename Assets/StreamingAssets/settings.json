@@ -4,5 +4,16 @@
  "logLevel":2,
  "maxFps":60,
  "vSync":false,
- "tileOcclusion":40
+ "tileOcclusion":40,
+ "maxPathFindingCache":30,
+ "maxPathFindingQueue":2,
+ "maxHits":50,
+ "hideTerritoryKey":"T",
+ "hideCloudsKey":"C",
+ "hideUIKey":"H",
+ "cursorEdgeMove":true,
+ "cursorEdgeMoveKey":"L",
+ "centerCameraKey":"Space",
+ "debugWindowKey":"Z",
+ "showConsole":"BackQuote"
 }

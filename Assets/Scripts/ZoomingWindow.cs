@@ -68,11 +68,10 @@ public class ZoomingWindow : MonoBehaviour, IScrollHandler
 
         CursorReplace.init.currentCursor = CursorType.Zoom;
 
-        StopAllCoroutines();
         StartCoroutine(DelayStop());
     }
 
-    IEnumerator DelayStop()
+    private IEnumerator DelayStop()
     {
         yield return new WaitForSeconds(0.5f);
         CursorReplace.init.currentCursor = CursorType.Previous;

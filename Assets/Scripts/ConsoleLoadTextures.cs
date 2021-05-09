@@ -50,7 +50,6 @@ public class ConsoleLoadTextures : ConsoleCommand
                 }
             }
 
-            StopAllCoroutines();
             StartCoroutine(ExecuteCommand());
         }
     }

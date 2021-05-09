@@ -23,6 +23,8 @@ public class Destroy : ConsoleCommand
 
     private bool fire1Clicked;
 
+    private Coroutine commandStream;
+
 
     public override void Initialize()
     {
@@ -129,7 +131,10 @@ public class Destroy : ConsoleCommand
             noMouseRequired = true;
             executeAll = false;
             fire1Clicked = false;
-            StopAllCoroutines();
+            if (commandStream != null)
+            {
+                StopCoroutine(commandStream);
+            }
 
             foreach (string subCommand in subCommands.Keys)
             {
@@ -171,7 +176,7 @@ public class Destroy : ConsoleCommand
             else
             {
                 ConsoleHandler.init.AddLine("Click a tile/unit to destroy...");
-                StartCoroutine(CommandStream());
+                commandStream = StartCoroutine(CommandStream());
             }
         }
     }

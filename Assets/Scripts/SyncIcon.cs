@@ -24,6 +24,8 @@ public class SyncIcon : MonoBehaviour
     public TileInfo _tile;
     private Image imageImage;
 
+    private Coroutine syncCoroutine;
+
     public void Initialize(TileInfo tile, float xPadding = 0f, float yPadding = 0f, float zLevelFlag = 0f)
     {
         imageImage = tile.tileEffect.imageImage;
@@ -40,12 +42,15 @@ public class SyncIcon : MonoBehaviour
     {
         if (start || alwaysOn)
         {
-            StopAllCoroutines();
-            StartCoroutine(SyncCoroutine());
+            if (syncCoroutine != null)
+            {
+                StopCoroutine(syncCoroutine);
+            }
+            syncCoroutine = StartCoroutine(SyncCoroutine());
         }
-        else
+        else if (syncCoroutine != null)
         {
-            StopAllCoroutines();
+            StopCoroutine(syncCoroutine);
         }
     }
 
@@ -65,7 +70,10 @@ public class SyncIcon : MonoBehaviour
     }
     public void Destroy()
     {
-        StopAllCoroutines();
+        if (syncCoroutine != null)
+        {
+            StopCoroutine(syncCoroutine);
+        }
         Destroy(gameObject);
     }
 

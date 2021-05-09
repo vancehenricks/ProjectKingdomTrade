@@ -16,6 +16,8 @@ namespace DebugHandler
 
         public static void Log(System.Object obj, object debug, LogType logtype = LogType.Log)
         {
+            if (!Debug.unityLogger.IsLogTypeAllowed(logtype)) return;
+
             string output = logtype + "|" + DateTime.UtcNow + "|";
             string objName = "Undefined";
 

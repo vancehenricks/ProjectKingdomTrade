@@ -84,11 +84,6 @@ public class TransitionHandler : MonoBehaviour
         devInfoData.Load(devInfo);
     }
 
-    private void OnDestroy()
-    {
-        StopAllCoroutines();
-    }
-
     public void Transition()
     {
         StartCoroutine(OnLoading());

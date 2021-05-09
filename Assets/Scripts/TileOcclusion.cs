@@ -35,6 +35,8 @@ public class TileOcclusion : MonoBehaviour
     private List<TileOcclusionValues> generatedTiles;
     private List<TileOcclusionValues> resultValueList;
 
+    private Coroutine scan;
+
     private void Awake()
     {
         init = this;
@@ -51,12 +53,15 @@ public class TileOcclusion : MonoBehaviour
         );
 
         generatedTiles = Convert(TileList.init.generatedTiles.Values.ToList<TileInfo>());
-        StartCoroutine(Scan());
+        scan = StartCoroutine(Scan());
     }
 
     private void OnDestroy()
     {
-        StopAllCoroutines();
+        if (scan != null)
+        {
+            StopCoroutine(scan);
+        }
     }
 
     private List<TileOcclusionValues> Convert(List<TileInfo> generatedTiles)
@@ -98,7 +103,12 @@ public class TileOcclusion : MonoBehaviour
                 Task task = new Task(parallelInstance.Calculate);
 
                 task.Start();
-                task.Wait();
+
+                yield return null;
+                if (!task.IsCompleted)
+                {
+                    task.Wait();
+                }
 
                 foreach (TileOcclusionValues tileValue in resultValueList)
                 {

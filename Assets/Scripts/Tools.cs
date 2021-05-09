@@ -97,6 +97,8 @@ public class Tools : MonoBehaviour
         {
             foreach (T inc in include)
             {
+                CDebug.Log(nameof(Tools), inc.name, LogType.Warning);
+
                 if (inc.tileType == tile.tileType)
                 {
                     tileInfos.Add(tile);

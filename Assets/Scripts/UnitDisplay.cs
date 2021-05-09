@@ -26,6 +26,9 @@ public class UnitDisplay : MonoBehaviour
     private TextMeshProUGUI multiUnitText;
     private TileInfo tile;
 
+    private Coroutine unitUpdate;
+    private Coroutine tileUpdate;
+
     private enum Obj
     {
        Morale = 0, Wall, Aqueduct, Unit=0, MultiUnit
@@ -55,11 +58,11 @@ public class UnitDisplay : MonoBehaviour
 
         if (tile.tileType == "Unit")
         {
-            StartCoroutine(Sync(UnitUpdate));
+            unitUpdate = StartCoroutine(Sync(UnitUpdate));
         }
         else
         {
-            StartCoroutine(Sync(TileUpdate));
+            tileUpdate = StartCoroutine(Sync(TileUpdate));
         }
     }
 
@@ -69,31 +72,45 @@ public class UnitDisplay : MonoBehaviour
 
         if (!tile.tileEffect.image.activeSelf || (tile.tileType != "Unit" && tile.standingTiles.Count > 0))
         {
-            StopAllCoroutines();
+            StopCoroutine();
             syncIcon.Sync(false);
             syncIcon.SetActive(false);
         }
         else
         {
-            StopAllCoroutines();
+            StopCoroutine();
             syncIcon.Sync(true);
             if (tile.tileType == "Unit")
             {
-                StartCoroutine(Sync(UnitUpdate));
+                unitUpdate = StartCoroutine(Sync(UnitUpdate));
             }
             else
             {
-                StartCoroutine(Sync(TileUpdate));
+                tileUpdate = StartCoroutine(Sync(TileUpdate));
             }
         }
     }
 
     private void OnDestroy()
     {
-        StopAllCoroutines();
+        StopCoroutine();
+
         if (syncIcon != null)
         {
             syncIcon.Destroy();
+        }
+    }
+
+    private void StopCoroutine()
+    {
+        if (unitUpdate != null)
+        {
+            StopCoroutine(unitUpdate);
+        }
+
+        if (tileUpdate != null)
+        {
+            StopCoroutine(tileUpdate);
         }
     }
 

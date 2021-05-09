@@ -6,6 +6,7 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class PathFindingCache : MonoBehaviour
@@ -18,7 +19,7 @@ public class PathFindingCache : MonoBehaviour
         private set { _init = value; }
     }
 
-
+    public int maxCache;
     private Dictionary<string, List<TileInfo>> cache;
 
     private void Awake()
@@ -69,6 +70,12 @@ public class PathFindingCache : MonoBehaviour
         List<TileInfo> reverse = new List<TileInfo>(generatedPoints);
         reverse.Reverse();
         reverse.Add(startPoint);
+
+        if (cache.Count > maxCache)
+        {
+            cache.Remove(cache.Keys.First());
+        }
+
         cache.Add(endPoint.transform.position + "," + startPoint.transform.position, reverse);
     }
 }

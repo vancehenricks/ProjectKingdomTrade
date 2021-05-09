@@ -144,6 +144,7 @@ public class CombatHandler : MonoBehaviour
         }
         else if (distance <= attackDistance && unitInfo.isEngaged)
         {
+            //damage enemy logic here
             CDebug.Log(this, "Unit [" + unitInfo.tileId + "] attacking Unit [" + targetUnit.tileId + "]", LogType.Warning);
         }
         else if (distance > attackDistance && unitInfo.isEngaged)

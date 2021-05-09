@@ -46,7 +46,7 @@ public class CloudCycle : MonoBehaviour
     public List<CloudAction> clouds;
     public KeyCode hideClouds;
     public bool hasSpawnDoubled;
-    public bool hide;
+    public bool visible;
 
     private int maxSpawnSaved;
     private bool hasStarted;
@@ -67,10 +67,10 @@ public class CloudCycle : MonoBehaviour
     {
         if (InputOverride.init.GetKeyUp(hideClouds))
         {
-            hide = !hide;
+            visible = !visible;
             foreach (CloudAction cloud in clouds)
             {
-                cloud.hide = hide;
+                cloud.visible = visible;
             }
         }
     }
@@ -94,7 +94,6 @@ public class CloudCycle : MonoBehaviour
     {
         Tick.init.tickUpdate += TickUpdate;
         clouds = new List<CloudAction>();
-        hide = true;
 
         if (grid != null && useGridInfluence)
         {
@@ -197,6 +196,7 @@ public class CloudCycle : MonoBehaviour
             float y = Random.Range(spawnable.posA.position.y, _posB.position.y);
 
             CloudAction cloud = Instantiate<CloudAction>(baseCloud, baseCloud.transform.parent);
+            cloud.visible = visible;
             cloud.speedModifier = spawnable.speedModifier;
             cloud.transform.position = new Vector3(x, y, zLevel);
             cloud.posA = spawnable.posA;

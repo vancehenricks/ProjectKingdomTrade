@@ -33,7 +33,6 @@ public class PreLoadHandler : MonoBehaviour
 
     public void LoadFiles()
     {
-        StopAllCoroutines();
         StartCoroutine(LoadFilesCoroutine());
     }
 
