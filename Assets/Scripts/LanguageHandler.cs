@@ -25,7 +25,6 @@ public class LanguageHandler : MonoBehaviour
 
     public Dictionary<string, string> texts;
     public Dictionary<string, string> language;
-    public string _defaultLanguage;
 
     public string defaultLanguage
     {

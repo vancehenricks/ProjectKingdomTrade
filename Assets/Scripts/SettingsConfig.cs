@@ -25,4 +25,9 @@ public struct SettingsConfig
     public string centerCameraKey;
     public string debugWindowKey;
     public string showConsole;
+    public float zoomSpeed;
+    public float minZoomScale;
+    public float maxZoomScale;
+    public float maxZoomMultiplier;
+
 }

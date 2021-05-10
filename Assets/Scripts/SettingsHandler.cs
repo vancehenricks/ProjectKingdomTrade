@@ -24,6 +24,7 @@ public class SettingsHandler : MonoBehaviour
     public ResetCenter resetCenter;
     public HideBorder hideTerritory;
     public CloudCycle cloudCycle;
+    public ZoomingWindow zoomingWindow;
 
     private void Awake()
     {
@@ -77,8 +78,14 @@ public class SettingsHandler : MonoBehaviour
         cameraDraggableWindow.isMouseLock = settingsConfig.cursorEdgeMove;
         cameraDraggableWindow.mouseLockKey = (KeyCode)Enum.Parse(typeof(KeyCode), settingsConfig.cursorEdgeMoveKey);
         resetCenter.key = (KeyCode)Enum.Parse(typeof(KeyCode), settingsConfig.centerCameraKey);
+
         HideObjectHandler.init.hideObjects["showConsole"].key = (KeyCode)Enum.Parse(typeof(KeyCode), settingsConfig.showConsole);
         HideObjectHandler.init.hideObjects["showDebug"].key = (KeyCode)Enum.Parse(typeof(KeyCode), settingsConfig.debugWindowKey);
+
+        zoomingWindow.defaultSpeed = settingsConfig.zoomSpeed;
+        zoomingWindow.minScale = settingsConfig.minZoomScale;
+        zoomingWindow.maxScale = settingsConfig.maxZoomScale;
+        zoomingWindow.maxScaleMultipler = settingsConfig.maxZoomMultiplier;
 
 
         return settingsConfig;
@@ -169,6 +176,26 @@ public class SettingsHandler : MonoBehaviour
         if (settingsConfig.debugWindowKey == null)
         {
             settingsConfig.debugWindowKey = HideObjectHandler.init.hideObjects["showDebug"].key.ToString();
+        }
+
+        if (settingsConfig.zoomSpeed == 0)
+        {
+            settingsConfig.zoomSpeed = zoomingWindow.defaultSpeed;
+        }
+
+        if (settingsConfig.minZoomScale == 0)
+        {
+            settingsConfig.minZoomScale = zoomingWindow.minScale;
+        }
+
+        if (settingsConfig.maxZoomScale == 0)
+        {
+            settingsConfig.maxZoomScale = zoomingWindow.maxScale;
+        }
+
+        if (settingsConfig.maxZoomMultiplier == 0)
+        {
+            settingsConfig.maxZoomMultiplier = zoomingWindow.maxScaleMultipler;
         }
 
         return settingsConfig;

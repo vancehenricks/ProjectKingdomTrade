@@ -15,5 +15,9 @@
  "cursorEdgeMoveKey":"L",
  "centerCameraKey":"Space",
  "debugWindowKey":"Z",
- "showConsole":"BackQuote"
+ "showConsole":"BackQuote",
+ "zoomSpeed":50.0,
+ "minZoomScale":-900.0,
+ "maxZoomScale":-200.0,
+ "maxZoomMultiplier":0.5
 }
