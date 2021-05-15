@@ -36,7 +36,7 @@ public class SelectTiles : MonoBehaviour
         flags = new Dictionary<string, GameObject>();
     }
 
-    protected void OnDestroy()
+    protected virtual void OnDestroy()
     {
         RemoveAllFlag();
     }

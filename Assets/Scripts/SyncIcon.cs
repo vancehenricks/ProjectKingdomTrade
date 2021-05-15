@@ -17,7 +17,6 @@ public class SyncIcon : MonoBehaviour
     public float _zLevelFlag;
     public float _xPadding;
     public float _yPadding;
-    public bool alwaysOn;
 
     public GenericObjectHolder genericObjectHolder;
 
@@ -40,7 +39,7 @@ public class SyncIcon : MonoBehaviour
 
     public void Sync(bool start)
     {
-        if (start || alwaysOn)
+        if (start)
         {
             if (syncCoroutine != null)
             {
@@ -56,8 +55,6 @@ public class SyncIcon : MonoBehaviour
 
     public void SetActive(bool active)
     {
-        if(alwaysOn) return;
-
         foreach (Image image in genericObjectHolder.images)
         {
             image.enabled = active;

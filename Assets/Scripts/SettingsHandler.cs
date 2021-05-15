@@ -25,6 +25,7 @@ public class SettingsHandler : MonoBehaviour
     public HideBorder hideTerritory;
     public CloudCycle cloudCycle;
     public ZoomingWindow zoomingWindow;
+    public TimeWindowAction timeWindowAction;
 
     private void Awake()
     {
@@ -86,6 +87,7 @@ public class SettingsHandler : MonoBehaviour
         zoomingWindow.minScale = settingsConfig.minZoomScale;
         zoomingWindow.maxScale = settingsConfig.maxZoomScale;
         zoomingWindow.maxScaleMultipler = settingsConfig.maxZoomMultiplier;
+        timeWindowAction.maxSpeed = settingsConfig.maxTimeSpeed;
 
 
         return settingsConfig;
@@ -196,6 +198,11 @@ public class SettingsHandler : MonoBehaviour
         if (settingsConfig.maxZoomMultiplier == 0)
         {
             settingsConfig.maxZoomMultiplier = zoomingWindow.maxScaleMultipler;
+        }
+
+        if (settingsConfig.maxTimeSpeed == 0)
+        {
+            settingsConfig.maxTimeSpeed = timeWindowAction.maxSpeed;
         }
 
         return settingsConfig;

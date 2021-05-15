@@ -19,6 +19,7 @@ public class UnitWayPoint : SelectTiles
     public GameObject moveFlag;
     public GameObject attackFlag;
     public GameObject mergeFlag;
+    public GameObject directionFlag;
 
     //public int index;
     // public bool cleaned;
@@ -28,76 +29,69 @@ public class UnitWayPoint : SelectTiles
         if (pathFinding != null)
         {
             pathFinding.wayPointReached += WayPointReached;
-            pathFinding.wayPointCountChange += WayPointCountChange;
-            pathFinding.firstWayPointChange += FirstWayPointChange;
+            //pathFinding.destinationChanged += DestinationChanged;
         }
 
         if (combatHandler != null)
         {
-            combatHandler.targetCountChange += TargetCountChange;
-            combatHandler.firstTargetChange += FirstTargetChange;
+            //combatHandler.targetCountChange += TargetCountChange;
+            //combatHandler.firstTargetChange += FirstTargetChange;
         }
 
         Initialize();
     }
 
-    private void WayPointReached(TileInfo tileInfo)
+    protected override void OnDestroy()
     {
-        if (tileInfo != null && flags.Count > 0 && unitInfo.targets.Count == 0)
+        if (pathFinding != null)
         {
-            RemoveFlag(tileInfo);
+            pathFinding.wayPointReached -= WayPointReached;
+            //pathFinding.destinationChanged -= DestinationChanged;
         }
+
+        if (combatHandler != null)
+        {
+            //combatHandler.targetCountChange -= TargetCountChange;
+            //combatHandler.firstTargetChange -= FirstTargetChange;
+        }
+
+        base.OnDestroy();
     }
 
-    private void FirstWayPointChange(TileInfo tileInfo)
+    public void UpdateWayPoint()
     {
-        if (unitInfo.targets.Count > 0) return;
-
         RemoveAllFlag();
 
         if (unitInfo.merge != null)
         {
             DrawAndSyncFlag(unitInfo.merge, mergeFlag);
-            return;
         }
-        DrawFlag(tileInfo, moveFlag);
-    }
-
-    private void WayPointCountChange(TileInfo tileInfo)
-    {
-        if (unitInfo.targets.Count > 0 || unitInfo.waypoints.Count == 1 || unitInfo.merge != null) return;
-
-        if (tileInfo == null)
+        else if (unitInfo.targets.Count == 0)
         {
-            RemoveAllFlag();
-            return;
+            for (int i = 0; i < unitInfo.waypoints.Count; i++)
+            {
+                DrawFlag(unitInfo.waypoints[i], moveFlag);
+            }
         }
-
-        DrawFlag(tileInfo, moveFlag);
     }
 
-    private void FirstTargetChange(TileInfo tileInfo)
+    private void WayPointReached(TileInfo tileInfo)
     {
-        RemoveAllFlag();
-        DrawAndSyncFlag(tileInfo, attackFlag);
+        RemoveFlag(tileInfo);
     }
 
-    private void TargetCountChange(TileInfo tileInfo)
+    /*private void DestinationChanged(int index, List<TileInfo> generatedTiles)
     {
-        //if (unitInfo.targets.Count == 1) return; <- this will likely cause issue if commented out
-
-        if (tileInfo == null)
+        /*RemoveAllFlag();
+        for (int i = index; i < generatedTiles.Count-1;i++)
         {
-            RemoveAllFlag();
-            return;
+            DrawFlag(unitInfo, generatedTiles[i], directionFlag, true, false, false);
         }
-
-        DrawAndSyncFlag(tileInfo, attackFlag);
-    }
+    }*/
 
     public void DrawFlag(TileInfo waypoint, GameObject bFlag, bool syncColor = true)
     {
-        DrawFlag(unitInfo, waypoint, bFlag, syncColor);
+        DrawFlag(unitInfo, waypoint, bFlag, syncColor, true, false);
     }
 
     public void DrawAndSyncFlag(TileInfo waypoint, GameObject bFlag, bool syncColor = true)

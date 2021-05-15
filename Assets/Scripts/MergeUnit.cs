@@ -25,6 +25,8 @@ public class MergeUnit : PlayerCommand
             unitInfos[i].merge = unitInfos[0];
             unitInfos[i].unitEffect.mergeHandler.GenerateWayPoint();
         }
+
+        UpdateUnitsWayPoints();
         EndAction();
     }
 

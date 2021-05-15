@@ -15,41 +15,35 @@ public class PathFindingHandler : MonoBehaviour
 {
     public UnitInfo unitInfo;
     public int wayPointIndex;
-    public Destination destination;
 
     public delegate void WayPointReached(TileInfo tileInfo);
     public WayPointReached wayPointReached;
 
-    public delegate void WayPointCountChange(TileInfo tileInfo);
-    public WayPointCountChange wayPointCountChange;
+    public delegate void DestinationChanged(int currentIndex, List<TileInfo> generatedWayPoints);
+    public DestinationChanged destinationChanged;
 
     public delegate bool IsWalkable(TileInfo tile);
     public IsWalkable isWalkable;
 
-    public delegate void FirstWayPointChange(TileInfo generatedWayPoint);
-    public FirstWayPointChange firstWayPointChange;
-
     public List<TileInfo> generatedWayPoints;
     public int gwPointsIndex;
 
-    private UnitEffect unitEffect;
-    private int previousWayPointCount;
-    private TileInfo firstWayPoint;
-    private bool saveCache;
+    public TileInfo tileDestination;
+    public float arrivalTime;
 
+    private bool saveCache;
+    private UnitEffect unitEffect;
     private bool isPathFinding;
     private PathFinder pathFinder;
 
     private void Start()
     {
-        destination = new Destination();
-        destination.tile = unitInfo;
-        destination.arrivalTime = -1;
         Tick.init.tickUpdate += TickUpdate;
         unitEffect = unitInfo.unitEffect;
         generatedWayPoints = new List<TileInfo>();
-        firstWayPoint = unitInfo;
         pathFinder = new PathFinder();
+        ResetDestination();
+        ResetGeneratedWaypoints();
     }
 
     public void OnDestroy()
@@ -57,54 +51,21 @@ public class PathFindingHandler : MonoBehaviour
         Tick.init.tickUpdate -= TickUpdate;
         isWalkable = null;
         wayPointReached = null;
-        wayPointCountChange = null;
-        firstWayPointChange = null;
-    }
-
-    private void Update()
-    {
-        if (unitInfo.waypoints.Count > 0 && unitInfo.waypoints[0] != null && firstWayPoint.tileId != unitInfo.waypoints[0].tileId)
-        {
-            ResetGeneratedWaypoints();
-            firstWayPoint = unitInfo.waypoints[0];
-
-			if(firstWayPointChange != null)
-			{
-				firstWayPointChange(unitInfo.waypoints[0]);
-			}
-        }
-
-        if (previousWayPointCount != unitInfo.waypoints.Count)
-        {
-            previousWayPointCount = unitInfo.waypoints.Count;
-
-            TileInfo tile = null;
-
-            if (unitInfo.waypoints.Count > 0)
-            {
-                tile = unitInfo.waypoints[previousWayPointCount - 1];
-            }
-
-			if(wayPointCountChange != null)
-			{
-				wayPointCountChange(tile);
-			}
-        }
+        destinationChanged = null;
     }
 
     private void TickUpdate()
     {
-        if (unitEffect == null && destination == null) return;
-        if (unitInfo.standingTile == null) return;
+        if (unitEffect == null && unitInfo.standingTile == null) return;
 
-        if (destination.arrivalTime <= 0)
+        if (arrivalTime > -2 && arrivalTime <= 0)
         {
-            transform.position = destination.tile.transform.position;
+            transform.position = tileDestination.transform.position;
         }
 
-        if (destination.arrivalTime > -1)
+        if (arrivalTime > -1)
         {
-            destination.arrivalTime -= 0.25f;
+            arrivalTime -= 0.25f;
         }
         else if (unitInfo.waypoints.Count > 0)
         {
@@ -114,13 +75,14 @@ public class PathFindingHandler : MonoBehaviour
             }
 
             TileInfo point = unitInfo.waypoints[wayPointIndex];
+
             if (point == null) return;
 
             if (unitInfo.standingTile.tileLocation == point.tileLocation || isWalkable != null && !isWalkable(point))
             {
+                CDebug.Log(this, "unitInfo.tileId =" + unitInfo.tileId + "end= " + point.tileLocation + "Waypoint reached!", LogType.Warning);
                 if (wayPointReached != null)
                 {
-                    CDebug.Log(this, "unitInfo.tileId =" + unitInfo.tileId + "end= " + point.tileLocation + "Waypoint reached!");
                     wayPointReached(point);
                 }
 
@@ -137,7 +99,7 @@ public class PathFindingHandler : MonoBehaviour
 
             if (isWalkable != null && isWalkable(point))
             {
-                GeneratePath(unitInfo.standingTile, point, destination);
+                GeneratePath(unitInfo.standingTile, point);
             }
 
             if (wayPointIndex >= unitInfo.waypoints.Count)
@@ -149,7 +111,7 @@ public class PathFindingHandler : MonoBehaviour
     }
 
 
-    private void GeneratePath(TileInfo standingTile, TileInfo pointTileInfo, Destination destination)
+    private void GeneratePath(TileInfo standingTile, TileInfo pointTileInfo)
     {
 
         if (gwPointsIndex == 0 && !isPathFinding && pointTileInfo.tileLocation != unitInfo.tileLocation)
@@ -188,8 +150,12 @@ public class PathFindingHandler : MonoBehaviour
 
         if (gwPointsIndex < generatedWayPoints.Count)
         {
-            destination.tile = generatedWayPoints[gwPointsIndex];
-            destination.arrivalTime = destination.tile.travelTime - unitEffect.unitInfo.travelSpeed;
+            if (destinationChanged != null)
+            {
+                destinationChanged(gwPointsIndex, generatedWayPoints);
+            }
+            tileDestination = generatedWayPoints[gwPointsIndex];
+            arrivalTime = tileDestination.travelTime - unitEffect.unitInfo.travelSpeed;
             gwPointsIndex++;
         }
     }
@@ -203,7 +169,7 @@ public class PathFindingHandler : MonoBehaviour
 
     public void ResetDestination()
     {
-        destination.tile = unitInfo;
-        destination.arrivalTime = -1;
+        tileDestination = unitInfo.standingTile == null ? unitInfo : unitInfo.standingTile;
+        arrivalTime = -2;
     }
 }

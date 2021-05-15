@@ -10,23 +10,24 @@ using UnityEngine;
 
 public class UnitDirection : MonoBehaviour
 {
-
     public PathFindingHandler pathfinding;
-    public UnitInfo unitInfo;
 
     private void Start()
     {
-        Tick.init.tickUpdate += TickUpdate;
+        pathfinding.destinationChanged += DestinationChanged;
     }
 
     private void OnDestroy()
     {
-        Tick.init.tickUpdate -= TickUpdate;
+        pathfinding.destinationChanged -= DestinationChanged;
     }
 
-    private void TickUpdate()
+    private void DestinationChanged(int index, List<TileInfo> generatedWayPoints)
     {
-        if (pathfinding.destination.tile == null) return;
-        Tools.SetDirection(transform, pathfinding.destination.tile.transform.position);
+        if (generatedWayPoints.Count == 0) return;
+        TileInfo tile = generatedWayPoints[index];
+
+        if (tile == null) return;
+        Tools.SetDirection(transform, tile.transform.position);
     }
 }

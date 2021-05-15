@@ -80,6 +80,8 @@ public class PlayerCommand : MonoBehaviour
         {
             _waypoints.AddRange(waypoints);
         }
+
+        UpdateUnitsWayPoints();
     }
 
     protected void AssignsToList(TileInfo waypoint, List<List<TileInfo>> _waypointList)
@@ -91,5 +93,16 @@ public class PlayerCommand : MonoBehaviour
                 waypoints.Add(waypoint);
             }
         }
+
+        UpdateUnitsWayPoints();
+    }
+
+    protected void UpdateUnitsWayPoints()
+    {
+        foreach (UnitInfo unit in unitInfos)
+        {
+            unit.unitEffect.unitWayPoint.UpdateWayPoint();
+        }
+
     }
 }

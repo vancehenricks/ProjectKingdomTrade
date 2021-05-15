@@ -51,7 +51,7 @@ public class TileInfo : MonoBehaviour
     public List<TileInfo> standingTiles;
     public List<Upgrade> upgrades;
 
-    protected void Awake()
+    protected virtual void Awake()
     {
         claimants = new HashSet<PlayerInfo>();
     }

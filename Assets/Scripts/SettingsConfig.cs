@@ -29,5 +29,6 @@ public struct SettingsConfig
     public float minZoomScale;
     public float maxZoomScale;
     public float maxZoomMultiplier;
+    public int maxTimeSpeed;
 
 }
