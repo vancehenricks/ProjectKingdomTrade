@@ -4,6 +4,7 @@
  * Written by Vance Henricks Patual <vpatual@gmail.com>, September 2020
  */
 
+using DebugHandler;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,14 +40,14 @@ public class PathFindingCache : MonoBehaviour
 
     public List<TileInfo> RetrieveTileInfos(TileInfo startPoint, TileInfo endPoint)
     {
-        string keyword = startPoint.transform.position + "," + endPoint.transform.position;
+        Vector3Int _start = Vector3Int.FloorToInt(startPoint.transform.position);
+        Vector3Int _end = Vector3Int.FloorToInt(endPoint.transform.position);
 
-        foreach (string key in cache.Keys)
+        string keyword = _start + "," + _end;
+
+        if (cache.ContainsKey(keyword))
         {
-            if (key.Contains(keyword))
-            {
-                return cache[key];
-            }
+            return cache[keyword];
         }
 
         return null;
@@ -54,28 +55,41 @@ public class PathFindingCache : MonoBehaviour
 
     public bool ContainsKey(TileInfo startPoint , TileInfo endPoint)
     {
-        return cache.ContainsKey(startPoint.transform.position + "," + endPoint.transform.position) ||
-            cache.ContainsKey(endPoint.transform.position + "," + startPoint.transform.position);
+        Vector3Int _start = Vector3Int.FloorToInt(startPoint.transform.position);
+        Vector3Int _end = Vector3Int.FloorToInt(endPoint.transform.position);
+
+        return cache.ContainsKey(_start + "," + _end) ||
+            cache.ContainsKey(_start + "," + _end);
     }
 
     public void Add(TileInfo startPoint, TileInfo endPoint, List<TileInfo> generatedPoints)
     {
-        if (cache.ContainsKey(startPoint.transform.position + "," + endPoint.transform.position))
+        Vector3Int _start = Vector3Int.FloorToInt(startPoint.transform.position);
+        Vector3Int _end = Vector3Int.FloorToInt(endPoint.transform.position);
+
+        if (cache.ContainsKey(_start + "," + _end))
         {
-            cache.Remove(startPoint.transform.position + "," + endPoint.transform.position);
-            cache.Remove(endPoint.transform.position + "," + startPoint.transform.position);
+            cache.Remove(_start + "," + _end);
+            cache.Remove(_end + "," + _start);
         }
 
-        cache.Add(startPoint.transform.position + "," + endPoint.transform.position, generatedPoints);
-        List<TileInfo> reverse = new List<TileInfo>(generatedPoints);
-        reverse.Reverse();
-        reverse.Add(startPoint);
-
-        if (cache.Count > maxCache)
+        try
         {
-            cache.Remove(cache.Keys.First());
-        }
+            cache.Add(_start + "," + _end, generatedPoints);
+            List<TileInfo> reverse = new List<TileInfo>(generatedPoints);
+            reverse.Reverse();
+            reverse.Add(startPoint);
 
-        cache.Add(endPoint.transform.position + "," + startPoint.transform.position, reverse);
+            if (cache.Count > maxCache)
+            {
+                cache.Remove(cache.Keys.First());
+            }
+
+            cache.Add(_end + "," + _start, reverse);
+        }
+        catch (System.Exception e)
+        {
+            CDebug.Log(this,e,LogType.Warning);
+        }
     }
 }

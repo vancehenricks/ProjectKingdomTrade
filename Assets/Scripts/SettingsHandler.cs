@@ -32,7 +32,6 @@ public class SettingsHandler : MonoBehaviour
         Debug.unityLogger.filterLogType = LogType.Log;
         CDebug.Log(this, "version=" + Application.version, LogType.Warning);
         
-
         init = this;
     }
 

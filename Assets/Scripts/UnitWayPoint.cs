@@ -16,10 +16,10 @@ public class UnitWayPoint : SelectTiles
     //public LineRenderer lineRenderer;
     public PathFindingHandler pathFinding;
     public CombatHandler combatHandler;
-    public GameObject moveFlag;
-    public GameObject attackFlag;
-    public GameObject mergeFlag;
-    public GameObject directionFlag;
+    public SyncIcon moveFlag;
+    public SyncIcon attackFlag;
+    public SyncIcon mergeFlag;
+    public SyncIcon directionFlag;
 
     //public int index;
     // public bool cleaned;
@@ -29,7 +29,7 @@ public class UnitWayPoint : SelectTiles
         if (pathFinding != null)
         {
             pathFinding.wayPointReached += WayPointReached;
-            //pathFinding.destinationChanged += DestinationChanged;
+            pathFinding.destinationChanged += DestinationChanged;
         }
 
         if (combatHandler != null)
@@ -46,7 +46,7 @@ public class UnitWayPoint : SelectTiles
         if (pathFinding != null)
         {
             pathFinding.wayPointReached -= WayPointReached;
-            //pathFinding.destinationChanged -= DestinationChanged;
+            pathFinding.destinationChanged -= DestinationChanged;
         }
 
         if (combatHandler != null)
@@ -62,6 +62,7 @@ public class UnitWayPoint : SelectTiles
     {
         RemoveAllFlag();
 
+        //issue with merging when drawing flags
         if (unitInfo.merge != null)
         {
             DrawAndSyncFlag(unitInfo.merge, mergeFlag);
@@ -70,37 +71,51 @@ public class UnitWayPoint : SelectTiles
         {
             for (int i = 0; i < unitInfo.waypoints.Count; i++)
             {
-                DrawFlag(unitInfo.waypoints[i], moveFlag);
+                DrawAndSyncFlag(unitInfo.waypoints[i], moveFlag);
             }
         }
+
+        int startIndex = pathFinding.gwPointsIndex - 1;
+
+        if (startIndex < 0)
+        {
+            startIndex = pathFinding.gwPointsIndex;
+        }
+
+        /*for (int i = startIndex; i < pathFinding.generatedWayPoints.Count - 1; i++)
+        {
+            if (unitInfo.standingTile != null && unitInfo.standingTile.tileId == pathFinding.generatedWayPoints[i].tileId) continue;
+            DrawAndSyncFlag(pathFinding.generatedWayPoints[i], directionFlag);
+        }*/
     }
 
     private void WayPointReached(TileInfo tileInfo)
     {
-        RemoveFlag(tileInfo);
+        RemoveFlag(tileInfo, moveFlag);
+        RemoveFlag(tileInfo, attackFlag);
+        RemoveFlag(tileInfo, mergeFlag);
     }
 
-    /*private void DestinationChanged(int index, List<TileInfo> generatedTiles)
+    private void DestinationChanged(int index, List<TileInfo> generatedTiles)
     {
-        /*RemoveAllFlag();
-        for (int i = index; i < generatedTiles.Count-1;i++)
+        if (unitInfo.selected)
         {
-            DrawFlag(unitInfo, generatedTiles[i], directionFlag, true, false, false);
-        }
-    }*/
+            RemoveTypeFlag(directionFlag);
 
-    public void DrawFlag(TileInfo waypoint, GameObject bFlag, bool syncColor = true)
-    {
-        DrawFlag(unitInfo, waypoint, bFlag, syncColor, true, false);
+            for (int i = index; i < generatedTiles.Count - 1; i++)
+            {
+                DrawAndSyncFlag(generatedTiles[i], directionFlag);
+            }
+        }
     }
 
-    public void DrawAndSyncFlag(TileInfo waypoint, GameObject bFlag, bool syncColor = true)
+    public void DrawFlag(TileInfo waypoint, SyncIcon bFlag, bool syncColor = true)
+    {
+        DrawFlag(unitInfo, waypoint, bFlag, syncColor);
+    }
+
+    public void DrawAndSyncFlag(TileInfo waypoint, SyncIcon bFlag, bool syncColor = true)
     {
         DrawAndSyncFlag(unitInfo, waypoint, bFlag, syncColor);
-    }
-
-    public void RemoveFlag(TileInfo tile)
-    {
-        RemoveFlag(unitInfo, tile);
     }
 }

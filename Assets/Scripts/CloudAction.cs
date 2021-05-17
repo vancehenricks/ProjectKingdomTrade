@@ -105,12 +105,11 @@ public class CloudAction : MonoBehaviour
                 Task task = new Task(parallellInstance.Calculate);
                 task.Start();
 
-                yield return null;
-                if (!task.IsCompleted)
-                {
+                //yield return null;
+                //if (!task.IsCompleted)
+                //{
                     task.Wait();
-                }
-
+                //}
                 //task.Wait();
 
                 liveTimeCounter = cloud.liveTimeCounter;

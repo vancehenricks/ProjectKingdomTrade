@@ -14,6 +14,7 @@ using UnityEngine.UI;
 public class SyncIcon : MonoBehaviour
 {
 
+    public string type;
     public float _zLevelFlag;
     public float _xPadding;
     public float _yPadding;
@@ -46,6 +47,11 @@ public class SyncIcon : MonoBehaviour
                 StopCoroutine(syncCoroutine);
             }
             syncCoroutine = StartCoroutine(SyncCoroutine());
+
+            if (type == "Select")
+            {
+                _tile.selected = true;
+            }
         }
         else if (syncCoroutine != null)
         {
@@ -71,6 +77,12 @@ public class SyncIcon : MonoBehaviour
         {
             StopCoroutine(syncCoroutine);
         }
+
+        if (type == "Select")
+        {
+            _tile.selected = false;
+        }
+
         Destroy(gameObject);
     }
 
@@ -83,7 +95,7 @@ public class SyncIcon : MonoBehaviour
             yield return null;
         }
 
-        Destroy(gameObject);
+        Destroy();
     }
 
     private void Sync()

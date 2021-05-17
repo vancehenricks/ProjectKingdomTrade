@@ -101,6 +101,7 @@ public class PlayerCommand : MonoBehaviour
     {
         foreach (UnitInfo unit in unitInfos)
         {
+            unit.unitEffect.pathFinder.CheckNewWaypoint();
             unit.unitEffect.unitWayPoint.UpdateWayPoint();
         }
 
