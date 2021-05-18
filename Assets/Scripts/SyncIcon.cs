@@ -18,22 +18,30 @@ public class SyncIcon : MonoBehaviour
     public float _zLevelFlag;
     public float _xPadding;
     public float _yPadding;
+    //public bool isTopLayer;
 
     public GenericObjectHolder genericObjectHolder;
 
-    public TileInfo _tile;
+    public TileInfo _hostTile;
+    public TileInfo _waypoint;
     private Image imageImage;
 
     private Coroutine syncCoroutine;
 
-    public void Initialize(TileInfo tile, float xPadding = 0f, float yPadding = 0f, float zLevelFlag = 0f)
+    public void Initialize(TileInfo hostTile, float xPadding = 0f, float yPadding = 0f, float zLevelFlag = 0f)
     {
-        imageImage = tile.tileEffect.imageImage;
+        Initialize(hostTile, hostTile, xPadding, yPadding, zLevelFlag);
+    }
+
+    public void Initialize(TileInfo hostTile, TileInfo waypoint, float xPadding = 0f, float yPadding = 0f, float zLevelFlag = 0f)
+    {
+        imageImage = hostTile.tileEffect.imageImage;
         _zLevelFlag = zLevelFlag;
         _xPadding = xPadding;
         _yPadding = yPadding;
 
-        _tile = tile;
+        _hostTile = hostTile;
+        _waypoint = waypoint;
 
         Sync();
     }
@@ -47,11 +55,6 @@ public class SyncIcon : MonoBehaviour
                 StopCoroutine(syncCoroutine);
             }
             syncCoroutine = StartCoroutine(SyncCoroutine());
-
-            if (type == "Select")
-            {
-                _tile.selected = true;
-            }
         }
         else if (syncCoroutine != null)
         {
@@ -71,6 +74,7 @@ public class SyncIcon : MonoBehaviour
             text.enabled = active;
         }
     }
+
     public void Destroy()
     {
         if (syncCoroutine != null)
@@ -78,29 +82,22 @@ public class SyncIcon : MonoBehaviour
             StopCoroutine(syncCoroutine);
         }
 
-        if (type == "Select")
-        {
-            _tile.selected = false;
-        }
-
         Destroy(gameObject);
     }
 
     private IEnumerator SyncCoroutine()
     {
-        while (_tile != null)
+        while (_hostTile != null && _waypoint != null)
         {
             Sync();
 
             yield return null;
         }
-
-        Destroy();
     }
 
     private void Sync()
     {
-        gameObject.transform.position = new Vector3(_tile.transform.position.x + _xPadding, _tile.transform.position.y + _yPadding, _zLevelFlag);
+        gameObject.transform.position = new Vector3(_waypoint.transform.position.x + _xPadding, _waypoint.transform.position.y + _yPadding, _zLevelFlag);
         SetActive(imageImage.enabled);
     }
 }

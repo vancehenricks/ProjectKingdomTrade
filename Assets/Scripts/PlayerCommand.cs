@@ -76,25 +76,35 @@ public class PlayerCommand : MonoBehaviour
 
     protected void AssignsToList(List<TileInfo> waypoints, List<List<TileInfo>> _waypointList)
     {
-        foreach (List<TileInfo> _waypoints in _waypointList)
+        for (int i=0;i <  _waypointList.Count;i++)
         {
-            _waypoints.AddRange(waypoints);
-        }
+            _waypointList[i].AddRange(waypoints);
 
-        UpdateUnitsWayPoints();
+            if (_waypointList[i].Count == 1)
+            {
+                unitInfos[i].unitEffect.pathFinder.CheckNewWaypoint();
+            }
+
+            unitInfos[i].unitEffect.unitWayPoint.UpdateWayPoint();
+        }
     }
 
     protected void AssignsToList(TileInfo waypoint, List<List<TileInfo>> _waypointList)
     {
-        foreach (List<TileInfo> waypoints in _waypointList)
+        for (int i=0;i < _waypointList.Count;i++)
         {
             if (waypoint != null)
             {
-                waypoints.Add(waypoint);
+                _waypointList[i].Add(waypoint);
             }
-        }
 
-        UpdateUnitsWayPoints();
+            if (_waypointList[i].Count == 1)
+            {
+                unitInfos[i].unitEffect.pathFinder.CheckNewWaypoint();
+            }
+
+            unitInfos[i].unitEffect.unitWayPoint.UpdateWayPoint();
+        }
     }
 
     protected void UpdateUnitsWayPoints()

@@ -24,7 +24,7 @@ public class UnitWayPoint : SelectTiles
     //public int index;
     // public bool cleaned;
 
-    protected new void Start()
+    private void Start()
     {
         if (pathFinding != null)
         {
@@ -41,7 +41,7 @@ public class UnitWayPoint : SelectTiles
         Initialize();
     }
 
-    protected override void OnDestroy()
+    private void OnDestroy()
     {
         if (pathFinding != null)
         {
@@ -55,7 +55,7 @@ public class UnitWayPoint : SelectTiles
             //combatHandler.firstTargetChange -= FirstTargetChange;
         }
 
-        base.OnDestroy();
+        RemoveAllFlag();
     }
 
     public void UpdateWayPoint()
@@ -75,6 +75,11 @@ public class UnitWayPoint : SelectTiles
             }
         }
 
+        SetDirectionFlag();
+    }
+
+    private void SetDirectionFlag()
+    {
         int startIndex = pathFinding.gwPointsIndex - 1;
 
         if (startIndex < 0)
@@ -82,11 +87,11 @@ public class UnitWayPoint : SelectTiles
             startIndex = pathFinding.gwPointsIndex;
         }
 
-        /*for (int i = startIndex; i < pathFinding.generatedWayPoints.Count - 1; i++)
+        for (int i = startIndex; i < pathFinding.generatedWayPoints.Count - 1; i++)
         {
             if (unitInfo.standingTile != null && unitInfo.standingTile.tileId == pathFinding.generatedWayPoints[i].tileId) continue;
             DrawAndSyncFlag(pathFinding.generatedWayPoints[i], directionFlag);
-        }*/
+        }
     }
 
     private void WayPointReached(TileInfo tileInfo)
@@ -94,6 +99,7 @@ public class UnitWayPoint : SelectTiles
         RemoveFlag(tileInfo, moveFlag);
         RemoveFlag(tileInfo, attackFlag);
         RemoveFlag(tileInfo, mergeFlag);
+        RemoveTypeFlag(directionFlag);
     }
 
     private void DestinationChanged(int index, List<TileInfo> generatedTiles)
@@ -101,7 +107,6 @@ public class UnitWayPoint : SelectTiles
         if (unitInfo.selected)
         {
             RemoveTypeFlag(directionFlag);
-
             for (int i = index; i < generatedTiles.Count - 1; i++)
             {
                 DrawAndSyncFlag(generatedTiles[i], directionFlag);
@@ -117,5 +122,12 @@ public class UnitWayPoint : SelectTiles
     public void DrawAndSyncFlag(TileInfo waypoint, SyncIcon bFlag, bool syncColor = true)
     {
         DrawAndSyncFlag(unitInfo, waypoint, bFlag, syncColor);
+    }
+
+    public override void SetAllSyncIcon(bool visible)
+    {
+        RemoveTypeFlag(directionFlag);
+        SetDirectionFlag();
+        base.SetAllSyncIcon(visible);
     }
 }

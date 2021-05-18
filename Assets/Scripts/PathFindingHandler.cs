@@ -35,6 +35,7 @@ public class PathFindingHandler : MonoBehaviour
     private UnitEffect unitEffect;
     private bool isPathFinding;
     private PathFinder pathFinder;
+    //private bool runOnceCheckNewWaypoint;
 
     private void Start()
     {
@@ -67,7 +68,7 @@ public class PathFindingHandler : MonoBehaviour
         {
             arrivalTime -= 0.25f;
         }
-        else
+        else /*if(!runOnceCheckNewWaypoint)*/
         {
             CheckNewWaypoint(true);
         }
@@ -76,6 +77,8 @@ public class PathFindingHandler : MonoBehaviour
 
     public void CheckNewWaypoint(bool increment = false)
     {
+       // runOnceCheckNewWaypoint = true;
+
         if (unitInfo.waypoints.Count == 0) return;
 
         if (wayPointIndex >= unitInfo.waypoints.Count)
@@ -95,13 +98,16 @@ public class PathFindingHandler : MonoBehaviour
                 wayPointReached(point);
             }
 
-            if (increment && unitInfo.waypoints.Count > 1)
+            if (increment)
             {
-                wayPointIndex++;
-            }
-            else
-            {
-                unitInfo.waypoints.Clear();
+                if (unitInfo.waypoints.Count > 1)
+                {
+                    wayPointIndex++;
+                }
+                else
+                {
+                    unitInfo.waypoints.Clear();
+                }
             }
             ResetGeneratedWaypoints();
         }
@@ -116,6 +122,8 @@ public class PathFindingHandler : MonoBehaviour
             unitInfo.waypoints.Clear();
             wayPointIndex = 0;
         }
+
+        //runOnceCheckNewWaypoint = false;
     }
 
     private void GeneratePath(TileInfo standingTile, TileInfo pointTileInfo, bool increment)

@@ -22,69 +22,19 @@ public class SelectTiles : MonoBehaviour
 {
     public OpenRightClick openRightClick;
     public float zLevelFlag;
-    public float zLevelLine;
+    //public float zLevelLine;
     public SyncIcon baseSelect;
     public Dictionary<SelectTilesValue, List<SyncIcon>> flags;
-    public List<SyncIcon> exclude;
+    //public List<SyncIcon> exclude;
 
     public enum Obj
     {
         Image = 0, Value = 0
     }
 
-    protected void Start()
-    {
-        MultiSelect.init.onSelectedChange += OnSelectedChange;
-        Initialize();
-    }
-
     public void Initialize() //declare here if wish to also be called by the child class
     {
         flags = new Dictionary<SelectTilesValue, List<SyncIcon>>();
-    }
-
-    protected virtual void OnDestroy()
-    {
-        MultiSelect.init.onSelectedChange -= OnSelectedChange;
-        RemoveAllFlag();
-    }
-
-    private void OnSelectedChange(List<TileInfo> tileInfos)
-    {
-        if (openRightClick.include.Count > 0) return;
-
-        if (tileInfos.Count != 0)
-        {
-            //SetAllVisibleFlags(false);
-            RemoveAllFlag();
-        }
-
-        foreach (TileInfo tile in tileInfos)
-        {
-            //SetVisibleFlags(tile, true);
-            Select(tile);
-        }
-    }
-
-    public void Select(TileInfo tile)
-    {
-        if (tile.tileType == "Edge") return;
-
-        DrawAndSyncFlag(tile, tile, baseSelect, false);
-
-        if (tile.tileType == "Unit")
-        {
-            //DrawAndSyncFlag(tile, tile, baseSelect, false);
-            UnitInfo unitInfo = (UnitInfo)tile;
-            unitInfo.unitEffect.ResetDisplay(unitInfo.standingTile);
-            tile.transform.SetAsLastSibling();
-            //issue with image is being treated as one instance;
-
-        }
-        /*else
-        {
-            RemoveFlag(tile, baseSelect);
-        }*/
     }
 
     public SyncIcon InitializeFlag(TileInfo hostTile, SyncIcon bFlag, bool syncColor)
@@ -107,17 +57,17 @@ public class SelectTiles : MonoBehaviour
         return syncIcon;
     }
 
-    public void DrawFlag(TileInfo hostTile, TileInfo waypoint, SyncIcon bFlag, bool syncColor = true)
+    public SyncIcon DrawFlag(TileInfo hostTile, TileInfo waypoint, SyncIcon bFlag, bool syncColor = true)
     {
-        DrawFlag(hostTile, waypoint, bFlag, syncColor, false);
+        return DrawFlag(hostTile, waypoint, bFlag, syncColor, false);
     }
 
-    public void DrawAndSyncFlag(TileInfo hostTile, TileInfo waypoint, SyncIcon bFlag, bool syncColor = true)
+    public SyncIcon DrawAndSyncFlag(TileInfo hostTile, TileInfo waypoint, SyncIcon bFlag, bool syncColor = true)
     {
-        DrawFlag(hostTile, waypoint, bFlag, syncColor, true);
+        return DrawFlag(hostTile, waypoint, bFlag, syncColor, true);
     }
 
-    public void DrawFlag(TileInfo hostTile, TileInfo waypoint, SyncIcon bFlag, bool syncColor = true/*, bool repeatable = false,*/, bool autoSync = false)
+    public SyncIcon DrawFlag(TileInfo hostTile, TileInfo waypoint, SyncIcon bFlag, bool syncColor = true/*, bool repeatable = false,*/, bool autoSync = false)
     {
         int salt = (int)Random.Range(0f, 1000f);
 
@@ -129,7 +79,7 @@ public class SelectTiles : MonoBehaviour
         selectTilesValue.tileLocation = waypoint.tileLocation;
 
         SyncIcon syncIcon = InitializeFlag(hostTile, bFlag, syncColor);
-        syncIcon.Initialize(waypoint, 0, 0, zLevelFlag);
+        syncIcon.Initialize(hostTile, waypoint, 0, 0, zLevelFlag);
 
         syncIcon.gameObject.SetActive(true);
 
@@ -148,6 +98,8 @@ public class SelectTiles : MonoBehaviour
         }
 
         CDebug.Log(this, "flags added=" + flags.Count);
+
+        return syncIcon;
     }
 
     public int Count(SyncIcon baseIcon)
@@ -193,19 +145,23 @@ public class SelectTiles : MonoBehaviour
     public void RemoveTypeFlag(SyncIcon baseIcon)
     {
         CDebug.Log(this, "flags removed=" + flags.Count);
-
         List<SelectTilesValue> flagKeys = flags.Keys.ToList<SelectTilesValue>();
 
         foreach (SelectTilesValue key in flagKeys)
         {
             if (key.type == baseIcon.type)
             {
-                for (int i =0; i < flags[key].Count;i++)
+                //if (baseIcon.type == "Direction")
+                //{
+                    //CDebug.Log(this, "flags removed=" + flags[key].Count, LogType.Warning);
+                //}
+
+                for (int i=0; i < flags[key].Count;i++)
                 {
                     flags[key][i].Destroy();
-                    flags[key].RemoveAt(i);
                 }
 
+                flags[key].Clear();
                 flags.Remove(key);
             }
         }
@@ -216,47 +172,23 @@ public class SelectTiles : MonoBehaviour
         CDebug.Log(this, "flags removed=" + flags.Count);
         foreach (var subLayer in flags)
         {
-            foreach (SyncIcon syncIcon in subLayer.Value)
+            for (int i=0;i < subLayer.Value.Count;i++)
             {
-                syncIcon.Destroy();
+                subLayer.Value[i].Destroy();
             }
+            subLayer.Value.Clear();
         }
         flags.Clear();
     }
 
-    public void SetAllVisibleFlags(bool visible)
+    public virtual void  SetAllSyncIcon(bool visible)
     {
-        foreach (List<SyncIcon> syncIconList in flags.Values)
+        foreach (List<SyncIcon> subLayer in flags.Values)
         {
-            foreach (SyncIcon syncIcon in syncIconList)
+            foreach (SyncIcon syncIcon in subLayer)
             {
-                  SetVisibleFlags(syncIcon._tile, visible);
-            }
-        }
-    }
-
-    public void SetVisibleFlags(TileInfo hostTile, bool visible)
-    {
-        Dictionary<SelectTilesValue, List<SyncIcon>>.ValueCollection Values = null;
-
-        hostTile.selected = visible;
-
-
-        if (hostTile.tileEffect.UnitWayPoint != null && hostTile.tileEffect.UnitWayPoint.flags != null)
-        {
-            Values = hostTile.tileEffect.UnitWayPoint.flags.Values;
-        }
-
-        if (Values == null) return;
-
-        foreach (List<SyncIcon> syncIconList in Values)
-        {
-            foreach (SyncIcon syncIcon in syncIconList)
-            {
-                if (exclude.Contains(syncIcon)) continue;
-
-                //syncIcon.SetActive(visible);
                 syncIcon.Sync(visible);
+                syncIcon.SetActive(visible);
             }
         }
     }
