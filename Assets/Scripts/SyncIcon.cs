@@ -82,6 +82,7 @@ public class SyncIcon : MonoBehaviour
             StopCoroutine(syncCoroutine);
         }
 
+        SetActive(false);
         Destroy(gameObject);
     }
 

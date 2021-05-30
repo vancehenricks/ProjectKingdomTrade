@@ -103,6 +103,10 @@ public class UnitEffect : TileEffect
         standingTile.tileEffect.unitDisplay.Sync();
         foreach (TileInfo tile in standingTile.standingTiles)
         {
+            if (tile.selected)
+            {
+                tile.transform.SetAsLastSibling();
+            }
             tile.tileEffect.unitDisplay.Sync();
         }
     }
