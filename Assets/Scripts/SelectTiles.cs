@@ -174,6 +174,7 @@ public class SelectTiles : MonoBehaviour
         {
             for (int i=0;i < subLayer.Value.Count;i++)
             {
+                if(subLayer.Value[i] == null) continue;
                 subLayer.Value[i].Destroy();
             }
             subLayer.Value.Clear();

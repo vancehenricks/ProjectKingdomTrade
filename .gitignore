@@ -67,4 +67,5 @@ crashlytics-build.properties
 DebugHandler/DebugHandler/bin/
 DebugHandler/DebugHandler/obj/
 
-revision
+#visual studio code
+.vsconfig
