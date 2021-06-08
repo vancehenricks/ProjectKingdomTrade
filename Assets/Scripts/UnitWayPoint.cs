@@ -87,11 +87,11 @@ public class UnitWayPoint : SelectTiles
             startIndex = pathFinding.gwPointsIndex;
         }
 
-        for (int i = startIndex; i < pathFinding.generatedWayPoints.Count - 1; i++)
+        /*for (int i = startIndex; i < pathFinding.generatedWayPoints.Count - 1; i++)
         {
             if (unitInfo.standingTile != null && unitInfo.standingTile.tileId == pathFinding.generatedWayPoints[i].tileId) continue;
             DrawAndSyncFlag(pathFinding.generatedWayPoints[i], directionFlag);
-        }
+        }*/
     }
 
     private void WayPointReached(TileInfo tileInfo)
@@ -99,19 +99,19 @@ public class UnitWayPoint : SelectTiles
         RemoveFlag(tileInfo, moveFlag);
         RemoveFlag(tileInfo, attackFlag);
         RemoveFlag(tileInfo, mergeFlag);
-        RemoveTypeFlag(directionFlag);
+        //RemoveTypeFlag(directionFlag);
     }
 
     private void DestinationChanged(int index, List<TileInfo> generatedTiles)
     {
-        if (unitInfo.selected)
+        /*if (unitInfo.selected)
         {
             RemoveTypeFlag(directionFlag);
             for (int i = index; i < generatedTiles.Count - 1; i++)
             {
                 DrawAndSyncFlag(generatedTiles[i], directionFlag);
             }
-        }
+        }*/
     }
 
     public void DrawFlag(TileInfo waypoint, SyncIcon bFlag, bool syncColor = true)
