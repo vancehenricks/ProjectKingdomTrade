@@ -4,7 +4,7 @@
  * Written by Vance Henricks Patual <vpatual@gmail.com>, August 2020
  */
 
-using DebugHandler;
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -59,36 +59,6 @@ public class Tools : MonoBehaviour
         down-right  current index - width)+1
 	*/
 
-    public static List<T> Convert<B, T>(List<B> tileInfos)
-    {
-        List<T> infos = new List<T>();
-
-        foreach (B tileInfo in tileInfos)
-        {
-            infos.Add(Convert<B, T>(tileInfo));
-        }
-
-        //Debug.Log("infos.Count="+infos.Count);
-
-        return infos;
-    }
-
-    public static T Convert<B, T>(B tileInfo)
-    {
-        try
-        {
-            CDebug.Log(nameof(Tools), "Attempting to Downcast");
-            T info = (T)System.Convert.ChangeType(tileInfo, typeof(B));
-            return info;
-        }
-        catch (System.Exception e)
-        {
-            CDebug.Log(nameof(Tools), e);
-            T info = (T)System.Convert.ChangeType(tileInfo, typeof(T));
-            return info;
-        }
-    }
-
     public static List<T> WhiteList<T>(List<T> _tileInfos, List<T> include) where T : TileInfo
     {
         List<T> tileInfos = new List<T>();
@@ -128,7 +98,6 @@ public class Tools : MonoBehaviour
         return -1;
     }
 
-
     public static List<T> MergeList<T>(List<T> selectedTiles, List<T> targetList) where T : TileInfo
     {
         List<T> sanitizeList = new List<T>();
@@ -142,17 +111,6 @@ public class Tools : MonoBehaviour
         }
 
         return sanitizeList;
-    }
-
-    public static void RemoveNulls(List<TileInfo> tiles)
-    {
-        foreach (TileInfo tile in tiles)
-        {
-            if (tile == null)
-            {
-                tiles.Remove(tile);
-            }
-        }
     }
 
     public static int TileLocationDistance(TileInfo tile1, TileInfo tile2)
@@ -170,16 +128,6 @@ public class Tools : MonoBehaviour
         }
 
         return distance;
-    }
-
-    public static bool HasNulls(List<TileInfo> tiles)
-    {
-        foreach (TileInfo tile in tiles)
-        {
-            if (tile == null) return true;
-        }
-
-        return false;
     }
 
     public static void Merge(UnitInfo unit1, UnitInfo unit2)
@@ -296,8 +244,6 @@ public class Tools : MonoBehaviour
     {
         WriteConfig(tileConfig, Path.Combine("Config", "Tiles", fileName));
     }
-
-    private static Regex regexSplit;
 
     public static List<string> JsonBeautify(string json)
     {

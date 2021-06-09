@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
-using DebugHandler;
+
 
 public class MoveUnit : PlayerCommand
 {
@@ -29,7 +29,7 @@ public class MoveUnit : PlayerCommand
         {
             openRightClick.openLeftClick.Ignore();
             CDebug.Log(this,"Creating multiple waypoint...");
-            AssignsToList(tileInfoRaycaster.GetTileInfoFromPos(Input.mousePosition), waypointsList);
+            AssignsToList(Normalize(tileInfoRaycaster.GetTileInfoFromPos(Input.mousePosition)), waypointsList);
         }
 
         if (Input.GetButtonDown("Fire1") && !MultiSelect.init.shiftPressed)
@@ -38,7 +38,7 @@ public class MoveUnit : PlayerCommand
             CDebug.Log(this,"Creating one waypoint... unitInfos.Count=" + unitInfos.Count);
             TileInfo tileInfo = tileInfoRaycaster.GetTileInfoFromPos(Input.mousePosition);
             ClearAllWaypoints();
-            AssignsToList(tileInfo, waypointsList);
+            AssignsToList(Normalize(tileInfo), waypointsList);
         }
 
         if (Input.GetButtonDown("Fire2"))
@@ -46,6 +46,23 @@ public class MoveUnit : PlayerCommand
             openRightClick.doNotDisplay = true;
             EndAction();
         }
+    }
+
+    private TileInfo Normalize(TileInfo tile)
+    {
+        TileInfo normalizedTile = tile;
+
+        if(tile.tileType == "Unit")
+        {
+            UnitInfo unitInfo = tile as UnitInfo;
+
+            if(unitInfo != null)
+            {
+                normalizedTile = unitInfo.standingTile;
+            }
+        }
+
+        return normalizedTile;
     }
 
     private void OverrideOnBeginDrag(PointerEventData eventData)

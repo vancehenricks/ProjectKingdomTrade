@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
-using DebugHandler;
 
 public class CameraDraggableWindow : MonoBehaviour/*,IDragHandler*/
 {

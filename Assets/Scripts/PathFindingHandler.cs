@@ -4,7 +4,7 @@
  * Written by Vance Henricks Patual <vpatual@gmail.com>, August 2019
  */
 
-using DebugHandler;
+
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
@@ -138,6 +138,11 @@ public class PathFindingHandler : MonoBehaviour
 
             pathFindValues.onDoneCalculate = (List<TileInfo> _generatedWayPoints) => {
                 generatedWayPoints = _generatedWayPoints;
+                
+                //this keyword does not work on anonymous functions
+                CDebug.Log(nameof(PathFindingHandler), "unitInfo.tileId=" + unitInfo.tileId + 
+                " generatedWayPoints.Count=" + generatedWayPoints.Count, LogType.Warning);
+
                 saveCache = true; 
             };
 
@@ -149,18 +154,22 @@ public class PathFindingHandler : MonoBehaviour
             isPathFinding = true;
 
             CDebug.Log(this, "unitInfo.tileId=" + unitInfo.tileId + " start=" + standingTile.tileLocation + 
-                "end=" + pointTileInfo.tileLocation + " Generating Pathfinding.");
+                " end=" + pointTileInfo.tileLocation + " Generating Pathfinding.", LogType.Warning);
         }
 
-        if (saveCache && generatedWayPoints.Count > 0)
+        if(saveCache)
         {
             saveCache = false;
+            if (generatedWayPoints.Count > 0)
+            {
+                //saveCache = false;
 
-            CDebug.Log(this,"Adding Cache start=" + generatedWayPoints[0].tileLocation + " end=" +
-                generatedWayPoints[generatedWayPoints.Count-1].tileLocation);
+                CDebug.Log(this, "unitInfo.tileId=" + unitInfo.tileId + " Adding Cache start=" + generatedWayPoints[0].tileLocation + " end=" +
+                    generatedWayPoints[generatedWayPoints.Count-1].tileLocation, LogType.Warning);
 
-            List<TileInfo> temp = new List<TileInfo>(generatedWayPoints);
-            PathFindingCache.init.Add(standingTile, pointTileInfo, temp);
+                List<TileInfo> temp = new List<TileInfo>(generatedWayPoints);
+                PathFindingCache.init.Add(standingTile, pointTileInfo, temp);
+            }
         }
 
         if (gwPointsIndex < generatedWayPoints.Count)

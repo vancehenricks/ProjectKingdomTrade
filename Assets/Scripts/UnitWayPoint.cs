@@ -29,7 +29,7 @@ public class UnitWayPoint : SelectTiles
         if (pathFinding != null)
         {
             pathFinding.wayPointReached += WayPointReached;
-            pathFinding.destinationChanged += DestinationChanged;
+            //pathFinding.destinationChanged += DestinationChanged;
         }
 
         if (combatHandler != null)
@@ -46,7 +46,7 @@ public class UnitWayPoint : SelectTiles
         if (pathFinding != null)
         {
             pathFinding.wayPointReached -= WayPointReached;
-            pathFinding.destinationChanged -= DestinationChanged;
+            //pathFinding.destinationChanged -= DestinationChanged;
         }
 
         if (combatHandler != null)
@@ -102,17 +102,17 @@ public class UnitWayPoint : SelectTiles
         //RemoveTypeFlag(directionFlag);
     }
 
-    private void DestinationChanged(int index, List<TileInfo> generatedTiles)
+    /*private void DestinationChanged(int index, List<TileInfo> generatedTiles)
     {
-        /*if (unitInfo.selected)
+        if (unitInfo.selected)
         {
             RemoveTypeFlag(directionFlag);
             for (int i = index; i < generatedTiles.Count - 1; i++)
             {
                 DrawAndSyncFlag(generatedTiles[i], directionFlag);
             }
-        }*/
-    }
+        }
+    }*/
 
     public void DrawFlag(TileInfo waypoint, SyncIcon bFlag, bool syncColor = true)
     {
@@ -126,7 +126,7 @@ public class UnitWayPoint : SelectTiles
 
     public override void SetAllSyncIcon(bool visible)
     {
-        RemoveTypeFlag(directionFlag);
+        //RemoveTypeFlag(directionFlag);
         SetDirectionFlag();
         base.SetAllSyncIcon(visible);
     }

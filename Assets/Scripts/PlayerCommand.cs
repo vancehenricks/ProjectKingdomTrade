@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
-using DebugHandler;
+
 
 public class PlayerCommand : MonoBehaviour
 {
@@ -35,7 +35,7 @@ public class PlayerCommand : MonoBehaviour
     {
         waypointsList.Clear();
         targetList.Clear();
-        unitInfos = Tools.Convert<TileInfo, UnitInfo>(MultiSelect.init.selectedTiles);
+        unitInfos = ConvertToUnitInfo(MultiSelect.init.selectedTiles);
         MultiSelect.init.Clear(true);
         openRightClick.ResetValues();
 
@@ -116,4 +116,20 @@ public class PlayerCommand : MonoBehaviour
         }
 
     }
+
+    protected List<UnitInfo> ConvertToUnitInfo(List<TileInfo> tileInfos)
+    {
+        List<UnitInfo> unitInfos = new List<UnitInfo>();
+
+        foreach (TileInfo tileInfo in tileInfos)
+        {
+            UnitInfo unitInfo = tileInfo as UnitInfo;
+
+            if(unitInfo == null) continue;
+            unitInfos.Add(unitInfo);
+        }
+
+        return unitInfos;
+    }
+
 }

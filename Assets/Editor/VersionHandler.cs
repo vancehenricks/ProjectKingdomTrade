@@ -1,4 +1,9 @@
-﻿using DebugHandler;
+﻿/* Copyright 2021 by Vance Henricks Patual - All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Vance Henricks Patual <vpatual@gmail.com>, May 2021
+ */
+
 using System;
 using System.Diagnostics;
 using System.IO;

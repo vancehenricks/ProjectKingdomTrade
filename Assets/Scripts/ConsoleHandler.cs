@@ -10,7 +10,7 @@ using UnityEngine.UI;
 using UnityEngine;
 using System;
 using System.Linq;
-using DebugHandler;
+
 
 public class ConsoleHandler : MonoBehaviour
 {

@@ -4,7 +4,7 @@
  * Written by Vance Henricks Patual <vpatual@gmail.com>, June 2019
  */
 
-using DebugHandler;
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
