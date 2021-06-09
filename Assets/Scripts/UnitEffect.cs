@@ -34,6 +34,7 @@ public class UnitEffect : TileEffect
     public UnitDirection unitDirection;
     public UnitWayPoint unitWayPoint;
     public NonWalkableTiles nonWalkableTiles;
+    public UnitOcclusion unitOcclusion;
 
     private void OnDestroy()
     {

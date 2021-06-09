@@ -15,7 +15,7 @@ public struct SettingsConfig
     public bool vSync;
     public int tileOcclusion;
     public int maxPathFindingCache;
-    public int maxPathFindingQueue;
+    //public int maxPathFindingQueue;
     public int maxHits;
     public string hideTerritoryKey;
     public string hideCloudsKey;

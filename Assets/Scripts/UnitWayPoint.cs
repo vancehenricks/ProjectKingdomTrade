@@ -71,14 +71,14 @@ public class UnitWayPoint : SelectTiles
         {
             for (int i = 0; i < unitInfo.waypoints.Count; i++)
             {
-                DrawAndSyncFlag(unitInfo.waypoints[i], moveFlag);
+                DrawFlag(unitInfo.waypoints[i], moveFlag);
             }
         }
 
-        SetDirectionFlag();
+        //SetDirectionFlag();
     }
 
-    private void SetDirectionFlag()
+    /*private void SetDirectionFlag()
     {
         int startIndex = pathFinding.gwPointsIndex - 1;
 
@@ -91,8 +91,8 @@ public class UnitWayPoint : SelectTiles
         {
             if (unitInfo.standingTile != null && unitInfo.standingTile.tileId == pathFinding.generatedWayPoints[i].tileId) continue;
             DrawAndSyncFlag(pathFinding.generatedWayPoints[i], directionFlag);
-        }*/
-    }
+        }
+    }*/
 
     private void WayPointReached(TileInfo tileInfo)
     {
@@ -122,12 +122,5 @@ public class UnitWayPoint : SelectTiles
     public void DrawAndSyncFlag(TileInfo waypoint, SyncIcon bFlag, bool syncColor = true)
     {
         DrawAndSyncFlag(unitInfo, waypoint, bFlag, syncColor);
-    }
-
-    public override void SetAllSyncIcon(bool visible)
-    {
-        //RemoveTypeFlag(directionFlag);
-        SetDirectionFlag();
-        base.SetAllSyncIcon(visible);
     }
 }

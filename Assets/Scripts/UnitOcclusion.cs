@@ -12,6 +12,7 @@ using UnityEngine;
 public struct UnitOcclusionValues
 {
     public bool enabled;
+    public bool withinCameraView;
     public OcclusionValue occlusion;
     public string parentName;
     public int getSiblingIndex;
@@ -25,7 +26,7 @@ public class UnitOcclusion : MonoBehaviour
     private UnitInfo unitInfo;
     private UnitEffect unitEffect;
 
-    private UnitOcclusionValues unitValues;
+    public UnitOcclusionValues unitValues;
     private ParallelInstance<UnitOcclusionValues> parallelInstance;
 
     private Coroutine scan;
@@ -60,6 +61,8 @@ public class UnitOcclusion : MonoBehaviour
 
         if (Tools.IsWithinCameraView(unitValues.occlusion))
         {
+            unitValues.withinCameraView = true;
+            
             if (unitValues.getSiblingIndex == unitValues.childCount - 1)
             {
                 unitValues.enabled = true;
@@ -71,6 +74,7 @@ public class UnitOcclusion : MonoBehaviour
         }
         else
         {
+            unitValues.withinCameraView = false;
             unitValues.enabled = false;
         }
 

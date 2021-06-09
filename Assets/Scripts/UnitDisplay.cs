@@ -54,6 +54,7 @@ public class UnitDisplay : MonoBehaviour
         multiUnitText = syncIcon.genericObjectHolder.texts[(int)Obj.MultiUnit];
         syncIcon.Initialize(tile, xLevel, yLevel, zLevel);
         syncIcon.gameObject.SetActive(true);
+        syncIcon.continousSync = true;
         syncIcon.Sync(true);
 
         if (tile.tileType == "Unit")

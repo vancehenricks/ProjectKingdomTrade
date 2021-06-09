@@ -67,12 +67,9 @@ public class SelectTiles : MonoBehaviour
         return DrawFlag(hostTile, waypoint, bFlag, syncColor, true);
     }
 
-    public SyncIcon DrawFlag(TileInfo hostTile, TileInfo waypoint, SyncIcon bFlag, bool syncColor = true/*, bool repeatable = false,*/, bool autoSync = false)
+    public SyncIcon DrawFlag(TileInfo hostTile, TileInfo waypoint, SyncIcon bFlag, bool syncColor = true, bool continousSync = false)
     {
-        int salt = (int)Random.Range(0f, 1000f);
-
-        //if (repeatable && flags.ContainsKey(waypoint.tileLocation + "," + salt)) return;
-        //if (!repeatable && flags.ContainsKey(waypoint.tileId + "," + hostTile.tileId)) return;
+        //int salt = (int)Random.Range(0f, 1000f);
 
         SelectTilesValue selectTilesValue = new SelectTilesValue();
         selectTilesValue.type = bFlag.type;
@@ -82,9 +79,9 @@ public class SelectTiles : MonoBehaviour
         syncIcon.Initialize(hostTile, waypoint, 0, 0, zLevelFlag);
 
         syncIcon.gameObject.SetActive(true);
-
-        syncIcon.Sync(/*hostTile.selected &&*/ autoSync);
-        //syncIcon.SetActive(hostTile.selected);
+        syncIcon.continousSync = continousSync;
+        syncIcon.Sync(true);
+        //syncIcon.SetActive(true);
 
         if (flags.ContainsKey(selectTilesValue))
         {

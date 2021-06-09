@@ -68,7 +68,7 @@ public class SettingsHandler : MonoBehaviour
         FrameRateHandler.init.vSync = settingsConfig.vSync;
         TileOcclusion.init.overflow = settingsConfig.tileOcclusion;
         Debug.unityLogger.filterLogType = (LogType)settingsConfig.logLevel;
-        PathFindingQueue.init.maxQueue = settingsConfig.maxPathFindingQueue;
+        //PathFindingQueue.init.maxQueue = settingsConfig.maxPathFindingQueue;
         PathFindingCache.init.maxCache = settingsConfig.maxPathFindingCache;
         TileInfoRaycaster.init.maxHits = settingsConfig.maxHits;
 
@@ -129,10 +129,10 @@ public class SettingsHandler : MonoBehaviour
             settingsConfig.maxPathFindingCache = PathFindingCache.init.maxCache;
         }
 
-        if (settingsConfig.maxPathFindingQueue == 0)
+        /*if (settingsConfig.maxPathFindingQueue == 0)
         {
             settingsConfig.maxPathFindingQueue = PathFindingQueue.init.maxQueue;
-        }
+        }*/
 
         if (settingsConfig.maxHits == 0)
         {

@@ -12,12 +12,12 @@ using UnityEngine;
 [System.Serializable]
 public class PathFindingPipeline
 {
-    public Stack<PathFinder> pathFinder;
+    public Queue<PathFinder> pathFinder;
     public Task task;
 
     public PathFindingPipeline()
     {
-        pathFinder = new Stack<PathFinder>();
+        pathFinder = new Queue<PathFinder>();
     }
 }
 
@@ -30,26 +30,20 @@ public class PathFindingQueue : MonoBehaviour
         private set { _init = value; }
     }
 
-    public int maxQueue;
-    public List<PathFindingPipeline> pipelines;
+    //public int maxQueue;
+    public PathFindingPipeline pipeline;
 
     private Coroutine scan;
+
+    public void Initialize()
+    {
+        scan = StartCoroutine(Scan());
+    }
 
     private void Awake()
     {
         init = this;
-
-        pipelines = new List<PathFindingPipeline>();
-    }
-
-    public void Initialize()
-    {
-        for (int i = 0; i < maxQueue; i++)
-        {
-            pipelines.Add(new PathFindingPipeline());
-        }
-
-        //scan = StartCoroutine(Scan());
+        pipeline = new PathFindingPipeline();
     }
 
     private void OnDestroy()
@@ -64,68 +58,35 @@ public class PathFindingQueue : MonoBehaviour
     {
         while (true)
         {
-            for(int i = 0;i < pipelines.Count;i++)
+            if(pipeline.pathFinder.Count == 0)
             {
-                if (pipelines[i].pathFinder.Count > 0 && pipelines[i].task == null)
-                {
-                    CDebug.Log(this, "Pipeline=" + i + " PEEK pathFinders.Count=" + pipelines[i].pathFinder.Count, LogType.Warning);
-                    pipelines[i].task = new Task(pipelines[i].pathFinder.Peek().Calculate);
-                    pipelines[i].task.Start();
-                }
-                else if (pipelines[i].task != null && pipelines[i].task.IsCompleted)
-                {
-                    pipelines[i].pathFinder.Pop();
-                    CDebug.Log(this, "Pipeline=" + i + " POP pathFinders.Count=" + pipelines[i].pathFinder.Count, LogType.Warning);
-                    pipelines[i].task = null;
-                }
+                yield return null;
+                continue;
             }
 
-            int pipelineEmpty = 0;
-            for(int i = 0;i < pipelines.Count;i++)
-            {
-                if(pipelines[i].pathFinder.Count == 0)
-                {
-                    pipelineEmpty++;
-                }
-            }
+            CDebug.Log(this, "PEEK pathFinders.Count=" + pipeline.pathFinder.Count, LogType.Warning);
+            pipeline.task = new Task(pipeline.pathFinder.Peek().Calculate);
+            pipeline.task.Start();
 
-            if(pipelineEmpty == pipelines.Count)
+            WAIT:
+            if(!pipeline.task.IsCompleted)
             {
-                yield break;
-            }
+                yield return null;
+                goto WAIT;
+            }    
 
+            pipeline.pathFinder.Dequeue();
+            CDebug.Log(this, "DEQUEUE pathFinders.Count=" + pipeline.pathFinder.Count, LogType.Warning);
+            pipeline.task = null;
+            
             yield return null;
         }
     }
 
-    public void Push(PathFinder pathFinder)
+    public void Enqueue(PathFinder pathFinder)
     {
-        int lowestCountIndex = 0;
-        int lowestCount = pipelines[0].pathFinder.Count;
-
-        for(int i = 0;i < pipelines.Count;i++)
-        {
-            if (pipelines[i].pathFinder.Count <= lowestCount)
-            {
-                lowestCount = pipelines[i].pathFinder.Count;
-                lowestCountIndex = i;
-            }
-        }
-
-        if (scan != null)
-        {
-            StopCoroutine(scan);
-        }
-
-        pipelines[lowestCountIndex].pathFinder.Push(pathFinder);
-        CDebug.Log(this, "Pipeline=" + lowestCountIndex + " PUSH pathFinders.Count=" + lowestCount, LogType.Warning);
-
-        for(int i = 0;i < pipelines.Count;i++)
-        {
-            pipelines[i].task = null;
-        }
-        
-        scan = StartCoroutine(Scan());
+        pipeline.pathFinder.Enqueue(pathFinder);
+        CDebug.Log(this, "ENQUEUE pathFinders.Count=" + pipeline.pathFinder.Count, LogType.Warning);
     }
 
 }

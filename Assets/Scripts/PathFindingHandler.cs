@@ -149,7 +149,7 @@ public class PathFindingHandler : MonoBehaviour
             pathFindValues.tempCache = PathFindingCache.init.RetrieveTileInfos(standingTile, pointTileInfo);
             pathFinder.Set(pathFindValues);
 
-            PathFindingQueue.init.Push(pathFinder);
+            PathFindingQueue.init.Enqueue(pathFinder);
 
             isPathFinding = true;
 

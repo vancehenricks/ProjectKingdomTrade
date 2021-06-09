@@ -6,7 +6,6 @@
  "vSync":false,
  "tileOcclusion":40,
  "maxPathFindingCache":30,
- "maxPathFindingQueue":2,
  "maxHits":50,
  "hideTerritoryKey":"T",
  "hideCloudsKey":"C",
