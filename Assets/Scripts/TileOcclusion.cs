@@ -103,7 +103,12 @@ public class TileOcclusion : MonoBehaviour
                 Task task = new Task(parallelInstance.Calculate);
 
                 task.Start();
-                task.Wait();
+                WAIT:
+                if(!task.IsCompleted)
+                {
+                    yield return null;
+                    goto WAIT;
+                }  
                 /*yield return null;
                 if (!task.IsCompleted)
                 {

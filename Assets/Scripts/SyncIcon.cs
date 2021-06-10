@@ -19,16 +19,12 @@ public class SyncIcon : MonoBehaviour
     public float _xPadding;
     public float _yPadding;
     //public bool alwaysTop;
-
+    public bool renderOutsideHostView;
     public bool continousSync;
-
     public GenericObjectHolder genericObjectHolder;
-
     public TileInfo _hostTile;
     public TileInfo _waypoint;
     private Image imageImage;
-    private UnitOcclusion unitOcclusion;
-
     private Coroutine syncCoroutine;
 
     public void Initialize(TileInfo hostTile, float xPadding = 0f, float yPadding = 0f, float zLevelFlag = 0f)
@@ -46,14 +42,7 @@ public class SyncIcon : MonoBehaviour
         _hostTile = hostTile;
         _waypoint = waypoint;
 
-        UnitInfo unitInfo = _hostTile as UnitInfo;
-
-        if(unitInfo != null)
-        {
-            unitOcclusion = unitInfo.unitEffect.unitOcclusion;
-        }
-
-        //Sync();
+        gameObject.transform.position = new Vector3(_waypoint.transform.position.x + _xPadding, _waypoint.transform.position.y + _yPadding, _zLevelFlag);
     }
 
     public void Sync(bool start)
@@ -112,10 +101,18 @@ public class SyncIcon : MonoBehaviour
     }
 
     private void Sync()
-    {        
-        if(/*alwaysTop || */(unitOcclusion != null &&  unitOcclusion.unitValues.withinCameraView) || unitOcclusion == null)
-        {
+    {   
+        if(continousSync)
+        {   
             gameObject.transform.position = new Vector3(_waypoint.transform.position.x + _xPadding, _waypoint.transform.position.y + _yPadding, _zLevelFlag);
+        }
+
+        if(renderOutsideHostView && !imageImage.enabled && _hostTile.selected)
+        {
+            SetActive(true);
+        }
+        else
+        {
             SetActive(imageImage.enabled);
         }
     }

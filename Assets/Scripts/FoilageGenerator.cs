@@ -128,8 +128,8 @@ public class FoilageGenerator : MonoBehaviour
             {
                 if (tileInfo2.tileType != spawnTile.tile && tileInfo2.subType != spawnTile.tile) continue;
 
-                int spawnX = (int)(MapGenerator.init.width * spawnTile.distance);
-                int spawnY = (int)(MapGenerator.init.height * spawnTile.distance);
+                int spawnX = Mathf.RoundToInt(MapGenerator.init.width * spawnTile.distance);
+                int spawnY = Mathf.RoundToInt(MapGenerator.init.height * spawnTile.distance);
 
                 int distance = Tools.TileLocationDistance(tileInfo, tileInfo2);
 

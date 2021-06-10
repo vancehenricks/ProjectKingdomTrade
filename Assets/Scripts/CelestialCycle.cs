@@ -92,10 +92,11 @@ public class CelestialCycle : MonoBehaviour
             Task task = new Task(parallelInstance.Calculate);
             task.Start();
 
-            yield return null;
-            if (!task.IsCompleted)
+            WAIT:
+            if(!task.IsCompleted)
             {
-                task.Wait();
+                yield return null;
+                goto WAIT;
             }
 
             //task.Wait();

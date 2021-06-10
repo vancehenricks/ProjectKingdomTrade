@@ -99,7 +99,7 @@ public class CloudCycle : MonoBehaviour
         {
             RectTransform baseCloudRect = baseCloud.GetComponent<RectTransform>();
             float width = (grid.rect.width / baseCloudRect.rect.width);
-            maxSpawn = maxSpawn * (int)width;
+            maxSpawn = maxSpawn * Mathf.RoundToInt(width);
         }
 
         maxSpawnSaved = maxSpawn;

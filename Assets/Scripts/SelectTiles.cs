@@ -69,8 +69,6 @@ public class SelectTiles : MonoBehaviour
 
     public SyncIcon DrawFlag(TileInfo hostTile, TileInfo waypoint, SyncIcon bFlag, bool syncColor = true, bool continousSync = false)
     {
-        //int salt = (int)Random.Range(0f, 1000f);
-
         SelectTilesValue selectTilesValue = new SelectTilesValue();
         selectTilesValue.type = bFlag.type;
         selectTilesValue.tileLocation = waypoint.tileLocation;

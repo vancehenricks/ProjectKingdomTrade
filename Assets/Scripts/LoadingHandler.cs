@@ -51,7 +51,7 @@ public class LoadingHandler : MonoBehaviour
 
         for (float i = current;i <= target;i += 0.01f)
         {
-            int percentage = (int)(i * 100);
+            int percentage = Mathf.RoundToInt(i * 100);
             label.text = message + " " + percentage + "%";
 
             if (percentage >= 98)

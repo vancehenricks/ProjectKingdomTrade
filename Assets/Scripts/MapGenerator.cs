@@ -51,8 +51,8 @@ public class MapGenerator : Pipeline
         if (useGridSize)
         {
             RectTransform rectPlaceHolder = placeHolderTile.GetComponent<RectTransform>();
-            width = (int)(grid.rect.width / rectPlaceHolder.rect.width);
-            height = (int)(grid.rect.height / rectPlaceHolder.rect.height);
+            width = Mathf.RoundToInt(grid.rect.width / rectPlaceHolder.rect.width);
+            height = Mathf.RoundToInt(grid.rect.height / rectPlaceHolder.rect.height);
         }
 
         base.Execute();

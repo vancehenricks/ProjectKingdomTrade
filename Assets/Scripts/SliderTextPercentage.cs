@@ -26,6 +26,6 @@ public class SliderTextPercentage : MonoBehaviour
     public void ValueChangeCheck()
     {
         float percentage = slider.value * 100f;
-        text.text = (int)percentage + "%";
+        text.text = Mathf.RoundToInt(percentage) + "%";
     }
 }

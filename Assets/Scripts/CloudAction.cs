@@ -19,14 +19,11 @@ public struct Cloud
     public float offsetDespawn;
     public float liveTime;
     public float liveTimeCounter;
-    public float zLevel;
     public float speedModifier;
     public int tickSpeed;
     public float deltaTime;
     public Vector3 newPos;
     public bool outOfBounds;
-    public bool markedForDestroy;
-    public Vector3 direction;
     public bool enabledImage;
     public OcclusionValue occlusion;
 }
@@ -91,10 +88,8 @@ public class CloudAction : MonoBehaviour
                 cloud.deltaTime = Time.deltaTime;
                 cloud.liveTime = liveTime;
                 cloud.speedModifier = speedModifier;
-                cloud.markedForDestroy = markedForDestroy;
                 cloud.tickSpeed = Tick.init.speed;
-                cloud.zLevel = cloudCycle.zLevel;
-                cloud.pos = transform.position;
+                cloud.pos = new Vector3(transform.position.x, transform.position.y, cloudCycle.zLevel);
                 cloud.offsetDespawn = offsetDespawn;
                 cloud.posA = posA.transform.position;
                 cloud.posB = posB.transform.position;
@@ -104,16 +99,16 @@ public class CloudAction : MonoBehaviour
                 parallellInstance.Set(cloud);
                 Task task = new Task(parallellInstance.Calculate);
                 task.Start();
-
-                //yield return null;
-                //if (!task.IsCompleted)
-                //{
-                    task.Wait();
-                //}
-                //task.Wait();
+                
+                WAIT:
+                if(!task.IsCompleted)
+                {
+                    yield return null;
+                    goto WAIT;
+                }  
 
                 liveTimeCounter = cloud.liveTimeCounter;
-                Tools.SetDirection(transform, cloud.direction);
+                Tools.SetDirection(transform, cloud.newPos);
                 gameObject.transform.position = cloud.newPos;
 
                 if (cloud.enabledImage == true && visible == true)
@@ -125,7 +120,7 @@ public class CloudAction : MonoBehaviour
                     image.enabled = false;
                 }
 
-                if (cloud.outOfBounds)
+                if (cloud.outOfBounds || markedForDestroy)
                 {
                     StartCoroutine(FadeOut(0.1f));
                 }
@@ -141,14 +136,14 @@ public class CloudAction : MonoBehaviour
         float diffXA = _cloud.pos.x - cloud.posA.x;
         float diffXB = _cloud.pos.x - cloud.posB.x;
 
-        _cloud.direction.x = _cloud.pos.x + (_cloud.tickSpeed * _cloud.speedModifier) * _cloud.deltaTime;
+        _cloud.newPos = Vector3.MoveTowards(_cloud.pos, new Vector3( _cloud.posB.x, _cloud.pos.y, _cloud.pos.z), 
+            (_cloud.tickSpeed * _cloud.speedModifier) * _cloud.deltaTime);
 
-        _cloud.newPos = new Vector3(_cloud.pos.x + (_cloud.tickSpeed * _cloud.speedModifier) * _cloud.deltaTime, _cloud.pos.y, _cloud.zLevel);
         _cloud.liveTimeCounter = _cloud.liveTimeCounter + (_cloud.tickSpeed * _cloud.deltaTime);
 
         if (diffXA >= -_cloud.offsetDespawn && diffXA <= _cloud.offsetDespawn
             || diffXB >= -_cloud.offsetDespawn && diffXB <= _cloud.offsetDespawn
-            || _cloud.liveTimeCounter >= _cloud.liveTime || _cloud.markedForDestroy || _cloud.speedModifier == 0f)
+            || _cloud.liveTimeCounter >= _cloud.liveTime || _cloud.speedModifier == 0f)
         {
             _cloud.outOfBounds = true;
         }
