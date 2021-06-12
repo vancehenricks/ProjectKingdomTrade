@@ -15,19 +15,14 @@ public class PathFindingHandler : MonoBehaviour
 {
     public UnitInfo unitInfo;
     public int wayPointIndex;
-
     public delegate void WayPointReached(TileInfo tileInfo);
     public WayPointReached wayPointReached;
-
     public delegate void DestinationChanged(int currentIndex, List<TileInfo> generatedWayPoints);
     public DestinationChanged destinationChanged;
-
     public delegate bool IsWalkable(TileInfo tile);
     public IsWalkable isWalkable;
-
     public List<TileInfo> generatedWayPoints;
     public int gwPointsIndex;
-
     public TileInfo tileDestination;
     public float arrivalTime;
     public BoxCollider2D unitCollider2D;
@@ -36,6 +31,8 @@ public class PathFindingHandler : MonoBehaviour
     private bool isPathFinding;
     private PathFinder pathFinder;
     private Coroutine transition;
+    private Coroutine queueWayPoint;
+    public bool inTransition;
     //private bool runOnceCheckNewWaypoint;
 
     private void Start()
@@ -83,10 +80,12 @@ public class PathFindingHandler : MonoBehaviour
 
     private IEnumerator Transition()
     {
+        inTransition = true;
         Vector3Int unitPos;
         Vector3Int desPos;
         unitCollider2D.enabled = false;
-        transform.SetParent(transform.parent.transform.parent);
+        Transform oldParent = transform.parent;
+        transform.SetParent(oldParent.transform.parent);
         transform.SetAsLastSibling();
 
         do
@@ -101,12 +100,33 @@ public class PathFindingHandler : MonoBehaviour
         while (unitPos != desPos);
 
         transform.position = tileDestination.transform.position;
+        transform.SetParent(oldParent);       
         unitCollider2D.enabled = true;
         //transition = null;
         arrivalTime = -2;
+        inTransition = false;
     }
 
-    public void CheckNewWaypoint(bool increment = false)
+    public void QueueNewWayPoint()
+    {
+        if(queueWayPoint != null)
+        {
+            StopCoroutine(queueWayPoint);
+        }
+
+        queueWayPoint = StartCoroutine(QueueNewWayPointCoroutine());
+    }
+
+    private IEnumerator QueueNewWayPointCoroutine()
+    {
+        while(inTransition)
+        {
+            yield return null;
+        }
+        CheckNewWaypoint(false);
+    }
+
+    private void CheckNewWaypoint(bool increment = false)
     {
        // runOnceCheckNewWaypoint = true;
         if (unitInfo.waypoints.Count == 0) return;
@@ -139,12 +159,18 @@ public class PathFindingHandler : MonoBehaviour
                     unitInfo.waypoints.Clear();
                 }
             }
+
             ResetGeneratedWaypoints();
         }
-
-        if (isWalkable != null && isWalkable(point))
+        
+        if (isWalkable == null || isWalkable(point))
         {
             GeneratePath(unitInfo.standingTile, point, increment);
+
+            if(isWalkable != null && !isWalkable(tileDestination))
+            {
+                ResetDestination();
+            }
         }
 
         if (wayPointIndex >= unitInfo.waypoints.Count)
@@ -155,7 +181,6 @@ public class PathFindingHandler : MonoBehaviour
 
         //runOnceCheckNewWaypoint = false;
     }
-
     private void GeneratePath(TileInfo standingTile, TileInfo pointTileInfo, bool increment)
     {
 
@@ -165,10 +190,11 @@ public class PathFindingHandler : MonoBehaviour
             pathFindValues.currentPoint = standingTile;
             pathFindValues.finalPoint = pointTileInfo;
             pathFindValues.isWalkable = isWalkable;
+            pathFindValues.cache = PathFindingCache.init.cache;
 
             pathFindValues.onDoneCalculate = (List<TileInfo> _generatedWayPoints) => {
                 generatedWayPoints = _generatedWayPoints;
-                
+
                 //this keyword does not work on anonymous functions
                 CDebug.Log(nameof(PathFindingHandler), "unitInfo.tileId=" + unitInfo.tileId + 
                 "Transferring generatedWayPoints.Count=" + generatedWayPoints.Count);
@@ -176,7 +202,6 @@ public class PathFindingHandler : MonoBehaviour
                 saveCache = true; 
             };
 
-            pathFindValues.tempCache = PathFindingCache.init.RetrieveTileInfos(standingTile, pointTileInfo);
             pathFinder.Set(pathFindValues);
 
             PathFindingQueue.init.Enqueue(pathFinder);
@@ -192,13 +217,10 @@ public class PathFindingHandler : MonoBehaviour
             saveCache = false;
             if (generatedWayPoints.Count > 0)
             {
-                //saveCache = false;
-
                 CDebug.Log(this, "unitInfo.tileId=" + unitInfo.tileId + " Adding Cache start=" + generatedWayPoints[0].tileLocation + " end=" +
                     generatedWayPoints[generatedWayPoints.Count-1].tileLocation);
 
-                List<TileInfo> temp = new List<TileInfo>(generatedWayPoints);
-                PathFindingCache.init.Add(standingTile, pointTileInfo, temp);
+                PathFindingCache.init.Add(standingTile, pointTileInfo, generatedWayPoints);
             }
         }
 

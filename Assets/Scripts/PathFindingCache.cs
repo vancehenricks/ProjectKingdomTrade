@@ -7,6 +7,7 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Linq;
 using UnityEngine;
 
@@ -21,7 +22,7 @@ public class PathFindingCache : MonoBehaviour
     }
 
     public int maxCache;
-    private Dictionary<string, List<TileInfo>> cache;
+    public ConcurrentDictionary<string, List<TileInfo>> cache;
 
     private void Awake()
     {
@@ -30,7 +31,7 @@ public class PathFindingCache : MonoBehaviour
 
     private void Start()
     {
-        cache = new Dictionary<string, List<TileInfo>>();
+        cache = new ConcurrentDictionary<string, List<TileInfo>>();
     }
 
     private void OnDestroy()
@@ -38,58 +39,24 @@ public class PathFindingCache : MonoBehaviour
         cache.Clear();
     }
 
-    public List<TileInfo> RetrieveTileInfos(TileInfo startPoint, TileInfo endPoint)
-    {
-        Vector3Int _start = Vector3Int.FloorToInt(startPoint.transform.position);
-        Vector3Int _end = Vector3Int.FloorToInt(endPoint.transform.position);
-
-        string keyword = _start + "," + _end;
-
-        if (cache.ContainsKey(keyword))
-        {
-            return cache[keyword];
-        }
-
-        return null;
-    }
-
-    public bool ContainsKey(TileInfo startPoint , TileInfo endPoint)
-    {
-        Vector3Int _start = Vector3Int.FloorToInt(startPoint.transform.position);
-        Vector3Int _end = Vector3Int.FloorToInt(endPoint.transform.position);
-
-        return cache.ContainsKey(_start + "," + _end) ||
-            cache.ContainsKey(_start + "," + _end);
-    }
-
     public void Add(TileInfo startPoint, TileInfo endPoint, List<TileInfo> generatedPoints)
     {
-        Vector3Int _start = Vector3Int.FloorToInt(startPoint.transform.position);
-        Vector3Int _end = Vector3Int.FloorToInt(endPoint.transform.position);
+        Vector2Int _start = startPoint.tileLocation;
+        Vector2Int _end = endPoint.tileLocation;
+
+        List<TileInfo> temp = new List<TileInfo>(generatedPoints);
+        List<TileInfo> delResult;
 
         if (cache.ContainsKey(_start + "," + _end))
         {
-            cache.Remove(_start + "," + _end);
-            cache.Remove(_end + "," + _start);
+            cache.TryRemove(_start + "," + _end, out delResult);
         }
 
-        try
+        if(cache.Count >= maxCache)
         {
-            cache.Add(_start + "," + _end, generatedPoints);
-            List<TileInfo> reverse = new List<TileInfo>(generatedPoints);
-            reverse.Reverse();
-            reverse.Add(startPoint);
-
-            if (cache.Count > maxCache)
-            {
-                cache.Remove(cache.Keys.First());
-            }
-
-            cache.Add(_end + "," + _start, reverse);
+            cache.TryRemove(cache.Keys.First<string>(), out delResult);
         }
-        catch (System.Exception e)
-        {
-            CDebug.Log(this,e,LogType.Warning);
-        }
+
+        cache.TryAdd(_start + "," + _end, temp);
     }
 }

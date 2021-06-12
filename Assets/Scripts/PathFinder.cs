@@ -6,6 +6,7 @@
 
 
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -13,7 +14,7 @@ public class PathFindValues
 {
     public TileInfo currentPoint;
     public TileInfo finalPoint;
-    public List<TileInfo> tempCache;
+    public ConcurrentDictionary<string, List<TileInfo>> cache;
     public PathFindingHandler.IsWalkable isWalkable;
     public System.Action<List<TileInfo>> onDoneCalculate;
 }
@@ -21,7 +22,7 @@ public class PathFindValues
 public class PathFinder
 {
     private PathFindValues pathFindValues;
-
+    private List<TileInfo> tempCache;
     public void Set(PathFindValues _pathFindValues)
     {
         pathFindValues = _pathFindValues;
@@ -38,13 +39,14 @@ public class PathFinder
 
     public void Calculate()
     {
-        List<TileInfo> generatedWayPoints = new List<TileInfo>();
-
         if (pathFindValues.currentPoint == null || pathFindValues.finalPoint == null) return;
+        
+        List<TileInfo> generatedWayPoints = new List<TileInfo>();
+        tempCache = RetrieveTileInfos(pathFindValues.currentPoint, pathFindValues.finalPoint);
 
-        if (pathFindValues.tempCache != null)
+        if (tempCache != null)
         {
-            CDebug.Log(this, "Found global cache re-using it tempCache.Count " + pathFindValues.tempCache.Count, LogType.Warning);
+            CDebug.Log(this, "Found global cache re-using it tempCache.Count " + tempCache.Count, LogType.Warning);
         }
 
         bool isDone = false;
@@ -54,7 +56,7 @@ public class PathFinder
             Dictionary<Vector2Int, Node> open = new Dictionary<Vector2Int, Node>();
             Dictionary<Vector2Int, Node> closed = new Dictionary<Vector2Int, Node>();
 
-           isDone = FindPath(open, closed, ref generatedWayPoints);
+            isDone = FindPath(open, closed, ref generatedWayPoints);
         }
 
         pathFindValues.onDoneCalculate(generatedWayPoints);
@@ -77,17 +79,17 @@ public class PathFinder
             {
                 generatedWayPoints = current.GenerateWaypoints();
 
-                if (pathFindValues.tempCache != null && pathFindValues.tempCache.Count > 0)
+                if (tempCache != null && tempCache.Count > 0)
                 {
-                    generatedWayPoints.AddRange(pathFindValues.tempCache);
+                    generatedWayPoints.AddRange(tempCache);
                     generatedWayPoints = FitlerWaklableTilesOnly(generatedWayPoints);
 
-                    if (!HasSameLastTileInfo(generatedWayPoints, pathFindValues.tempCache))
+                    if (!HasSameLastTileInfo(generatedWayPoints, tempCache))
                     {
                         CDebug.Log(this, "Checking fail! " + generatedWayPoints[generatedWayPoints.Count - 1].tileLocation +
                             "!=" + pathFindValues.finalPoint.tileLocation + " generating another one.", LogType.Warning);
 
-                        pathFindValues.tempCache = generatedWayPoints;
+                        tempCache = generatedWayPoints;
                         pathFindValues.currentPoint = generatedWayPoints[generatedWayPoints.Count - 1];
                         generatedWayPoints = new List<TileInfo>();
 
@@ -117,6 +119,21 @@ public class PathFinder
         }
 
         return true;
+    }
+
+    private List<TileInfo> RetrieveTileInfos(TileInfo startPoint, TileInfo endPoint)
+    {
+        Vector2Int _start = startPoint.tileLocation;
+        Vector2Int _end = endPoint.tileLocation;
+
+        string keyword = _start + "," + _end;
+
+        if (pathFindValues.cache.ContainsKey(keyword))
+        {
+            return pathFindValues.cache[keyword];
+        }
+
+        return null;
     }
 
     private bool HasSameLastTileInfo(List<TileInfo> tiles1, List<TileInfo> tiles2)

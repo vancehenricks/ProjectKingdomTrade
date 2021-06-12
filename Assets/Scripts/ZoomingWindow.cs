@@ -23,13 +23,22 @@ public class ZoomingWindow : MonoBehaviour, IScrollHandler
     public float maxScaleMultipler;
     public float maxScale;
     public float minScale;
-
     private bool enable;
+    private Vector3 oldMousePos;
+    private Coroutine delayStop;
 
     public void Initialize()
     {
         maxScale += (maxScale * maxScaleMultipler);
         enable = true;
+    }
+
+    private void OnDestroy()
+    {
+        if(delayStop != null)
+        {
+            StopCoroutine(delayStop);
+        }
     }
 
     public void OnScroll(PointerEventData eventData)
@@ -39,6 +48,11 @@ public class ZoomingWindow : MonoBehaviour, IScrollHandler
         if (grid.rect.width > defaultWidth)
         {
             speed = (defaultSpeed + (grid.rect.width / divideWidth));
+        }
+
+        if(delayStop != null)
+        {
+            StopCoroutine(delayStop);
         }
 
         Vector3 preZoom = TranslatePosToWorldPoint.init.pos;
@@ -68,12 +82,19 @@ public class ZoomingWindow : MonoBehaviour, IScrollHandler
 
         CursorReplace.init.currentCursor = CursorType.Zoom;
 
-        StartCoroutine(DelayStop());
+        oldMousePos = Input.mousePosition;
+        delayStop = StartCoroutine(DelayStop());
     }
 
     private IEnumerator DelayStop()
     {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1f);
+
+        while(Input.mousePosition == oldMousePos)
+        {
+            yield return null;
+        }
+
         CursorReplace.init.currentCursor = CursorType.Previous;
     }
 

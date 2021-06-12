@@ -14,19 +14,18 @@ public class CombatHandler : MonoBehaviour
 {
     public UnitInfo unitInfo;
     public PathFindingHandler pathFinding;
-    public delegate void TargetCountChange(TileInfo tile);
-    public TargetCountChange targetCountChange;
-    public delegate void FirstTargetChange(TileInfo tile);
-    public FirstTargetChange firstTargetChange;
+    //public delegate void TargetCountChange(TileInfo tile);
+    //public TargetCountChange targetCountChange;
+    //public delegate void FirstTargetChange(TileInfo tile);
+    //public FirstTargetChange firstTargetChange;
     public TileInfoRaycaster tileInfoRaycaster;
     public CombatSession combatSession;
-
     private CombatSession defaultCombatSession;
-
     private int previousTargetCount;
     private TileInfo firstTarget;
     private TileInfo targetStandingTile;
-
+    public int targetIndex;
+    private Coroutine queueTarget;
     private void Start()
     {
         defaultCombatSession = combatSession;
@@ -41,13 +40,13 @@ public class CombatHandler : MonoBehaviour
         //DisEngage(targetUnit);
         DisEngage();
         Tick.init.tickUpdate -= TickUpdate;
-        targetCountChange = null;
-        firstTargetChange = null;
+        //targetCountChange = null;
+        //firstTargetChange = null;
     }
 
     private void Update()
     {
-        if (unitInfo.currentTarget == null)
+        /*if (unitInfo.currentTarget == null)
         {
             //Issue with selecting towns -- to be implemented later for attacking towns
             try
@@ -82,9 +81,9 @@ public class CombatHandler : MonoBehaviour
                 CDebug.Log(this,e,LogType.Error);
                 CDebug.Log(this,"unitInfo.targets got modified...",LogType.Error);
             }
-        }
+        }*/
 
-        if (firstTargetChange != null && unitInfo.targets.Count > 0 && firstTarget.tileId != unitInfo.targets[0].tileId)
+        /*if (firstTargetChange != null && unitInfo.targets.Count > 0 && firstTarget.tileId != unitInfo.targets[0].tileId)
         {
             firstTarget = unitInfo.targets[0];
             firstTargetChange(unitInfo.targets[0]);
@@ -102,13 +101,72 @@ public class CombatHandler : MonoBehaviour
             {
                 targetCountChange(unitInfo.targets[previousTargetCount - 1]);
             }
-        }
+        }*/
 
     }
 
     private void TickUpdate()
     {
+        RetrieveTarget();
         GenerateWaypoint(null, true);
+    }
+
+    public void QueueNewTarget()
+    {
+        if(queueTarget != null)
+        {
+            StopCoroutine(queueTarget);
+        }
+
+        queueTarget = StartCoroutine(QueueNewTargetCoroutine());
+    }
+
+    private IEnumerator QueueNewTargetCoroutine()
+    {
+        while(pathFinding.inTransition)
+        {
+            yield return null;
+        }
+        RetrieveTarget(false);
+    }    
+
+    private void RetrieveTarget(bool increment = false)
+    {
+        if(unitInfo.currentTarget != null || unitInfo.targets.Count == 0 || pathFinding.inTransition) return;
+
+        UnitInfo target = unitInfo.targets[targetIndex] as UnitInfo;
+
+        if (target == null)
+        {
+            unitInfo.targets.RemoveAt(targetIndex);
+            ResetCombatPathing();
+            return;
+        }
+
+        //create an instance of CombatSession inside target
+        unitInfo.currentTarget = target;
+        AddToIndex(target.targetted, 0);
+
+        //Issue with this executing the last target since there is no checking here ideal targetted unit will delete itself in unitInfo.targets
+        //This will be catched on target == null
+        //combatSession.ClearCombantants();
+        target.unitEffect.combatHandler.combatSession.Add(target);
+        combatSession = target.unitEffect.combatHandler.combatSession;
+        combatSession.Add(unitInfo);
+        combatSession.Relay();
+
+        if(increment)
+        {
+            if(targetIndex < unitInfo.targets.Count)
+            {
+                targetIndex++;
+            }
+            else
+            {
+                targetIndex=0;
+            }
+        }
+
     }
 
     public void GenerateWaypoint(TileInfo waypoint, bool checkOnlyWithinDistance = false)
@@ -134,7 +192,7 @@ public class CombatHandler : MonoBehaviour
         {
             CDebug.Log(this,"NEARBY DISTANCE" + distance);
 
-            AddToIndex(targetUnit.targets, unitInfo, 0);
+            AddToIndex(targetUnit.targets, 0);
             targetUnit.currentTarget = unitInfo;
 
             unitInfo.isEngaged = true;
@@ -178,7 +236,7 @@ public class CombatHandler : MonoBehaviour
         unitInfo.waypoints.Clear();
     }
 
-    private void AddToIndex(List<TileInfo> tileInfos, TileInfo tile, int index)
+    private void AddToIndex(List<TileInfo> tileInfos, int index)
     {
         if (Tools.Exist<TileInfo>(tileInfos, unitInfo) > -1)
         {
