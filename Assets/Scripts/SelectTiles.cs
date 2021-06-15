@@ -40,6 +40,7 @@ public class SelectTiles : MonoBehaviour
     public SyncIcon InitializeFlag(TileInfo hostTile, SyncIcon bFlag, bool syncColor)
     {
         GameObject flag = Instantiate(bFlag.gameObject);
+        flag.name = bFlag.name + "_" + hostTile.tileId;
         SyncIcon syncIcon = flag.GetComponent<SyncIcon>();
 
         Image image = syncIcon.genericObjectHolder.images[(int)Obj.Image];

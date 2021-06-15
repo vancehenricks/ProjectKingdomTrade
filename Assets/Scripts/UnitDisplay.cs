@@ -50,6 +50,7 @@ public class UnitDisplay : MonoBehaviour
     public void Initialize()
     {
         syncIcon = Instantiate(syncIconBase, syncIconBase.transform.parent);
+        syncIcon.name = syncIconBase.name + "_" + tile.tileId;
         unitText = syncIcon.genericObjectHolder.texts[(int)Obj.Unit];
         multiUnitText = syncIcon.genericObjectHolder.texts[(int)Obj.MultiUnit];
         syncIcon.Initialize(tile, xLevel, yLevel, zLevel);

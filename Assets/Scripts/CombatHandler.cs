@@ -21,11 +21,11 @@ public class CombatHandler : MonoBehaviour
     public TileInfoRaycaster tileInfoRaycaster;
     public CombatSession combatSession;
     private CombatSession defaultCombatSession;
-    private int previousTargetCount;
+    //private int previousTargetCount;
     private TileInfo firstTarget;
     private TileInfo targetStandingTile;
     public int targetIndex;
-    private Coroutine queueTarget;
+    
     private void Start()
     {
         defaultCombatSession = combatSession;
@@ -44,95 +44,15 @@ public class CombatHandler : MonoBehaviour
         //firstTargetChange = null;
     }
 
-    private void Update()
-    {
-        /*if (unitInfo.currentTarget == null)
-        {
-            //Issue with selecting towns -- to be implemented later for attacking towns
-            try
-            {
-                foreach (UnitInfo target in unitInfo.targets)
-                {
-                    //Debug.Log("41");
-
-                    if (target == null)
-                    {
-                        unitInfo.targets.Remove(target);
-                        ResetCombatPathing();
-                        break;
-                    }
-
-                    //create an instance of CombatSession inside target
-                    unitInfo.currentTarget = target;
-                    AddToIndex(target.targetted, unitInfo, 0);
-
-                    //Issue with this executing the last target since there is no checking here ideal targetted unit will delete itself in unitInfo.targets
-                    //This will be catched on target == null
-                    //combatSession.ClearCombantants();
-                    target.unitEffect.combatHandler.combatSession.Add(target);
-                    combatSession = target.unitEffect.combatHandler.combatSession;
-                    combatSession.Add(unitInfo);
-                    combatSession.Relay();
-                    break;
-                }
-            }
-            catch (System.Exception e)
-            {
-                CDebug.Log(this,e,LogType.Error);
-                CDebug.Log(this,"unitInfo.targets got modified...",LogType.Error);
-            }
-        }*/
-
-        /*if (firstTargetChange != null && unitInfo.targets.Count > 0 && firstTarget.tileId != unitInfo.targets[0].tileId)
-        {
-            firstTarget = unitInfo.targets[0];
-            firstTargetChange(unitInfo.targets[0]);
-        }
-
-        if (targetCountChange != null && previousTargetCount != unitInfo.targets.Count)
-        {
-            previousTargetCount = unitInfo.targets.Count;
-
-            if (previousTargetCount == 0)
-            {
-                targetCountChange(null);
-            }
-            else
-            {
-                targetCountChange(unitInfo.targets[previousTargetCount - 1]);
-            }
-        }*/
-
-    }
-
     private void TickUpdate()
     {
         RetrieveTarget();
         GenerateWaypoint(null, true);
     }
 
-    public void QueueNewTarget()
+    private void RetrieveTarget()
     {
-        if(queueTarget != null)
-        {
-            StopCoroutine(queueTarget);
-        }
-
-        queueTarget = StartCoroutine(QueueNewTargetCoroutine());
-    }
-
-    private IEnumerator QueueNewTargetCoroutine()
-    {
-        while(pathFinding.inTransition)
-        {
-            yield return null;
-        }
-        RetrieveTarget(false);
-    }    
-
-    private void RetrieveTarget(bool increment = false)
-    {
-        if(unitInfo.currentTarget != null || unitInfo.targets.Count == 0 || pathFinding.inTransition) return;
+        if(unitInfo.currentTarget != null || unitInfo.targets.Count == 0) return;
 
         UnitInfo target = unitInfo.targets[targetIndex] as UnitInfo;
 
@@ -140,6 +60,7 @@ public class CombatHandler : MonoBehaviour
         {
             unitInfo.targets.RemoveAt(targetIndex);
             ResetCombatPathing();
+            GenerateWaypoint(null, true);
             return;
         }
 
@@ -155,18 +76,15 @@ public class CombatHandler : MonoBehaviour
         combatSession.Add(unitInfo);
         combatSession.Relay();
 
-        if(increment)
-        {
-            if(targetIndex < unitInfo.targets.Count)
-            {
-                targetIndex++;
-            }
-            else
-            {
-                targetIndex=0;
-            }
-        }
 
+        if(targetIndex < unitInfo.targets.Count)
+        {
+            targetIndex++;
+        }
+        else
+        {
+            targetIndex=0;
+        }
     }
 
     public void GenerateWaypoint(TileInfo waypoint, bool checkOnlyWithinDistance = false)
@@ -186,11 +104,11 @@ public class CombatHandler : MonoBehaviour
         int distance = Tools.TileLocationDistance(unitInfo, targetUnit);
         int attackDistance = unitInfo.attackDistance <= 1 ? 0 : unitInfo.attackDistance;
 
-        CDebug.Log(this,"DISTANCE=" + distance);
+        CDebug.Log(this,"unitInfo.tileId=" + unitInfo.tileId + " distance=" + distance);
 
         if (distance <= attackDistance && !unitInfo.isEngaged)
         {
-            CDebug.Log(this,"NEARBY DISTANCE" + distance);
+            CDebug.Log(this,"unitInfo.tileId=" + unitInfo.tileId + " distance=" + distance);
 
             AddToIndex(targetUnit.targets, 0);
             targetUnit.currentTarget = unitInfo;
@@ -203,7 +121,7 @@ public class CombatHandler : MonoBehaviour
         else if (distance <= attackDistance && unitInfo.isEngaged)
         {
             //damage enemy logic here
-            CDebug.Log(this, "Unit [" + unitInfo.tileId + "] attacking Unit [" + targetUnit.tileId + "]", LogType.Warning);
+            CDebug.Log(this, "unitInfo.tileId=" + unitInfo.tileId + " targetUnit.tileId=" + targetUnit.tileId, LogType.Warning);
         }
         else if (distance > attackDistance && unitInfo.isEngaged)
         {
@@ -251,7 +169,7 @@ public class CombatHandler : MonoBehaviour
 
     public void DisEngage()
     {
-        CDebug.Log(this, "Unit[" + unitInfo.tileId + "] Disengaging!", LogType.Warning);
+        CDebug.Log(this, " unitInfo.tileId=" + unitInfo.tileId + " Disengaging!", LogType.Warning);
 
         if (unitInfo.isEngaged || unitInfo.currentTarget != null)
         {

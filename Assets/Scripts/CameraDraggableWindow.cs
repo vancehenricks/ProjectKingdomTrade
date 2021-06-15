@@ -26,8 +26,11 @@ public class CameraDraggableWindow : MonoBehaviour/*,IDragHandler*/
 
     private void Update()
     {
-        keySpeedModifier = defaultSpeed * ((cm.transform.position.z / 1000f) - 1);
-        MoveCamera(InputOverride.init.GetAxis("Horizontal"), InputOverride.init.GetAxis("Vertical"), keySpeedModifier);
+        if(InputOverride.init.GetAxis("Horizontal") != 0 || InputOverride.init.GetAxis("Vertical") != 0)
+        {
+            keySpeedModifier = defaultSpeed * ((cm.transform.position.z / 1000f) - 1);
+            MoveCamera(InputOverride.init.GetAxis("Horizontal"), InputOverride.init.GetAxis("Vertical"), keySpeedModifier);
+        }
 
         if (!isMouseLock)
         {

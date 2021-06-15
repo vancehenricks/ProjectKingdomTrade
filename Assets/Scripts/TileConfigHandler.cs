@@ -232,6 +232,15 @@ public class TileConfigHandler : MonoBehaviour
         tileInfo.tileEffect.autumnTemp = config.autumnTemp;
         tileInfo.tileEffect.summerTemp = config.summerTemp;
 
+        //finalize object name for easy searching
+        if(tileInfo.subType == "")
+        {
+            tileInfo.name = baseObj.name + "_" + tileInfo.tileType;
+        }
+        else
+        {
+            tileInfo.name = baseObj.name + "_" + tileInfo.tileType + "_" + tileInfo.subType;
+        }
 
         return tileInfo;
     }

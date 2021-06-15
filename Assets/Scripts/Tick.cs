@@ -103,7 +103,7 @@ public class Tick : MonoBehaviour
             }
 
             //Debug.Log("Seconds: "+ seconds + " Day:" +day+ " Month:" +month+ " Year:" +year);
-            yield return new WaitForSeconds(realSpeed);
+            yield return new WaitForSecondsRealtime(realSpeed);
         }
     }
 }

@@ -117,15 +117,15 @@ public class Tools : MonoBehaviour
     {
         int distance = 0;
 
-        try
-        {
-            distance = (int)Math.Round(Vector2.Distance(tile1.tileLocation, tile2.tileLocation), MidpointRounding.AwayFromZero);
-        }
-        catch (System.Exception e)
-        {
-            CDebug.Log(nameof(Tools), e,LogType.Warning);
-            distance = (int)Math.Round(Vector2.Distance(tile1.transform.position, tile2.transform.position) / Tools.tileSize, MidpointRounding.AwayFromZero);
-        }
+        //try
+        //{
+            distance = Mathf.RoundToInt(Vector2Int.Distance(tile1.tileLocation, tile2.tileLocation));
+        //}
+        //catch (System.Exception e)
+        //{
+        //    CDebug.Log(nameof(Tools), e,LogType.Warning);
+        //    distance = Mathf.RoundToInt(Vector2.Distance(tile1.transform.position, tile2.transform.position) / Tools.tileSize);
+        //}
 
         return distance;
     }
@@ -152,6 +152,7 @@ public class Tools : MonoBehaviour
     public static TileInfo ReplaceTile(TileInfo baseTile, TileInfo target, bool isPlayer = false)
     {
         TileInfo newTile = Instantiate(baseTile, target.transform.parent);
+        newTile.name = baseTile.name;
         newTile.transform.position = target.transform.position;
         newTile.tileLocation = target.tileLocation;
 

@@ -74,6 +74,13 @@ public class UnitWayPoint : SelectTiles
                 DrawFlag(unitInfo.waypoints[i], moveFlag);
             }
         }
+        else
+        {
+            for (int i = 0; i < unitInfo.targets.Count; i++)
+            {
+                DrawAndSyncFlag(unitInfo.targets[i], attackFlag);
+            }
+        }
 
         //SetDirectionFlag();
     }
@@ -97,7 +104,7 @@ public class UnitWayPoint : SelectTiles
     private void WayPointReached(TileInfo tileInfo)
     {
         RemoveFlag(tileInfo, moveFlag);
-        RemoveFlag(tileInfo, attackFlag);
+        //RemoveFlag(tileInfo, attackFlag);
         RemoveFlag(tileInfo, mergeFlag);
         //RemoveTypeFlag(directionFlag);
     }

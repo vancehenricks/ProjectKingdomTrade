@@ -67,9 +67,9 @@ public class TileInfo : MonoBehaviour
         //upgrades = new List<Upgrade>();
         //spawnDistance = new List<SpawnDistance>();
         tileId = Tools.UniqueId;
+        gameObject.name = gameObject.name + "_" + tileId;
         TileList.init.Add(this);
         localTemp = Temperature.init.temperature;
-
         SetSprite(sprite);
     }
 

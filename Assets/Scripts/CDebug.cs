@@ -5,17 +5,19 @@
  */
 
 using System;
+using System.Globalization;
 using UnityEngine;
 
 public static class CDebug
 {
-    public static void Log(System.Object obj, object debug, LogType logtype = LogType.Log, 
+    public static void Log(System.Object obj, System.Object debug, LogType logtype = LogType.Log, 
         [System.Runtime.CompilerServices.CallerLineNumber] int lineNumber = 0, 
         [System.Runtime.CompilerServices.CallerMemberName] string methodName = "")
     {
         if (!Debug.unityLogger.IsLogTypeAllowed(logtype)) return;
 
-        string output = logtype + "|" + DateTime.UtcNow + "|";
+        string time = DateTime.UtcNow.ToString("dd/MM/yyyy HH:mm:ss.fff", CultureInfo.InvariantCulture);
+        string output = logtype + "|" + time + "|";
         string objName = "Undefined";
 
         if (obj != null)

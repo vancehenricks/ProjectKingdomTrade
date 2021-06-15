@@ -79,13 +79,6 @@ public class PlayerCommand : MonoBehaviour
         for (int i=0;i <  _waypointList.Count;i++)
         {
             _waypointList[i].AddRange(waypoints);
-
-            //if (_waypointList[i].Count == 1)
-            //{
-                unitInfos[i].unitEffect.pathFinder.QueueNewWayPoint();
-                unitInfos[i].unitEffect.combatHandler.QueueNewTarget();
-            //}
-
             unitInfos[i].unitEffect.unitWayPoint.UpdateWayPoint();
         }
     }
@@ -98,13 +91,6 @@ public class PlayerCommand : MonoBehaviour
             {
                 _waypointList[i].Add(waypoint);
             }
-
-            //if (_waypointList[i].Count == 1)
-            //{
-                unitInfos[i].unitEffect.pathFinder.QueueNewWayPoint();
-                unitInfos[i].unitEffect.combatHandler.QueueNewTarget();
-            //}
-
             unitInfos[i].unitEffect.unitWayPoint.UpdateWayPoint();
         }
     }
@@ -113,7 +99,7 @@ public class PlayerCommand : MonoBehaviour
     {
         foreach (UnitInfo unit in unitInfos)
         {
-            unit.unitEffect.pathFinder.QueueNewWayPoint();
+            //unit.unitEffect.pathFinder.QueueNewWayPoint();
             unit.unitEffect.unitWayPoint.UpdateWayPoint();
         }
     }

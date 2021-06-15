@@ -12,6 +12,7 @@ using UnityEngine;
 
 public class PathFindValues
 {
+    public TileInfo unitInfo;
     public TileInfo currentPoint;
     public TileInfo finalPoint;
     public ConcurrentDictionary<string, List<TileInfo>> cache;
@@ -44,26 +45,17 @@ public class PathFinder
         List<TileInfo> generatedWayPoints = new List<TileInfo>();
         tempCache = RetrieveTileInfos(pathFindValues.currentPoint, pathFindValues.finalPoint);
 
-        if (tempCache != null)
+
+        if (FinalizeTempCache(ref generatedWayPoints) || FindPath(ref generatedWayPoints))
         {
-            CDebug.Log(this, "Found global cache re-using it tempCache.Count " + tempCache.Count, LogType.Warning);
+            pathFindValues.onDoneCalculate(generatedWayPoints);
         }
-
-        bool isDone = false;
-
-        while (!isDone)
-        {
-            Dictionary<Vector2Int, Node> open = new Dictionary<Vector2Int, Node>();
-            Dictionary<Vector2Int, Node> closed = new Dictionary<Vector2Int, Node>();
-
-            isDone = FindPath(open, closed, ref generatedWayPoints);
-        }
-
-        pathFindValues.onDoneCalculate(generatedWayPoints);
     }
 
-    private bool FindPath(Dictionary<Vector2Int, Node> open, Dictionary<Vector2Int, Node> closed, ref List<TileInfo> generatedWayPoints)
+    private bool FindPath(ref List<TileInfo> generatedWayPoints)
     {
+        Dictionary<Vector2Int, Node> open = new Dictionary<Vector2Int, Node>();
+        Dictionary<Vector2Int, Node> closed = new Dictionary<Vector2Int, Node>();
 
         open.Add(pathFindValues.currentPoint.tileLocation, 
             new Node(pathFindValues.currentPoint, pathFindValues.currentPoint, pathFindValues.finalPoint, closed, true));
@@ -79,25 +71,9 @@ public class PathFinder
             {
                 generatedWayPoints = current.GenerateWaypoints();
 
-                if (tempCache != null && tempCache.Count > 0)
-                {
-                    generatedWayPoints.AddRange(tempCache);
-                    generatedWayPoints = FitlerWaklableTilesOnly(generatedWayPoints);
-
-                    if (!HasSameLastTileInfo(generatedWayPoints, tempCache))
-                    {
-                        CDebug.Log(this, "Checking fail! " + generatedWayPoints[generatedWayPoints.Count - 1].tileLocation +
-                            "!=" + pathFindValues.finalPoint.tileLocation + " generating another one.", LogType.Warning);
-
-                        tempCache = generatedWayPoints;
-                        pathFindValues.currentPoint = generatedWayPoints[generatedWayPoints.Count - 1];
-                        generatedWayPoints = new List<TileInfo>();
-
-                        return false;
-                    }
-                }
-
-                CDebug.Log(this, "Done Pathfinding! generatedWaypoints.Count=" + generatedWayPoints.Count, LogType.Warning);
+                CDebug.Log(this, "unitInfo.tileId=" + pathFindValues.unitInfo.tileId + 
+                    " Done Pathfinding! generatedWaypoints.Count=" + generatedWayPoints.Count, LogType.Warning);
+                
                 return true;
             }
 
@@ -121,6 +97,23 @@ public class PathFinder
         return true;
     }
 
+    private bool FinalizeTempCache(ref List<TileInfo> generatedWayPoints)
+    {
+        if (tempCache != null && tempCache.Count > 0 && CheckForWalkableTiles(tempCache))
+        {
+            generatedWayPoints.AddRange(tempCache);
+            
+            CDebug.Log(this, "unitInfo.tileid=" + pathFindValues.unitInfo.tileId + 
+                " Re-using it tempCache.Count= " + tempCache.Count, LogType.Warning);
+
+            return true;
+        }       
+
+        CDebug.Log(this, "unitInfo.tileid=" + pathFindValues.unitInfo.tileId + " Cache Invalid", LogType.Warning);
+
+        return false;
+    }
+
     private List<TileInfo> RetrieveTileInfos(TileInfo startPoint, TileInfo endPoint)
     {
         Vector2Int _start = startPoint.tileLocation;
@@ -136,27 +129,13 @@ public class PathFinder
         return null;
     }
 
-    private bool HasSameLastTileInfo(List<TileInfo> tiles1, List<TileInfo> tiles2)
+    private bool CheckForWalkableTiles(List<TileInfo> tiles)
     {
-        if (tiles1.Count > 0 && tiles2.Count > 0 && tiles1[tiles1.Count - 1].tileLocation == tiles2[tiles2.Count - 1].tileLocation)
-        {
-            return true;
-        }
-
-        return false;
-    }
-
-    private List<TileInfo> FitlerWaklableTilesOnly(List<TileInfo> tiles)
-    {
-        List<TileInfo> final = new List<TileInfo>();
-
         foreach (TileInfo tile in tiles)
         {
-            if (pathFindValues.isWalkable != null && !pathFindValues.isWalkable(tile)) return final;
-
-            final.Add(tile);
+            if (pathFindValues.isWalkable != null && !pathFindValues.isWalkable(tile)) return false;
         }
 
-        return final;
+        return true;
     }
 }

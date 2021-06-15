@@ -39,13 +39,19 @@ public class PathFindingCache : MonoBehaviour
         cache.Clear();
     }
 
-    public void Add(TileInfo startPoint, TileInfo endPoint, List<TileInfo> generatedPoints)
+    public void Add(TileInfo startPoint, List<TileInfo> generatedPoints)
     {
         Vector2Int _start = startPoint.tileLocation;
-        Vector2Int _end = endPoint.tileLocation;
+        Vector2Int _end = generatedPoints[generatedPoints.Count-1].tileLocation;
 
         List<TileInfo> temp = new List<TileInfo>(generatedPoints);
+
         List<TileInfo> delResult;
+
+        /*foreach(TileInfo tile in generatedPoints)
+        {
+            CDebug.Log(this, "tile.tileLocation=" + tile.tileLocation, LogType.Warning);
+        }*/
 
         if (cache.ContainsKey(_start + "," + _end))
         {

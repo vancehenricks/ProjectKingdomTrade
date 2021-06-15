@@ -48,7 +48,9 @@ public class IslandGenerator : MonoBehaviour
                 subGrid.SetActive(true);
 
                 List<TileInfo> baseTiles = TileConfigHandler.init.baseTiles.Values.ToList<TileInfo>();
-                TileInfo newTile = Instantiate(GetBaseTile(noiseMap[x, y], baseTiles), subGrid.transform);
+                TileInfo baseTile = GetBaseTile(noiseMap[x, y], baseTiles);
+                TileInfo newTile = Instantiate(baseTile, subGrid.transform);
+                newTile.name = baseTile.name;
                 newTile.transform.position = placeHolder;
                 newTile.tileLocation = new Vector2Int(x, y);
                 subGrid.name = x + "_" + y;
