@@ -48,19 +48,12 @@ public class PathFindingCache : MonoBehaviour
 
         List<TileInfo> delResult;
 
-        /*foreach(TileInfo tile in generatedPoints)
+        if(!cache.TryRemove(_start + "," + _end, out delResult))
         {
-            CDebug.Log(this, "tile.tileLocation=" + tile.tileLocation, LogType.Warning);
-        }*/
-
-        if (cache.ContainsKey(_start + "," + _end))
-        {
-            cache.TryRemove(_start + "," + _end, out delResult);
-        }
-
-        if(cache.Count >= maxCache)
-        {
-            cache.TryRemove(cache.Keys.First<string>(), out delResult);
+            if(cache.Count >= maxCache)
+            {
+                cache.TryRemove(cache.Keys.First<string>(), out delResult);
+            }
         }
 
         cache.TryAdd(_start + "," + _end, temp);

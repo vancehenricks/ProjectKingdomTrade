@@ -4,12 +4,12 @@
  * Written by Vance Henricks Patual <vpatual@gmail.com>, June 2019
  */
 
-
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using System.Threading.Tasks;
 
 public class TileInfoRaycaster : MonoBehaviour
 {
@@ -50,7 +50,7 @@ public class TileInfoRaycaster : MonoBehaviour
         return tileInfos[0];
     }
 
-    public void GetTileInfosFromPos(Vector3 pos, List<TileInfo> _tileInfos)
+    public void GetTileInfosFromPos(Vector3 pos, List<TileInfo> _tileInfos, List<TileInfo> filter = null)
     {
         pointerEventData = new PointerEventData(eventSystem);
         pointerEventData.position = pos;
@@ -67,21 +67,27 @@ public class TileInfoRaycaster : MonoBehaviour
         }
 
         _tileInfos.Clear();
-        Ray ray = cm.ScreenPointToRay(pos);
-        RaycastHit2D[] hits = Physics2D.GetRayIntersectionAll(ray);
+        StartCoroutine(GetTilesInfoFromPosCoroutine(pos , _tileInfos, filter));
+        CDebug.Log(this, "_tileInfos.Count=" + _tileInfos.Count, LogType.Warning);  
+    }
 
-        int hitCount = 0;
+    private IEnumerator GetTilesInfoFromPosCoroutine(Vector3 pos, List<TileInfo> _tileInfos, List<TileInfo> filter = null)
+    {
+         Ray ray = cm.ScreenPointToRay(pos);
+        //bounds.extents = Vector3.one;
+        Task<List<TileInfo>> task = TileColliderHandler.init.Cast(ray, filter, maxHits);
 
-        foreach (RaycastHit2D hit in hits)
+        while(!task.IsCompleted)
         {
-            TileInfo tile = hit.transform.gameObject.GetComponent<TileInfo>();
-
-            if (hitCount <= maxHits && tile != null && tile.tileType != "Edge")
-            {
-                hitCount++;
-                CDebug.Log(this, "Tile hit=" + tile.tileId + "," + tile.tileType + "," + tile.subType + "," + tile.tileLocation);
-                _tileInfos.Add(tile);
-            }
+            yield return null;
         }
+
+        if(!task.IsFaulted && !task.IsCanceled)
+        {
+            //Make sure to add it instead of assigning reference Result directly, this will cause issue of not retrieving tiles in unity
+            _tileInfos.AddRange(task.Result);
+        }
+
+        CDebug.Log(this, "_tileInfos.Count=" + _tileInfos.Count, LogType.Warning);   
     }
 }

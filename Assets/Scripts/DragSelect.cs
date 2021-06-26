@@ -101,6 +101,7 @@ public class DragSelect : MonoBehaviour
     public void OverrideOnEndDrag(PointerEventData eventData)
     {
         //tileInfoGetterArray.holdList = true;
+        tileInfoGetterArray.Scan();
         openRightClick.ResetValues();
         openRightClick.forceDisplay = true;
 

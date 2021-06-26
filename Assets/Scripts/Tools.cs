@@ -80,24 +80,6 @@ public class Tools : MonoBehaviour
         return tileInfos;
     }
 
-    public static int Exist<T>(List<T> list, T key) where T : TileInfo
-    {
-
-        int index = -1;
-
-        foreach (TileInfo tile in list)
-        {
-            index++;
-
-            if (tile.tileId == key.tileId)
-            {
-                return index;
-            }
-        }
-
-        return -1;
-    }
-
     public static List<T> MergeList<T>(List<T> selectedTiles, List<T> targetList) where T : TileInfo
     {
         List<T> sanitizeList = new List<T>();

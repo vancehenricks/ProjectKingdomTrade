@@ -74,9 +74,7 @@ public class TileOcclusion : MonoBehaviour
 
             tileValue.tileLocation = tile.tileLocation;
             tileValue.enabled = tile.tileEffect.imageImage.enabled;
-            tileValue.occlusion.screenSize = new Vector2Int(cm.pixelWidth, cm.pixelHeight);
             tileValue.worldPos = tile.transform.position;
-            tileValue.occlusion.overflow = overflow;
 
             tileValueList.Add(tileValue);
         }
@@ -95,26 +93,20 @@ public class TileOcclusion : MonoBehaviour
                 for (int i = 0; i < generatedTiles.Count; i++)
                 {
                     TileOcclusionValues tileOcclusionValues = generatedTiles[i];
-                    tileOcclusionValues.occlusion.screenPos = cm.WorldToScreenPoint(generatedTiles[i].worldPos);
+
+                    tileOcclusionValues.occlusion = new OcclusionValue(cm.WorldToScreenPoint(generatedTiles[i].worldPos),
+                     new Vector2Int(cm.pixelWidth, cm.pixelHeight),overflow);
+
                     generatedTiles[i] = tileOcclusionValues;
                 }
 
-                parallelInstance.Set(generatedTiles);
-                Task task = new Task(parallelInstance.Calculate);
-
-                task.Start();
+                Task task = parallelInstance.Start(generatedTiles);
                 task.Wait();
-                //WAIT:
-                //if(!task.IsCompleted)
+                
+                //while(!task.IsCompleted)
                 //{
                 //    yield return null;
-                //    goto WAIT;
                 //}  
-                /*yield return null;
-                if (!task.IsCompleted)
-                {
-                    task.Wait();
-                }*/
 
                 foreach (TileOcclusionValues tileValue in resultValueList)
                 {
@@ -144,20 +136,15 @@ public class TileOcclusion : MonoBehaviour
     private void Calculate(System.Action<List<TileOcclusionValues>, List<TileOcclusionValues>> result, List<TileOcclusionValues> tileValueList)
     {
         List<TileOcclusionValues> newTileValueList = new List<TileOcclusionValues>();
-        TileOcclusionValues newValue = new TileOcclusionValues();
 
         for(int i = 0; i < tileValueList.Count;i++)
         { 
-
+            TileOcclusionValues newValue = tileValueList[i];
             newValue.enabled = Tools.IsWithinCameraView(tileValueList[i].occlusion);
 
             if (newValue.enabled != tileValueList[i].enabled)
             {
-                TileOcclusionValues updateValue = tileValueList[i];
-                updateValue.enabled = newValue.enabled;
-                tileValueList[i] = updateValue;
-
-                newValue.tileLocation = tileValueList[i].tileLocation;
+                tileValueList[i] = newValue;
                 newTileValueList.Add(newValue);
             }
         }

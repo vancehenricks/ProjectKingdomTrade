@@ -68,12 +68,10 @@ public class PathFindingQueue : MonoBehaviour
             pipeline.task = new Task(pipeline.pathFinder.Peek().Calculate);
             pipeline.task.Start();
 
-            WAIT:
-            if(!pipeline.task.IsCompleted)
+            while(!pipeline.task.IsCompleted)
             {
                 yield return null;
-                goto WAIT;
-            }    
+            }   
 
             pipeline.pathFinder.Dequeue();
             CDebug.Log(this, "DEQUEUE pathFinders.Count=" + pipeline.pathFinder.Count, LogType.Warning);

@@ -30,7 +30,7 @@ public class CombatSession : MonoBehaviour
 
     public void Add(UnitInfo unitInfo)
     {
-        if (Tools.Exist(combatants, unitInfo) > -1) return;
+        if (combatants.Contains(unitInfo)) return;
 
         combatants.Add(unitInfo);
     }

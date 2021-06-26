@@ -30,6 +30,8 @@ public class TileEffect : MonoBehaviour
     public float summerTemp;
     public UnitWayPoint UnitWayPoint;
     public UnitDisplay unitDisplay;
+
+    public TileCollider tileCollider;
     //public int maxDaysBeforeRevert;
 
     //private int daysResultWinter;
@@ -90,6 +92,32 @@ public class TileEffect : MonoBehaviour
             _shadeImage = value;
         }
     }
+
+    protected virtual void Start()
+    {
+        tileCollider.onEnter += OnEnter;
+        tileCollider.onExit += OnExit;
+    }
+
+    protected virtual void OnDestroy()
+    {
+        tileCollider.onEnter -= OnEnter;
+        tileCollider.onExit -= OnExit;
+    }
+
+    //Different thread+
+    protected virtual void OnEnter(List<TileInfo> tiles)
+    {
+
+    }
+    //Different thread-
+
+    //Different thread+
+    protected virtual void OnExit(List<TileInfo> tiles)
+    {
+
+    }
+    //Different thread-
 
     public void UpdateTileEffect(CloudAction cloud, bool isExit)
     {

@@ -36,33 +36,40 @@ public class UnitEffect : TileEffect
     public NonWalkableTiles nonWalkableTiles;
     public UnitOcclusion unitOcclusion;
 
-    private void OnDestroy()
+    protected override void OnDestroy()
     {
         if (unitInfo.standingTile != null)
         {
             unitInfo.standingTile.standingTiles.Remove(unitInfo);
             ResetDisplay(unitInfo.standingTile);
         }
-    }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+        base.OnDestroy();
+    }
+    
+    //Different thread+
+    protected override void OnEnter(List<TileInfo> tileInfos)
     {
         if (unitInfo.tileType == "Town") return;
 
-        TileInfo tempTile = collision.GetComponent<TileInfo>();
-
-        if (tempTile == null) return;
-
-        if (tempTile.tileType != unitInfo.tileType)
+        foreach(TileInfo tile in tileInfos)
         {
-            transform.SetParent(tempTile.transform.parent);
-            tempTile.standingTiles.Add(unitInfo);
-            ResetDisplay(tempTile);
+            if (tile.tileType != unitInfo.tileType && !tile.standingTiles.Contains(unitInfo))
+            {
+                transform.SetParent(tile.transform.parent);
+                tile.standingTiles.Add(unitInfo);
+                ResetDisplay(tile);
+
+                unitInfo.standingTile = tile;
+                unitInfo.tileLocation = tile.tileLocation;
+                unitInfo.travelTime = tile.travelTime;
+                break;            
+            }
         }
-
     }
+    //Different thread-
 
-    private void OnTriggerStay2D(Collider2D collision)
+    /*private void OnTriggerStay2D(Collider2D collision)
     {
         if (unitInfo.tileType == "Town") return;
 
@@ -78,25 +85,25 @@ public class UnitEffect : TileEffect
         }
 
         unitInfo.localTemp = tempTile.localTemp;
-    }
+    }*/
 
-
-    private void OnTriggerExit2D(Collider2D collision)
+    //Different thread+
+    protected override void OnExit(List<TileInfo> tileInfos)
     {
         if (unitInfo.tileType == "Town") return;
 
-        TileInfo tempTile = collision.GetComponent<TileInfo>();
-
-        if (tempTile == null) return;
-
-        if (tempTile.tileType != unitInfo.tileType)
+        foreach(TileInfo tile in tileInfos)
         {
-            tempTile.standingTiles.Remove(unitInfo);
-            ResetDisplay(tempTile);
+            if (tile.tileType != unitInfo.tileType && tile.standingTiles.Contains(unitInfo))
+            {
+                tile.standingTiles.Remove(unitInfo);
+                ResetDisplay(tile);
+            }
         }
 
         //transform.SetParent(MapGenerator.init.grid);
     }
+    //Different thread-    
 
 
     public void ResetDisplay(TileInfo standingTile)

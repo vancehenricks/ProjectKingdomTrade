@@ -10,7 +10,6 @@ using UnityEngine;
 
 public class CloudEffectGround : MonoBehaviour
 {
-    public TileInfo tileInfo;
     public TileEffect tileEffect;
     public CloudAction cloudAction;
 

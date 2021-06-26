@@ -11,7 +11,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Threading.Tasks;
 
-public struct Cloud
+public struct CloudActionValues
 {
     public Vector3 pos;
     public Vector3 posA;
@@ -55,14 +55,13 @@ public class CloudAction : MonoBehaviour
     public Image image;
     public bool visible;
 
-    private Cloud cloud;
-    private ParallelInstance<Cloud> parallellInstance;
+    private CloudActionValues cloud;
+    private ParallelInstance<CloudActionValues> parallellInstance;
 
     private Coroutine move;
 
     private void Start()
     {
-
         if (grid.rect.width > defaultWidth && influenceByGrid)
         {
             maxLiveTime *= (grid.rect.width / divideWidth);
@@ -70,10 +69,8 @@ public class CloudAction : MonoBehaviour
 
         liveTime = Random.Range(minLiveTime, maxLiveTime);
 
-        cloud = new Cloud();
-        cloud.occlusion.overflow = TileOcclusion.init.overflow;
-
-        parallellInstance = new ParallelInstance<Cloud>(Calculate, (Cloud _cloud, Cloud original) => {cloud = _cloud;});
+        cloud = new CloudActionValues();
+        parallellInstance = new ParallelInstance<CloudActionValues>(Calculate, (CloudActionValues newCloud) => {cloud = newCloud;});
 
         StartCoroutine(FadeIn(0.1f));
         move = StartCoroutine(Move());
@@ -93,18 +90,14 @@ public class CloudAction : MonoBehaviour
                 cloud.offsetDespawn = offsetDespawn;
                 cloud.posA = posA.transform.position;
                 cloud.posB = posB.transform.position;
-                cloud.occlusion.screenPos = cm.WorldToScreenPoint(transform.position);
-                cloud.occlusion.screenSize = new Vector2Int(cm.pixelWidth, cm.pixelHeight);
+                cloud.occlusion = new OcclusionValue(cm.WorldToScreenPoint(transform.position), new Vector2Int(cm.pixelWidth, cm.pixelHeight),
+                 TileOcclusion.init.overflow);
 
-                parallellInstance.Set(cloud);
-                Task task = new Task(parallellInstance.Calculate);
-                task.Start();
+                Task task = parallellInstance.Start(cloud);
                 
-                WAIT:
-                if(!task.IsCompleted)
+                while(!task.IsCompleted)
                 {
                     yield return null;
-                    goto WAIT;
                 }  
 
                 liveTimeCounter = cloud.liveTimeCounter;
@@ -131,26 +124,28 @@ public class CloudAction : MonoBehaviour
     }
 
     //Seperate thread+
-    private void Calculate(System.Action<Cloud,Cloud> result, Cloud _cloud)
+    private void Calculate(System.Action<CloudActionValues> result, CloudActionValues _cloud)
     {
-        float diffXA = _cloud.pos.x - cloud.posA.x;
-        float diffXB = _cloud.pos.x - cloud.posB.x;
+        CloudActionValues newCloud = _cloud;
 
-        _cloud.newPos = Vector3.MoveTowards(_cloud.pos, new Vector3( _cloud.posB.x, _cloud.pos.y, _cloud.pos.z), 
-            (_cloud.tickSpeed * _cloud.speedModifier) * _cloud.deltaTime);
+        float diffXA = newCloud.pos.x - cloud.posA.x;
+        float diffXB = newCloud.pos.x - cloud.posB.x;
 
-        _cloud.liveTimeCounter = _cloud.liveTimeCounter + (_cloud.tickSpeed * _cloud.deltaTime);
+        newCloud.newPos = Vector3.MoveTowards(newCloud.pos, new Vector3( newCloud.posB.x, newCloud.pos.y, newCloud.pos.z), 
+            (newCloud.tickSpeed * newCloud.speedModifier) * newCloud.deltaTime);
 
-        if (diffXA >= -_cloud.offsetDespawn && diffXA <= _cloud.offsetDespawn
-            || diffXB >= -_cloud.offsetDespawn && diffXB <= _cloud.offsetDespawn
-            || _cloud.liveTimeCounter >= _cloud.liveTime || _cloud.speedModifier == 0f)
+        newCloud.liveTimeCounter = newCloud.liveTimeCounter + (newCloud.tickSpeed * newCloud.deltaTime);
+
+        if (diffXA >= -newCloud.offsetDespawn && diffXA <= newCloud.offsetDespawn
+            || diffXB >= -newCloud.offsetDespawn && diffXB <= newCloud.offsetDespawn
+            || newCloud.liveTimeCounter >= newCloud.liveTime || newCloud.speedModifier == 0f)
         {
-            _cloud.outOfBounds = true;
+            newCloud.outOfBounds = true;
         }
 
-        _cloud.enabledImage = Tools.IsWithinCameraView(_cloud.occlusion);
+        newCloud.enabledImage = Tools.IsWithinCameraView(newCloud.occlusion);
 
-        result(_cloud, _cloud);
+        result(newCloud);
     }
     //Seperate thread-
 

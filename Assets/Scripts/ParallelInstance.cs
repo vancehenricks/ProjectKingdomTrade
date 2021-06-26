@@ -13,23 +13,56 @@ using System.Threading.Tasks;
 
 public class ParallelInstance<T>
 {
-    private System.Action<System.Action<T,T>,T> action;
-    private System.Action<T,T> result;
+    private Task task;
+    private System.Action<System.Action<T,T>,T> action2;
+    private System.Action<System.Action<T>,T> action1;    
+    private System.Action<T,T> result2;
+    private System.Action<T> result1;    
     private T obj;
 
     public ParallelInstance(System.Action<System.Action<T,T>,T> _action, System.Action<T,T> _result)
     {
-        action = _action;
-        result = _result;
+        action2 = _action;
+        result2 = _result;
     }
 
-    public virtual void Set(T _obj)
+    public ParallelInstance(System.Action<System.Action<T>,T> _action, System.Action<T> _result)
+    {
+        result1 = _result;
+        action1 = _action;
+    }
+
+    public virtual Task Start(T _obj)
     {
         obj = _obj;
+        task = new Task(Calculate);
+        task.Start();
+
+        return task;
+    }
+
+    public virtual Task Start()
+    {
+        task.Start();
+        return task;
+    }
+
+    public Task Set(T _obj)
+    {
+        obj = _obj;
+        task = new Task(Calculate);
+        return task;
     }
 
     public virtual void Calculate()
     {
-        action(result, obj);
+        if(action1 != null)
+        {
+            action1(result1, obj);
+        }
+        else
+        {
+            action2(result2, obj);
+        }
     }
 }

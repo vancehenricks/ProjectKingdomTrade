@@ -25,7 +25,7 @@ public class PathFindingHandler : MonoBehaviour
     public int gwPointsIndex;
     public TileInfo tileDestination;
     public float arrivalTime;
-    public BoxCollider2D unitCollider2D;
+    //public BoxCollider2D unitCollider2D;
     private bool saveCache;
     private UnitEffect unitEffect;
     private bool isPathFinding;
@@ -83,9 +83,10 @@ public class PathFindingHandler : MonoBehaviour
         //Tick.init.tickUpdate -= TickUpdate;
         Vector3Int unitPos;
         Vector3Int desPos;
-        unitCollider2D.enabled = false;
+        //unitCollider2D.enabled = false;
         Transform previousParent = transform.parent;
         transform.SetParent(transform.parent.transform.parent);
+        unitEffect.tileCollider.Relay(false);
         //transform.SetAsLastSibling();
         do
         {
@@ -99,10 +100,11 @@ public class PathFindingHandler : MonoBehaviour
             yield return null;
         }
         while (unitPos != desPos);
-
         transform.position = tileDestination.transform.position;
-        transform.SetParent(previousParent);     
-        unitCollider2D.enabled = true;
+        transform.SetParent(previousParent);
+        unitEffect.tileCollider.UpdatePosition();
+        unitEffect.tileCollider.Relay();
+        //unitCollider2D.enabled = true;
         //yield return new WaitForEndOfFrame();
         transition = null;
         ResetDestination();

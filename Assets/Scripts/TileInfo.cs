@@ -4,12 +4,13 @@
  * Written by Vance Henricks Patual <vpatual@gmail.com>, January 2019
  */
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class TileInfo : MonoBehaviour
+public class TileInfo : MonoBehaviour, IEquatable<TileInfo>
 {
     protected Sprite _sprite;
     public Sprite sprite
@@ -50,6 +51,7 @@ public class TileInfo : MonoBehaviour
     public List<string> options;
     public List<TileInfo> standingTiles;
     public List<Upgrade> upgrades;
+    //public TileCollider tileCollider;
 
     protected virtual void Awake()
     {
@@ -71,6 +73,7 @@ public class TileInfo : MonoBehaviour
         TileList.init.Add(this);
         localTemp = Temperature.init.temperature;
         SetSprite(sprite);
+        tileEffect.tileCollider.Initialize();
     }
 
     public void OnDestroy()
@@ -98,4 +101,15 @@ public class TileInfo : MonoBehaviour
     {
         return _sprite;
     }
+
+
+    public bool Equals(TileInfo other)
+    {
+        if (tileId == other.tileId)
+        {
+            return true;
+        }
+        
+        return false;
+    }  
 }

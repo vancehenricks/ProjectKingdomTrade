@@ -35,11 +35,8 @@ public class UnitOcclusion : MonoBehaviour
         unitInfo = GetComponent<UnitInfo>();
         unitEffect = unitInfo.unitEffect;
 
-        unitValues.occlusion.overflow = TileOcclusion.init.overflow;
-        unitValues.occlusion.screenSize = new Vector2Int(cm.pixelWidth, cm.pixelHeight);
-
         parallelInstance = new ParallelInstance<UnitOcclusionValues>(Calculate,
-            (UnitOcclusionValues _result, UnitOcclusionValues _original) => {
+            (UnitOcclusionValues _result) => {
             unitValues = _result;
         });
 
@@ -55,27 +52,29 @@ public class UnitOcclusion : MonoBehaviour
     }
 
     //seperate thread+
-    private void Calculate(System.Action<UnitOcclusionValues,UnitOcclusionValues> result, UnitOcclusionValues unitValues)
+    private void Calculate(System.Action<UnitOcclusionValues> result, UnitOcclusionValues unitValues)
     {
+
+        UnitOcclusionValues newUnitValues = unitValues;
 
         if (Tools.IsWithinCameraView(unitValues.occlusion))
         {
             
             if (unitValues.getSiblingIndex == unitValues.childCount - 1)
             {
-                unitValues.enabled = true;
+                newUnitValues.enabled = true;
             }
             else if (unitValues.parentName != "Grid")
             {
-                unitValues.enabled = false;
+                newUnitValues.enabled = false;
             }
         }
         else
         {
-            unitValues.enabled = false;
+            newUnitValues.enabled = false;
         }
 
-        result(unitValues, unitValues);
+        result(unitValues);
 
     }
     //seperate thread-
@@ -85,20 +84,17 @@ public class UnitOcclusion : MonoBehaviour
 
         while (true)
         {
-            unitValues.occlusion.screenPos = cm.WorldToScreenPoint(unitInfo.transform.position);
+            unitValues.occlusion = new OcclusionValue(cm.WorldToScreenPoint(unitInfo.transform.position),
+             new Vector2Int(cm.pixelWidth, cm.pixelHeight), TileOcclusion.init.overflow);
             unitValues.getSiblingIndex = transform.GetSiblingIndex();
             unitValues.childCount = transform.parent.childCount;
             unitValues.parentName = transform.parent.name;
 
-            parallelInstance.Set(unitValues);
-            Task task = new Task(parallelInstance.Calculate);
-            task.Start();
+            Task task = parallelInstance.Start(unitValues);
 
-            WAIT:
-            if(!task.IsCompleted)
+            while(!task.IsCompleted)
             {
                 yield return null;
-                goto WAIT;
             }  
 
             unitEffect.imageImage.enabled = unitValues.enabled;

@@ -46,13 +46,13 @@ public class PathFinder
         tempCache = RetrieveTileInfos(pathFindValues.currentPoint, pathFindValues.finalPoint);
 
 
-        if (FinalizeTempCache(ref generatedWayPoints) || FindPath(ref generatedWayPoints))
+        if (FinalizeTempCache(generatedWayPoints) || FindPath(generatedWayPoints))
         {
             pathFindValues.onDoneCalculate(generatedWayPoints);
         }
     }
 
-    private bool FindPath(ref List<TileInfo> generatedWayPoints)
+    private bool FindPath(List<TileInfo> generatedWayPoints)
     {
         Dictionary<Vector2Int, Node> open = new Dictionary<Vector2Int, Node>();
         Dictionary<Vector2Int, Node> closed = new Dictionary<Vector2Int, Node>();
@@ -97,7 +97,7 @@ public class PathFinder
         return true;
     }
 
-    private bool FinalizeTempCache(ref List<TileInfo> generatedWayPoints)
+    private bool FinalizeTempCache(List<TileInfo> generatedWayPoints)
     {
         if (tempCache != null && tempCache.Count > 0 && CheckForWalkableTiles(tempCache))
         {

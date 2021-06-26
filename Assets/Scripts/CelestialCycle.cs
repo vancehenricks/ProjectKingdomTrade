@@ -11,7 +11,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Threading.Tasks;
 
-public struct Celestial
+public struct CelestialValues
 {
     public Vector3 sun;
     public Vector3 moon;
@@ -32,15 +32,15 @@ public class CelestialCycle : MonoBehaviour
     public Transform pointA;
     public Transform pointB;
 
-    private ParallelInstance<Celestial> parallelInstance;
-    private Celestial celestial;
+    private ParallelInstance<CelestialValues> parallelInstance;
+    private CelestialValues celestial;
 
     private Coroutine cycle;
 
     public void Initialize()
     {
-        celestial = new Celestial();
-        parallelInstance = new ParallelInstance<Celestial>(Calculate, (Celestial _celestial, Celestial orginal) => { celestial = _celestial; });
+        celestial = new CelestialValues();
+        parallelInstance = new ParallelInstance<CelestialValues>(Calculate, (CelestialValues _celestial) => { celestial = _celestial; });
         cycle = StartCoroutine(Cycle());
     }
 
@@ -53,21 +53,23 @@ public class CelestialCycle : MonoBehaviour
     }
 
     //Seperate thread+
-    private void Calculate(System.Action<Celestial,Celestial> _result, Celestial _celestial)
+    private void Calculate(System.Action<CelestialValues> _result, CelestialValues _celestial)
     {
+
+        CelestialValues newCelestial = _celestial;
 
         if (_celestial.isNight)
         {
-            _celestial.sun = Vector3.Lerp(_celestial.sun, _celestial.pointB, (_celestial.TickSpeed * 0.2f) * _celestial.deltaTime);
-            _celestial.moon = Vector3.Lerp(_celestial.moon, _celestial.pointA, (_celestial.TickSpeed * 0.8f) * _celestial.deltaTime);
+            newCelestial.sun = Vector3.Lerp(_celestial.sun, _celestial.pointB, (_celestial.TickSpeed * 0.2f) * _celestial.deltaTime);
+            newCelestial.moon = Vector3.Lerp(_celestial.moon, _celestial.pointA, (_celestial.TickSpeed * 0.8f) * _celestial.deltaTime);
         }
         else
         {
-            _celestial.sun = Vector3.Lerp(_celestial.sun, _celestial.pointA, (_celestial.TickSpeed * 0.8f) * _celestial.deltaTime);
-            _celestial.moon = Vector3.Lerp(_celestial.moon, _celestial.pointB, (_celestial.TickSpeed * 0.2f) * _celestial.deltaTime);
+            newCelestial.sun = Vector3.Lerp(_celestial.sun, _celestial.pointA, (_celestial.TickSpeed * 0.8f) * _celestial.deltaTime);
+            newCelestial.moon = Vector3.Lerp(_celestial.moon, _celestial.pointB, (_celestial.TickSpeed * 0.2f) * _celestial.deltaTime);
         }
 
-        _result(_celestial, _celestial);
+        _result(newCelestial);
     }
     //Seperate thread-
 
@@ -88,15 +90,11 @@ public class CelestialCycle : MonoBehaviour
             celestial.deltaTime = Time.deltaTime;
             celestial.isNight = NightDay.init.isNight();
 
-            parallelInstance.Set(celestial);
-            Task task = new Task(parallelInstance.Calculate);
-            task.Start();
+            Task task = parallelInstance.Start(celestial);
 
-            WAIT:
-            if(!task.IsCompleted)
+            while(!task.IsCompleted)
             {
                 yield return null;
-                goto WAIT;
             }
 
             //task.Wait();

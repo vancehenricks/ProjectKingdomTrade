@@ -7,7 +7,21 @@ using UnityEngine;
 
 public struct OcclusionValue
 {
-    public Vector3 screenPos;
-    public Vector2Int screenSize;
-    public int overflow;
+    readonly public Vector3 screenPos;
+    readonly public Vector2Int screenSize;
+    readonly public int overflow;
+
+    public OcclusionValue(Vector3 _screenPos, Vector2Int _screenSize, int _overflow) : this()
+    {
+        screenPos = _screenPos;
+        screenSize = _screenSize;
+        overflow = _overflow;
+    }
+
+    public OcclusionValue(OcclusionValue occlusionValue)
+    {
+        screenPos = occlusionValue.screenPos;
+        screenSize = occlusionValue.screenSize;
+        overflow = occlusionValue.overflow;
+    }
 }

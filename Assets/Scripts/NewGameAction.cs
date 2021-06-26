@@ -128,6 +128,7 @@ public class NewGameAction : MonoBehaviour
     {
         closeWindow.DoClose();
         LoadingHandler.init.SetActive(true);
+        TileColliderHandler.init.Initialize();
         yield return new WaitForSeconds(0.5f);
         grid.sizeDelta = new Vector2(w * Tools.tileSize, h * Tools.tileSize);
         SyncSize.init.doSync();

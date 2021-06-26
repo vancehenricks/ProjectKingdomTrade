@@ -8,92 +8,61 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Threading.Tasks;
 
 public class TileInfoGetterArray : MonoBehaviour
 {
     public int maxHits;
     //public bool holdList;
-
-    public BoxCollider2D boxCollider2D;
-
+    private BoxCollider2D boxCollider2D;
     public List<TileInfo> tileInfos;
     public List<TileInfo> baseTiles;
+    private Coroutine scan;
 
     //private int overflowCount;
 
     private void Start()
     {
         maxHits = TileInfoRaycaster.init.maxHits;
+        boxCollider2D = GetComponent<BoxCollider2D>();
     }
 
-    private void OnTriggerEnter2D(Collider2D col)
+    private void OnDestroy()
     {
-
-        /*if (overflowCount != 0)
-        {
-            overflowCount--;
-            return;
-        }*/
-
-        TileInfo temp = col.GetComponent<TileInfo>();
-
-        if (temp == null || tileInfos.Contains(temp)) return;
-
-        foreach (TileInfo tile in baseTiles)
-        {
-            if (tile.tileType == temp.tileType && tileInfos.Count < (maxHits - 1))
-            {
-                tileInfos.Add(temp);
-                break;
-            }
-            else if (tile.tileType == temp.tileType && tileInfos.Count == (maxHits - 1))
-            {
-                CDebug.Log(this, (maxHits - 1) + " = " + tileInfos.Count, LogType.Warning);
-                tileInfos.Add(temp);
-                //overflowCount = tileInfos.Count;
-                boxCollider2D.enabled = false;
-                break;
-            }
-        }
+      if(scan != null)
+      {
+          StopCoroutine(scan);
+      }
     }
 
-    /*private void OnTriggerExit2D(Collider2D col)
+    public void Scan()
     {
-        if (holdList) return;
+      if(scan != null)
+      {
+          StopCoroutine(scan);
+      }
+      scan = StartCoroutine(ScanCoroutine());
+    }
 
-        Debug.Log("REMOVING");
+    private IEnumerator ScanCoroutine()
+    {
+        Task<List<TileInfo>> task = TileColliderHandler.init.Cast(boxCollider2D.bounds, baseTiles, maxHits);  
 
-        if (overflowCount != 0)
+        while(!task.IsCompleted)
         {
-            overflowCount--;
-            return;
+            yield return null;
         }
 
-        if (overflowCount == 0 && !boxCollider2D.enabled)
+        if(!task.IsFaulted && !task.IsCanceled)
         {
-            overflowCount = tileInfos.Count;
-            boxCollider2D.enabled = true;
-            return;
+            tileInfos.AddRange(task.Result);
         }
-
-        TileInfo temp = col.GetComponent<TileInfo>();
-
-        if (temp == null) return;
-
-        foreach (TileInfo tile in baseTiles)
-        {
-            if (tile.tileType == temp.tileType)
-            {
-                tileInfos.Remove(temp);
-                break;
-            }
-        }
-    }*/
+    }
 
     public void Clear()
     {
         //overflowCount = 0;
-        boxCollider2D.enabled = true;
+        //boxCollider2D.enabled = true;
         tileInfos.Clear();
     }
 }
