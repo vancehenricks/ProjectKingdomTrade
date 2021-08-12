@@ -50,19 +50,22 @@ using UnityEngine.UI;
     
     public void Relay(bool isEnter = true)
     {
-        TileColliderHandler.init.Cast(currentBounds, null, -1, tileInfo, isEnter);        
+        TileColliderHandler.init.Relay(TileColliderHandler.init.Cast(currentBounds, null, -1/*, tileInfo, isEnter*/), tileInfo, isEnter);        
     }
 
     //Different thread+
-    public void OnCollosion(List<TileInfo> collosion, bool isEnter)
+    public void OnCollosion(List<TileInfo> tileInfos, bool isEnter)
     {
+
+        CDebug.Log(nameof(TileCollider), "tileInfos.Count= " + tileInfos.Count, LogType.Warning);
+
         if(isEnter && onEnter != null)
         {
-            onEnter(collosion);
+            onEnter(tileInfos);
         }
         else if(onExit != null)
         {
-            onExit(collosion);
+            onExit(tileInfos);
         }
     }
     //Different thread-

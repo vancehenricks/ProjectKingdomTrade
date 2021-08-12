@@ -73,7 +73,7 @@ public class TileInfo : MonoBehaviour, IEquatable<TileInfo>
         TileList.init.Add(this);
         localTemp = Temperature.init.temperature;
         SetSprite(sprite);
-        tileEffect.tileCollider.Initialize();
+        tileEffect.Initialize();
     }
 
     public void OnDestroy()

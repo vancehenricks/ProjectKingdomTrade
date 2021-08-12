@@ -104,7 +104,7 @@ public class GlobalSelectTiles : SelectTiles
             //DrawAndSyncFlag(tile, tile, baseSelect, false);
             UnitInfo unitInfo = (UnitInfo)tile;
             unitInfo.unitEffect.ResetDisplay(unitInfo.standingTile);
-            tile.transform.SetAsLastSibling();
+            //tile.transform.SetAsLastSibling();
             //issue with image is being treated as one instance;
 
         }

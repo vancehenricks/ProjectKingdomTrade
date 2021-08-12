@@ -52,8 +52,12 @@ public class UnitEffect : TileEffect
     {
         if (unitInfo.tileType == "Town") return;
 
+        CDebug.Log(nameof(UnitEffect), "tileInfos.Count= " + tileInfos.Count, LogType.Warning);
+
         foreach(TileInfo tile in tileInfos)
         {
+            CDebug.Log(nameof(UnitEffect), "tile.standingTiles.Count=" + tile.standingTiles.Count, LogType.Warning);
+
             if (tile.tileType != unitInfo.tileType && !tile.standingTiles.Contains(unitInfo))
             {
                 transform.SetParent(tile.transform.parent);

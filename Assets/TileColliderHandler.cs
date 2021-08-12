@@ -19,8 +19,8 @@ public class TileColliderHandlerValues
     public Bounds bounds;
     public Ray ray;
     public bool useRay;
-    public TileInfo origin;
-    public bool isEnter;
+    //public TileInfo origin;
+    //public bool isEnter;
     public List<TileInfo> filter;
     public int maxHits;
 
@@ -62,8 +62,8 @@ public class TileColliderHandler : MonoBehaviour
         Bounds bounds = colliderHandlerValues.bounds;
         Ray ray = colliderHandlerValues.ray;
         bool useRay = colliderHandlerValues.useRay;
-        TileInfo origin = colliderHandlerValues.origin;
-        bool isEnter = colliderHandlerValues.isEnter;
+        //TileInfo origin = colliderHandlerValues.origin;
+        //bool isEnter = colliderHandlerValues.isEnter;
         int maxHits = colliderHandlerValues.maxHits;
         int hitCount = 0;
         List<TileInfo> filter = colliderHandlerValues.filter;
@@ -109,7 +109,7 @@ public class TileColliderHandler : MonoBehaviour
             }
         }
 
-        if(origin != null)
+        /*if(origin != null)
         {
             List<TileInfo> withOutOrigin = new List<TileInfo>(tileInfos);
             withOutOrigin.Remove(origin);
@@ -123,29 +123,29 @@ public class TileColliderHandler : MonoBehaviour
                 if(origin.tileId == tile.tileId) continue;
                 tile.tileEffect.tileCollider.OnCollosion(withOrigin, isEnter);
             }
-        }
+        }*/
 
         return await Task.FromResult(tileInfos);
     }
     
-    public Task<List<TileInfo>> Cast(Ray ray, List<TileInfo> filter = null, int maxHits = -1,  bool isEnter = true)
+    public Task<List<TileInfo>> Cast(Ray ray, List<TileInfo> filter = null, int maxHits = -1  /*, bool isEnter = true*/)
     {
-        return Cast(new Bounds(), ray, true, filter, maxHits, null, isEnter);
+        return Cast(new Bounds(), ray, true, filter, maxHits/*, null, isEnter*/);
     }   
 
-    public Task<List<TileInfo>> Cast(Bounds bounds, List<TileInfo> filter = null, int maxHits = -1, TileInfo origin = null, bool isEnter = true)
+    public Task<List<TileInfo>> Cast(Bounds bounds, List<TileInfo> filter = null, int maxHits = -1 /*, TileInfo origin = null, bool isEnter = true*/)
     {
-        return Cast(bounds, new Ray(), false, filter, maxHits, origin, isEnter);
+        return Cast(bounds, new Ray(), false, filter, maxHits/*, origin, isEnter*/);
     }
 
-    public async Task<List<TileInfo>> Cast(Bounds bounds, Ray ray, bool useRay, List<TileInfo> filter, int maxHits, TileInfo origin, bool isEnter)
+    public async Task<List<TileInfo>> Cast(Bounds bounds, Ray ray, bool useRay, List<TileInfo> filter, int maxHits /*, TileInfo origin, bool isEnter*/)
     {
         Vector3 center = bounds.center;
         Bounds normalizedBounds = new Bounds(new Vector3(center.x, center.y), bounds.size);
 
         //CDebug.Log(this, "colliderValues.Count="+colliderHandlerValues.colliderValues.Count,LogType.Warning);
-        colliderHandlerValues.origin = origin;
-        colliderHandlerValues.isEnter = isEnter;
+        //colliderHandlerValues.origin = origin;
+        //colliderHandlerValues.isEnter = isEnter;
         colliderHandlerValues.bounds = normalizedBounds;
         colliderHandlerValues.ray = ray;
         colliderHandlerValues.useRay = useRay;
@@ -157,45 +157,39 @@ public class TileColliderHandler : MonoBehaviour
         return await task;
     }
 
+    public void Relay(Task<List<TileInfo>> task, TileInfo origin, bool isEnter)
+    {
+        StartCoroutine(RelayCoroutine(task, origin, isEnter));
+    }
+
+    private IEnumerator RelayCoroutine(Task<List<TileInfo>> task, TileInfo origin, bool isEnter)
+    {
+        while(!task.IsCompleted)
+        {
+            yield return null;
+        }
+
+        if(task.IsFaulted || task.IsCanceled) yield break;
+
+        List<TileInfo> tileInfos = task.Result;
+        origin.tileEffect.tileCollider.OnCollosion(tileInfos, isEnter);
+    }
+
+    //Naive approach could cause memory leak
     public void Add(TileInfo tile, Bounds previousBounds, Bounds currentBounds)
     {
-        TileInfo removedTile;
-        if(colliderHandlerValues.colliderValues.ContainsKey(previousBounds))
-        {
-            colliderHandlerValues.colliderValues[previousBounds].TryRemove(tile.tileId, out removedTile);
-        }
+        Remove(tile, previousBounds);
         colliderHandlerValues.colliderValues.TryAdd(currentBounds, new ConcurrentDictionary<long, TileInfo>());
         colliderHandlerValues.colliderValues[currentBounds].TryAdd(tile.tileId, tile);        
     }
 
     public void Remove(TileInfo tile, Bounds previousBounds)
     {
-        StartCoroutine(RemoveCoroutine(tile, previousBounds));
-    }
-
-    private IEnumerator RemoveCoroutine(TileInfo tile, Bounds previousBounds)
-    {
-        int timedOut = 30;
-
-        if(!colliderHandlerValues.colliderValues.ContainsKey(previousBounds)) yield break;
-
-        if(colliderHandlerValues.colliderValues[previousBounds].Count <= 1)
+        TileInfo removedTile;
+        if(colliderHandlerValues.colliderValues.ContainsKey(previousBounds))
         {
-            ConcurrentDictionary<long, TileInfo> removedSubGroup;
-            while(timedOut > 0 && !colliderHandlerValues.colliderValues.TryRemove(previousBounds, out removedSubGroup))
-            {
-                timedOut--;
-                yield return null;
-            }
-        }
-        else
-        {
-            TileInfo removedTile;
-            while(timedOut > 0 && !colliderHandlerValues.colliderValues[previousBounds].TryRemove(tile.tileId, out removedTile))
-            {
-                timedOut--;
-                yield return null;
-            }
+            colliderHandlerValues.colliderValues[previousBounds].TryRemove(tile.tileId, out removedTile);
         }
     }
+
 }

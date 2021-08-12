@@ -93,10 +93,11 @@ public class TileEffect : MonoBehaviour
         }
     }
 
-    protected virtual void Start()
+    public virtual void Initialize()
     {
         tileCollider.onEnter += OnEnter;
         tileCollider.onExit += OnExit;
+        tileCollider.Initialize();
     }
 
     protected virtual void OnDestroy()
