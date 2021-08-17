@@ -47,16 +47,15 @@ public class UnitEffect : TileEffect
         base.OnDestroy();
     }
     
-    //Different thread+
     protected override void OnEnter(List<TileInfo> tileInfos)
     {
         if (unitInfo.tileType == "Town") return;
 
-        CDebug.Log(nameof(UnitEffect), "tileInfos.Count= " + tileInfos.Count, LogType.Warning);
+        //CDebug.Log(nameof(UnitEffect), "tileInfos.Count= " + tileInfos.Count, LogType.Warning);
 
         foreach(TileInfo tile in tileInfos)
         {
-            CDebug.Log(nameof(UnitEffect), "tile.standingTiles.Count=" + tile.standingTiles.Count, LogType.Warning);
+            //CDebug.Log(nameof(UnitEffect), "tile.standingTiles.Count=" + tile.standingTiles.Count, LogType.Warning);
 
             if (tile.tileType != unitInfo.tileType && !tile.standingTiles.Contains(unitInfo))
             {
@@ -71,7 +70,6 @@ public class UnitEffect : TileEffect
             }
         }
     }
-    //Different thread-
 
     /*private void OnTriggerStay2D(Collider2D collision)
     {

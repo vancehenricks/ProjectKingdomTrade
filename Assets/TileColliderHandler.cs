@@ -188,7 +188,10 @@ public class TileColliderHandler : MonoBehaviour
         TileInfo removedTile;
         if(colliderHandlerValues.colliderValues.ContainsKey(previousBounds))
         {
-            colliderHandlerValues.colliderValues[previousBounds].TryRemove(tile.tileId, out removedTile);
+            if(!colliderHandlerValues.colliderValues[previousBounds].TryRemove(tile.tileId, out removedTile) && removedTile != null)
+            {
+                CDebug.Log(this, "Remove failed for removedTile.tileId=" + removedTile.tileId, LogType.Warning);
+            }
         }
     }
 

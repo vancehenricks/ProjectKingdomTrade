@@ -106,19 +106,15 @@ public class TileEffect : MonoBehaviour
         tileCollider.onExit -= OnExit;
     }
 
-    //Different thread+
     protected virtual void OnEnter(List<TileInfo> tiles)
     {
 
     }
-    //Different thread-
 
-    //Different thread+
     protected virtual void OnExit(List<TileInfo> tiles)
     {
 
     }
-    //Different thread-
 
     public void UpdateTileEffect(CloudAction cloud, bool isExit)
     {

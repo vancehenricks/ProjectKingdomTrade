@@ -48,6 +48,7 @@ public class PathFinder
 
         if (FinalizeTempCache(generatedWayPoints) || FindPath(generatedWayPoints))
         {
+            //CDebug.Log(this, "generatedWayPoint.Count=" + generatedWayPoints.Count, LogType.Warning);
             pathFindValues.onDoneCalculate(generatedWayPoints);
         }
     }
@@ -69,7 +70,7 @@ public class PathFinder
 
             if (current._tile.tileLocation == pathFindValues.finalPoint.tileLocation)
             {
-                generatedWayPoints = current.GenerateWaypoints();
+                generatedWayPoints.AddRange(current.GenerateWaypoints());
 
                 CDebug.Log(this, "unitInfo.tileId=" + pathFindValues.unitInfo.tileId + 
                     " Done Pathfinding! generatedWaypoints.Count=" + generatedWayPoints.Count, LogType.Warning);

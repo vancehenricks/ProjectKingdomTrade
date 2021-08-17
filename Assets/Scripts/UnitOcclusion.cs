@@ -74,7 +74,7 @@ public class UnitOcclusion : MonoBehaviour
             newUnitValues.enabled = false;
         }
 
-        result(unitValues);
+        result(newUnitValues);
 
     }
     //seperate thread-
@@ -89,6 +89,9 @@ public class UnitOcclusion : MonoBehaviour
             unitValues.getSiblingIndex = transform.GetSiblingIndex();
             unitValues.childCount = transform.parent.childCount;
             unitValues.parentName = transform.parent.name;
+
+            //CDebug.Log(nameof(UnitOcclusion), "transform.GetSiblingIndex()=" + unitValues.getSiblingIndex + 
+            //"transform.parent.childCount=" + unitValues.childCount + "unitValues.enabled=" + unitValues.enabled, LogType.Warning);
 
             Task task = parallelInstance.Start(unitValues);
 
