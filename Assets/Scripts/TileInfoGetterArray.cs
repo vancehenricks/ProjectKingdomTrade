@@ -46,7 +46,7 @@ public class TileInfoGetterArray : MonoBehaviour
 
     private IEnumerator ScanCoroutine()
     {
-        Task<List<TileInfo>> task = TileColliderHandler.init.Cast(boxCollider2D.bounds, baseTiles, maxHits);  
+        Task<List<BaseInfo>> task = TileColliderHandler.init.Cast(boxCollider2D.bounds, Tools.ConvertTileToBaseInfo(baseTiles), maxHits);  
 
         while(!task.IsCompleted)
         {
@@ -55,7 +55,7 @@ public class TileInfoGetterArray : MonoBehaviour
 
         if(!task.IsFaulted && !task.IsCanceled)
         {
-            tileInfos.AddRange(task.Result);
+            tileInfos.AddRange(Tools.ConvertBaseToTileInfo(task.Result));
         }
     }
 

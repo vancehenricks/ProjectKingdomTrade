@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class TileInfo : MonoBehaviour, IEquatable<TileInfo>
+public class TileInfo : BaseInfo, IEquatable<TileInfo>
 {
     protected Sprite _sprite;
     public Sprite sprite
@@ -25,15 +25,15 @@ public class TileInfo : MonoBehaviour, IEquatable<TileInfo>
         }
     }
 
-    public string tileType;
-    public string subType;
-    public long tileId;
+    //public string tileType;
+    //public string subType;
+    //public long tileId;
     public string tileName;
     public PlayerInfo playerInfo;
     public HashSet<PlayerInfo> claimants;
     public TileEffect tileEffect;
     //Tilelocation already has tile size accomodated to it no need for dividing 25 again
-    public Vector2Int tileLocation;
+    //public Vector2Int tileLocation;
     public float localTemp;
     public float travelTime; //seconds
     public bool isPlayer;
@@ -76,7 +76,7 @@ public class TileInfo : MonoBehaviour, IEquatable<TileInfo>
         tileEffect.Initialize();
     }
 
-    public void OnDestroy()
+    public virtual void OnDestroy()
     {
         if (claimants != null) claimants.Clear();
         //TileList.init.Remove(this); this causes timing issue with dictionary moved to UnitInfo instead

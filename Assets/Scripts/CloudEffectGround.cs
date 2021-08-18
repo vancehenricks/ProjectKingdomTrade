@@ -33,19 +33,19 @@ public class CloudEffectGround : MonoBehaviour
 
         if (cloud == null) return;
 
-        if (tileEffect != null && tileEffect.tileInfo.tileType != "Edge" && cloudAction.type == "Cloud" && cloud.type == "Cloud")
+        if (tileEffect != null && tileEffect.tileInfo.tileType != "Edge" && cloudAction.subType == "Cloud" && cloud.subType == "Cloud")
         {
             CloudCycle.init.GenerateTornado(cloudAction, cloud);
         }
-        else if (cloudAction.type == "Cloud")
+        else if (cloudAction.subType == "Cloud")
         {
             cloudAction.markedForDestroy = true;
         }
-        else if (cloudAction.type == "Tornado" && cloud.type == "Cloud")
+        else if (cloudAction.subType == "Tornado" && cloud.subType == "Cloud")
         {
             cloudAction.liveTimeCounter -= cloud.collidePoints;
         }
-        else if (cloudAction.type == "Tornado" && cloud.type == "Tornado")
+        else if (cloudAction.subType == "Tornado" && cloud.subType == "Tornado")
         {
             CloudCycle.init.GenerateTornado(cloudAction, cloud);
         }

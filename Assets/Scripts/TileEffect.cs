@@ -31,7 +31,7 @@ public class TileEffect : MonoBehaviour
     public UnitWayPoint UnitWayPoint;
     public UnitDisplay unitDisplay;
 
-    public TileCollider tileCollider;
+    //public TileCollider tileCollider;
     //public int maxDaysBeforeRevert;
 
     //private int daysResultWinter;
@@ -95,23 +95,23 @@ public class TileEffect : MonoBehaviour
 
     public virtual void Initialize()
     {
-        tileCollider.onEnter += OnEnter;
-        tileCollider.onExit += OnExit;
-        tileCollider.Initialize();
+        tileInfo.tileCollider.onEnter += OnEnter;
+        tileInfo.tileCollider.onExit += OnExit;
+        tileInfo.tileCollider.Initialize();
     }
 
     protected virtual void OnDestroy()
     {
-        tileCollider.onEnter -= OnEnter;
-        tileCollider.onExit -= OnExit;
+        tileInfo.tileCollider.onEnter -= OnEnter;
+        tileInfo.tileCollider.onExit -= OnExit;
     }
 
-    protected virtual void OnEnter(List<TileInfo> tiles)
+    protected virtual void OnEnter(List<BaseInfo> tiles)
     {
 
     }
 
-    protected virtual void OnExit(List<TileInfo> tiles)
+    protected virtual void OnExit(List<BaseInfo> tiles)
     {
 
     }

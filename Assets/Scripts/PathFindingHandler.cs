@@ -86,7 +86,7 @@ public class PathFindingHandler : MonoBehaviour
         //unitCollider2D.enabled = false;
         Transform previousParent = transform.parent;
         transform.SetParent(transform.parent.transform.parent);
-        unitEffect.tileCollider.Relay(false);
+        unitInfo.tileCollider.Relay(false);
         //transform.SetAsLastSibling();
         do
         {
@@ -102,8 +102,8 @@ public class PathFindingHandler : MonoBehaviour
         while (unitPos != desPos);
         transform.position = tileDestination.transform.position;
         transform.SetParent(previousParent);
-        unitEffect.tileCollider.UpdatePosition();
-        unitEffect.tileCollider.Relay();
+        unitInfo.tileCollider.UpdatePosition();
+        unitInfo.tileCollider.Relay();
         //unitCollider2D.enabled = true;
         //yield return new WaitForEndOfFrame();
         transition = null;

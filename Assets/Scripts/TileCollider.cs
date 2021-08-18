@@ -15,18 +15,19 @@ using UnityEngine.UI;
 
     //private BoxCollider2D boxCollider2D;
     public Vector2 size;
+    public List<BaseInfo> filter;
     public Bounds previousBounds;
     public Bounds currentBounds;
-    private TileInfo tileInfo;
+    private BaseInfo baseInfo;
     private RectTransform rect;
 
-    public System.Action<List<TileInfo>> onEnter, onExit;
+    public System.Action<List<BaseInfo>> onEnter, onExit;
 
     public void Initialize()
     {
         //boxCollider2D = GetComponent<BoxCollider2D>();
         rect = GetComponent<RectTransform>();
-        tileInfo = GetComponent<TileInfo>();
+        baseInfo = GetComponent<BaseInfo>();
         currentBounds = new Bounds(transform.position,size);
         UpdatePosition();
         Relay();
@@ -38,34 +39,34 @@ using UnityEngine.UI;
         //onCollosion = null;
         onEnter = null;
         onExit = null;
-        TileColliderHandler.init.Remove(tileInfo, currentBounds);  
+        TileColliderHandler.init.Remove(baseInfo, currentBounds);  
     }
 
     public void UpdatePosition()
     {
         previousBounds = currentBounds;
         currentBounds = new Bounds(transform.position,size);
-        TileColliderHandler.init.Add(tileInfo, previousBounds, currentBounds);  
+        TileColliderHandler.init.Add(baseInfo, previousBounds, currentBounds);  
     }
     
     public void Relay(bool isEnter = true)
     {
-        TileColliderHandler.init.Relay(TileColliderHandler.init.Cast(currentBounds, null, -1/*, tileInfo, isEnter*/), tileInfo, isEnter);        
+        TileColliderHandler.init.Relay(TileColliderHandler.init.Cast(currentBounds, filter, -1, true), baseInfo, isEnter);        
     }
 
     //Different thread+
-    public void OnCollosion(List<TileInfo> tileInfos, bool isEnter)
+    public void OnCollosion(List<BaseInfo> baseInfos, bool isEnter)
     {
 
-        CDebug.Log(nameof(TileCollider), "tileInfos.Count= " + tileInfos.Count, LogType.Warning);
+        CDebug.Log(nameof(TileCollider), "baseInfos.tileId=" + baseInfo.tileId + " baseInfos.Count=" + baseInfos.Count, LogType.Warning);
 
         if(isEnter && onEnter != null)
         {
-            onEnter(tileInfos);
+            onEnter(baseInfos);
         }
         else if(onExit != null)
         {
-            onExit(tileInfos);
+            onExit(baseInfos);
         }
     }
     //Different thread-

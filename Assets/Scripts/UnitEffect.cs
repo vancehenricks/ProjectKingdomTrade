@@ -47,13 +47,13 @@ public class UnitEffect : TileEffect
         base.OnDestroy();
     }
     
-    protected override void OnEnter(List<TileInfo> tileInfos)
+    protected override void OnEnter(List<BaseInfo> baseInfos)
     {
         if (unitInfo.tileType == "Town") return;
 
         //CDebug.Log(nameof(UnitEffect), "tileInfos.Count= " + tileInfos.Count, LogType.Warning);
 
-        foreach(TileInfo tile in tileInfos)
+        foreach(TileInfo tile in baseInfos)
         {
             //CDebug.Log(nameof(UnitEffect), "tile.standingTiles.Count=" + tile.standingTiles.Count, LogType.Warning);
 
@@ -90,11 +90,11 @@ public class UnitEffect : TileEffect
     }*/
 
     //Different thread+
-    protected override void OnExit(List<TileInfo> tileInfos)
+    protected override void OnExit(List<BaseInfo> baseInfos)
     {
         if (unitInfo.tileType == "Town") return;
 
-        foreach(TileInfo tile in tileInfos)
+        foreach(TileInfo tile in baseInfos)
         {
             if (tile.tileType != unitInfo.tileType && tile.standingTiles.Contains(unitInfo))
             {

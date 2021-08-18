@@ -75,7 +75,14 @@ public class TileInfoRaycaster : MonoBehaviour
     {
          Ray ray = cm.ScreenPointToRay(pos);
         //bounds.extents = Vector3.one;
-        Task<List<TileInfo>> task = TileColliderHandler.init.Cast(ray, filter, maxHits);
+        List<BaseInfo> baseFilter = null;
+
+        if (filter != null)
+        {
+            baseFilter = Tools.ConvertTileToBaseInfo(filter);
+        }
+
+        Task<List<BaseInfo>> task = TileColliderHandler.init.Cast(ray, baseFilter, maxHits);
 
         while(!task.IsCompleted)
         {
@@ -85,7 +92,7 @@ public class TileInfoRaycaster : MonoBehaviour
         if(!task.IsFaulted && !task.IsCanceled)
         {
             //Make sure to add it instead of assigning reference Result directly, this will cause issue of not retrieving tiles in unity
-            _tileInfos.AddRange(task.Result);
+            _tileInfos.AddRange(Tools.ConvertBaseToTileInfo(task.Result));
         }
 
         CDebug.Log(this, "_tileInfos.Count=" + _tileInfos.Count, LogType.Warning);   

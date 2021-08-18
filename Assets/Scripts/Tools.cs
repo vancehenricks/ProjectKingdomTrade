@@ -280,4 +280,28 @@ public class Tools : MonoBehaviour
             return false;
         }
     }
+
+    public static List<BaseInfo> ConvertTileToBaseInfo (List<TileInfo> tInfos)
+    {
+        List<BaseInfo> bInfos = new List<BaseInfo>();
+
+        foreach(BaseInfo bInfo in tInfos)
+        {
+            bInfos.Add(bInfo);
+        }
+
+        return bInfos;
+    }
+
+    public static List<TileInfo> ConvertBaseToTileInfo (List<BaseInfo> bInfos)
+    {
+        List<TileInfo> tInfos = new List<TileInfo>();
+
+        foreach(TileInfo tInfo in bInfos)
+        {
+            tInfos.Add(tInfo);
+        }
+
+        return tInfos;
+    }
 }

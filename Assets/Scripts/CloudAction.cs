@@ -28,10 +28,10 @@ public struct CloudActionValues
     public OcclusionValue occlusion;
 }
 
-public class CloudAction : MonoBehaviour
+public class CloudAction : BaseInfo
 {
     public Camera cm;
-    public string type;
+    //public string type;
     public float spawnChance;
     public CloudCycle cloudCycle;
     public RectTransform grid;
