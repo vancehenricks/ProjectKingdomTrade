@@ -32,7 +32,7 @@ public static class CDebug
             exParam = MapGenerator.init.width + "x" + MapGenerator.init.height + " " + MapGenerator.init.xOffset.ToString("0.00") + "," +
                 MapGenerator.init.yOffset.ToString("0.00") + "," + MapGenerator.init.scale.ToString("0.00") + " " +
                 Tick.init.day + "/" + Tick.init.month + "/" + Tick.init.year + " " +
-                Tick.init.seconds + " " + Temperature.init.temperature + "c " + ClimateControl.init.Climate() + "|";
+                Tick.init.tick + " " + Temperature.init.temperature + "c " + ClimateControl.init.Climate() + "|";
         }
 
         output += exParam + objName.Replace('|', ' ') + " " + methodName + ":" + lineNumber + "|" + debug;

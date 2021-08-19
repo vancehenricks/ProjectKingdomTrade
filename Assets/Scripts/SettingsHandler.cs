@@ -21,11 +21,9 @@ public class SettingsHandler : MonoBehaviour
     }
 
     public CameraDraggableWindow cameraDraggableWindow;
-    public ResetCenter resetCenter;
     public HideBorder hideTerritory;
     public CloudCycle cloudCycle;
     public ZoomingWindow zoomingWindow;
-    public TimeWindowAction timeWindowAction;
 
     private void Awake()
     {
@@ -77,7 +75,7 @@ public class SettingsHandler : MonoBehaviour
         HideObjectHandler.init.hideObjects["hideUI"].key = (KeyCode)Enum.Parse(typeof(KeyCode), settingsConfig.hideUIKey);
         cameraDraggableWindow.isMouseLock = settingsConfig.cursorEdgeMove;
         cameraDraggableWindow.mouseLockKey = (KeyCode)Enum.Parse(typeof(KeyCode), settingsConfig.cursorEdgeMoveKey);
-        resetCenter.key = (KeyCode)Enum.Parse(typeof(KeyCode), settingsConfig.centerCameraKey);
+        ResetCenter.init.key = (KeyCode)Enum.Parse(typeof(KeyCode), settingsConfig.centerCameraKey);
 
         HideObjectHandler.init.hideObjects["showConsole"].key = (KeyCode)Enum.Parse(typeof(KeyCode), settingsConfig.showConsole);
         HideObjectHandler.init.hideObjects["showDebug"].key = (KeyCode)Enum.Parse(typeof(KeyCode), settingsConfig.debugWindowKey);
@@ -86,7 +84,7 @@ public class SettingsHandler : MonoBehaviour
         zoomingWindow.minScale = settingsConfig.minZoomScale;
         zoomingWindow.maxScale = settingsConfig.maxZoomScale;
         zoomingWindow.maxScaleMultipler = settingsConfig.maxZoomMultiplier;
-        timeWindowAction.maxSpeed = settingsConfig.maxTimeSpeed;
+        TimeWindowAction.init.maxSpeed = settingsConfig.maxTimeSpeed;
 
 
         return settingsConfig;
@@ -166,7 +164,7 @@ public class SettingsHandler : MonoBehaviour
 
         if (settingsConfig.centerCameraKey == null)
         {
-            settingsConfig.centerCameraKey = resetCenter.key.ToString();
+            settingsConfig.centerCameraKey = ResetCenter.init.key.ToString();
         }
 
         if (settingsConfig.showConsole == null)
@@ -201,7 +199,7 @@ public class SettingsHandler : MonoBehaviour
 
         if (settingsConfig.maxTimeSpeed == 0)
         {
-            settingsConfig.maxTimeSpeed = timeWindowAction.maxSpeed;
+            settingsConfig.maxTimeSpeed = TimeWindowAction.init.maxSpeed;
         }
 
         return settingsConfig;

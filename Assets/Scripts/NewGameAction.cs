@@ -132,7 +132,7 @@ public class NewGameAction : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         grid.sizeDelta = new Vector2(w * Tools.tileSize, h * Tools.tileSize);
         SyncSize.init.doSync();
-        resetCenter.DoAction();
+        ResetCenter.init.Initialize();
         LoadingHandler.init.Set(0.3f, "[GENERATING-TILES]");
         yield return new WaitForSeconds(0.5f);
         MapGenerator.init.Initialize(x,y,s);
@@ -148,6 +148,7 @@ public class NewGameAction : MonoBehaviour
         zoomingWindow.Initialize();
         TileOcclusion.init.Initialize();
         PathFindingQueue.init.Initialize();
+        //TimeWindowAction.init.Initialize();
         LoadingHandler.init.SetActive(false);
         openWindow.DoOpen();
     }

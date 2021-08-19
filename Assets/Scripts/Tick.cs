@@ -18,16 +18,27 @@ public class Tick : MonoBehaviour
         private set { _init = value; }
     }
 
-    public int speed;
-    public float realSpeed { get; private set; }
-    public float dayToSecond { get; private set; }
-    public double realSeconds { get; private set; }
-    public float seconds { get; private set; }
-    public int day { get; private set; }
-    public long realDays { get; private set; }
-    public int month { get; private set; }
-    public long realMonths { get; private set; }
-    public int year { get; private set; }
+    private int _speed;
+
+    public int speed 
+    {
+        get 
+        {
+            return _speed;
+        }
+
+        set 
+        {
+            secondPerTick = 1f / value;
+            _speed = value;
+        }
+    }
+
+    public float secondPerTick { get; private set; }
+    public long tick { get; private set; }
+    public long day { get; private set; }
+    public long month { get; private set; }
+    public long year { get; private set; }
 
     public delegate void TickUpdate();
     public TickUpdate tickUpdate;
@@ -41,14 +52,10 @@ public class Tick : MonoBehaviour
 
     public void Initialize()
     {
-        realSeconds = 5f;
-        seconds = 5f;
+        tick = 5;
         speed = 1;
-        dayToSecond = 24f;
         day = 24;
-        realDays = 24;
         month = 8;
-        realMonths = 8;
         year = 500;
         startTick = StartCoroutine(StartTick());
     }
@@ -62,7 +69,7 @@ public class Tick : MonoBehaviour
         tickUpdate = null;
     }
 
-    IEnumerator StartTick()
+    private IEnumerator StartTick()
     {
 
         while (true)
@@ -71,39 +78,37 @@ public class Tick : MonoBehaviour
             if (speed != 0)
             {
 
-                realSeconds++;
-
                 if (Tick.init.tickUpdate != null)
                 {
                     Tick.init.tickUpdate();
                 }
 
-                seconds++;
-                realSpeed = 1f / speed;
+                tick++;
 
-                if (seconds >= dayToSecond + 1)
+                if (tick > 24)
                 {
                     day++;
-                    realDays++;
-                    seconds = 1;
+                    tick = 1;
                 }
 
-                if (day >= 30)
+                if (day > 30)
                 {
                     month++;
-                    realMonths++;
                     day = 1;
                 }
 
-                if (month >= 12)
+                if (month > 12)
                 {
                     year++;
                     month = 1;
                 }
-            }
 
-            //Debug.Log("Seconds: "+ seconds + " Day:" +day+ " Month:" +month+ " Year:" +year);
-            yield return new WaitForSecondsRealtime(realSpeed);
+                yield return new WaitForSecondsRealtime(secondPerTick);
+            }
+            
+            yield return null;
+            //CDebug.Log(this, "speed:" + speed + " secondPerTick:" + secondPerTick + " Tick:"+ tick + " Day:" +day+ " Month:" +month+ " Year:" +year, LogType.Warning);
+
         }
     }
 }

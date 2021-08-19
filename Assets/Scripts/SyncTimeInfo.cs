@@ -31,7 +31,7 @@ public class SyncTimeInfo : MonoBehaviour
 
     private void TickUpdate()
     {
-        time.text = "" + Tick.init.seconds;
+        time.text = "" + Tick.init.tick;
         temperature.text = "" + Mathf.RoundToInt(Temperature.init.temperature);
         date.text = Tick.init.day + "/" + Tick.init.month + "/" + Tick.init.year;
     }

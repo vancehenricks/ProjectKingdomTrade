@@ -80,6 +80,8 @@ public class PathFindingHandler : MonoBehaviour
 
     private IEnumerator Transition()
     {
+        //yield return new WaitUntil(() => Tick.init.tick > ((Tick.init.tick+5) % 24));
+
         //Tick.init.tickUpdate -= TickUpdate;
         Vector3Int unitPos;
         Vector3Int desPos;

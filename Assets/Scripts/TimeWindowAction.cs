@@ -12,6 +12,13 @@ using UnityEngine;
 public class TimeWindowAction : MonoBehaviour
 {
 
+    private static TimeWindowAction _init;
+    public static TimeWindowAction init
+    {
+        get { return _init; }
+        private set { _init = value; }
+    }
+
     public int speed;
     public int maxSpeed;
     public int minSpeed;
@@ -21,6 +28,11 @@ public class TimeWindowAction : MonoBehaviour
 
     private int savedSpeed;
     private bool isPaused;
+
+    private void Awake()
+    {
+        init = this;
+    }
 
     private void Update()
     {
@@ -54,7 +66,7 @@ public class TimeWindowAction : MonoBehaviour
 
             if (Tick.init.speed <= minSpeed)
             {
-                Tick.init.speed = 1;
+                Tick.init.speed = speed;
             }
             else
             {

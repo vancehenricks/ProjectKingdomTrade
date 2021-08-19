@@ -85,11 +85,11 @@ public class NightDay : MonoBehaviour
     public bool isNight()
     {
 
-        if (Tick.init.seconds >= sunset)
+        if (Tick.init.tick >= sunset)
         {
             return true;
         }
-        else if (Tick.init.seconds >= sunrise)
+        else if (Tick.init.tick >= sunrise)
         {
             return false;
         }
