@@ -67,7 +67,12 @@ public class ResetCenter : MonoBehaviour
 
             for(int i = currentIndex;i < selectPos.Count;i++)
             {
-                Vector2 nextPos = selectPos[i].transform.position;
+                Vector2 nextPos = pos;
+                
+                if(selectPos[i] != null)
+                {
+                    nextPos = selectPos[i].transform.position;
+                }
 
                 if (pos != nextPos)
                 {

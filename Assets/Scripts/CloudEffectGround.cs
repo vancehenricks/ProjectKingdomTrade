@@ -10,59 +10,77 @@ using UnityEngine;
 
 public class CloudEffectGround : MonoBehaviour
 {
-    public TileEffect tileEffect;
     public CloudAction cloudAction;
 
-    private void OnTriggerEnter2D(Collider2D col)
+    private void Start()
+    {
+        cloudAction.tileCollider.onEnter += OnEnter;
+        cloudAction.tileCollider.onExit += OnExit;
+        cloudAction.tileCollider.Initialize();
+        Tick.init.tickUpdate += TickUpdate;
+    }
+
+    private void OnDestroy()
+    {
+        cloudAction.tileCollider.onEnter -= OnEnter;
+        cloudAction.tileCollider.onExit -= OnExit;
+        Tick.init.tickUpdate -= TickUpdate;
+    }
+
+    private void TickUpdate()
+    {
+        //cloudAction.tileCollider.Relay(false);
+        //cloudAction.tileCollider.UpdatePosition();
+        //cloudAction.tileCollider.Relay();
+
+        //CDebug.Log(this, "Moving...", LogType.Warning);
+    }
+
+    private void OnEnter(List<BaseInfo> baseInfos)
     {
 
-        if (col.gameObject.layer != this.gameObject.layer)
+        foreach(BaseInfo baseInfo in baseInfos)
         {
-            tileEffect = col.gameObject.GetComponent<TileEffect>();
+            TileInfo tileInfo = baseInfo as TileInfo; 
 
-            if (tileEffect == null)
+            if (tileInfo != null)
             {
-                return;
+                tileInfo.tileEffect.UpdateTileEffect(cloudAction, false);
             }
 
-            tileEffect.UpdateTileEffect(cloudAction, false);
+            CloudAction cloud = baseInfo as CloudAction;
 
-        }
+            if (cloud == null) return;
 
-        CloudAction cloud = col.GetComponent<CloudAction>();
-
-        if (cloud == null) return;
-
-        if (tileEffect != null && tileEffect.tileInfo.tileType != "Edge" && cloudAction.subType == "Cloud" && cloud.subType == "Cloud")
-        {
-            CloudCycle.init.GenerateTornado(cloudAction, cloud);
-        }
-        else if (cloudAction.subType == "Cloud")
-        {
-            cloudAction.markedForDestroy = true;
-        }
-        else if (cloudAction.subType == "Tornado" && cloud.subType == "Cloud")
-        {
-            cloudAction.liveTimeCounter -= cloud.collidePoints;
-        }
-        else if (cloudAction.subType == "Tornado" && cloud.subType == "Tornado")
-        {
-            CloudCycle.init.GenerateTornado(cloudAction, cloud);
+            if (cloudAction.subType == "Cloud" && cloud.subType == "Cloud")
+            {
+                CloudCycle.init.GenerateTornado(cloudAction, cloud);
+            }
+            else if (cloudAction.subType == "Cloud")
+            {
+                cloudAction.markedForDestroy = true;
+            }
+            else if (cloudAction.subType == "Tornado" && cloud.subType == "Cloud")
+            {
+                cloudAction.liveTimeCounter -= cloud.collidePoints;
+            }
+            else if (cloudAction.subType == "Tornado" && cloud.subType == "Tornado")
+            {
+                CloudCycle.init.GenerateTornado(cloudAction, cloud);
+            }
         }
     }
 
-    private void OnTriggerExit2D(Collider2D col)
+    private void OnExit(List<BaseInfo> baseInfos)
     {
-        if (col.gameObject.layer != this.gameObject.layer)
-        {
-            tileEffect = col.gameObject.GetComponent<TileEffect>();
+        foreach(BaseInfo baseInfo in baseInfos)
+        {        
+            TileInfo tileInfo = baseInfo as TileInfo; 
 
-            if (tileEffect == null)
+            if (tileInfo != null)
             {
-                return;
+                tileInfo.tileEffect.UpdateTileEffect(cloudAction, true);
             }
-
-            tileEffect.UpdateTileEffect(cloudAction, true);
         }
     }
 

@@ -90,7 +90,7 @@ public class TileColliderHandler : MonoBehaviour
                 {
                     if(hitCount > maxHits && maxHits != -1) break;
 
-                    if(filter != null)
+                    if(filter != null && filter.Count > 0)
                     {
                         foreach(BaseInfo fTile in filter)
                         {
