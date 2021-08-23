@@ -21,7 +21,9 @@ using UnityEngine.UI;
     private BaseInfo baseInfo;
     private RectTransform rect;
 
-    public System.Action<List<BaseInfo>> onEnter, onExit;
+    public System.Action<List<BaseInfo>> onEnter, onStay, onExit;
+
+    public List<BaseInfo> previousBaseInfos;
 
     public void Initialize()
     {
@@ -42,11 +44,50 @@ using UnityEngine.UI;
         TileColliderHandler.init.Remove(baseInfo, currentBounds);  
     }
 
-    public void UpdatePosition()
+    public void UpdatePosition(bool observer = false)
     {
         previousBounds = currentBounds;
         currentBounds = new Bounds(transform.position,size);
-        TileColliderHandler.init.Add(baseInfo, previousBounds, currentBounds);  
+
+        if(!observer)
+        {
+            TileColliderHandler.init.Add(baseInfo, previousBounds, currentBounds);  
+        }
+    }
+
+    public void Listen()
+    {
+        //still need further improvement
+        TileColliderHandler.init.Cast((List<BaseInfo> baseInfos) => {
+            //OnCollosion(baseInfos, true);
+            
+            List<BaseInfo> exit = new List<BaseInfo>();
+
+            if(previousBaseInfos.Count > 0)
+            {
+                foreach(BaseInfo baseInfo in baseInfos)
+                {
+                    foreach(BaseInfo prevBaseInfo in previousBaseInfos)
+                    {
+                        if(baseInfo.tileId == prevBaseInfo.tileId)
+                        {
+                            exit.Add(baseInfo);
+                        }
+                    }
+                }
+
+                foreach(BaseInfo baseInfo in exit)
+                {
+                    baseInfos.Remove(baseInfo);
+                }
+                
+                OnCollosion(exit, false);
+            }
+            
+            OnCollosion(baseInfos, true);
+            previousBaseInfos = baseInfos;
+
+        }, currentBounds, filter, -1, true);
     }
     
     public void Relay(bool isEnter = true)
@@ -54,7 +95,6 @@ using UnityEngine.UI;
         TileColliderHandler.init.Relay(TileColliderHandler.init.Cast(currentBounds, filter, -1, true), baseInfo, isEnter);        
     }
 
-    //Different thread+
     public void OnCollosion(List<BaseInfo> baseInfos, bool isEnter)
     {
 
@@ -69,5 +109,4 @@ using UnityEngine.UI;
             onExit(baseInfos);
         }
     }
-    //Different thread-
  }

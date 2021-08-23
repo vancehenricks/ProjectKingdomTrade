@@ -97,7 +97,7 @@ public class PathFindingHandler : MonoBehaviour
             desPos = Vector3Int.FloorToInt(tileDestination.transform.position);
             CDebug.Log(this, "unitInfo.tileId=" + unitInfo.tileId + " wayPointIndex=" + wayPointIndex + 
              " start=" + unitInfo.tileLocation + " end=" + tileDestination.tileLocation +
-             " unitPos=" + unitPos + " desPos=" + desPos, LogType.Warning);
+             " unitPos=" + unitPos + " desPos=" + desPos);
 
             yield return null;
         }

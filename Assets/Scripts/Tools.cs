@@ -283,6 +283,8 @@ public class Tools : MonoBehaviour
 
     public static List<BaseInfo> ConvertTileToBaseInfo (List<TileInfo> tInfos)
     {
+        if(tInfos == null) return null;
+
         List<BaseInfo> bInfos = new List<BaseInfo>();
 
         foreach(BaseInfo bInfo in tInfos)
@@ -293,8 +295,11 @@ public class Tools : MonoBehaviour
         return bInfos;
     }
 
+    //this causes error need to be fix
     public static List<TileInfo> ConvertBaseToTileInfo (List<BaseInfo> bInfos)
     {
+        if(bInfos == null) return null;
+
         List<TileInfo> tInfos = new List<TileInfo>();
 
         foreach(TileInfo tInfo in bInfos)

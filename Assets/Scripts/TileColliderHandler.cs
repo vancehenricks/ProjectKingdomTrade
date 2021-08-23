@@ -20,8 +20,6 @@ public class TileColliderHandlerValues
     public Ray ray;
     public bool useRay;
     public bool filterOut;
-    //public BaseInfo origin;
-    //public bool isEnter;
     public List<BaseInfo> filter;
     public int maxHits;
 
@@ -41,8 +39,6 @@ public class TileColliderHandler : MonoBehaviour
         private set { _init = value; }
     }
     
-    //private ParallelInstance<TileColliderHandlerValues> parallelInstance;
-    
     private TileColliderHandlerValues colliderHandlerValues;
 
     private void Awake()
@@ -52,9 +48,7 @@ public class TileColliderHandler : MonoBehaviour
 
     public void Initialize()
     {
-        //Tick.init.tickUpdate += TickUpdate;
         colliderHandlerValues = new TileColliderHandlerValues();
-        //parallelInstance = new ParallelInstance<TileColliderHandlerValues>(Calculate);
     }
 
     private async Task<List<BaseInfo>> Calculate(TileColliderHandlerValues colliderHandlerValues)
@@ -64,8 +58,6 @@ public class TileColliderHandler : MonoBehaviour
         Ray ray = colliderHandlerValues.ray;
         bool useRay = colliderHandlerValues.useRay;
         bool filterOut = colliderHandlerValues.filterOut;
-        //BaseInfo origin = colliderHandlerValues.origin;
-        //bool isEnter = colliderHandlerValues.isEnter;
         int maxHits = colliderHandlerValues.maxHits;
         int hitCount = 0;
         List<BaseInfo> filter = colliderHandlerValues.filter;
@@ -120,50 +112,56 @@ public class TileColliderHandler : MonoBehaviour
             }
         }
 
-        /*if(origin != null)
-        {
-            List<BaseInfo> withOutOrigin = new List<BaseInfo>(baseInfos);
-            withOutOrigin.Remove(origin);
-            
-            List<BaseInfo> withOrigin = new List<BaseInfo>(baseInfos);
-
-            origin.tileEffect.tileCollider.OnCollosion(withOutOrigin, isEnter);
-
-            foreach(BaseInfo tile in baseInfos)
-            {
-                if(origin.tileId == tile.tileId) continue;
-                tile.tileEffect.tileCollider.OnCollosion(withOrigin, isEnter);
-            }
-        }*/
-
         return await Task.FromResult(baseInfos);
     }
     
-    public Task<List<BaseInfo>> Cast(Ray ray, List<BaseInfo> filter = null, int maxHits = -1, bool filterOut = false  /*, bool isEnter = true*/)
+    public Task<List<BaseInfo>> Cast(Ray ray, List<BaseInfo> filter = null, int maxHits = -1, bool filterOut = false)
     {
         return Cast(new Bounds(), ray, true, filter, maxHits, filterOut);
     }   
 
-    public Task<List<BaseInfo>> Cast(Bounds bounds, List<BaseInfo> filter = null, int maxHits = -1, bool filterOut = false /*, BaseInfo origin = null, bool isEnter = true*/)
+    public Task<List<BaseInfo>> Cast(Bounds bounds, List<BaseInfo> filter = null, int maxHits = -1, bool filterOut = false)
     {
         return Cast(bounds, new Ray(), false, filter, maxHits, filterOut);
     }
 
-    public async Task<List<BaseInfo>> Cast(Bounds bounds, Ray ray, bool useRay, List<BaseInfo> filter, int maxHits, bool filterOut /*, BaseInfo origin, bool isEnter*/)
+    public void Cast(System.Action<List<BaseInfo>> callback, Bounds bounds, List<BaseInfo> filter = null, int maxHits = 1, bool filterOut = false)
+    {
+        StartCoroutine(GetBaseInfosCoroutine(callback, bounds, new Ray(), false, filter, maxHits, filterOut));
+    }
+
+    public void Cast(System.Action<List<BaseInfo>> callback, Ray ray, List<BaseInfo> filter = null, int maxHits = 1, bool filterOut = false)
+    {
+        StartCoroutine(GetBaseInfosCoroutine(callback, new Bounds(), ray, true, filter, maxHits, filterOut));
+    }    
+
+    private IEnumerator GetBaseInfosCoroutine(System.Action<List<BaseInfo>> callback, Bounds bounds, Ray ray, bool useRay,
+         List<BaseInfo> filter, int maxHits, bool filterOut)
+    {
+        Task<List<BaseInfo>> task = TileColliderHandler.init.Cast(bounds, ray, useRay, filter, maxHits, filterOut);
+
+        while(!task.IsCompleted)
+        {
+            yield return null;
+        }
+
+        if(task.IsFaulted || task.IsCanceled) yield break;
+
+        //Make sure to add it instead of assigning reference Result directly, this will cause issue of not retrieving tiles in unity
+        callback(new List<BaseInfo>(task.Result));         
+    }
+
+    public async Task<List<BaseInfo>> Cast(Bounds bounds, Ray ray, bool useRay, List<BaseInfo> filter, int maxHits, bool filterOut)
     {
         Vector3 center = bounds.center;
         Bounds normalizedBounds = new Bounds(new Vector3(center.x, center.y), bounds.size);
 
-        //CDebug.Log(this, "colliderValues.Count="+colliderHandlerValues.colliderValues.Count,LogType.Warning);
-        //colliderHandlerValues.origin = origin;
-        //colliderHandlerValues.isEnter = isEnter;
         colliderHandlerValues.bounds = normalizedBounds;
         colliderHandlerValues.ray = ray;
         colliderHandlerValues.useRay = useRay;
         colliderHandlerValues.maxHits = maxHits;
         colliderHandlerValues.filter = filter;
         colliderHandlerValues.filterOut = filterOut;
-        //parallelInstance.Set(colliderHandlerValues);
 
         Task<List<BaseInfo>> task = Calculate(colliderHandlerValues);
         return await task;

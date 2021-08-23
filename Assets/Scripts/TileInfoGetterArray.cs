@@ -17,7 +17,7 @@ public class TileInfoGetterArray : MonoBehaviour
     private BoxCollider2D boxCollider2D;
     public List<TileInfo> tileInfos;
     public List<TileInfo> baseTiles;
-    private Coroutine scan;
+    //private Coroutine scan;
 
     //private int overflowCount;
 
@@ -27,36 +27,13 @@ public class TileInfoGetterArray : MonoBehaviour
         boxCollider2D = GetComponent<BoxCollider2D>();
     }
 
-    private void OnDestroy()
-    {
-      if(scan != null)
-      {
-          StopCoroutine(scan);
-      }
-    }
-
     public void Scan()
     {
-      if(scan != null)
-      {
-          StopCoroutine(scan);
-      }
-      scan = StartCoroutine(ScanCoroutine());
-    }
+        TileColliderHandler.init.Cast((List<BaseInfo> baseInfos) => {
+            tileInfos.AddRange(Tools.ConvertBaseToTileInfo(baseInfos));
+        }, boxCollider2D.bounds, Tools.ConvertTileToBaseInfo(baseTiles), maxHits);
 
-    private IEnumerator ScanCoroutine()
-    {
-        Task<List<BaseInfo>> task = TileColliderHandler.init.Cast(boxCollider2D.bounds, Tools.ConvertTileToBaseInfo(baseTiles), maxHits);  
-
-        while(!task.IsCompleted)
-        {
-            yield return null;
-        }
-
-        if(!task.IsFaulted && !task.IsCanceled)
-        {
-            tileInfos.AddRange(Tools.ConvertBaseToTileInfo(task.Result));
-        }
+        CDebug.Log(this, "tileInfos.Count=" + tileInfos.Count, LogType.Warning);  
     }
 
     public void Clear()

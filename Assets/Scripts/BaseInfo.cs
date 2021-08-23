@@ -4,11 +4,12 @@
  * Written by Vance Henricks Patual <vpatual@gmail.com>, August 2021
  */
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BaseInfo : MonoBehaviour
+public class BaseInfo : MonoBehaviour, IEquatable<BaseInfo>
 {
     public TileCollider tileCollider;
     public string tileType;
@@ -16,4 +17,13 @@ public class BaseInfo : MonoBehaviour
     public long tileId;
     public Vector2Int tileLocation;
 
+    public bool Equals(BaseInfo other)
+    {
+        if (tileId == other.tileId)
+        {
+            return true;
+        }
+        
+        return false;
+    }    
 }

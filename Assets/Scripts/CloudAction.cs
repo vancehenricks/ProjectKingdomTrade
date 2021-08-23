@@ -54,6 +54,7 @@ public class CloudAction : BaseInfo
     private float liveTime;
     public Image image;
     public bool visible;
+    public int tickCountMax;
 
     private CloudActionValues cloud;
     private ParallelInstance<CloudActionValues> parallellInstance;

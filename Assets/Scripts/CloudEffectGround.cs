@@ -11,6 +11,7 @@ using UnityEngine;
 public class CloudEffectGround : MonoBehaviour
 {
     public CloudAction cloudAction;
+    private int tickCount = 0;
 
     private void Start()
     {
@@ -29,11 +30,14 @@ public class CloudEffectGround : MonoBehaviour
 
     private void TickUpdate()
     {
-        //cloudAction.tileCollider.Relay(false);
-        //cloudAction.tileCollider.UpdatePosition();
-        //cloudAction.tileCollider.Relay();
+        if(cloudAction.tickCountMax < 0) return;
 
-        //CDebug.Log(this, "Moving...", LogType.Warning);
+        if(tickCount++ > cloudAction.tickCountMax)
+        {
+            tickCount = 0;
+            cloudAction.tileCollider.UpdatePosition(true);
+            cloudAction.tileCollider.Listen();
+        }
     }
 
     private void OnEnter(List<BaseInfo> baseInfos)
@@ -50,23 +54,24 @@ public class CloudEffectGround : MonoBehaviour
 
             CloudAction cloud = baseInfo as CloudAction;
 
-            if (cloud == null) return;
-
-            if (cloudAction.subType == "Cloud" && cloud.subType == "Cloud")
+            if (cloud != null) 
             {
-                CloudCycle.init.GenerateTornado(cloudAction, cloud);
-            }
-            else if (cloudAction.subType == "Cloud")
-            {
-                cloudAction.markedForDestroy = true;
-            }
-            else if (cloudAction.subType == "Tornado" && cloud.subType == "Cloud")
-            {
-                cloudAction.liveTimeCounter -= cloud.collidePoints;
-            }
-            else if (cloudAction.subType == "Tornado" && cloud.subType == "Tornado")
-            {
-                CloudCycle.init.GenerateTornado(cloudAction, cloud);
+                if (cloudAction.subType == "Cloud" && cloud.subType == "Cloud")
+                {
+                    CloudCycle.init.GenerateTornado(cloudAction, cloud);
+                }
+                else if (cloudAction.subType == "Cloud")
+                {
+                    cloudAction.markedForDestroy = true;
+                }
+                else if (cloudAction.subType == "Tornado" && cloud.subType == "Cloud")
+                {
+                    cloudAction.liveTimeCounter -= cloud.collidePoints;
+                }
+                else if (cloudAction.subType == "Tornado" && cloud.subType == "Tornado")
+                {
+                    CloudCycle.init.GenerateTornado(cloudAction, cloud);
+                }
             }
         }
     }

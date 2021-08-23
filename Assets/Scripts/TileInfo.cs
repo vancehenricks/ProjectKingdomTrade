@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class TileInfo : BaseInfo, IEquatable<TileInfo>
+public class TileInfo : BaseInfo
 {
     protected Sprite _sprite;
     public Sprite sprite
@@ -100,16 +100,5 @@ public class TileInfo : BaseInfo, IEquatable<TileInfo>
     protected virtual Sprite GetSprite()
     {
         return _sprite;
-    }
-
-
-    public bool Equals(TileInfo other)
-    {
-        if (tileId == other.tileId)
-        {
-            return true;
-        }
-        
-        return false;
-    }  
+    } 
 }

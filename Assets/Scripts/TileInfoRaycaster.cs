@@ -67,34 +67,13 @@ public class TileInfoRaycaster : MonoBehaviour
         }
 
         _tileInfos.Clear();
-        StartCoroutine(GetTilesInfoFromPosCoroutine(pos , _tileInfos, filter));
+
+        Ray ray = cm.ScreenPointToRay(pos);
+
+        TileColliderHandler.init.Cast((List<BaseInfo> baseInfos) => {
+            _tileInfos.AddRange(Tools.ConvertBaseToTileInfo(baseInfos));
+        }, ray, Tools.ConvertTileToBaseInfo(filter), maxHits);
+
         CDebug.Log(this, "_tileInfos.Count=" + _tileInfos.Count, LogType.Warning);  
-    }
-
-    private IEnumerator GetTilesInfoFromPosCoroutine(Vector3 pos, List<TileInfo> _tileInfos, List<TileInfo> filter = null)
-    {
-         Ray ray = cm.ScreenPointToRay(pos);
-        //bounds.extents = Vector3.one;
-        List<BaseInfo> baseFilter = null;
-
-        if (filter != null)
-        {
-            baseFilter = Tools.ConvertTileToBaseInfo(filter);
-        }
-
-        Task<List<BaseInfo>> task = TileColliderHandler.init.Cast(ray, baseFilter, maxHits);
-
-        while(!task.IsCompleted)
-        {
-            yield return null;
-        }
-
-        if(!task.IsFaulted && !task.IsCanceled)
-        {
-            //Make sure to add it instead of assigning reference Result directly, this will cause issue of not retrieving tiles in unity
-            _tileInfos.AddRange(Tools.ConvertBaseToTileInfo(task.Result));
-        }
-
-        CDebug.Log(this, "_tileInfos.Count=" + _tileInfos.Count, LogType.Warning);   
     }
 }
