@@ -17,13 +17,28 @@ public class BaseInfo : MonoBehaviour, IEquatable<BaseInfo>
     public long tileId;
     public Vector2Int tileLocation;
 
+    public virtual void Initialize()
+    {
+        tileId = Tools.UniqueId;        
+    }
+
+    public override bool Equals(object obj)
+    {
+        return Equals (obj as BaseInfo);
+    }
+
     public bool Equals(BaseInfo other)
     {
-        if (tileId == other.tileId)
+        if (other != null && tileId == other.tileId)
         {
             return true;
         }
         
         return false;
-    }    
+    }
+
+    public override int GetHashCode()
+    {
+        return tileId.GetHashCode();
+    } 
 }

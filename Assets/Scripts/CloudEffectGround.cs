@@ -35,7 +35,7 @@ public class CloudEffectGround : MonoBehaviour
         if(tickCount++ > cloudAction.tickCountMax)
         {
             tickCount = 0;
-            cloudAction.tileCollider.UpdatePosition(true);
+            cloudAction.tileCollider.UpdatePosition();
             cloudAction.tileCollider.Listen();
         }
     }

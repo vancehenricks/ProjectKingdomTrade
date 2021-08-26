@@ -15,24 +15,28 @@ using UnityEngine.UI;
 
     //private BoxCollider2D boxCollider2D;
     public Vector2 size;
-    public List<BaseInfo> filter;
+    public List<BaseInfo> filterOut;
     public Bounds previousBounds;
     public Bounds currentBounds;
-    private BaseInfo baseInfo;
+    public BaseInfo baseInfo;
     private RectTransform rect;
 
-    public System.Action<List<BaseInfo>> onEnter, onStay, onExit;
+    public System.Action<List<BaseInfo>> onEnter, onExit;
 
     public List<BaseInfo> previousBaseInfos;
 
-    public void Initialize()
+    public void Initialize(bool observer = false)
     {
         //boxCollider2D = GetComponent<BoxCollider2D>();
         rect = GetComponent<RectTransform>();
         baseInfo = GetComponent<BaseInfo>();
         currentBounds = new Bounds(transform.position,size);
-        UpdatePosition();
-        Relay();
+
+        if(!observer)
+        {
+            UpdatePosition();
+            Relay();
+        }
         //boxCollider2D.bounds;         
     }
     
@@ -87,12 +91,12 @@ using UnityEngine.UI;
             OnCollosion(baseInfos, true);
             previousBaseInfos = baseInfos;
 
-        }, currentBounds, filter, -1, true);
+        }, currentBounds, filterOut, -1, true);
     }
     
     public void Relay(bool isEnter = true)
     {
-        TileColliderHandler.init.Relay(TileColliderHandler.init.Cast(currentBounds, filter, -1, true), baseInfo, isEnter);        
+        TileColliderHandler.init.Relay(TileColliderHandler.init.Cast(currentBounds, filterOut, -1, true), baseInfo, isEnter);        
     }
 
     public void OnCollosion(List<BaseInfo> baseInfos, bool isEnter)

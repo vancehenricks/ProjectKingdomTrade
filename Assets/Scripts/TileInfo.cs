@@ -58,8 +58,10 @@ public class TileInfo : BaseInfo
         claimants = new HashSet<PlayerInfo>();
     }
 
-    public virtual void Initialize()
+    public override void Initialize()
     {
+        base.Initialize();
+
         if (playerInfo == null)
         {
             playerInfo = PlayerList.init.defaultPlayerInfo;
@@ -68,7 +70,6 @@ public class TileInfo : BaseInfo
         //unitInfos = new List<UnitInfo>();
         //upgrades = new List<Upgrade>();
         //spawnDistance = new List<SpawnDistance>();
-        tileId = Tools.UniqueId;
         gameObject.name = gameObject.name + "_" + tileId;
         TileList.init.Add(this);
         localTemp = Temperature.init.temperature;

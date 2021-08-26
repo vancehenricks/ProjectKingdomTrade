@@ -63,6 +63,8 @@ public class CloudAction : BaseInfo
 
     private void Start()
     {
+        base.Initialize();
+
         if (grid.rect.width > defaultWidth && influenceByGrid)
         {
             maxLiveTime *= (grid.rect.width / divideWidth);
