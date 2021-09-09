@@ -145,7 +145,11 @@ public class TileColliderHandler : MonoBehaviour
             yield return null;
         }
 
-        if(task.IsFaulted || task.IsCanceled) yield break;
+        if(task.IsFaulted || task.IsCanceled)
+        {
+            CDebug.Log(this, "Task Faulted/Canceled", LogType.Warning);           
+            yield break;
+        }
 
         //Make sure to add it instead of assigning reference Result directly, this will cause issue of not retrieving tiles in unity
         callback(new List<BaseInfo>(task.Result));         
@@ -179,7 +183,11 @@ public class TileColliderHandler : MonoBehaviour
             yield return null;
         }
 
-        if(task.IsFaulted || task.IsCanceled) yield break;
+        if(task.IsFaulted || task.IsCanceled)
+        {
+            CDebug.Log(this, "Task Faulted/Canceled", LogType.Warning);           
+            yield break;
+        } 
 
         List<BaseInfo> baseInfos = task.Result;
         origin.tileCollider.OnCollosion(baseInfos, isEnter);
