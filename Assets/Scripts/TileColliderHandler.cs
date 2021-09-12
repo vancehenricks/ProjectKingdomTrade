@@ -115,16 +115,6 @@ public class TileColliderHandler : MonoBehaviour
         return await Task.FromResult(baseInfos);
     }
     
-    public Task<List<BaseInfo>> Cast(Ray ray, List<BaseInfo> filter = null, int maxHits = -1, bool filterOut = false)
-    {
-        return Cast(new Bounds(), ray, true, filter, maxHits, filterOut);
-    }   
-
-    public Task<List<BaseInfo>> Cast(Bounds bounds, List<BaseInfo> filter = null, int maxHits = -1, bool filterOut = false)
-    {
-        return Cast(bounds, new Ray(), false, filter, maxHits, filterOut);
-    }
-
     public void Cast(System.Action<List<BaseInfo>> callback, Bounds bounds, List<BaseInfo> filter = null, int maxHits = 1, bool filterOut = false)
     {
         StartCoroutine(GetBaseInfosCoroutine(callback, bounds, new Ray(), false, filter, maxHits, filterOut));
@@ -147,7 +137,7 @@ public class TileColliderHandler : MonoBehaviour
 
         if(task.IsFaulted || task.IsCanceled)
         {
-            CDebug.Log(this, "Task Faulted/Canceled", LogType.Warning);           
+            CDebug.Log(this, "Task Faulted/Canceled", LogType.Error);           
             yield break;
         }
 
@@ -169,28 +159,6 @@ public class TileColliderHandler : MonoBehaviour
 
         Task<List<BaseInfo>> task = Calculate(colliderHandlerValues);
         return await task;
-    }
-
-    public void Relay(Task<List<BaseInfo>> task, BaseInfo origin, bool isEnter)
-    {
-        StartCoroutine(RelayCoroutine(task, origin, isEnter));
-    }
-
-    private IEnumerator RelayCoroutine(Task<List<BaseInfo>> task, BaseInfo origin, bool isEnter)
-    {
-        while(!task.IsCompleted)
-        {
-            yield return null;
-        }
-
-        if(task.IsFaulted || task.IsCanceled)
-        {
-            CDebug.Log(this, "Task Faulted/Canceled", LogType.Warning);           
-            yield break;
-        } 
-
-        List<BaseInfo> baseInfos = task.Result;
-        origin.tileCollider.OnCollosion(baseInfos, isEnter);
     }
 
     //Naive approach could cause memory leak

@@ -29,11 +29,32 @@ public class DebugInfo : MonoBehaviour
     private TileInfo tile;
     private PlayerInfo playerInfo;
 
-    private bool initialize;
+    private Coroutine scan;
 
     private void Awake()
     {
         version.text = Application.version;
+    }
+
+    public void OnOpen()
+    {
+        scan = StartCoroutine(Scan());     
+        MultiSelect.init.onSelectedChange += OnSelectedChange;   
+    }
+
+    public void OnClose()
+    {
+        if(scan != null)
+        {
+            StopCoroutine(scan);
+        }
+
+        MultiSelect.init.onSelectedChange -= OnSelectedChange;
+    }
+
+    private void OnDestroy()
+    {
+        OnClose();
     }
 
     public void OnSelectedChange(List<TileInfo> tiles)
@@ -65,19 +86,19 @@ public class DebugInfo : MonoBehaviour
         mapSize.text = "(" + MapGenerator.init.width + ", " + MapGenerator.init.height + ")";
     }
 
-    private void Update()
+    private IEnumerator Scan()
     {
-        if (tile != null)
+        while(true)
         {
-            tileLocation.text = tile.tileLocation + "";
-        }
-        else if (!initialize && MultiSelect.init != null)
-        {
-            MultiSelect.init.onSelectedChange += OnSelectedChange;
-            initialize = true;
-        }
+            if (tile != null)
+            {
+                tileLocation.text = tile.tileLocation + "";
+            }
 
-        ms.text = string.Format("{0:0.##}", Time.deltaTime * 1000.0f);
-        fps.text = string.Format("{0:0}", 1.0f / Time.deltaTime);
+            ms.text = string.Format("{0:0.##}", Time.deltaTime * 1000.0f);
+            fps.text = string.Format("{0:0}", 1.0f / Time.deltaTime); 
+
+            yield return new WaitForSeconds(1f);
+        }
     }
 }

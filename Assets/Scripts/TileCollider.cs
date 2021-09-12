@@ -96,7 +96,11 @@ using UnityEngine.UI;
     
     public void Relay(bool isEnter = true)
     {
-        TileColliderHandler.init.Relay(TileColliderHandler.init.Cast(currentBounds, filterOut, -1, true), baseInfo, isEnter);        
+        TileColliderHandler.init.Cast((List<BaseInfo> baseInfos) => {
+
+        OnCollosion(baseInfos, isEnter);
+
+        }, currentBounds, filterOut, -1, true);      
     }
 
     public void OnCollosion(List<BaseInfo> baseInfos, bool isEnter)

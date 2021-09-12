@@ -54,7 +54,7 @@ public class PathFindingCache : MonoBehaviour
             {
                 if(!cache.TryRemove(cache.Keys.First<string>(), out delResult) && delResult != null)
                 {
-                    CDebug.Log(this, "Remove failed for cache.Keys.First=" + cache.Keys.First<string>(), LogType.Warning);
+                    CDebug.Log(this, "Remove failed for cache.Keys.First=" + cache.Keys.First<string>(), LogType.Error);
                 }
             }
         }
