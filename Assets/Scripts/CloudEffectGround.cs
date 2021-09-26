@@ -79,7 +79,9 @@ public class CloudEffectGround : MonoBehaviour
     private void OnExit(List<BaseInfo> baseInfos)
     {
         foreach(BaseInfo baseInfo in baseInfos)
-        {        
+        {
+            //CDebug.Log(this, "baseInfo.tileType=" + baseInfo.tileType, LogType.Warning);
+
             TileInfo tileInfo = baseInfo as TileInfo; 
 
             if (tileInfo != null)

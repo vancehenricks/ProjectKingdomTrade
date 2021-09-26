@@ -30,7 +30,7 @@ using UnityEngine.UI;
         //boxCollider2D = GetComponent<BoxCollider2D>();
         rect = GetComponent<RectTransform>();
         baseInfo = GetComponent<BaseInfo>();
-        currentBounds = new Bounds(transform.position,size);
+        currentBounds = new Bounds(new Vector3(transform.position.x,transform.position.y,0f),size);
 
         if(!observer)
         {
@@ -51,7 +51,8 @@ using UnityEngine.UI;
     public void UpdatePosition(bool observer = false)
     {
         previousBounds = currentBounds;
-        currentBounds = new Bounds(transform.position,size);
+        //CDebug.Log(this, "baseInfo.tileId=" + baseInfo.tileId + " transform.position=" + transform.position, LogType.Warning);
+        currentBounds = new Bounds(new Vector3(transform.position.x,transform.position.y,0f),size);
 
         if(!observer)
         {
@@ -64,25 +65,26 @@ using UnityEngine.UI;
         //still need further improvement
         TileColliderHandler.init.Cast((List<BaseInfo> baseInfos) => {
             //OnCollosion(baseInfos, true);
+            baseInfos.Remove(baseInfo);
             
             List<BaseInfo> exit = new List<BaseInfo>();
 
             if(previousBaseInfos.Count > 0)
             {
-                foreach(BaseInfo baseInfo in baseInfos)
+                foreach(BaseInfo bInfo in baseInfos)
                 {
                     foreach(BaseInfo prevBaseInfo in previousBaseInfos)
                     {
-                        if(baseInfo.tileId == prevBaseInfo.tileId)
+                        if(bInfo.tileId == prevBaseInfo.tileId)
                         {
-                            exit.Add(baseInfo);
+                            exit.Add(bInfo);
                         }
                     }
                 }
 
-                foreach(BaseInfo baseInfo in exit)
+                foreach(BaseInfo bInfoExit in exit)
                 {
-                    baseInfos.Remove(baseInfo);
+                    baseInfos.Remove(bInfoExit);
                 }
                 
                 OnCollosion(exit, false);
@@ -91,22 +93,23 @@ using UnityEngine.UI;
             OnCollosion(baseInfos, true);
             previousBaseInfos = baseInfos;
 
-        }, currentBounds, filterOut, -1, true);
+        }, baseInfo, currentBounds, filterOut, -1, true);
     }
     
     public void Relay(bool isEnter = true)
     {
         TileColliderHandler.init.Cast((List<BaseInfo> baseInfos) => {
-
+        baseInfos.Remove(baseInfo);
+        
         OnCollosion(baseInfos, isEnter);
 
-        }, currentBounds, filterOut, -1, true);      
+        }, baseInfo, currentBounds, filterOut, -1, true);      
     }
 
     public void OnCollosion(List<BaseInfo> baseInfos, bool isEnter)
     {
 
-        CDebug.Log(nameof(TileCollider), "baseInfos.tileId=" + baseInfo.tileId + " baseInfos.Count=" + baseInfos.Count, LogType.Warning);
+        //CDebug.Log(nameof(TileCollider), "baseInfos.tileId=" + baseInfo.tileId + " baseInfos.Count=" + baseInfos.Count, LogType.Warning);
 
         if(isEnter && onEnter != null)
         {

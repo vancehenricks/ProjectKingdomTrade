@@ -16,6 +16,7 @@ using TileColliderDictionary = System.Collections.Concurrent.ConcurrentDictionar
 public class TileColliderHandlerValues
 {
     public TileColliderDictionary colliderValues;
+    public BaseInfo baseInfo;
     public Bounds bounds;
     public Ray ray;
     public bool useRay;
@@ -54,6 +55,7 @@ public class TileColliderHandler : MonoBehaviour
     private async Task<List<BaseInfo>> Calculate(TileColliderHandlerValues colliderHandlerValues)
     {
         TileColliderDictionary colliderValues = colliderHandlerValues.colliderValues;
+        BaseInfo baseInfo = colliderHandlerValues.baseInfo;
         Bounds bounds = colliderHandlerValues.bounds;
         Ray ray = colliderHandlerValues.ray;
         bool useRay = colliderHandlerValues.useRay;
@@ -79,8 +81,10 @@ public class TileColliderHandler : MonoBehaviour
             if(hasHits)
             {
                 foreach(BaseInfo tile in colliderValue.Value.Values.ToList<BaseInfo>())
-                {
+                {                    
                     if(hitCount > maxHits && maxHits != -1) break;
+
+                    if(baseInfo != null && baseInfo.tileId == tile.tileId) continue;
 
                     if(filter != null && filter.Count > 0)
                     {
@@ -115,20 +119,20 @@ public class TileColliderHandler : MonoBehaviour
         return await Task.FromResult(baseInfos);
     }
     
-    public void Cast(System.Action<List<BaseInfo>> callback, Bounds bounds, List<BaseInfo> filter = null, int maxHits = 1, bool filterOut = false)
+    public void Cast(System.Action<List<BaseInfo>> callback, BaseInfo baseInfo, Bounds bounds, List<BaseInfo> filter = null, int maxHits = 1, bool filterOut = false)
     {
-        StartCoroutine(GetBaseInfosCoroutine(callback, bounds, new Ray(), false, filter, maxHits, filterOut));
+        StartCoroutine(GetBaseInfosCoroutine(callback, null, bounds, new Ray(), false, filter, maxHits, filterOut));
     }
 
     public void Cast(System.Action<List<BaseInfo>> callback, Ray ray, List<BaseInfo> filter = null, int maxHits = 1, bool filterOut = false)
     {
-        StartCoroutine(GetBaseInfosCoroutine(callback, new Bounds(), ray, true, filter, maxHits, filterOut));
+        StartCoroutine(GetBaseInfosCoroutine(callback, null, new Bounds(), ray, true, filter, maxHits, filterOut));
     }    
 
-    private IEnumerator GetBaseInfosCoroutine(System.Action<List<BaseInfo>> callback, Bounds bounds, Ray ray, bool useRay,
+    private IEnumerator GetBaseInfosCoroutine(System.Action<List<BaseInfo>> callback, BaseInfo baseInfo, Bounds bounds, Ray ray, bool useRay,
          List<BaseInfo> filter, int maxHits, bool filterOut)
     {
-        Task<List<BaseInfo>> task = TileColliderHandler.init.Cast(bounds, ray, useRay, filter, maxHits, filterOut);
+        Task<List<BaseInfo>> task = TileColliderHandler.init.Cast(baseInfo, bounds, ray, useRay, filter, maxHits, filterOut);
 
         while(!task.IsCompleted)
         {
@@ -145,11 +149,12 @@ public class TileColliderHandler : MonoBehaviour
         callback(new List<BaseInfo>(task.Result));         
     }
 
-    public async Task<List<BaseInfo>> Cast(Bounds bounds, Ray ray, bool useRay, List<BaseInfo> filter, int maxHits, bool filterOut)
+    public async Task<List<BaseInfo>> Cast(BaseInfo baseInfo, Bounds bounds, Ray ray, bool useRay, List<BaseInfo> filter, int maxHits, bool filterOut)
     {
         Vector3 center = bounds.center;
         Bounds normalizedBounds = new Bounds(new Vector3(center.x, center.y), bounds.size);
 
+        colliderHandlerValues.baseInfo = baseInfo;
         colliderHandlerValues.bounds = normalizedBounds;
         colliderHandlerValues.ray = ray;
         colliderHandlerValues.useRay = useRay;

@@ -31,7 +31,6 @@ public class MultiSelect : MonoBehaviour
     private void Start()
     {
         shiftPressed = false;
-        selectedTiles = new List<TileInfo>();
         CommandPipeline.init.Add(Command, 200);
     }
 

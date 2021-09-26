@@ -31,7 +31,7 @@ public class TileInfoGetterArray : MonoBehaviour
     {
         TileColliderHandler.init.Cast((List<BaseInfo> baseInfos) => {
             tileInfos.AddRange(Tools.ConvertBaseToTileInfo(baseInfos));
-        }, boxCollider2D.bounds, Tools.ConvertTileToBaseInfo(baseTiles), maxHits);
+        }, null, boxCollider2D.bounds, Tools.ConvertTileToBaseInfo(baseTiles), maxHits);
 
         CDebug.Log(this, "tileInfos.Count=" + tileInfos.Count, LogType.Warning);  
     }

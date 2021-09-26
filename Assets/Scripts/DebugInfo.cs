@@ -31,11 +31,6 @@ public class DebugInfo : MonoBehaviour
 
     private Coroutine scan;
 
-    private void Awake()
-    {
-        version.text = Application.version;
-    }
-
     public void OnOpen()
     {
         scan = StartCoroutine(Scan());     
@@ -50,6 +45,12 @@ public class DebugInfo : MonoBehaviour
         }
 
         MultiSelect.init.onSelectedChange -= OnSelectedChange;
+    }
+
+    private void Start()
+    {
+        version.text = Application.version;        
+        OnOpen();        
     }
 
     private void OnDestroy()
@@ -95,8 +96,11 @@ public class DebugInfo : MonoBehaviour
                 tileLocation.text = tile.tileLocation + "";
             }
 
-            ms.text = string.Format("{0:0.##}", Time.deltaTime * 1000.0f);
-            fps.text = string.Format("{0:0}", 1.0f / Time.deltaTime); 
+            float ffps = 1.0f / Time.deltaTime;
+            float fms = (1.0f / ffps) * 1000f;
+
+            ms.text = string.Format("{0:0.##}", fms);
+            fps.text = string.Format("{0:0}", ffps); 
 
             yield return new WaitForSeconds(1f);
         }
