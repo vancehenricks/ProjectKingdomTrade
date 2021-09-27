@@ -47,9 +47,11 @@ public class CloudCycle : MonoBehaviour
     public KeyCode hideClouds;
     public bool hasSpawnDoubled;
     public bool visible;
+    public int tickCountMax;
 
     private int maxSpawnSaved;
     private bool hasStarted;
+    private int tickCount;
 
     private static CloudCycle _init;
     public static CloudCycle init
@@ -78,8 +80,12 @@ public class CloudCycle : MonoBehaviour
     // Update is called once per frame
     private void TickUpdate()
     {
-        if (hasStarted)
+        if(tickCountMax < 0) return;
+
+        if (hasStarted && tickCount++ > tickCountMax)
         {
+            tickCount = 0;
+
             foreach (Spawnable spawnable in spawnables)
             {
                 if (Tick.init.month >= spawnable.minMonth && Tick.init.month <= spawnable.maxMonth)
@@ -98,8 +104,8 @@ public class CloudCycle : MonoBehaviour
         if (grid != null && useGridInfluence)
         {
             RectTransform baseCloudRect = baseCloud.GetComponent<RectTransform>();
-            float width = (grid.rect.width / baseCloudRect.rect.width);
-            maxSpawn = maxSpawn * Mathf.RoundToInt(width);
+            float height = (grid.rect.height / baseCloudRect.rect.height)/2;
+            maxSpawn = Mathf.RoundToInt(height);
         }
 
         maxSpawnSaved = maxSpawn;
@@ -122,47 +128,37 @@ public class CloudCycle : MonoBehaviour
     {
         if (cloudAction1.markedForDestroy || cloudAction2.markedForDestroy) return;
 
-        float result = cloudAction1.speedModifier + cloudAction2.speedModifier;
-
-        if (result == 0f)
+        if (cloudAction1.subType == "Cloud" && cloudAction2.subType == "Cloud" && cloudAction1.posA == cloudAction2.posA)
         {
-            if (Random.Range(0f, 1f) <= baseTornado.spawnChance)
+            cloudAction1.markedForDestroy = true;
+            cloudAction2.markedForDestroy = true;
+            return;
+        }
+
+        //float result = cloudAction1.speedModifier + cloudAction2.speedModifier;
+
+        if (Random.Range(0f,1f) <= baseTornado.spawnChance)
+        {
+            CloudAction tornado = Instantiate<CloudAction>(baseTornado, cloudAction1.transform.parent);
+            tornado.name = baseTornado.name;
+            tornado.visible = visible;
+            tornado.speedModifier = cloudAction1.speedModifier + cloudAction2.speedModifier;
+
+            if (cloudAction1.speedModifier > cloudAction2.speedModifier)
             {
-                CloudAction tornado = Instantiate<CloudAction>(baseTornado, cloudAction1.transform.parent);
-                tornado.speedModifier = Random.Range(-tornado.speedModifier, tornado.speedModifier);
-
-                if (tornado.speedModifier > 0f)
-                {
-                    if (cloudAction1.speedModifier > 0f)
-                    {
-                        tornado.posA = cloudAction1.posA;
-                        tornado.posB = cloudAction1.posB;
-                    }
-                    else
-                    {
-                        tornado.posA = cloudAction2.posA;
-                        tornado.posB = cloudAction2.posB;
-                    }
-                }
-                else 
-                {
-                    if (cloudAction1.speedModifier < 0f)
-                    {
-                        tornado.posA = cloudAction1.posA;
-                        tornado.posB = cloudAction1.posB;
-                    }
-                    else
-                    {
-                        tornado.posA = cloudAction2.posA;
-                        tornado.posB = cloudAction2.posB;
-                    }
-                }
-
-                tornado.transform.position = cloudAction1.transform.position;
-                clouds.Add(tornado);
-                tornado.gameObject.SetActive(true);
-                counter++;
+                tornado.posA = cloudAction1.posA;
+                tornado.posB = cloudAction1.posB;
             }
+            else
+            {
+                tornado.posA = cloudAction2.posA;
+                tornado.posB = cloudAction2.posB;
+            }
+
+            tornado.transform.position = cloudAction1.transform.position;
+            clouds.Add(tornado);
+            tornado.gameObject.SetActive(true);
+            counter++;
         }
 
         cloudAction1.markedForDestroy = true;
@@ -196,6 +192,7 @@ public class CloudCycle : MonoBehaviour
             float y = Random.Range(spawnable.posA.position.y, _posB.position.y);
 
             CloudAction cloud = Instantiate<CloudAction>(baseCloud, baseCloud.transform.parent);
+            cloud.name = baseCloud.name;
             cloud.visible = visible;
             cloud.speedModifier = spawnable.speedModifier;
             cloud.transform.position = new Vector3(x, y, zLevel);

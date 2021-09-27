@@ -19,7 +19,8 @@ public class BaseInfo : MonoBehaviour, IEquatable<BaseInfo>
 
     public virtual void Initialize()
     {
-        tileId = Tools.UniqueId;        
+        tileId = Tools.UniqueId;
+        name = name + "_" + tileId;
     }
 
     public override bool Equals(object obj)

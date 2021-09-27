@@ -70,7 +70,7 @@ public class TileInfo : BaseInfo
         //unitInfos = new List<UnitInfo>();
         //upgrades = new List<Upgrade>();
         //spawnDistance = new List<SpawnDistance>();
-        gameObject.name = gameObject.name + "_" + tileId;
+        //gameObject.name = gameObject.name + "_" + tileId;
         TileList.init.Add(this);
         localTemp = Temperature.init.temperature;
         SetSprite(sprite);
