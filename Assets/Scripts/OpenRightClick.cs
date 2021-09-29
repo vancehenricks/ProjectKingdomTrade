@@ -12,24 +12,34 @@ using UnityEngine.UI;
 
 public class OpenRightClick : MonoBehaviour
 {
+    private static OpenRightClick _init;
+    public static OpenRightClick init
+    {
+        get { return _init; }
+        private set { _init = value; }
+    }
 
     public GenerateCells generateCells;
     public OptionGenerator optionGenerator;
-    public TileInfoRaycaster tileInfoRaycaster;
     public Vector3 offset;
     public GraphicRaycaster graphicsRaycaster;
     public EventSystem eventSystem;
-    public OpenLeftClick openLeftClick;
 
     public bool forceDisplay;
     public bool doNotDisplay;
     public bool showOptions;
     public bool whiteList;
     public bool multiSelect;
-    public bool UseDefaultCursor;
+    public bool useDefaultCursor;
+    public bool skipRaycast;
     public List<TileInfo> include;
 
     private PointerEventData pointerEventData;
+
+    private void Awake()
+    {
+        init = this;
+    }
 
     private void Start()
     {
@@ -51,16 +61,20 @@ public class OpenRightClick : MonoBehaviour
     {
         //Debug.Log("OpenRightClick");
 
-        if (Input.GetButtonDown("Fire2"))
+        if (!skipRaycast && Input.GetButtonDown("Fire2"))
         {
             Debug.Log("Retriving new TileInfo");
-            tileInfoRaycaster.GetTileInfosFromPos(Input.mousePosition);
+            TileInfoRaycaster.init.GetTileInfosFromPos(Input.mousePosition);
+        }
+        else if(skipRaycast)
+        {
+            skipRaycast = false;
         }
 
         if (Input.GetButtonUp("Fire2") || forceDisplay)
         {
 
-            if (UseDefaultCursor)
+            if (useDefaultCursor)
             {
                 CursorReplace.init.currentCursor = CursorType.Default;
             }
@@ -82,7 +96,7 @@ public class OpenRightClick : MonoBehaviour
                 return;
             }
 
-            openLeftClick.Ignore();
+            OpenLeftClick.init.Ignore();
             if (TileInfoRaycaster.init.tileInfos.Count == 1)
             {
                 optionGenerator.Initialize();
@@ -101,7 +115,6 @@ public class OpenRightClick : MonoBehaviour
             generateCells.Display();
             generateCells.transform.position = Input.mousePosition + offset;
             generateCells.gameObject.SetActive(true);
-
         }
         else if (Input.GetButtonDown("Fire1") || Input.GetButtonDown("Fire3") ||
             Input.GetAxis("Mouse ScrollWheel") < 0 || Input.GetAxis("Mouse ScrollWheel") > 0)
@@ -138,10 +151,10 @@ public class OpenRightClick : MonoBehaviour
         generateCells.gameObject.SetActive(false);
         optionGenerator.SetActiveAll(false);
         optionGenerator.gameObject.SetActive(false);
-        UseDefaultCursor = true;
+        useDefaultCursor = true;
         showOptions = true;
         whiteList = false;
         multiSelect = true;
         include.Clear();
-    }
+    }   
 }

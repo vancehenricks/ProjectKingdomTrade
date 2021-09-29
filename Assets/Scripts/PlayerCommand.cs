@@ -14,7 +14,6 @@ using UnityEngine.EventSystems;
 public class PlayerCommand : MonoBehaviour
 {
     public TileInfoRaycaster tileInfoRaycaster;
-    public OpenRightClick openRightClick;
     public List<UnitInfo> unitInfos;
     public List<List<TileInfo>> waypointsList;
     public List<List<TileInfo>> targetList;
@@ -37,7 +36,7 @@ public class PlayerCommand : MonoBehaviour
         targetList.Clear();
         unitInfos = ConvertToUnitInfo(MultiSelect.init.selectedTiles);
         MultiSelect.init.Clear(true);
-        openRightClick.ResetValues();
+        OpenRightClick.init.ResetValues();
 
         foreach (UnitInfo unit in unitInfos)
         {

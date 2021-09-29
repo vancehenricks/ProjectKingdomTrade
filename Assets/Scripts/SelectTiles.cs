@@ -20,7 +20,6 @@ public struct SelectTilesValue
 
 public class SelectTiles : MonoBehaviour
 {
-    public OpenRightClick openRightClick;
     public float zLevelFlag;
     //public float zLevelLine;
     public SyncIcon baseSelect;

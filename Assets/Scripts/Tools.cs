@@ -59,7 +59,7 @@ public class Tools : MonoBehaviour
         down-right  current index - width)+1
 	*/
 
-    public static List<T> WhiteList<T>(List<T> _tileInfos, List<T> include) where T : TileInfo
+    public static List<T> WhiteListTileType<T>(List<T> _tileInfos, List<T> include) where T : TileInfo
     {
         List<T> tileInfos = new List<T>();
 

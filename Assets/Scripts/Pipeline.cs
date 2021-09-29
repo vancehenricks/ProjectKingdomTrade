@@ -10,6 +10,7 @@ using UnityEngine;
 
 public delegate void ExecuteCommands();
 
+//Lowest value will execute first
 public class Pipeline : MonoBehaviour
 {
     public SortedList<float, ExecuteCommands> commandList;

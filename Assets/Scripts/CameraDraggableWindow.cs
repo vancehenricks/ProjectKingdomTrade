@@ -22,8 +22,6 @@ public class CameraDraggableWindow : MonoBehaviour/*,IDragHandler*/
     //public float mouseSpeedModifierDrag;
     public float defaultSpeed;
 
-    public OpenRightClick openRightClick;
-
     private void Update()
     {
         if(InputOverride.init.GetAxis("Horizontal") != 0 || InputOverride.init.GetAxis("Vertical") != 0)
@@ -92,7 +90,7 @@ public class CameraDraggableWindow : MonoBehaviour/*,IDragHandler*/
         float speed = Time.deltaTime * defaultSpeed * mouseSpeedModifier;
 
         cm.transform.position = new Vector3(direction > 0 ? (cm.transform.position.x + speed) : (cm.transform.position.x - speed), cm.transform.position.y, cm.transform.position.z);
-        openRightClick.ResetValues();
+        OpenRightClick.init.ResetValues();
     }
 
     private void MoveYCamera(float direction)
@@ -101,7 +99,7 @@ public class CameraDraggableWindow : MonoBehaviour/*,IDragHandler*/
         float speed = Time.deltaTime * defaultSpeed * mouseSpeedModifier;
 
         cm.transform.position = new Vector3(cm.transform.position.x, direction > 0 ? (cm.transform.position.y + speed) : (cm.transform.position.y - speed), cm.transform.position.z);
-        openRightClick.ResetValues();
+        OpenRightClick.init.ResetValues();
     }
 
 }

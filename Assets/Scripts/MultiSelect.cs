@@ -21,7 +21,9 @@ public class MultiSelect : MonoBehaviour
     public delegate void OnSelectedChange(List<TileInfo> tiles);
     public OnSelectedChange onSelectedChange;
     public List<TileInfo> selectedTiles;
+    public List<TileInfo> previousSelectedTiles;
     public bool shiftPressed;
+    public bool ctrlPressed;
 
     private void Awake()
     {
@@ -30,8 +32,7 @@ public class MultiSelect : MonoBehaviour
 
     private void Start()
     {
-        shiftPressed = false;
-        CommandPipeline.init.Add(Command, 200);
+        CommandPipeline.init.Add(Command, 30);
     }
 
 	private void OnDestroy()
@@ -52,6 +53,17 @@ public class MultiSelect : MonoBehaviour
         {
             shiftPressed = false;
         }
+
+        if (Input.GetKeyDown(KeyCode.LeftControl) || 
+            Input.GetKeyDown(KeyCode.RightControl))
+        {
+            ctrlPressed = true;
+        }
+        else if (Input.GetKeyUp(KeyCode.LeftControl) || 
+            Input.GetKeyUp(KeyCode.RightControl))
+        {
+            ctrlPressed = false;
+        }  
     }
 
     public void Add(TileInfo tileInfo, bool relay = false)
@@ -70,6 +82,8 @@ public class MultiSelect : MonoBehaviour
 
     public void Clear(bool relay = false)
     {
+        previousSelectedTiles.Clear();
+        previousSelectedTiles.AddRange(selectedTiles);
         selectedTiles.Clear();
         if (!relay) return;
         Relay();

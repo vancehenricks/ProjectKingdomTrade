@@ -42,20 +42,20 @@ public class AttackUnit : MoveUnit
 
         if (_selectedTiles.Count > 0 && targetList.Count > 0)
         {
-            openRightClick.openLeftClick.Ignore();
+            OpenLeftClick.init.Ignore();
 
             if (MultiSelect.init.shiftPressed)
             {
                 //this assumes every data contain in selectedTiles are just duplicate
                 //make sure to check if DoAction calls ClearAllWaypoints or this wont be true anymore
                 List<TileInfo> distinctList = Tools.MergeList(_selectedTiles, targetList[0]);
-                List<TileInfo> whiteListed = Tools.WhiteList(distinctList, include);
+                List<TileInfo> whiteListed = Tools.WhiteListTileType(distinctList, include);
 
                 AssignsToList(whiteListed, targetList);
             }
             else
             {
-                List<TileInfo> sanitizeList = Tools.WhiteList(_selectedTiles, include);
+                List<TileInfo> sanitizeList = Tools.WhiteListTileType(_selectedTiles, include);
 
                 if (sanitizeList.Count == 0) return;
 
@@ -77,9 +77,10 @@ public class AttackUnit : MoveUnit
 
         if (Input.GetButtonDown("Fire2"))
         {
-            openRightClick.doNotDisplay = true;
-            CDebug.Log(this,"AttackUnit set doNotDisplay" + openRightClick.doNotDisplay);
-            openRightClick.ResetValues();
+            OpenRightClick.init.doNotDisplay = true;
+            OpenRightClick.init.skipRaycast = true;
+            CDebug.Log(this,"AttackUnit set doNotDisplay" + OpenRightClick.init.doNotDisplay);
+            OpenRightClick.init.ResetValues();
             EndAction();
         }
 
@@ -88,13 +89,13 @@ public class AttackUnit : MoveUnit
             List<TileInfo> _tileInfos = new List<TileInfo>();
             tileInfoRaycaster.GetTileInfosFromPos(Input.mousePosition, _tileInfos);
 
-            List<TileInfo> tileInfos = Tools.WhiteList(_tileInfos, include);
+            List<TileInfo> tileInfos = Tools.WhiteListTileType(_tileInfos, include);
 
             CDebug.Log(this,"TileInfo.Count=" + tileInfos.Count);
 
             if (tileInfos.Count == 0) return;
 
-            openRightClick.openLeftClick.Ignore();
+            OpenLeftClick.init.Ignore();
 
             if (tileInfos.Count == 1)
             {
@@ -108,13 +109,13 @@ public class AttackUnit : MoveUnit
                 return;
             }
 
-            openRightClick.include.AddRange(include);
-            openRightClick.showOptions = false;
-            openRightClick.whiteList = true;
-            openRightClick.UseDefaultCursor = false;
-            //openRightClick.multiSelect = false;
-            openRightClick.tileInfoRaycaster.GetTileInfosFromPos(Input.mousePosition);
-            openRightClick.forceDisplay = true;
+            OpenRightClick.init.include.AddRange(include);
+            OpenRightClick.init.showOptions = false;
+            OpenRightClick.init.whiteList = true;
+            OpenRightClick.init.useDefaultCursor = false;
+            //openRightClick.init.multiSelect = false;
+            TileInfoRaycaster.init.GetTileInfosFromPos(Input.mousePosition);
+            OpenRightClick.init.forceDisplay = true;
             CDebug.Log(this, "Unit Selected!");
         }
 
@@ -124,7 +125,7 @@ public class AttackUnit : MoveUnit
     {
         yield return new WaitForSeconds(0.4f);
 
-        openRightClick.ResetValues();
+        OpenRightClick.init.ResetValues();
 
         yield return null;
     }

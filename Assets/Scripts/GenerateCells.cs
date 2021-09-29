@@ -12,7 +12,6 @@ using UnityEngine.UI;
 public class GenerateCells : MonoBehaviour
 {
 
-    public TileInfoRaycaster tileInfoRaycaster;
     public GridLayoutGroup gridLayoutGroup;
     public OptionGenerator optionGenerator;
     public GameObject content;
@@ -50,7 +49,7 @@ public class GenerateCells : MonoBehaviour
         DeleteAllCells();
         //maxCellCount = 0;
         //currentIndex = 0;
-        List<TileInfo> tiles = whiteList ? Tools.WhiteList(_tiles, include) : _tiles;
+        List<TileInfo> tiles = whiteList ? Tools.WhiteListTileType(_tiles, include) : _tiles;
 
         if (tiles.Count == 0)
         {

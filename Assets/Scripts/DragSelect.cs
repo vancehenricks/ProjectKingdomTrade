@@ -14,7 +14,6 @@ using UnityEngine.EventSystems;
 public class DragSelect : MonoBehaviour
 {
     public GameObject selectorObj;
-    public OpenRightClick openRightClick;
 
     public Vector2 offset;
 
@@ -102,10 +101,11 @@ public class DragSelect : MonoBehaviour
     {
         //tileInfoGetterArray.holdList = true;
         tileInfoGetterArray.Scan();
-        openRightClick.ResetValues();
-        openRightClick.forceDisplay = true;
+        OpenRightClick.init.ResetValues();
+        OpenRightClick.init.forceDisplay = true;
 
-        TileInfoRaycaster.init.tileInfos = tileInfoGetterArray.tileInfos;
+        TileInfoRaycaster.init.tileInfos.Clear();
+        TileInfoRaycaster.init.tileInfos.AddRange(tileInfoGetterArray.tileInfos);
 
         selectorObj.SetActive(false);
         _selectorObjRect.sizeDelta = Vector2.one;

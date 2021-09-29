@@ -11,8 +11,12 @@ using UnityEngine.EventSystems;
 
 public class OpenLeftClick : MonoBehaviour
 {
-    public TileInfoRaycaster tileInfoRaycaster;
-    public OpenRightClick openRightClick;
+    private static OpenLeftClick _init;
+    public static OpenLeftClick init
+    {
+        get { return _init; }
+        private set { _init = value; }
+    }
 
     private bool ignore;
 
@@ -23,9 +27,14 @@ public class OpenLeftClick : MonoBehaviour
         return ignore;
     }
 
+    private void Awake()
+    {
+        init = this;
+    }
+
     private void Start()
     {
-        CommandPipeline.init.Add(Command, 1001);
+        CommandPipeline.init.Add(Command, 999);
         CommandPipeline.init.Add(PreCommand, 49);
     }
 
@@ -45,12 +54,12 @@ public class OpenLeftClick : MonoBehaviour
 
         if (Input.GetButtonDown("Fire1"))
         {
-            tileInfoRaycaster.GetTileInfosFromPos(Input.mousePosition);
+            TileInfoRaycaster.init.GetTileInfosFromPos(Input.mousePosition);
         }
 
         if (Input.GetButtonUp("Fire1"))
         {
-            List<RaycastResult> results = openRightClick.FireRayCast();
+            List<RaycastResult> results = OpenRightClick.init.FireRayCast();
 
             if (results.Count > 0)
             {

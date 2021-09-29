@@ -31,7 +31,7 @@ public class GlobalSelectTiles : SelectTiles
 
     private void OnSelectedChange(List<TileInfo> tileInfos)
     {
-        if (openRightClick.include.Count > 0) return;
+        if (OpenRightClick.init.include.Count > 0) return;
 
         if (tileInfos.Count != 0)
         {
