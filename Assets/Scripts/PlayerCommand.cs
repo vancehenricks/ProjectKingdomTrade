@@ -17,10 +17,10 @@ public class PlayerCommand : MonoBehaviour
     public List<UnitInfo> unitInfos;
     public List<List<TileInfo>> waypointsList;
     public List<List<TileInfo>> targetList;
+    private float key;
 
     protected virtual void Start()
     {
-        CommandPipeline.init.Add(Command, 100);
         waypointsList = new List<List<TileInfo>>();
         targetList = new List<List<TileInfo>>();
     }
@@ -32,9 +32,10 @@ public class PlayerCommand : MonoBehaviour
 
     public virtual void DoAction()
     {
+        key = CommandPipeline.init.Add(Command, 100);
         waypointsList.Clear();
         targetList.Clear();
-        unitInfos = ConvertToUnitInfo(MultiSelect.init.selectedTiles);
+        unitInfos = ConvertToUnitInfo(new List<TileInfo>(MultiSelect.init.selectedTiles));
         MultiSelect.init.Clear(true);
         OpenRightClick.init.ResetValues();
 
@@ -50,6 +51,7 @@ public class PlayerCommand : MonoBehaviour
     public virtual void EndAction()
     {
         CDebug.Log(this,"END ACTION");
+        CommandPipeline.init.Remove(key);
         CursorReplace.init.currentCursor = CursorType.Default;
         CursorReplace.init.SetCurrentCursorAsPrevious();
         unitInfos.Clear();

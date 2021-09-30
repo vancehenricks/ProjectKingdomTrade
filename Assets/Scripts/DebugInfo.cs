@@ -58,8 +58,10 @@ public class DebugInfo : MonoBehaviour
         OnClose();
     }
 
-    public void OnSelectedChange(List<TileInfo> tiles)
+    public void OnSelectedChange(HashSet<TileInfo> tileInfos)
     {
+        List<TileInfo> tiles = new List<TileInfo>(tileInfos);
+
         if (tiles == null || tiles.Count == 0) return;
 
         int lastIndex = tiles.Count - 1;

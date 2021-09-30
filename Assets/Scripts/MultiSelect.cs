@@ -18,15 +18,17 @@ public class MultiSelect : MonoBehaviour
         private set { _init = value; }
     }
 
-    public delegate void OnSelectedChange(List<TileInfo> tiles);
+    public delegate void OnSelectedChange(HashSet<TileInfo> tiles);
     public OnSelectedChange onSelectedChange;
-    public List<TileInfo> selectedTiles;
-    public List<TileInfo> previousSelectedTiles;
+    public HashSet<TileInfo> selectedTiles;
+    public HashSet<TileInfo> previousSelectedTiles;
     public bool shiftPressed;
     public bool ctrlPressed;
 
     private void Awake()
     {
+        selectedTiles = new HashSet<TileInfo>();
+        previousSelectedTiles = new HashSet<TileInfo>();
         init = this;
     }
 
@@ -73,9 +75,9 @@ public class MultiSelect : MonoBehaviour
         Relay();
     }
 
-    public void AddRange(List<TileInfo> tileInfos, bool relay = false)
+    public void UnionWith(HashSet<TileInfo> tileInfos, bool relay = false)
     {
-        selectedTiles.AddRange(tileInfos);
+        selectedTiles.UnionWith(tileInfos);
         if (!relay) return;
         Relay();
     }
@@ -83,7 +85,7 @@ public class MultiSelect : MonoBehaviour
     public void Clear(bool relay = false)
     {
         previousSelectedTiles.Clear();
-        previousSelectedTiles.AddRange(selectedTiles);
+        previousSelectedTiles.UnionWith(selectedTiles);
         selectedTiles.Clear();
         if (!relay) return;
         Relay();

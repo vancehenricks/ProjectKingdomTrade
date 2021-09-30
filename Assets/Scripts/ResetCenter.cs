@@ -36,7 +36,7 @@ public class ResetCenter : MonoBehaviour
         cm.transform.position = originalPos;
     }
 
-    private void OnSelectedChange(List<TileInfo> tileInfos)
+    private void OnSelectedChange(HashSet<TileInfo> tileInfos)
     {
         if(tileInfos.Count > 0)
         {

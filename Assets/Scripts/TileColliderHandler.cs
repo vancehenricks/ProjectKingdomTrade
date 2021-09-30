@@ -145,8 +145,15 @@ public class TileColliderHandler : MonoBehaviour
             yield break;
         }
 
-        //Make sure to add it instead of assigning reference Result directly, this will cause issue of not retrieving tiles in unity
-        callback(new List<BaseInfo>(task.Result));         
+        List<BaseInfo> baseInfos = new List<BaseInfo>();
+        List<BaseInfo> results = task.Result;
+
+        if(results != null && results.Count > 0)
+        {
+            baseInfos.AddRange(results);
+        }
+
+        callback(baseInfos);         
     }
 
     public async Task<List<BaseInfo>> Cast(BaseInfo baseInfo, Bounds bounds, Ray ray, bool useRay, List<BaseInfo> filter, int maxHits, bool filterOut)

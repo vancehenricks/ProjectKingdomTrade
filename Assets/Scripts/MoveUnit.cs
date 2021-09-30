@@ -29,7 +29,12 @@ public class MoveUnit : PlayerCommand
         {
             OpenLeftClick.init.Ignore();
             CDebug.Log(this,"Creating multiple waypoint...");
-            AssignsToList(Normalize(tileInfoRaycaster.GetTileInfoFromPos(Input.mousePosition)), waypointsList);
+            TileInfo tileInfo = tileInfoRaycaster.GetTileInfoFromPos(Input.mousePosition);
+
+            if(tileInfo != null)
+            {
+                AssignsToList(Normalize(tileInfo), waypointsList);
+            }
         }
 
         if (Input.GetButtonDown("Fire1") && !MultiSelect.init.shiftPressed)
@@ -38,7 +43,11 @@ public class MoveUnit : PlayerCommand
             CDebug.Log(this,"Creating one waypoint... unitInfos.Count=" + unitInfos.Count);
             TileInfo tileInfo = tileInfoRaycaster.GetTileInfoFromPos(Input.mousePosition);
             ClearAllWaypoints();
-            AssignsToList(Normalize(tileInfo), waypointsList);
+            
+            if(tileInfo != null)
+            {
+                AssignsToList(Normalize(tileInfo), waypointsList);
+            }
         }
 
         if (Input.GetButtonDown("Fire2"))

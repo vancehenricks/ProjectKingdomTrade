@@ -13,7 +13,7 @@ public delegate void ExecuteCommands();
 //Lowest value will execute first
 public class Pipeline : MonoBehaviour
 {
-    public SortedList<float, ExecuteCommands> commandList;
+    private SortedList<float, ExecuteCommands> commandList;
 
     protected virtual void Awake()
     {
@@ -35,7 +35,7 @@ public class Pipeline : MonoBehaviour
         }
     }
 
-    public void Add(ExecuteCommands command, float priority)
+    public float Add(ExecuteCommands command, float priority)
     {
 
         while (true)
@@ -50,6 +50,14 @@ public class Pipeline : MonoBehaviour
             }
         }
 
+        commandList = new SortedList<float, ExecuteCommands>(commandList);
         commandList.Add(priority, command);
+        return priority;
+    }
+
+    public void Remove(float key)
+    {
+        commandList = new SortedList<float, ExecuteCommands>(commandList);
+        commandList.Remove(key);
     }
 }

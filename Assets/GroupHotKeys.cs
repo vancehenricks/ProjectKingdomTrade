@@ -56,7 +56,7 @@ public class GroupHotKeys : MonoBehaviour
         if (OpenRightClick.init.skipRaycast && Input.GetButtonDown("Fire2"))
         {
             TileInfoRaycaster.init.tileInfos.Clear();
-            CDebug.Log(this, "MultiSelect.init.selectedTiles.Count="+MultiSelect.init.previousSelectedTiles.Count, LogType.Warning);
+            CDebug.Log(this, "MultiSelect.init.selectedTiles.Count="+MultiSelect.init.selectedTiles.Count, LogType.Warning);
             TileInfoRaycaster.init.tileInfos.AddRange(MultiSelect.init.previousSelectedTiles);
         }
         else if (MultiSelect.init.shiftPressed && Input.GetButtonDown("Fire2"))
@@ -73,7 +73,7 @@ public class GroupHotKeys : MonoBehaviour
                 if(MultiSelect.init.ctrlPressed)
                 {
                     CDebug.Log(this, "Created group for " + key, LogType.Warning);
-                    groups[key] = new List<TileInfo>(MultiSelect.init.selectedTiles);
+                    groups[key] = new List<TileInfo>(MultiSelect.init.previousSelectedTiles);
                 }
                 else if (groups[key].Count > 0)
                 {
@@ -87,9 +87,9 @@ public class GroupHotKeys : MonoBehaviour
                     CDebug.Log(this, "Retrieving group for " + key, LogType.Warning);
                     TileInfoRaycaster.init.tileInfos.Clear();
                     TileInfoRaycaster.init.tileInfos.AddRange(groups[key]);
-                    MultiSelect.init.Clear();
-                    MultiSelect.init.previousSelectedTiles.Clear();
-                    MultiSelect.init.AddRange(groups[key], true);
+                    MultiSelect.init.Clear(true);
+                    MultiSelect.init.UnionWith(new HashSet<TileInfo>(groups[key]), true);
+                    MultiSelect.init.Clear(true);
 
                     if(!skip && previousKey == key)
                     {

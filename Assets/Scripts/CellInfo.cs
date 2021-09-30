@@ -108,7 +108,7 @@ public class CellInfo : MonoBehaviour
         {
             optionGenerator.transform.position = corner.position + offset;
             //generate approriate option where it will only show that is common on all selected tiles
-            optionGenerator.Display(tileInfo, GetCommonOptions(MultiSelect.init.selectedTiles));
+            optionGenerator.Display(tileInfo, GetCommonOptions(new List<TileInfo>(MultiSelect.init.selectedTiles)));
 
         }
 

@@ -16,12 +16,13 @@ public class AttackUnit : MoveUnit
 {
     public List<TileInfo> include;
 
-    private List<TileInfo> _selectedTiles;
+    private HashSet<TileInfo> _selectedTiles;
     private bool onSelectChange;
 
     protected override void Start()
     {
         base.Start();
+        _selectedTiles = new HashSet<TileInfo>();
         MultiSelect.init.onSelectedChange += OnSelectedChangeProxy;
         ExecuteCommands command = OnSelectedChange;
         CommandPipeline.init.Add(command, 500);
@@ -46,26 +47,21 @@ public class AttackUnit : MoveUnit
 
             if (MultiSelect.init.shiftPressed)
             {
-                //this assumes every data contain in selectedTiles are just duplicate
-                //make sure to check if DoAction calls ClearAllWaypoints or this wont be true anymore
-                List<TileInfo> distinctList = Tools.MergeList(_selectedTiles, targetList[0]);
-                List<TileInfo> whiteListed = Tools.WhiteListTileType(distinctList, include);
-
+                List<TileInfo> whiteListed = Tools.WhiteListTileType(new List<TileInfo>(_selectedTiles), include);
                 AssignsToList(whiteListed, targetList);
             }
             else
             {
-                List<TileInfo> sanitizeList = Tools.WhiteListTileType(_selectedTiles, include);
+                List<TileInfo> sanitizeList = Tools.WhiteListTileType(new List<TileInfo>(_selectedTiles), include);
 
                 if (sanitizeList.Count == 0) return;
-
                 ClearAllWaypoints();
                 AssignsToList(sanitizeList[0], targetList);
             }
         }
     }
 
-    protected void OnSelectedChangeProxy(List<TileInfo> selectedTiles)
+    protected void OnSelectedChangeProxy(HashSet<TileInfo> selectedTiles)
     {
         onSelectChange = true;
         _selectedTiles = selectedTiles;

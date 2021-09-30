@@ -70,6 +70,24 @@ public class OpenLeftClick : MonoBehaviour
 
             if (count > 1)
             {
+                if (MultiSelect.init.shiftPressed)
+                {                    
+                    List<TileInfo> normalized = new List<TileInfo>();
+                    foreach (TileInfo tile in TileInfoRaycaster.init.tileInfos)
+                    {
+                        if (tile.tileType == "Unit")
+                        {
+                            normalized.Add(tile);
+                        }
+                    }
+
+                    TileInfoRaycaster.init.tileInfos.Clear();
+                    TileInfoRaycaster.init.tileInfos.AddRange(MultiSelect.init.selectedTiles);
+                    TileInfoRaycaster.init.tileInfos.AddRange(normalized);
+                    MultiSelect.init.Clear(true);
+                    MultiSelect.init.UnionWith(new HashSet<TileInfo>(TileInfoRaycaster.init.tileInfos));
+                }
+
                 MultiSelect.init.Clear(true);
 
                 foreach (TileInfo tile in TileInfoRaycaster.init.tileInfos)
@@ -79,11 +97,15 @@ public class OpenLeftClick : MonoBehaviour
                 }
 
                 MultiSelect.init.Relay();
+                if(!MultiSelect.init.shiftPressed)
+                {
+                   MultiSelect.init.Clear(true); 
+                }
             }
             else if (count == 1)
             {
                 MultiSelect.init.Clear(true);
-                MultiSelect.init.AddRange(TileInfoRaycaster.init.tileInfos, true);
+                MultiSelect.init.UnionWith(new HashSet<TileInfo>(TileInfoRaycaster.init.tileInfos), true);
             }
         }
     }

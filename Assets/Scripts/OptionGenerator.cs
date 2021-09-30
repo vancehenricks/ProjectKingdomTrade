@@ -50,7 +50,7 @@ public class OptionGenerator : MonoBehaviour
     private void Show(string name, TileInfo tileInfo)
     {
         List<TileInfo> raycastTile = TileInfoRaycaster.init.tileInfos;
-        List<TileInfo> multiSelect = MultiSelect.init.selectedTiles;
+        HashSet<TileInfo> multiSelect = MultiSelect.init.selectedTiles;
 
         string[] n = name.Split('_');
         name = n[0] + "_" + n[1];

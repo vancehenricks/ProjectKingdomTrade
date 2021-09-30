@@ -29,7 +29,7 @@ public class GlobalSelectTiles : SelectTiles
         Initialize();
     }
 
-    private void OnSelectedChange(List<TileInfo> tileInfos)
+    private void OnSelectedChange(HashSet<TileInfo> tileInfos)
     {
         if (OpenRightClick.init.include.Count > 0) return;
 

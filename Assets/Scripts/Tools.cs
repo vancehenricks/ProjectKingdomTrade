@@ -80,21 +80,6 @@ public class Tools : MonoBehaviour
         return tileInfos;
     }
 
-    public static List<T> MergeList<T>(List<T> selectedTiles, List<T> targetList) where T : TileInfo
-    {
-        List<T> sanitizeList = new List<T>();
-
-        foreach (T tile in selectedTiles)
-        {
-            if (!targetList.Contains(tile))
-            {
-                sanitizeList.Add(tile);
-            }
-        }
-
-        return sanitizeList;
-    }
-
     public static int TileLocationDistance(TileInfo tile1, TileInfo tile2)
     {
         int distance = 0;
