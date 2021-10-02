@@ -15,7 +15,7 @@ public class GlobalSelectTiles : SelectTiles
 
 
     //public Dictionary<string, List<SyncIcon>> parentTiles;
-    public List<TileInfo> previousSelected;
+    private List<TileInfo> previousSelected;
 
     private void Awake()
     {
@@ -26,6 +26,7 @@ public class GlobalSelectTiles : SelectTiles
     private void Start()
     {
         MultiSelect.init.onSelectedChange += OnSelectedChange;
+        previousSelected = new List<TileInfo>();
         Initialize();
     }
 

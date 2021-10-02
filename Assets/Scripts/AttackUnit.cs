@@ -28,6 +28,11 @@ public class AttackUnit : MoveUnit
         CommandPipeline.init.Add(command, 500);
     }
 
+    private void OnDestroy()
+    {
+        MultiSelect.init.onSelectedChange -= OnSelectedChangeProxy;
+    }
+
     public override void DoAction()
     {
         base.DoAction();

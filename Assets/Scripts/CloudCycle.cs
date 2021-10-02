@@ -65,6 +65,11 @@ public class CloudCycle : MonoBehaviour
         init = this;
     }
 
+    private void OnDestroy()
+    {
+        Tick.init.tickUpdate -= TickUpdate;
+    }
+
     private void Update()
     {
         if (InputOverride.init.GetKeyUp(hideClouds))

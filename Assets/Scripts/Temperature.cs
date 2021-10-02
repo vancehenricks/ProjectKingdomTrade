@@ -26,11 +26,16 @@ public class Temperature : MonoBehaviour
     private void Awake()
     {
         init = this;
-        Tick.init.tickUpdate += TickUpdate;
+    }
+
+    private void OnDestroy()
+    {
+        Tick.init.tickUpdate -= TickUpdate;
     }
 
     private void Start()
     {
+        Tick.init.tickUpdate += TickUpdate;
         temperature = 30f;
         minTemp = 29f;
         maxTemp = 32f;

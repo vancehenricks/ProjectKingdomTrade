@@ -68,44 +68,60 @@ public class OpenLeftClick : MonoBehaviour
 
             int count = TileInfoRaycaster.init.tileInfos.Count;
 
-            if (count > 1)
+            //if (count > 1)
+            //{
+            if (MultiSelect.init.shiftPressed)
+            {                  
+                HashSet<TileInfo> normalized = new HashSet<TileInfo>();
+
+                Filter(TileInfoRaycaster.init.tileInfos, ref normalized);
+                Filter(MultiSelect.init.previousSelectedTiles, ref normalized);
+
+                TileInfoRaycaster.init.tileInfos.Clear();
+
+                TileInfoRaycaster.init.tileInfos.AddRange(normalized);
+                MultiSelect.init.Clear(true);
+                MultiSelect.init.UnionWith(normalized, true);
+                MultiSelect.init.Clear(true);
+            }
+            else
             {
-                if (MultiSelect.init.shiftPressed)
-                {                    
-                    List<TileInfo> normalized = new List<TileInfo>();
-                    foreach (TileInfo tile in TileInfoRaycaster.init.tileInfos)
-                    {
-                        if (tile.tileType == "Unit")
-                        {
-                            normalized.Add(tile);
-                        }
-                    }
-
-                    TileInfoRaycaster.init.tileInfos.Clear();
-                    TileInfoRaycaster.init.tileInfos.AddRange(MultiSelect.init.selectedTiles);
-                    TileInfoRaycaster.init.tileInfos.AddRange(normalized);
-                    MultiSelect.init.Clear(true);
-                    MultiSelect.init.UnionWith(new HashSet<TileInfo>(TileInfoRaycaster.init.tileInfos));
-                }
-
                 MultiSelect.init.Clear(true);
 
                 foreach (TileInfo tile in TileInfoRaycaster.init.tileInfos)
                 {
-                    if (tile.tileType != "Unit") continue;
+                    if (count > 1 && tile.tileType != "Unit" && tile.tileType != "Town") continue;
                     MultiSelect.init.Add(tile);
                 }
 
                 MultiSelect.init.Relay();
-                if(!MultiSelect.init.shiftPressed)
-                {
-                   MultiSelect.init.Clear(true); 
-                }
+                MultiSelect.init.Clear(true); 
             }
-            else if (count == 1)
+            //}
+            //else if (count == 1)
+            //{
+            //    MultiSelect.init.Clear(true);
+            //    MultiSelect.init.UnionWith(new HashSet<TileInfo>(TileInfoRaycaster.init.tileInfos), true);
+            //}
+        }
+    }
+
+    private void Filter(ICollection<TileInfo> list, ref HashSet<TileInfo> normalized)
+    {
+        int count = normalized.Count;
+        int maxHits = TileInfoRaycaster.init.maxHits;
+
+        foreach (TileInfo tile in list)
+        {
+            if(count++ >= maxHits) break;
+
+            if (tile.tileType == "Unit" || tile.tileType == "Town")
             {
-                MultiSelect.init.Clear(true);
-                MultiSelect.init.UnionWith(new HashSet<TileInfo>(TileInfoRaycaster.init.tileInfos), true);
+                normalized.Add(tile);
+            }
+            else
+            {
+                count--;
             }
         }
     }

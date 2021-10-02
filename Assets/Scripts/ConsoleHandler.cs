@@ -36,7 +36,7 @@ public class ConsoleHandler : MonoBehaviour
     //public RectTransform context;
 
     public int maxNumberOfLines;
-    public float textHeight;
+    //public float textHeight;
 
     public string previousCommand;
 
@@ -46,7 +46,6 @@ public class ConsoleHandler : MonoBehaviour
     private static string cacheInput;
     private static List<string> cacheConsole;
     private static List<string> cacheCommands;
-    private static int numberOfLines;
     private static int remainOnIndex;
     //-
 
@@ -130,7 +129,7 @@ public class ConsoleHandler : MonoBehaviour
 
     public void NextLine()
     {
-        if (Input.GetKey(KeyCode.Return))
+        if (Input.GetKey(KeyCode.Return) || Input.GetKey(KeyCode.KeypadEnter))
         {
             previousCommand = command.text;
 
@@ -250,9 +249,9 @@ public class ConsoleHandler : MonoBehaviour
 
     public void AddLine(string line, bool record = true)
     {
-        if (++numberOfLines > maxNumberOfLines)
+        if (consoles.Count >= maxNumberOfLines)
         {
-            Clear();
+            Trunked();
         }
 
         InputFieldOverride console = Instantiate<InputFieldOverride>(baseConsole);
@@ -284,6 +283,13 @@ public class ConsoleHandler : MonoBehaviour
         AddLine("Type \"help\" or press TAB for more info.");
     }
 
+    public void Trunked()
+    {
+        Destroy(consoles[0].gameObject);
+        consoles.RemoveAt(0);
+        cacheConsole.RemoveAt(0);
+    }
+
     public void Clear()
     {
         foreach (InputFieldOverride inputField in consoles)
@@ -293,7 +299,6 @@ public class ConsoleHandler : MonoBehaviour
 
         consoles.Clear();
         cacheConsole.Clear();
-        numberOfLines = 0;
         //context.sizeDelta = new Vector2(0f, textHeight);
         Welcome();
     }

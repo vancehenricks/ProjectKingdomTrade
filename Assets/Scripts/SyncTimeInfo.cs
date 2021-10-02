@@ -19,9 +19,14 @@ public class SyncTimeInfo : MonoBehaviour
     public Text speed;
 
     // Update is called once per frame
-    private void Awake()
+    private void Start()
     {
         Tick.init.tickUpdate += TickUpdate;
+    }
+
+    private void OnDestroy()
+    {
+        Tick.init.tickUpdate -= TickUpdate;
     }
 
     private void Update()

@@ -83,25 +83,28 @@ public class PathFindingHandler : MonoBehaviour
         //yield return new WaitUntil(() => Tick.init.tick > ((Tick.init.tick+5) % 24));
 
         //Tick.init.tickUpdate -= TickUpdate;
-        Vector3Int unitPos;
-        Vector3Int desPos;
+        //Vector3Int unitPos;
+        //Vector3Int desPos;
         //unitCollider2D.enabled = false;
         Transform previousParent = transform.parent;
         transform.SetParent(transform.parent.transform.parent);
         unitInfo.tileCollider.Relay(false);
         //transform.SetAsLastSibling();
-        do
+        
+        transform.position = (transform.position + tileDestination.transform.position) / 2f;
+        yield return new WaitForSeconds(0.1f);
+        /*do
         {
             transform.position = Vector3.MoveTowards(transform.position, tileDestination.transform.position, 5f);
             unitPos = Vector3Int.FloorToInt(transform.position);
             desPos = Vector3Int.FloorToInt(tileDestination.transform.position);
-            CDebug.Log(this, "unitInfo.tileId=" + unitInfo.tileId + " wayPointIndex=" + wayPointIndex + 
-             " start=" + unitInfo.tileLocation + " end=" + tileDestination.tileLocation +
-             " unitPos=" + unitPos + " desPos=" + desPos);
+            //CDebug.Log(this, "unitInfo.tileId=" + unitInfo.tileId + " wayPointIndex=" + wayPointIndex + 
+            // " start=" + unitInfo.tileLocation + " end=" + tileDestination.tileLocation +
+            // " unitPos=" + unitPos + " desPos=" + desPos);
 
             yield return null;
         }
-        while (unitPos != desPos);
+        while (unitPos != desPos);*/
         transform.position = tileDestination.transform.position;
         transform.SetParent(previousParent);
         unitInfo.tileCollider.UpdatePosition();

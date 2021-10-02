@@ -73,7 +73,14 @@ public class GroupHotKeys : MonoBehaviour
                 if(MultiSelect.init.ctrlPressed)
                 {
                     CDebug.Log(this, "Created group for " + key, LogType.Warning);
-                    groups[key] = new List<TileInfo>(MultiSelect.init.previousSelectedTiles);
+                    if(OpenRightClick.init.generateCells.gameObject.activeSelf)
+                    {
+                        groups[key] = new List<TileInfo>(MultiSelect.init.selectedTiles);
+                    }
+                    else
+                    {
+                        groups[key] = new List<TileInfo>(MultiSelect.init.previousSelectedTiles);
+                    }
                 }
                 else if (groups[key].Count > 0)
                 {

@@ -82,7 +82,7 @@ public class TileColliderHandler : MonoBehaviour
             {
                 foreach(BaseInfo tile in colliderValue.Value.Values.ToList<BaseInfo>())
                 {                    
-                    if(hitCount > maxHits && maxHits != -1) break;
+                    if(hitCount > maxHits && maxHits != -1) break; //this is wrong logic it will capture +1 but we will let this be
 
                     if(baseInfo != null && baseInfo.tileId == tile.tileId) continue;
 
@@ -145,15 +145,7 @@ public class TileColliderHandler : MonoBehaviour
             yield break;
         }
 
-        List<BaseInfo> baseInfos = new List<BaseInfo>();
-        List<BaseInfo> results = task.Result;
-
-        if(results != null && results.Count > 0)
-        {
-            baseInfos.AddRange(results);
-        }
-
-        callback(baseInfos);         
+        callback(new List<BaseInfo>(task.Result));         
     }
 
     public async Task<List<BaseInfo>> Cast(BaseInfo baseInfo, Bounds bounds, Ray ray, bool useRay, List<BaseInfo> filter, int maxHits, bool filterOut)

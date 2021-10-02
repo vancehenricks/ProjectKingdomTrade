@@ -32,7 +32,10 @@ public class PathFindingQueue : MonoBehaviour
 
     //public int maxQueue;
     public PathFindingPipeline pipeline;
-
+    public int tickCountMax;
+    public int taskCountMax;
+    private int taskCount;
+    private int tickCount;
     private Coroutine scan;
 
     public void Initialize()
@@ -46,11 +49,25 @@ public class PathFindingQueue : MonoBehaviour
         pipeline = new PathFindingPipeline();
     }
 
+    private void Start()
+    {
+        Tick.init.tickUpdate += TickUpdate;
+    }
+
     private void OnDestroy()
     {
         if (scan != null)
         {
             StopCoroutine(scan);
+        }
+        Tick.init.tickUpdate -= TickUpdate;
+    }
+
+    private void TickUpdate()
+    {
+        if(tickCount++ > tickCountMax)
+        {
+            tickCount = 0;
         }
     }
 
@@ -77,7 +94,17 @@ public class PathFindingQueue : MonoBehaviour
             CDebug.Log(this, "DEQUEUE pathFinders.Count=" + pipeline.pathFinder.Count, LogType.Warning);
             pipeline.task = null;
             
-            yield return null;
+            if(++taskCount < tickCountMax)
+            {
+                yield return null;
+            }
+            else
+            {
+                taskCount = 0;
+                yield return new WaitUntil(() => {
+                    return tickCount >= tickCountMax; //delay for x ticks
+                });
+            }
         }
     }
 

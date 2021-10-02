@@ -8,6 +8,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class CellInfo : MonoBehaviour
 {
@@ -15,7 +16,7 @@ public class CellInfo : MonoBehaviour
     public Image image;
     public Image border;
     public Image select;
-    public Text value;
+    public TextMeshProUGUI unit;
     public TileInfo tileInfo;
     public GenerateCells generateCells;
     public Transform corner;
@@ -35,7 +36,7 @@ public class CellInfo : MonoBehaviour
 
         if (tile.unit > 0)
         {
-            value.text = Tools.ConvertToSymbols(tile.unit);
+            unit.text = Tools.ConvertToSymbols(tile.unit);
         }
 
         Image shade = null;
