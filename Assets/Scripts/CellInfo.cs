@@ -29,6 +29,7 @@ public class CellInfo : MonoBehaviour
 
     public void Initialize(TileInfo tile, bool _showOptions, bool _multiSelect)
     {
+        name += "_" + tile.tileId;
         showOptions = _showOptions;
         multiSelect = _multiSelect;
         optionGenerator = generateCells.optionGenerator;
@@ -38,39 +39,10 @@ public class CellInfo : MonoBehaviour
         {
             unit.text = Tools.ConvertToSymbols(tile.unit);
         }
-
-        Image shade = null;
-
-        if (tileInfo.tileEffect != null)
-        {
-            image.sprite = tileInfo.sprite;
-        }
-        else
-        {
-            Image img = tileInfo.tileEffect.imageImage;
-            shade = tileInfo.tileEffect.shadeImage;
-            image.sprite = img.sprite;
-        }
-
-        if (tileInfo.playerInfo == null)
-        {
-            border.gameObject.SetActive(false);
-            image.color = Color.white;
-        }
-        else
-        {
-            border.gameObject.SetActive(true);
-
-            if (shade == null)
-            {
-                border.color = new Color(tileInfo.playerInfo.color.r, tileInfo.playerInfo.color.g, tileInfo.playerInfo.color.b);
-            }
-            else
-            {
-                border.sprite = shade.sprite;
-                border.color = new Color(tileInfo.playerInfo.color.r, tileInfo.playerInfo.color.g, tileInfo.playerInfo.color.b, shade.color.a);
-            }
-        }
+        
+        image.sprite = tileInfo.sprite;
+        border.sprite = tileInfo.tileEffect.shadeImage.sprite;
+        border.color = tileInfo.tileEffect.shadeImage.color;
 
         if (showOptions)
         {

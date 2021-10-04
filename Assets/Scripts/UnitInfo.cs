@@ -71,7 +71,7 @@ public class UnitInfo : TileInfo
         base.OnDestroy();
     }
 
-    protected override Sprite SetSprite(Sprite sp)
+    protected override void SetSprite(Sprite sp)
     {
         if (sp != null)
         {
@@ -89,6 +89,6 @@ public class UnitInfo : TileInfo
             unitEffect.shadeImage.color = new Color(playerInfo.color.r, playerInfo.color.g, playerInfo.color.b, unitEffect.shadeImage.color.a);
         }
 
-        return sp;
+        _sprite = sp;
     }
 }

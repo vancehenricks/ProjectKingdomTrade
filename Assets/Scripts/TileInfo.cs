@@ -12,6 +12,7 @@ using UnityEngine.UI;
 
 public class TileInfo : BaseInfo
 {
+    [SerializeField]
     protected Sprite _sprite;
     public Sprite sprite
     {
@@ -21,7 +22,8 @@ public class TileInfo : BaseInfo
         }
         set
         {
-            _sprite = SetSprite(value);
+            SetSprite(value);
+            _sprite = value;
         }
     }
 
@@ -66,6 +68,8 @@ public class TileInfo : BaseInfo
         {
             playerInfo = PlayerList.init.defaultPlayerInfo;
         }
+
+        name += "_" + playerInfo.playerId;
         localTemp = Temperature.init.temperature;
         //unitInfos = new List<UnitInfo>();
         //upgrades = new List<Upgrade>();
@@ -73,7 +77,7 @@ public class TileInfo : BaseInfo
         //gameObject.name = gameObject.name + "_" + tileId;
         TileList.init.Add(this);
         localTemp = Temperature.init.temperature;
-        SetSprite(sprite);
+        //SetSprite(sprite);
         tileEffect.Initialize();
     }
 
@@ -88,14 +92,13 @@ public class TileInfo : BaseInfo
         Destroy(gameObject);
     }
 
-    protected virtual Sprite SetSprite(Sprite sp)
+    protected virtual void SetSprite(Sprite sp)
     {
         if (sp != null)
         {
             tileEffect.imageImage.sprite = sp;
+            _sprite = sp;
         }
-
-        return sp;
     }
 
     protected virtual Sprite GetSprite()

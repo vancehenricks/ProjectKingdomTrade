@@ -24,7 +24,7 @@ public class TileInfoRaycaster : MonoBehaviour
     public int maxHits;
     public List<TileInfo> tileInfos;
 
-    public List<BaseInfo> filterOut;
+    public List<string> filterOut;
 
     public GraphicRaycaster graphicsRaycaster;
     public EventSystem eventSystem;
@@ -45,15 +45,20 @@ public class TileInfoRaycaster : MonoBehaviour
     public TileInfo GetTileInfoFromPos(Vector3 pos)
     {
         List<TileInfo> tileInfos = new List<TileInfo>();
-        GetTileInfosFromPos(pos, tileInfos);
+        GetTileInfosFromPos(pos, tileInfos, 1);
 
         if (tileInfos.Count == 0) return null;
 
         return tileInfos[0];
     }
 
-    public void GetTileInfosFromPos(Vector3 pos, List<TileInfo> _tileInfos)
+    public void GetTileInfosFromPos(Vector3 pos, List<TileInfo> _tileInfos, int hits = -1)
     {
+        if(hits == -1)
+        {
+            hits = maxHits;
+        }
+
         pointerEventData = new PointerEventData(eventSystem);
         pointerEventData.position = pos;
 
@@ -74,7 +79,7 @@ public class TileInfoRaycaster : MonoBehaviour
 
         TileColliderHandler.init.Cast((List<BaseInfo> baseInfos) => {
             _tileInfos.AddRange(Tools.ConvertBaseToTileInfo(baseInfos));
-        }, ray, filterOut, maxHits, true);
+        }, ray, filterOut, hits, true);
 
         CDebug.Log(this, "_tileInfos.Count=" + _tileInfos.Count, LogType.Warning);  
     }

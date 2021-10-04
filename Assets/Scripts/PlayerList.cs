@@ -46,6 +46,7 @@ public class PlayerList : MonoBehaviour
     public PlayerInfo Instantiate()
     {
         PlayerInfo temp = Instantiate<PlayerInfo>(basePlayerInfo, basePlayerInfo.transform.parent);
+        temp.name = basePlayerInfo.name;
         temp.Initialize();
 
         if (defaultPlayerInfo == null)

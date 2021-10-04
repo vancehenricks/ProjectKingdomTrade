@@ -49,7 +49,7 @@ public class GenerateCells : MonoBehaviour
         DeleteAllCells();
         //maxCellCount = 0;
         //currentIndex = 0;
-        List<TileInfo> tiles = whiteList ? Tools.WhiteListTileType(_tiles, include) : _tiles;
+        List<TileInfo> tiles = whiteList ? SortTileType(Tools.WhiteListTileType(_tiles, include)) : SortTileType(_tiles);
 
         if (tiles.Count == 0)
         {
@@ -74,6 +74,7 @@ public class GenerateCells : MonoBehaviour
             //maxCellCount++;
             //currentIndex = i;
             GameObject cell = Instantiate(baseCell);
+            cell.name = baseCell.name;
             cell.GetComponent<CellInfo>().Initialize(tiles[i], showOptions, multiSelect);
             cell.transform.SetParent(content.transform);
             cells.Add(cell);
@@ -127,6 +128,25 @@ public class GenerateCells : MonoBehaviour
             Image select = cell.GetComponent<CellInfo>().select;
             select.gameObject.SetActive(false);
         }
+    }
+
+    private List<TileInfo> SortTileType(List<TileInfo> tileInfos)
+    {
+        List<TileInfo> tileOnly = new List<TileInfo>();
+        List<TileInfo> unitOnly = new List<TileInfo>(tileInfos);
+
+        foreach(TileInfo tile in tileInfos)
+        {
+            if(tile.tileType != "Unit")
+            {
+                tileOnly.Add(tile);
+                unitOnly.Remove(tile);
+            }
+        }
+
+        tileOnly.AddRange(unitOnly);
+        
+        return tileOnly;
     }
 
     /*public void DoButtonDown()

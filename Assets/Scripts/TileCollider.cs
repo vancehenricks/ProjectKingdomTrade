@@ -15,7 +15,7 @@ using UnityEngine.UI;
 
     //private BoxCollider2D boxCollider2D;
     public Vector2 size;
-    public List<BaseInfo> filterOut;
+    public List<string> filterOut;
     public Bounds previousBounds;
     public Bounds currentBounds;
     public BaseInfo baseInfo;

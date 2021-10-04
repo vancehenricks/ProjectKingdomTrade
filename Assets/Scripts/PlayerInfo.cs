@@ -18,6 +18,7 @@ public class PlayerInfo : MonoBehaviour
     public void Initialize()
     {
         playerId = Tools.UniqueId;
+        name += "_" + playerId;
         claims = new HashSet<TileInfo>();
     }
 }

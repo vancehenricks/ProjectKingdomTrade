@@ -65,6 +65,7 @@ public class OpenRightClick : MonoBehaviour
         {
             Debug.Log("Retriving new TileInfo");
             TileInfoRaycaster.init.GetTileInfosFromPos(Input.mousePosition);
+            AddStandingTile();
         }
         else if(skipRaycast)
         {
@@ -133,6 +134,32 @@ public class OpenRightClick : MonoBehaviour
         {
             ResetValues();
         }
+    }
+
+    private void AddStandingTile()
+    {
+        List<TileInfo> tileInfos = TileInfoRaycaster.init.tileInfos;
+        HashSet<TileInfo> trimmed = new HashSet<TileInfo>(TileInfoRaycaster.init.tileInfos);
+        TileInfo standingTile = null;
+        
+        foreach(TileInfo tileInfo in tileInfos)
+        {
+            UnitInfo unit = tileInfo as UnitInfo;
+
+            if(unit != null)
+            {
+                trimmed.Remove(unit.standingTile);
+                standingTile = unit.standingTile;
+                break;
+            }
+        }
+
+        tileInfos.Clear();
+        if(standingTile != null)
+        {
+            tileInfos.Add(standingTile);
+        }
+        tileInfos.AddRange(trimmed);
     }
 
     public List<RaycastResult> FireRayCast()

@@ -16,7 +16,7 @@ public class TileInfoGetterArray : MonoBehaviour
     //public bool holdList;
     private BoxCollider2D boxCollider2D;
     public List<TileInfo> tileInfos;
-    public List<TileInfo> baseTiles;
+    public List<string> filterIn;
     //private Coroutine scan;
 
     //private int overflowCount;
@@ -31,7 +31,7 @@ public class TileInfoGetterArray : MonoBehaviour
     {
         TileColliderHandler.init.Cast((List<BaseInfo> baseInfos) => {
             tileInfos.AddRange(Tools.ConvertBaseToTileInfo(baseInfos));
-        }, null, boxCollider2D.bounds, Tools.ConvertTileToBaseInfo(baseTiles), maxHits);
+        }, null, boxCollider2D.bounds, filterIn, maxHits);
 
         CDebug.Log(this, "tileInfos.Count=" + tileInfos.Count, LogType.Warning);  
     }
