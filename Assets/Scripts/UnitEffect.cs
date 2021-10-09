@@ -35,6 +35,20 @@ public class UnitEffect : TileEffect
     public UnitWayPoint unitWayPoint;
     public NonWalkableTiles nonWalkableTiles;
     public UnitOcclusion unitOcclusion;
+    public TileCollider territoryCollider;
+
+    public override void Initialize()
+    {
+        if(territoryCollider != null)
+        {
+            territoryCollider.onEnter += OnEnterTerritory;
+            territoryCollider.onExit += OnExitTerritory;
+            territoryCollider.Initialize(true);
+            territoryCollider.Listen();
+        }
+
+        base.Initialize();
+    }
 
     protected override void OnDestroy()
     {
@@ -44,9 +58,33 @@ public class UnitEffect : TileEffect
             ResetDisplay(unitInfo.standingTile);
         }
 
+        if(territoryCollider != null)
+        {
+            territoryCollider.onEnter -= OnEnterTerritory;
+            territoryCollider.onExit -= OnExitTerritory;
+        }
+
         base.OnDestroy();
     }
-    
+
+    protected virtual void OnEnterTerritory(List<BaseInfo> baseInfos)
+    {
+        foreach(BaseInfo baseInfo in baseInfos)
+        {
+            TileInfo tileInfo = baseInfo as TileInfo;
+
+            if(tileInfo != null)
+            {
+                tileInfo.tileEffect.UpdateTerritory(unitInfo);
+            }
+        }
+    }   
+
+    protected virtual void OnExitTerritory(List<BaseInfo> baseInfos)
+    {
+
+    }    
+
     protected override void OnEnter(List<BaseInfo> baseInfos)
     {
         if (unitInfo.tileType == "Town") return;
@@ -71,25 +109,6 @@ public class UnitEffect : TileEffect
         }
     }
 
-    /*private void OnTriggerStay2D(Collider2D collision)
-    {
-        if (unitInfo.tileType == "Town") return;
-
-        TileInfo tempTile = collision.GetComponent<TileInfo>();
-
-        if (tempTile == null) return;
-
-        if (tempTile.tileType != unitInfo.tileType)
-        {
-            unitInfo.standingTile = tempTile;
-            unitInfo.tileLocation = tempTile.tileLocation;
-            unitInfo.travelTime = tempTile.travelTime;
-        }
-
-        unitInfo.localTemp = tempTile.localTemp;
-    }*/
-
-    //Different thread+
     protected override void OnExit(List<BaseInfo> baseInfos)
     {
         if (unitInfo.tileType == "Town") return;
@@ -105,8 +124,6 @@ public class UnitEffect : TileEffect
 
         //transform.SetParent(MapGenerator.init.grid);
     }
-    //Different thread-    
-
 
     public void ResetDisplay(TileInfo standingTile)
     {

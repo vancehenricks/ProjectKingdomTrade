@@ -20,11 +20,14 @@ public class CombatHandler : MonoBehaviour
     //public FirstTargetChange firstTargetChange;
     public TileInfoRaycaster tileInfoRaycaster;
     public CombatSession combatSession;
+    public System.Action<UnitInfo, UnitInfo> OnEnterCombat;
+    public System.Action<UnitInfo, UnitInfo> OnStayCombat;    
+    public System.Action<UnitInfo, UnitInfo> OnLeaveCombat;    
     private CombatSession defaultCombatSession;
     //private int previousTargetCount;
     private TileInfo firstTarget;
     private TileInfo targetStandingTile;
-    public int targetIndex;
+    private int targetIndex;
     
     private void Start()
     {
@@ -35,13 +38,11 @@ public class CombatHandler : MonoBehaviour
 
     private void OnDestroy()
     {
-        //UnitInfo targetUnit = (UnitInfo)unitInfo.currentTarget;
-
-        //DisEngage(targetUnit);
+        OnEnterCombat = null;
+        OnStayCombat = null;
+        OnLeaveCombat = null;
         DisEngage();
         Tick.init.tickUpdate -= TickUpdate;
-        //targetCountChange = null;
-        //firstTargetChange = null;
     }
 
     private void TickUpdate()
@@ -114,13 +115,24 @@ public class CombatHandler : MonoBehaviour
             targetUnit.currentTarget = unitInfo;
 
             unitInfo.isEngaged = true;
+
+            if(OnEnterCombat != null)
+            {
+                OnEnterCombat(unitInfo, targetUnit);
+            }
+
             targetStandingTile = null;
             ResetCombatPathing();
             targetUnit.waypoints.Add(unitInfo);
         }
         else if (distance <= attackDistance && unitInfo.isEngaged)
         {
-            //damage enemy logic here
+            if(OnStayCombat != null)
+            {
+                //do animation and damage here
+                OnStayCombat(unitInfo, targetUnit);
+            }
+
             CDebug.Log(this, "unitInfo.tileId=" + unitInfo.tileId + " targetUnit.tileId=" + targetUnit.tileId, LogType.Warning);
         }
         else if (distance > attackDistance && unitInfo.isEngaged)
@@ -178,12 +190,19 @@ public class CombatHandler : MonoBehaviour
                 combatSession.Remove(unitInfo);
                 combatSession = defaultCombatSession;
             }
+
+            if(OnLeaveCombat != null)
+            {
+                OnLeaveCombat(unitInfo, unitInfo.currentTarget as UnitInfo);
+            }
+
             unitInfo.targetted.Remove(unitInfo.currentTarget);
             unitInfo.targets.Remove(unitInfo.currentTarget);
             unitInfo.currentTarget = null;
             unitInfo.isEngaged = false;
         }
-
+        
+        targetIndex=0;
         ResetCombatPathing();
     }
 }

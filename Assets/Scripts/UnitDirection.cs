@@ -10,16 +10,24 @@ using UnityEngine;
 
 public class UnitDirection : MonoBehaviour
 {
-    public PathFindingHandler pathfinding;
+    public PathFindingHandler pathFindingHandler;
+    public CombatHandler combatHandler;
 
     private void Start()
     {
-        pathfinding.destinationChanged += DestinationChanged;
+        pathFindingHandler.destinationChanged += DestinationChanged;
+        combatHandler.OnEnterCombat += OnEnterCombat;
     }
 
     private void OnDestroy()
     {
-        pathfinding.destinationChanged -= DestinationChanged;
+        pathFindingHandler.destinationChanged -= DestinationChanged;
+        combatHandler.OnEnterCombat -= OnEnterCombat;
+    }
+
+    private void OnEnterCombat(UnitInfo origin, UnitInfo target)
+    {
+        Tools.SetDirection(origin.transform, target.transform.position);
     }
 
     private void DestinationChanged(int index, List<TileInfo> generatedWayPoints)

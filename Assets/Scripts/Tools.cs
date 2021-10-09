@@ -280,7 +280,6 @@ public class Tools : MonoBehaviour
         return bInfos;
     }
 
-    //this causes error need to be fix
     public static List<TileInfo> ConvertBaseToTileInfo (List<BaseInfo> bInfos)
     {
         if(bInfos == null) return null;

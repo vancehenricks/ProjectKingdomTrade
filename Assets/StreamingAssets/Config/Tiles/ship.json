@@ -20,7 +20,7 @@
  "spawnDistance":
  [
  ],
- "unit":0,
+ "unit":10,
  "maxUnit":0,
  "travelSpeed":2.5,
  "attackDistance":0,

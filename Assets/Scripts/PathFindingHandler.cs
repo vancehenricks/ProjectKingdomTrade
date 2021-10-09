@@ -15,10 +15,8 @@ public class PathFindingHandler : MonoBehaviour
 {
     public UnitInfo unitInfo;
     public int wayPointIndex;
-    public delegate void WayPointReached(TileInfo tileInfo);
-    public WayPointReached wayPointReached;
-    public delegate void DestinationChanged(int currentIndex, List<TileInfo> generatedWayPoints);
-    public DestinationChanged destinationChanged;
+    public System.Action<TileInfo> wayPointReached;
+    public System.Action<int, List<TileInfo>> destinationChanged;
     public delegate bool IsWalkable(TileInfo tile);
     public IsWalkable isWalkable;
     public List<TileInfo> generatedWayPoints;
@@ -119,7 +117,7 @@ public class PathFindingHandler : MonoBehaviour
     {
        // runOnceCheckNewWaypoint = true;
         if (unitInfo.waypoints.Count == 0) return;
-
+        
         if(firstWayPoint.tileId != unitInfo.waypoints[0].tileId)
         {
             CDebug.Log(this, "unitInfo.tileId=" + unitInfo.tileId + " wayPointIndex=" + wayPointIndex + 
@@ -187,10 +185,10 @@ public class PathFindingHandler : MonoBehaviour
                 generatedWayPoints = _generatedWayPoints;
 
                 //this keyword does not work on anonymous functions
-                CDebug.Log(nameof(PathFindingHandler), "unitInfo.tileId=" + unitInfo.tileId + " wayPointIndex=" + wayPointIndex + 
-                    " generatedWayPoint.start=" + generatedWayPoints[0].tileLocation + " start=" + standingTile.tileLocation + 
-                    " end=" + generatedWayPoints[generatedWayPoints.Count-1].tileLocation + 
-                    " Transferring generatedWayPoints.Count=" + generatedWayPoints.Count, LogType.Warning);
+                //CDebug.Log(nameof(PathFindingHandler), "unitInfo.tileId=" + unitInfo.tileId + " wayPointIndex=" + wayPointIndex + 
+                //    " generatedWayPoint.start=" + generatedWayPoints[0].tileLocation + " start=" + standingTile.tileLocation + 
+                //    " end=" + generatedWayPoints[generatedWayPoints.Count-1].tileLocation + 
+                //    " Transferring generatedWayPoints.Count=" + generatedWayPoints.Count, LogType.Warning);
 
                 saveCache = true; 
             };
@@ -201,8 +199,8 @@ public class PathFindingHandler : MonoBehaviour
 
             isPathFinding = true;
 
-            CDebug.Log(this, "unitInfo.tileId=" + unitInfo.tileId + " wayPointIndex=" + wayPointIndex + " start=" + standingTile.tileLocation + 
-                " end=" + pointTileInfo.tileLocation + " Generating Pathfinding.", LogType.Warning);
+            //CDebug.Log(this, "unitInfo.tileId=" + unitInfo.tileId + " wayPointIndex=" + wayPointIndex + " start=" + standingTile.tileLocation + 
+            //    " end=" + pointTileInfo.tileLocation + " Generating Pathfinding.", LogType.Warning);
         }
 
         if(saveCache)
@@ -225,9 +223,9 @@ public class PathFindingHandler : MonoBehaviour
                 destinationChanged(gwPointsIndex, generatedWayPoints);
             }
             
-            CDebug.Log(this, "unitInfo.tileId=" + unitInfo.tileId  + " gwPointsIndex=" + gwPointsIndex +
-                " wayPointIndex=" + wayPointIndex +  " tileDestination=" + generatedWayPoints[gwPointsIndex].tileLocation + 
-                " end=" + pointTileInfo.tileLocation, LogType.Warning);
+            //CDebug.Log(this, "unitInfo.tileId=" + unitInfo.tileId  + " gwPointsIndex=" + gwPointsIndex +
+            //    " wayPointIndex=" + wayPointIndex +  " tileDestination=" + generatedWayPoints[gwPointsIndex].tileLocation + 
+            //    " end=" + pointTileInfo.tileLocation, LogType.Warning);
 
             tileDestination = generatedWayPoints[gwPointsIndex];
             arrivalTime = tileDestination.travelTime - unitEffect.unitInfo.travelSpeed;
@@ -238,7 +236,7 @@ public class PathFindingHandler : MonoBehaviour
 
     public void ResetGeneratedWaypoints()
     {
-        CDebug.Log(this, "unitInfo.tileId=" + unitInfo.tileId + " ResetGeneratedWaypoints", LogType.Warning);           
+        //CDebug.Log(this, "unitInfo.tileId=" + unitInfo.tileId + " ResetGeneratedWaypoints", LogType.Warning);           
         gwPointsIndex = 0;
         generatedWayPoints.Clear();
         isPathFinding = false;
@@ -246,14 +244,14 @@ public class PathFindingHandler : MonoBehaviour
 
     public void ResetDestination()
     {
-        CDebug.Log(this, "unitInfo.tileId=" + unitInfo.tileId + " ResetDestination", LogType.Warning);        
+        //CDebug.Log(this, "unitInfo.tileId=" + unitInfo.tileId + " ResetDestination", LogType.Warning);        
         tileDestination = unitInfo.standingTile == null ? unitInfo : unitInfo.standingTile;
         arrivalTime = -2;
     }
 
     public void ResetWayPoints()
     {
-        CDebug.Log(this, "unitInfo.tileId=" + unitInfo.tileId + " ResetWayPoints", LogType.Warning);
+        //CDebug.Log(this, "unitInfo.tileId=" + unitInfo.tileId + " ResetWayPoints", LogType.Warning);
         unitInfo.waypoints.Clear();
         wayPointIndex = 0;     
     }

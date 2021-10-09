@@ -119,18 +119,21 @@ public class TileColliderHandler : MonoBehaviour
         return await Task.FromResult(baseInfos);
     }
     
-    public void Cast(System.Action<List<BaseInfo>> callback, BaseInfo baseInfo, Bounds bounds, List<string> filter = null, int maxHits = 1, bool filterOut = false)
+    public void Cast(System.Action<List<BaseInfo>> callback, BaseInfo baseInfo, Bounds bounds, 
+        List<string> filter = null, int maxHits = 1, bool filterOut = false)
     {
         StartCoroutine(GetBaseInfosCoroutine(callback, null, bounds, new Ray(), false, filter, maxHits, filterOut));
     }
 
-    public void Cast(System.Action<List<BaseInfo>> callback, Ray ray, List<string> filter = null, int maxHits = 1, bool filterOut = false)
+    public void Cast(System.Action<List<BaseInfo>> callback, Ray ray, 
+        List<string> filter = null, int maxHits = 1, bool filterOut = false)
     {
         StartCoroutine(GetBaseInfosCoroutine(callback, null, new Bounds(), ray, true, filter, maxHits, filterOut));
     }    
 
-    private IEnumerator GetBaseInfosCoroutine(System.Action<List<BaseInfo>> callback, BaseInfo baseInfo, Bounds bounds, Ray ray, bool useRay,
-         List<string> filter, int maxHits, bool filterOut)
+    private IEnumerator GetBaseInfosCoroutine(System.Action<List<BaseInfo>> callback, 
+        BaseInfo baseInfo, Bounds bounds, Ray ray, bool useRay,
+        List<string> filter, int maxHits, bool filterOut)
     {
         Task<List<BaseInfo>> task = TileColliderHandler.init.Cast(baseInfo, bounds, ray, useRay, filter, maxHits, filterOut);
 
@@ -148,7 +151,8 @@ public class TileColliderHandler : MonoBehaviour
         callback(new List<BaseInfo>(task.Result));         
     }
 
-    public async Task<List<BaseInfo>> Cast(BaseInfo baseInfo, Bounds bounds, Ray ray, bool useRay, List<string> filter, int maxHits, bool filterOut)
+    public async Task<List<BaseInfo>> Cast(BaseInfo baseInfo, Bounds bounds, Ray ray, bool useRay, 
+        List<string> filter, int maxHits, bool filterOut)
     {
         Vector3 center = bounds.center;
         Bounds normalizedBounds = new Bounds(new Vector3(center.x, center.y), bounds.size);

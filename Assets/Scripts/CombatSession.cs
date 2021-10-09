@@ -59,11 +59,9 @@ public class CombatSession : MonoBehaviour
             }
 
             centroid /= combatants.Count;
-            point =  tileInfoRaycaster.GetTileInfoFromPos(cm.WorldToScreenPoint(centroid));
+            point = GetTileFromPos(centroid);
             startingIndex = 0;
         }
-
-        //Debug.Log("POINTS="+point.tileLocation);
 
         for (int i = startingIndex; i < combatants.Count; i++)
         {
@@ -71,6 +69,23 @@ public class CombatSession : MonoBehaviour
             CombatHandler unitCombatHandler = combatants[i].unitEffect.combatHandler;
             unitCombatHandler.GenerateWaypoint(point);
         }
+    }
+
+    private TileInfo GetTileFromPos(Vector2 position)
+    {
+        Bounds bounds = new Bounds(position, new Vector2(3f,3f));
+        TileInfo point = null;
+
+        TileColliderHandler.init.Cast((List<BaseInfo> baseInfos) => {
+            
+            foreach(BaseInfo baseInfo in baseInfos)
+            {
+                point = baseInfo as TileInfo;
+            }
+
+        }, null, bounds, unitInfo.tileCollider.filterOut, 1, true);
+
+        return point;
     }
 
     public void Clear()
