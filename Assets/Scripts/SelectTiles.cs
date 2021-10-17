@@ -38,7 +38,7 @@ public class SelectTiles : MonoBehaviour
 
     public SyncIcon InitializeFlag(TileInfo hostTile, SyncIcon bFlag, bool syncColor)
     {
-        GameObject flag = Instantiate(bFlag.gameObject);
+        GameObject flag = Instantiate(bFlag.gameObject); //improvement: instead of creating a new one lets reuse existing
         flag.name = bFlag.name + "_" + hostTile.tileId;
         SyncIcon syncIcon = flag.GetComponent<SyncIcon>();
 
@@ -73,8 +73,10 @@ public class SelectTiles : MonoBehaviour
         selectTilesValue.type = bFlag.type;
         selectTilesValue.tileLocation = waypoint.tileLocation;
 
+        //this is expensive we could improve this by reploading number of flags based on maxHits then only create new one if lacking
+
         SyncIcon syncIcon = InitializeFlag(hostTile, bFlag, syncColor);
-        syncIcon.Initialize(hostTile, waypoint, 0, 0, zLevelFlag);
+        syncIcon.Initialize(hostTile, waypoint, 0, 0, zLevelFlag); 
 
         syncIcon.gameObject.SetActive(true);
         syncIcon.continousSync = continousSync;

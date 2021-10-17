@@ -1,16 +1,14 @@
 ﻿/* Copyright 2021 by Vance Henricks Patual - All Rights Reserved
  * Unauthorized copying of this file, via any medium is strictly prohibited
  * Proprietary and confidential
- * Written by Vance Henricks Patual <vpatual@gmail.com>, February 2021
+ * Written by Vance Henricks Patual <vpatual@gmail.com>, October 2021
  */
-
 
 using System.Collections;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using UnityEngine;
 
-public class ConsoleMoveUnit : ConsoleCommand
+public class ConsoleAttackUnit : ConsoleCommand
 {
     public UnitInfo unitInfo;
     public List<TileInfo> targetTiles;
@@ -18,7 +16,7 @@ public class ConsoleMoveUnit : ConsoleCommand
 
     protected override string SetCommand()
     {
-        return "move-unit";
+        return "attack-unit";
     }
 
     public override void Initialize(Dictionary<string, string> subCommands)
@@ -27,32 +25,28 @@ public class ConsoleMoveUnit : ConsoleCommand
         subCommands.Add("tile-id", "0");
         subCommands.Add("tile-object", "0");  
         subCommands.Add("target-tile-object", "1");  
-        subCommands.Add("target-tile-id", "0|1");    
-        subCommands.Add("target-tile-location", "0,0|0,1");
+        subCommands.Add("target-tile-id", "0|1");
         subCommands.Add("cancel", "");
         subCommands.Add("help", "");
     }
 
     private void ExecuteCommand()
     {
-        unitInfo.waypoints.AddRange(targetTiles);
-        unitInfo.unitEffect.unitWayPoint.UpdateWayPoint();
-        //unitInfo.unitEffect.combatHandler.DisEngage();
-        //unitInfo.merge = null;        
+        unitInfo.targets.AddRange(targetTiles);
+        unitInfo.unitEffect.unitWayPoint.UpdateWayPoint();   
         
         if(log)
         {
-            ConsoleHandler.init.AddLine("Moving unit");
+            ConsoleHandler.init.AddLine("Attacking unit");
             ConsoleHandler.init.AddCache(ConsoleHandler.init.previousCommand);
         }
-        //}
     }
 
     public override void OnParsedConsoleEvent( Dictionary<string, string> subCommands, string[] arguments, params object[] objects)
     {
         unitInfo = null;
         log = true;
-        targetTiles.Clear();      
+        targetTiles.Clear();
 
         foreach (string subCommand in subCommands.Keys)
         {
@@ -81,10 +75,6 @@ public class ConsoleMoveUnit : ConsoleCommand
                         int.TryParse(subCommands[subCommand], out index);
                         targetTiles.AddRange(objects[index] as List<TileInfo>);
                     }
-                    break;
-                case "target-tile-location":
-                    string[] locations = subCommands[subCommand].Split('|');
-                    targetTiles.AddRange(ParseTileLocation<TileInfo>(locations));
                     break;
                 case "log":
                     if(subCommands[subCommand] == "0")

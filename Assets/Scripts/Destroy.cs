@@ -10,36 +10,36 @@ using UnityEngine;
 
 public class Destroy : ConsoleCommand
 {
-    public TileInfoRaycaster tileInfoRaycaster;
     //public bool isEnabled;
     public string type;
     public int nCount;
     public int nMax;
-    public int targetLayer;
+    //public int targetLayer;
     public bool autoFocus;
     public bool executeAll;
-    public long tileId;
     public bool noMouseRequired;
-
-    private bool fire1Clicked;
+    public TileInfo tileInfo;
+    public bool fire1Clicked;
 
     private Coroutine commandStream;
 
 
-    public override void Initialize()
+    protected override string SetCommand()
     {
-        Dictionary<string, string> subCommands = new Dictionary<string, string>();
+        return "destroy";
+    }
+
+    public override void Initialize(Dictionary<string, string> subCommands)
+    {
         subCommands.Add("tile-id", "0");
+        subCommands.Add("tile-object", "0");
         subCommands.Add("type", "Unit");
         subCommands.Add("amount", "1");
-        subCommands.Add("layer", "1");
+        //subCommands.Add("layer", "1");
         subCommands.Add("auto-focus", "true");
         subCommands.Add("execute-all", "");
         subCommands.Add("cancel", "");
         subCommands.Add("help", "");
-
-        ConsoleHandler.init.AddCommand("destroy", subCommands);
-        ConsoleHandler.init.AddCache("destroy");
     }
 
     private IEnumerator CommandStream()
@@ -51,28 +51,28 @@ public class Destroy : ConsoleCommand
                 fire1Clicked = true;
 
                 List<TileInfo> tiles = new List<TileInfo>();
-                tileInfoRaycaster.GetTileInfosFromPos(Input.mousePosition, tiles);
+                TileInfoRaycaster.init.GetTileInfosFromPos(Input.mousePosition, tiles);
 
-                int cLayer = 0;
+                //int cLayer = 0;
                 foreach (TileInfo tile in tiles)
                 {
                     if (tile != null)
                     {
 
-                        if (type == "Unit" && tile.tileType == type && cLayer == targetLayer)
+                        if (type == "Unit" && tile.tileType == type /*&& cLayer == targetLayer*/)
                         {
                             UnitInfo unit = (UnitInfo)tile;
                             unit.Destroy();
                             AddLineAndCheckForFocus($"Destroyed tile [{nCount + 1}/{nMax}].");
                             break;
                         }
-                        else if (type != "Unit" && tile.tileType == type && cLayer == targetLayer)
+                        else if (type != "Unit" && tile.tileType == type /*&& cLayer == targetLayer*/)
                         {
                             tile.Destroy();
                             AddLineAndCheckForFocus($"Destroyed unit [{nCount + 1}/{nMax}].");
                             break;
                         }
-                        cLayer++;
+                        //cLayer++;
                     }
                 }
             }
@@ -101,83 +101,85 @@ public class Destroy : ConsoleCommand
 
     private void ExecuteCommand()
     {
-        TileInfo tile = TileList.init.tileInfos[tileId];
-
         if (type == "Unit")
         {
-            UnitInfo unit = (UnitInfo)tile;
+            UnitInfo unit = (UnitInfo)tileInfo;
             unit.Destroy();
             AddLineAndCheckForFocus($"Destroyed unit [{nCount + 1}/{nMax}].");
         }
         else if (type != "Unit")
         {
-            tile.Destroy();
+            tileInfo.Destroy();
             AddLineAndCheckForFocus($"Destroyed tile [{nCount + 1}/{nMax}].");
         }
     }
 
-    public override void OnParsedConsoleEvent(string command, string[] arguments)
+    public override void OnParsedConsoleEvent(Dictionary<string, string> subCommands, string[] arguments, params object[] objects)
     {
-        if (command == "destroy")
+        type = "Unit";
+        nCount = 0;
+        nMax = 1;
+        //targetLayer = 1;
+        autoFocus = true;
+        noMouseRequired = false;
+        executeAll = false;
+        fire1Clicked = false;
+        tileInfo = null;
+
+        if (commandStream != null)
         {
-            Dictionary<string, string> subCommands = ConsoleParser.init.ArgumentsToSubCommands(arguments);
+            StopCoroutine(commandStream);
+        }
 
-            tileId = 0;
-            type = "Unit";
-            nCount = 0;
-            nMax = 1;
-            targetLayer = 1;
-            autoFocus = true;
-            noMouseRequired = true;
-            executeAll = false;
-            fire1Clicked = false;
-            if (commandStream != null)
+        foreach (string subCommand in subCommands.Keys)
+        {             
+            switch (subCommand)
             {
-                StopCoroutine(commandStream);
-            }
-
-            foreach (string subCommand in subCommands.Keys)
-            {
-                switch (subCommand)
-                {
-                    case "type":
-                        type = subCommands[subCommand];
-                        break;
-                    case "amount":
-                        int.TryParse(subCommands[subCommand], out nMax);
-                        break;
-                    case "layer":
-                        int.TryParse(subCommands[subCommand], out targetLayer);
-                        break;
-                    case "auto-focus":
-                        bool.TryParse(subCommands[subCommand], out autoFocus);
-                        break;
-                    case "execute-all":
-                        executeAll = true;
-                        break;
-                    case "tile-id":
-                        long.TryParse(subCommands[subCommand], out tileId);
-                        noMouseRequired = true;
-                        break;
-                    case "cancel":
-                        ConsoleHandler.init.AddLine("destroy command cancelled");
-                        return;
-                    case "help":
-                    default:
-                        ConsoleHandler.init.DisplaySubCommands("destroy");
-                        return;
-                }
-            }
-
-            if (noMouseRequired)
-            {
-                ExecuteCommand();
-            }
-            else
-            {
-                ConsoleHandler.init.AddLine("Click a tile/unit to destroy...");
-                commandStream = StartCoroutine(CommandStream());
+                case "type":
+                    type = subCommands[subCommand];
+                    break;
+                case "amount":
+                    int.TryParse(subCommands[subCommand], out nMax);
+                    break;
+                //case "layer":
+                //    int.TryParse(subCommands[subCommand], out targetLayer);
+                //    break;
+                case "auto-focus":
+                    bool.TryParse(subCommands[subCommand], out autoFocus);
+                    break;
+                case "execute-all":
+                    executeAll = true;
+                    break;
+                case "tile-id":
+                    long tileId = 0;
+                    long.TryParse(subCommands[subCommand], out tileId);
+                    tileInfo = TileList.init.tileInfos[tileId];
+                    noMouseRequired = true;
+                    break;
+                case "tile-object":
+                    int index = 0;
+                    int.TryParse(subCommands[subCommand], out index);
+                    tileInfo = (TileInfo)objects[index];
+                    break;
+                case "cancel":
+                    ConsoleHandler.init.AddLine("destroy command cancelled");
+                    return;
+                case "help":
+                default:
+                    ConsoleHandler.init.DisplaySubCommands("destroy");
+                    return;
             }
         }
+
+        if (noMouseRequired)
+        {
+            ExecuteCommand();
+        }
+        else
+        {
+            ConsoleHandler.init.AddLine("Click a tile/unit to destroy...");
+            commandStream = StartCoroutine(CommandStream());
+        }
+        
     }
 }

@@ -352,13 +352,15 @@ public class ConsoleHandler : MonoBehaviour
         int index = 0;
         foreach (string val in values)
         {
-            index++;
+
             string args = "";
 
             if (descriptionList != null && descriptionList[index].Length > 0)
             {
                 args = ":";
             }
+
+            index++;
 
             if (substrings[substrings.Length - 1].Length > 0 && val.Contains(substrings[substrings.Length - 1]))
             {

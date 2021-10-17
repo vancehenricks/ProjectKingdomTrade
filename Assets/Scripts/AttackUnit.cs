@@ -14,6 +14,8 @@ using System.Linq;
 
 public class AttackUnit : MoveUnit
 {
+    protected readonly string attackUnitCommand = "attack-unit log:0 tile-object:0 target-tile-object:1";
+
     public List<TileInfo> include;
 
     private HashSet<TileInfo> _selectedTiles;
@@ -46,14 +48,14 @@ public class AttackUnit : MoveUnit
 
         if (unitInfos.Count == 0) return;
 
-        if (_selectedTiles.Count > 0 && targetList.Count > 0)
+        if (_selectedTiles.Count > 0 /*&& targetList.Count > 0*/)
         {
             OpenLeftClick.init.Ignore();
 
             if (MultiSelect.init.shiftPressed)
             {
                 List<TileInfo> whiteListed = Tools.WhiteListTileType(new List<TileInfo>(_selectedTiles), include);
-                AssignsToList(whiteListed, targetList);
+                Execute(whiteListed, attackUnitCommand);
             }
             else
             {
@@ -61,7 +63,7 @@ public class AttackUnit : MoveUnit
 
                 if (sanitizeList.Count == 0) return;
                 ClearAllWaypoints();
-                AssignsToList(sanitizeList[0], targetList);
+                Execute(sanitizeList[0], attackUnitCommand);
             }
         }
     }
@@ -88,7 +90,7 @@ public class AttackUnit : MoveUnit
         if (Input.GetButtonDown("Fire1"))
         {
             List<TileInfo> _tileInfos = new List<TileInfo>();
-            tileInfoRaycaster.GetTileInfosFromPos(Input.mousePosition, _tileInfos);
+            TileInfoRaycaster.init.GetTileInfosFromPos(Input.mousePosition, _tileInfos);
 
             List<TileInfo> tileInfos = Tools.WhiteListTileType(_tileInfos, include);
 
@@ -106,7 +108,7 @@ public class AttackUnit : MoveUnit
                     ClearAllWaypoints();
                 }
 
-                AssignsToList(tileInfos[0], targetList);
+                Execute(tileInfos[0], attackUnitCommand);
                 return;
             }
 

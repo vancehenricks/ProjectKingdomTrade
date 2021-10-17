@@ -44,8 +44,7 @@ public class CombatSession : MonoBehaviour
     {
         //PathFinding hostPathFinder = host.unitEffect.pathFinder;
         CombatHandler hostCombatHandler = unitInfo.unitEffect.combatHandler;
-        TileInfoRaycaster tileInfoRaycaster = hostCombatHandler.tileInfoRaycaster;
-        Camera cm = tileInfoRaycaster.cm;
+        //Camera cm = TileInfoRaycaster.init.cm;
         TileInfo point = unitInfo;
         int startingIndex = 1;
 

@@ -18,7 +18,7 @@ public class CombatHandler : MonoBehaviour
     //public TargetCountChange targetCountChange;
     //public delegate void FirstTargetChange(TileInfo tile);
     //public FirstTargetChange firstTargetChange;
-    public TileInfoRaycaster tileInfoRaycaster;
+    //public TileInfoRaycaster tileInfoRaycaster;
     public CombatSession combatSession;
     public System.Action<UnitInfo, UnitInfo> OnEnterCombat;
     public System.Action<UnitInfo, UnitInfo> OnStayCombat;    

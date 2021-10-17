@@ -123,7 +123,7 @@ public class Tools : MonoBehaviour
         newTile.transform.position = target.transform.position;
         newTile.tileLocation = target.tileLocation;
 
-        CDebug.Log(nameof(Tools), "newTile.tileLocation=" + newTile.tileLocation + " " + "target.tileLocation=" + target.tileLocation, LogType.Warning);
+        //CDebug.Log(nameof(Tools), "newTile.tileLocation=" + newTile.tileLocation + " " + "target.tileLocation=" + target.tileLocation, LogType.Warning);
 
         //transfer all stats from target to newTile probably a function in TileInfo or do it here
         target.Destroy();
@@ -193,6 +193,18 @@ public class Tools : MonoBehaviour
 
         return new Vector2Int(x, y);
     }
+
+    public static List<Vector2Int> ParseLocation(string[] coordinates)
+    {
+        List<Vector2Int> final = new List<Vector2Int>();
+
+        foreach(string coord in coordinates)
+        {
+            final.Add(ParseLocation(coord));
+        }
+
+        return final;
+    }    
 
     public static void WriteConfig(object tileConfig, string fileName)
     {

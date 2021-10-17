@@ -13,6 +13,8 @@ using UnityEngine.EventSystems;
 
 public class MoveUnit : PlayerCommand
 {
+    protected readonly string moveUnitCommand = "move-unit log:0 tile-object:0 target-tile-object:1";
+    protected readonly string cancelMoveUnitCommand = "move-unit log:0 tile-object:0 cancel";
 
     protected override void Start()
     {
@@ -29,11 +31,12 @@ public class MoveUnit : PlayerCommand
         {
             OpenLeftClick.init.Ignore();
             CDebug.Log(this,"Creating multiple waypoint...");
-            TileInfo tileInfo = tileInfoRaycaster.GetTileInfoFromPos(Input.mousePosition);
+            TileInfo tileInfo = TileInfoRaycaster.init.GetTileInfoFromPos(Input.mousePosition);
 
             if(tileInfo != null)
             {
-                AssignsToList(Normalize(tileInfo), waypointsList);
+                List<TileInfo> tmp = new List<TileInfo>();
+                Execute(Normalize(tileInfo), moveUnitCommand);
             }
         }
 
@@ -41,12 +44,12 @@ public class MoveUnit : PlayerCommand
         {
             OpenLeftClick.init.Ignore();
             CDebug.Log(this,"Creating one waypoint... unitInfos.Count=" + unitInfos.Count);
-            TileInfo tileInfo = tileInfoRaycaster.GetTileInfoFromPos(Input.mousePosition);
+            TileInfo tileInfo = TileInfoRaycaster.init.GetTileInfoFromPos(Input.mousePosition);
             ClearAllWaypoints();
             
             if(tileInfo != null)
             {
-                AssignsToList(Normalize(tileInfo), waypointsList);
+                Execute(Normalize(tileInfo), moveUnitCommand);
             }
         }
 
@@ -55,6 +58,14 @@ public class MoveUnit : PlayerCommand
             OpenRightClick.init.doNotDisplay = true;
             OpenRightClick.init.skipRaycast = true;
             EndAction();
+        }
+    }
+
+    public virtual void ClearAllWaypoints()
+    {
+        for (int i=0;i < unitInfos.Count;i++)
+        {
+            ConsoleParser.init.ConsoleEvent(cancelMoveUnitCommand, unitInfos[i]);
         }
     }
 
@@ -85,7 +96,7 @@ public class MoveUnit : PlayerCommand
         CursorReplace.init.currentCursor = CursorType.Move;
 
         base.DoAction();
-
+        ClearAllWaypoints();
         OpenLeftClick.init.Ignore();
     }
 

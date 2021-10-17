@@ -11,7 +11,6 @@ using System.Linq;
 
 public class SpawnUnit : ConsoleCommand
 {
-    public TileInfoRaycaster tileInfoRaycaster;
     //public KeyCode spawnKey;
     public int nCount;
     public int nMax;
@@ -24,18 +23,24 @@ public class SpawnUnit : ConsoleCommand
     public long playerId;
     public PlayerInfo playerInfo;
     public bool noMouseRequired;
-    public Vector2Int tileLocation;
+    public TileInfo tileInfo;
 
     private bool fire1Clicked;
 
     private Coroutine commandStream;
 
-    public override void Initialize()
+    protected override string SetCommand()
     {
-        Dictionary<string, string> subCommands = new Dictionary<string, string>();
+        return "spawn-unit";
+    }
+
+    public override void Initialize(Dictionary<string, string> subCommands)
+    {
         subCommands.Add("player-id", "0");
+        subCommands.Add("player-object", "0");
         subCommands.Add("sub-type", "Worker");
         subCommands.Add("amount", "1");
+        subCommands.Add("tile-object", "0");
         subCommands.Add("tile-location", "0,0");
         subCommands.Add("color", "#ffffff");
         subCommands.Add("attack-distance", "1");
@@ -44,21 +49,18 @@ public class SpawnUnit : ConsoleCommand
         subCommands.Add("execute-all", "");
         subCommands.Add("cancel", "");
         subCommands.Add("help", "");
-
-        ConsoleHandler.init.AddCommand("spawn-unit", subCommands);
-        ConsoleHandler.init.AddCache("spawn-unit");
-
     }
 
     private IEnumerator CommandStream()
     {
+        
         while (nCount < nMax)
         {
             if (Input.GetButtonDown("Fire1") || (fire1Clicked && executeAll))
             {
                 fire1Clicked = true;
                 //make the units random color
-                TileInfo tile = tileInfoRaycaster.GetTileInfoFromPos(Input.mousePosition);
+                TileInfo tile = TileInfoRaycaster.init.GetTileInfoFromPos(Input.mousePosition);
                 if (tile != null)
                 {
                     Spawn(tile.transform.position);
@@ -71,84 +73,90 @@ public class SpawnUnit : ConsoleCommand
 
     private void ExecuteCommand()
     {
-        Spawn(TileList.init.generatedTiles[tileLocation].transform.position);
+        Spawn(tileInfo.transform.position);
     }
 
-    public override void OnParsedConsoleEvent(string command, string[] arguments)
+    public override void OnParsedConsoleEvent(Dictionary<string, string> subCommands, string[] arguments, params object[] objects)
     {
-        if (command == "spawn-unit")
+        SetDefaults();
+
+        foreach (string subCommand in subCommands.Keys)
         {
-            Dictionary<string, string> subCommands = ConsoleParser.init.ArgumentsToSubCommands(arguments);
-            SetDefaults();
+            //CDebug.Log(subCommand);
+            int index = 0;
 
-            foreach (string subCommand in subCommands.Keys)
+            switch (subCommand)
             {
-                //CDebug.Log(subCommand);
+                case "tile-object":
+                    int.TryParse(subCommands[subCommand], out index);
+                    tileInfo = objects[index] as TileInfo;
+                break;
+                case "player-object":
+                    int.TryParse(subCommands[subCommand], out index);
+                    playerInfo = objects[index] as PlayerInfo;
+                break;
+                case "tile-location":
+                    Vector2Int tileLocation = Tools.ParseLocation(subCommands[subCommand]);
+                    tileInfo = TileList.init.generatedTiles[tileLocation];
+                    noMouseRequired = true;
+                    break;
+                case "player-id":
+                    if (!PlayerList.init.players.ContainsKey(playerId)) break;
 
-                switch (subCommand)
-                {
-                    case "tile-location":
-                        tileLocation = Tools.ParseLocation(subCommands[subCommand]);
-                        noMouseRequired = true;
-                        break;
-                    case "player-id":
-                        if (!PlayerList.init.players.ContainsKey(playerId)) break;
+                    long.TryParse(subCommands[subCommand], out playerId);
+                    playerInfo = PlayerList.init.players[playerId];
+                    break;
+                case "sub-type":
+                    if (!TileConfigHandler.init.baseUnits.ContainsKey(subCommands[subCommand])) break;
+                    subType = subCommands[subCommand];
+                    UnitInfo unitInfo = TileConfigHandler.init.baseUnits[subType].GetComponent<UnitInfo>();
 
-                        long.TryParse(subCommands[subCommand], out playerId);
-                        playerInfo = PlayerList.init.players[playerId];
-                        break;
-                    case "sub-type":
-                        if (!TileConfigHandler.init.baseUnits.ContainsKey(subCommands[subCommand])) break;
-                        subType = subCommands[subCommand];
-                        UnitInfo unitInfo = TileConfigHandler.init.baseUnits[subType].GetComponent<UnitInfo>();
+                    if (!subCommands.ContainsKey("units"))
+                    {
+                        units = unitInfo.unit;
+                    }
 
-                        if (!subCommands.ContainsKey("units"))
-                        {
-                            units = unitInfo.unit;
-                        }
-
-                        if (!subCommands.ContainsKey("attackDistance"))
-                        {
-                            attackDistance = unitInfo.attackDistance;
-                        }
-                        break;
-                    case "amount":
-                        int.TryParse(subCommands[subCommand], out nMax);
-                        break;
-                    case "auto-focus":
-                        bool.TryParse(subCommands[subCommand], out autoFocus);
-                        break;
-                    case "color":
-                        ColorUtility.TryParseHtmlString(subCommands[subCommand], out color);
-                        break;
-                    case "attack-distance":
-                        int.TryParse(subCommands[subCommand], out attackDistance);
-                        break;
-                    case "execute-all":
-                        executeAll = true;
-                        break;
-                    case "units":
-                        int.TryParse(subCommands[subCommand], out units);
-                        break;
-                    case "cancel":
-                        ConsoleHandler.init.AddLine("spawn-unit command cancelled");
-                        return;
-                    case "help":
-                    default:
-                        ConsoleHandler.init.DisplaySubCommands("spawn-unit");
-                        return;
-                }
+                    if (!subCommands.ContainsKey("attackDistance"))
+                    {
+                        attackDistance = unitInfo.attackDistance;
+                    }
+                    break;
+                case "amount":
+                    int.TryParse(subCommands[subCommand], out nMax);
+                    break;
+                case "auto-focus":
+                    bool.TryParse(subCommands[subCommand], out autoFocus);
+                    break;
+                case "color":
+                    ColorUtility.TryParseHtmlString(subCommands[subCommand], out color);
+                    break;
+                case "attack-distance":
+                    int.TryParse(subCommands[subCommand], out attackDistance);
+                    break;
+                case "execute-all":
+                    executeAll = true;
+                    break;
+                case "units":
+                    int.TryParse(subCommands[subCommand], out units);
+                    break;
+                case "cancel":
+                    ConsoleHandler.init.AddLine("spawn-unit command cancelled");
+                    return;
+                case "help":
+                default:
+                    ConsoleHandler.init.DisplaySubCommands("spawn-unit");
+                    return;
             }
+        }
 
-            if (noMouseRequired)
-            {
-                ExecuteCommand();
-            }
-            else
-            {
-                ConsoleHandler.init.AddLine("Click a tile to spawn.");
-                commandStream = StartCoroutine(CommandStream());
-            }
+        if (noMouseRequired)
+        {
+            ExecuteCommand();
+        }
+        else
+        {
+            ConsoleHandler.init.AddLine("Click a tile to spawn.");
+            commandStream = StartCoroutine(CommandStream());
         }
     }
 
@@ -182,7 +190,6 @@ public class SpawnUnit : ConsoleCommand
 
     private void SetDefaults()
     {
-        tileLocation = Vector2Int.zero;
         subType = "Worker";
         UnitInfo unitInfo = TileConfigHandler.init.baseUnits[subType].GetComponent<UnitInfo>();
         playerInfo = PlayerList.init.players.Values.ElementAt(0);
@@ -195,6 +202,8 @@ public class SpawnUnit : ConsoleCommand
         color = Color.white;
         executeAll = false;
         fire1Clicked = false;
+        tileInfo = null;
+
         if (commandStream != null)
         {
             StopCoroutine(commandStream);

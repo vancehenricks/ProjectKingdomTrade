@@ -13,16 +13,15 @@ using UnityEngine.EventSystems;
 
 public class PlayerCommand : MonoBehaviour
 {
-    public TileInfoRaycaster tileInfoRaycaster;
-    public List<UnitInfo> unitInfos;
-    public List<List<TileInfo>> waypointsList;
-    public List<List<TileInfo>> targetList;
+    public List<TileInfo> unitInfos;
+    //public List<List<TileInfo>> waypointsList;
+    //public List<List<TileInfo>> targetList;
     private float key;
 
     protected virtual void Start()
     {
-        waypointsList = new List<List<TileInfo>>();
-        targetList = new List<List<TileInfo>>();
+        //waypointsList = new List<List<TileInfo>>();
+        //targetList = new List<List<TileInfo>>();
     }
 
     protected virtual void Command()
@@ -33,19 +32,17 @@ public class PlayerCommand : MonoBehaviour
     public virtual void DoAction()
     {
         key = CommandPipeline.init.Add(Command, 100);
-        waypointsList.Clear();
-        targetList.Clear();
-        unitInfos = ConvertToUnitInfo(new List<TileInfo>(MultiSelect.init.selectedTiles));
+        //waypointsList.Clear();
+        //targetList.Clear();
+        unitInfos = new List<TileInfo>(MultiSelect.init.selectedTiles);
         MultiSelect.init.Clear(true);
         OpenRightClick.init.ResetValues();
 
-        foreach (UnitInfo unit in unitInfos)
-        {
-            waypointsList.Add(unit.waypoints);
-            targetList.Add(unit.targets);
-        }
-
-        ClearAllWaypoints();
+        //foreach (UnitInfo unit in unitInfos)
+        //{
+        //    waypointsList.Add(unit.waypoints);
+        //    targetList.Add(unit.targets);
+        //}
     }
 
     public virtual void EndAction()
@@ -57,55 +54,32 @@ public class PlayerCommand : MonoBehaviour
         unitInfos.Clear();
     }
 
-    public virtual void ClearAllWaypoints()
+    protected void Execute(List<TileInfo> waypoints, string command)
     {
-
-        foreach (List<TileInfo> target in targetList)
+        for (int i=0;i < unitInfos.Count;i++)
         {
-            target.Clear();
-        }
-
-        foreach (UnitInfo unit in unitInfos)
-        {
-            if (unit != null)
-            {
-                unit.unitEffect.combatHandler.DisEngage();
-                unit.merge = null;
-            }
-        }
+            ConsoleParser.init.ConsoleEvent(command, unitInfos[i], waypoints);  
+        }      
     }
 
-    protected void AssignsToList(List<TileInfo> waypoints, List<List<TileInfo>> _waypointList)
-    {
-        for (int i=0;i <  _waypointList.Count;i++)
-        {
-            _waypointList[i].AddRange(waypoints);
-            unitInfos[i].unitEffect.unitWayPoint.UpdateWayPoint();
-        }
+    protected void Execute(TileInfo waypoint, string command)
+    {     
+        List<TileInfo> tmp = new List<TileInfo>();
+        tmp.Add(waypoint);
+
+        Execute(tmp, command);
     }
 
-    protected void AssignsToList(TileInfo waypoint, List<List<TileInfo>> _waypointList)
-    {
-        for (int i=0;i < _waypointList.Count;i++)
-        {
-            if (waypoint != null)
-            {
-                _waypointList[i].Add(waypoint);
-            }
-            unitInfos[i].unitEffect.unitWayPoint.UpdateWayPoint();
-        }
-    }
-
-    protected void UpdateUnitsWayPoints()
+    /*protected void UpdateUnitsWayPoints()
     {
         foreach (UnitInfo unit in unitInfos)
         {
             //unit.unitEffect.pathFinder.QueueNewWayPoint();
             unit.unitEffect.unitWayPoint.UpdateWayPoint();
         }
-    }
+    }*/
 
-    protected List<UnitInfo> ConvertToUnitInfo(List<TileInfo> tileInfos)
+    /*protected List<UnitInfo> ConvertToUnitInfo(List<TileInfo> tileInfos)
     {
         List<UnitInfo> unitInfos = new List<UnitInfo>();
 
@@ -118,6 +92,6 @@ public class PlayerCommand : MonoBehaviour
         }
 
         return unitInfos;
-    }
+    }*/
 
 }

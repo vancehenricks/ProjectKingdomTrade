@@ -12,26 +12,19 @@ using System.Threading.Tasks;
 
 public class TileInfoGetterArray : MonoBehaviour
 {
-    public int maxHits;
     //public bool holdList;
-    private BoxCollider2D boxCollider2D;
+    public BoxCollider2D boxCollider2D;
     public List<TileInfo> tileInfos;
     public List<string> filterIn;
     //private Coroutine scan;
 
     //private int overflowCount;
 
-    private void Start()
-    {
-        maxHits = TileInfoRaycaster.init.maxHits;
-        boxCollider2D = GetComponent<BoxCollider2D>();
-    }
-
     public void Scan()
     {
         TileColliderHandler.init.Cast((List<BaseInfo> baseInfos) => {
             tileInfos.AddRange(Tools.ConvertBaseToTileInfo(baseInfos));
-        }, null, boxCollider2D.bounds, filterIn, maxHits);
+        }, null, boxCollider2D.bounds, filterIn, TileInfoRaycaster.init.maxHits);
 
         CDebug.Log(this, "tileInfos.Count=" + tileInfos.Count, LogType.Warning);  
     }

@@ -33,7 +33,7 @@ public class FoilageGenerator : MonoBehaviour
     }
     private void Generate()
     {
-        CDebug.Log(this,"Generating Foilage");
+        CDebug.Log(this,"Generating Foilage", LogType.Warning);
 
         for (int layer = 1; layer < 6; layer++)
         {

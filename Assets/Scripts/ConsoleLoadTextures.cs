@@ -10,13 +10,15 @@ using UnityEngine;
 
 public class ConsoleLoadTextures : ConsoleCommand
 {
-    public override void Initialize()
+    protected override string SetCommand()
     {
-        Dictionary<string, string> subCommands = new Dictionary<string, string>();
+        return "load-textures";
+    }
+
+    public override void Initialize(Dictionary<string, string> subCommands)
+    {
         subCommands.Add("cancel", "");
         subCommands.Add("help", "");
-        ConsoleHandler.init.AddCommand("load-textures", subCommands);
-        ConsoleHandler.init.AddCache("load-textures");
     }
 
     private IEnumerator ExecuteCommand()
@@ -31,26 +33,21 @@ public class ConsoleLoadTextures : ConsoleCommand
         LoadingHandler.init.SetActive(false);
     }
 
-    public override void OnParsedConsoleEvent(string command, string[] arguments)
+    public override void OnParsedConsoleEvent( Dictionary<string, string> subCommands, string[] arguments, params object[] objects)
     {
-        if (command == "load-textures")
+        foreach (string subCommand in subCommands.Keys)
         {
-            Dictionary<string, string> subCommands = ConsoleParser.init.ArgumentsToSubCommands(arguments);
-
-            foreach (string subCommand in subCommands.Keys)
+            switch (subCommand)
             {
-                switch (subCommand)
-                {
-                    case "cancel":
-                        return;
-                    case "help":
-                    default:
-                        ConsoleHandler.init.DisplaySubCommands("load-textures");
-                        return;
-                }
+                case "cancel":
+                    return;
+                case "help":
+                default:
+                    ConsoleHandler.init.DisplaySubCommands("load-textures");
+                    return;
             }
-
-            StartCoroutine(ExecuteCommand());
         }
+
+        StartCoroutine(ExecuteCommand());
     }
 }

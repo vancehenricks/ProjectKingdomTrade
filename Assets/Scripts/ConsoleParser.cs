@@ -23,7 +23,7 @@ public class ConsoleParser : MonoBehaviour
         init = this;
     }
 
-    public delegate void OnParsedConsoleEvent(string command, string[] arguments);
+    public delegate void OnParsedConsoleEvent(string command, string[] arguments, params object[] objects);
     public OnParsedConsoleEvent onParsedConsoleEvent;
 
     private void Start()
@@ -33,14 +33,19 @@ public class ConsoleParser : MonoBehaviour
 
     //spawn_unit type:archer amount:1000 loc:mousePosition
 
-    public void OnConsoleEvent(string rawCommands)
+    private void OnConsoleEvent(string rawCommands)
+    {
+        ConsoleEvent(rawCommands);
+    }
+
+    public void ConsoleEvent(string rawCommands, params object[] objects)
     {
         string[] commandArray = rawCommands.Split(' ');
         string command = commandArray[0];
         string[] arguments = new string[commandArray.Length - 1];
         Array.Copy(commandArray, 1, arguments, 0, arguments.Length);
 
-        onParsedConsoleEvent(command, arguments);
+        onParsedConsoleEvent(command, arguments, objects);
     }
 
     public Dictionary<string, string> ArgumentsToSubCommands(string[] arguments)

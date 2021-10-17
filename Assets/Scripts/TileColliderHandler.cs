@@ -78,42 +78,39 @@ public class TileColliderHandler : MonoBehaviour
                 hasHits = colliderValue.Key.IntersectRay(ray);
             }
             
-            if(hasHits)
-            {
-                foreach(BaseInfo tile in colliderValue.Value.Values.ToList<BaseInfo>())
-                {                    
-                    if(hitCount >= maxHits && maxHits != -1) break;
+            if(!hasHits) continue;
+            
+            foreach(BaseInfo tile in colliderValue.Value.Values.ToList<BaseInfo>())
+            {                    
+                if(hitCount >= maxHits && maxHits != -1) break;
 
-                    if(baseInfo != null && baseInfo.tileId == tile.tileId) continue;
+                if(baseInfo != null && baseInfo.tileId == tile.tileId) continue;
 
-                    if(filter != null && filter.Count > 0)
+                if(filter != null && filter.Count > 0)
+                {
+                    foreach(string tileType in filter)
                     {
-                        foreach(string tileType in filter)
+                        if(!filterOut && (tileType == tile.tileType || tileType == tile.subType))
                         {
-                            if(!filterOut)
-                            {
-                                if(tileType == tile.tileType || tileType == tile.subType)
-                                {
-                                    hitCount++;
-                                    baseInfos.Add(tile);
-                                    break;
-                                }
-                            }
-                            else if(tileType != tile.tileType && tileType != tile.subType)
-                            {
-                                hitCount++;
-                                baseInfos.Add(tile);
-                                break;
-                            }
+                            hitCount++;
+                            baseInfos.Add(tile);
+                            break;
+                        }
+                        else if(tileType != tile.tileType && tileType != tile.subType)
+                        {
+                            hitCount++;
+                            baseInfos.Add(tile);
+                            break;
                         }
                     }
-                    else
-                    {
-                        hitCount++;
-                        baseInfos.Add(tile);
-                    }
+                }
+                else
+                {
+                    hitCount++;
+                    baseInfos.Add(tile);
                 }
             }
+            
         }
 
         return await Task.FromResult(baseInfos);
@@ -180,12 +177,12 @@ public class TileColliderHandler : MonoBehaviour
     public void Remove(BaseInfo tile, Bounds previousBounds)
     {
         BaseInfo removedTile;
-        if(colliderHandlerValues.colliderValues.ContainsKey(previousBounds))
+        
+        if(!colliderHandlerValues.colliderValues.ContainsKey(previousBounds)) return;
+        
+        if(!colliderHandlerValues.colliderValues[previousBounds].TryRemove(tile.tileId, out removedTile) && removedTile != null)
         {
-            if(!colliderHandlerValues.colliderValues[previousBounds].TryRemove(tile.tileId, out removedTile) && removedTile != null)
-            {
-                CDebug.Log(this, "Remove failed for removedTile.tileId=" + removedTile.tileId, LogType.Warning);
-            }
+            CDebug.Log(this, "Remove failed for removedTile.tileId=" + removedTile.tileId, LogType.Warning);
         }
     }
 

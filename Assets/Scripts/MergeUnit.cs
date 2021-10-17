@@ -10,31 +10,22 @@ using UnityEngine;
 
 public class MergeUnit : PlayerCommand
 {
+    protected readonly string mergeUnitCommand = "merge-unit log:0 tile-object:0";
+    protected readonly string mergeCancelCommand = "merge-unit log:0 tile-object:0 cancel";
+
     protected override void Start()
     {
         base.Start();
     }
 
-    public void DoMergeAction()
+    public override void DoAction()
     {
-        DoAction();
+        base.DoAction();
         OpenLeftClick.init.Ignore();
+        ConsoleParser.init.ConsoleEvent(mergeCancelCommand, unitInfos);
+        ConsoleParser.init.ConsoleEvent(mergeUnitCommand, unitInfos);
 
-        for (int i = 1;i < unitInfos.Count;i++)
-        {
-            unitInfos[i].merge = unitInfos[0];
-            unitInfos[i].unitEffect.mergeHandler.GenerateWayPoint();
-        }
-
-        UpdateUnitsWayPoints();
-        EndAction();
-    }
-
-    public void DoSplitAction()
-    {
-        DoAction();
-        OpenLeftClick.init.Ignore();
-        Tools.Split(unitInfos[0]);
+        //UpdateUnitsWayPoints();
         EndAction();
     }
 }

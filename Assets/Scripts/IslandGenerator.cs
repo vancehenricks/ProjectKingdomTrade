@@ -31,7 +31,7 @@ public class IslandGenerator : MonoBehaviour
     }
     private void Generate()
     {
-        CDebug.Log(this, "Generating Island");
+        CDebug.Log(this, "Generating Island", LogType.Warning);
 
 
 

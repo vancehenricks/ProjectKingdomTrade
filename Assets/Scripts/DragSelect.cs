@@ -32,7 +32,7 @@ public class DragSelect : MonoBehaviour
     {
         _selectorObjRect = selectorObj.GetComponent<RectTransform>();
         _selectorObjCollider = selectorObj.GetComponent<BoxCollider2D>();
-        tileInfoGetterArray = selectorObj.GetComponent<TileInfoGetterArray>();
+        tileInfoGetterArray = GetComponent<TileInfoGetterArray>();
 
         DragHandler.init.overrideOnBeginDrag += OverrideOnBeginDrag;
         DragHandler.init.overrideOnDrag += OverrideOnDrag;
