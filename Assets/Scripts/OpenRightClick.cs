@@ -146,7 +146,7 @@ public class OpenRightClick : MonoBehaviour
             UnitInfo unit = tileInfo as UnitInfo;
             HashSet<TileInfo> trimmed = null;
 
-            if(unit != null)
+            if(unit != null && unit.tileType != "Town")
             {
                 trimmed = new HashSet<TileInfo>(TileInfoRaycaster.init.tileInfos);
                 trimmed.Remove(unit.standingTile);
