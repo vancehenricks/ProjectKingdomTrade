@@ -33,6 +33,7 @@
  "attackDistance":0,
  "options":
  [
+  "Recruit_1",
   "Examine_1"
  ],
  "killChance":0.0,
