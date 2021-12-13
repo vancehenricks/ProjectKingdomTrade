@@ -51,19 +51,17 @@ public class AttackUnit : MoveUnit
         if (_selectedTiles.Count > 0 /*&& targetList.Count > 0*/)
         {
             OpenLeftClick.init.Ignore();
-
+            List<TileInfo> whiteListed = Tools.WhiteListTileType(new List<TileInfo>(_selectedTiles), include);
+            
             if (MultiSelect.init.shiftPressed)
             {
-                List<TileInfo> whiteListed = Tools.WhiteListTileType(new List<TileInfo>(_selectedTiles), include);
                 Execute(whiteListed, attackUnitCommand);
             }
             else
             {
-                List<TileInfo> sanitizeList = Tools.WhiteListTileType(new List<TileInfo>(_selectedTiles), include);
-
-                if (sanitizeList.Count == 0) return;
+                if (whiteListed.Count == 0) return;
                 ClearAllWaypoints();
-                Execute(sanitizeList[0], attackUnitCommand);
+                Execute(whiteListed[0], attackUnitCommand);
             }
         }
     }
