@@ -61,6 +61,7 @@ public class GroupHotKeys : MonoBehaviour
         }
         else if (MultiSelect.init.shiftPressed && Input.GetButtonDown("Fire2"))
         {
+            TileInfoRaycaster.init.tileInfos.RemoveAll(tileInfo => tileInfo == null);
             OpenRightClick.init.skipRaycast = true;
         }
 
@@ -90,7 +91,7 @@ public class GroupHotKeys : MonoBehaviour
                         previousKey = key;
                         skip = true;
                     }
-                    
+                    groups[key].RemoveAll(tileInfo => tileInfo == null);
                     CDebug.Log(this, "Retrieving group for " + key, LogType.Warning);
                     TileInfoRaycaster.init.tileInfos.Clear();
                     TileInfoRaycaster.init.tileInfos.AddRange(groups[key]);
