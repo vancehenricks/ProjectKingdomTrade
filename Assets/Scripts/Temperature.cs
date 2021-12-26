@@ -41,8 +41,6 @@ public class Temperature : MonoBehaviour
         maxTemp = 32f;
     }
 
-
-    // Update is called once per frame
     private void TickUpdate()
     {
         //Debug.Log("temp:" + temperature);
