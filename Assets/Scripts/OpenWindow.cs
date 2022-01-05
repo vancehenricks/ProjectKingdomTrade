@@ -10,21 +10,29 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
+[System.Serializable]
+public class OpenWindowInfo
+{
+    public GameObject window;
+    public bool openOnce;
+}
 
 public class OpenWindow : MonoBehaviour
 {
 
-    public List<GameObject> windowList;
+    public List<OpenWindowInfo> windowList;
 
     public void DoOpen()
     {
 
-        foreach (GameObject window in windowList)
+        foreach (OpenWindowInfo windowInfo in windowList)
         {
-            CDebug.Log(this, "Opening window=" + window.name, LogType.Log);
+            CDebug.Log(this, "Opening window=" + windowInfo.window.name, LogType.Log);
 
-            window.SetActive(!window.activeSelf);
-            window.transform.SetAsLastSibling();
+            if(windowInfo.openOnce && windowInfo.window.activeSelf) continue;
+
+            windowInfo.window.SetActive(!windowInfo.window.activeSelf);
+            windowInfo.window.transform.SetAsLastSibling();
         }
     }
 
