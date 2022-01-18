@@ -47,7 +47,7 @@ public class ConsoleMergeUnit : ConsoleCommand
             
             if(log)
             {
-                ConsoleHandler.init.AddLine("Attacking unit");
+                ConsoleHandler.init.AddLine("Merging unit");
                 ConsoleHandler.init.AddCache(ConsoleHandler.init.previousCommand);
             }
         }

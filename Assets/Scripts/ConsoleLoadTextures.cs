@@ -17,7 +17,7 @@ public class ConsoleLoadTextures : ConsoleCommand
 
     public override void Initialize(Dictionary<string, string> subCommands)
     {
-        subCommands.Add("cancel", "");
+        //subCommands.Add("cancel", "");
         subCommands.Add("help", "");
     }
 
@@ -39,8 +39,8 @@ public class ConsoleLoadTextures : ConsoleCommand
         {
             switch (subCommand)
             {
-                case "cancel":
-                    return;
+                //case "cancel":
+                //    return;
                 case "help":
                 default:
                     ConsoleHandler.init.DisplaySubCommands("load-textures");

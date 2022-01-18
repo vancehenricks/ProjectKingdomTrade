@@ -61,10 +61,10 @@ public class ConsoleHandler : MonoBehaviour
             cacheCommands = new List<string>();
             cacheConsole = new List<string>();
 
-            AddCache("cancel");
+            //AddCache("cancel");
             AddCache("help");
             AddCache("clear");
-            commandList.Add("cancel", new Dictionary<string, string>());
+            //commandList.Add("cancel", new Dictionary<string, string>());
             commandList.Add("help", new Dictionary<string, string>());
             commandList.Add("clear", new Dictionary<string, string>());
 
@@ -145,13 +145,13 @@ public class ConsoleHandler : MonoBehaviour
             {
                 DisplayCommands();
             }
-            else if (command.text == "cancel")
+            /*else if (command.text == "cancel")
             {
                 foreach (var cmd in commandList)
                 {
                     onConsoleEvent(cmd.Key + " cancel");
                 }
-            }
+            }*/
             else if (onConsoleEvent != null)
             {
                 onConsoleEvent(command.text);

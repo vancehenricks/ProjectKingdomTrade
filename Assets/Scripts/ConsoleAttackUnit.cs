@@ -23,9 +23,9 @@ public class ConsoleAttackUnit : ConsoleCommand
     {
         subCommands.Add("log", "1");
         subCommands.Add("tile-id", "0");
-        subCommands.Add("tile-object", "0");  
-        subCommands.Add("target-tile-object", "1");  
+        subCommands.Add("tile-object", "0");
         subCommands.Add("target-tile-id", "0|1");
+        subCommands.Add("target-tile-object", "1");
         subCommands.Add("cancel", "");
         subCommands.Add("help", "");
     }

@@ -40,8 +40,8 @@ public class SpawnUnit : ConsoleCommand
         subCommands.Add("player-object", "0");
         subCommands.Add("sub-type", "Worker");
         subCommands.Add("amount", "1");
-        subCommands.Add("tile-object", "0");
         subCommands.Add("tile-location", "0,0");
+        subCommands.Add("tile-object", "0");
         subCommands.Add("color", "#ffffff");
         subCommands.Add("attack-distance", "1");
         subCommands.Add("units", "10");
