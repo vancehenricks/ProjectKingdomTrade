@@ -66,7 +66,10 @@ public class ConsoleHandler : MonoBehaviour
             AddCache("clear");
             //commandList.Add("cancel", new Dictionary<string, string>());
             commandList.Add("help", new Dictionary<string, string>());
-            commandList.Add("clear", new Dictionary<string, string>());
+            
+            Dictionary<string,string> clearSubCommands = new Dictionary<string, string>();
+            clearSubCommands.Add("*description", "Clear all logs in the console");
+            commandList.Add("clear", clearSubCommands);
 
             Welcome();
             // initialize();
@@ -173,7 +176,16 @@ public class ConsoleHandler : MonoBehaviour
         AddLine("COMMANDS:");
         foreach (var cmd in commandList)
         {
-            AddLine("\t" + cmd.Key);
+            if(cmd.Value.ContainsKey("*description"))
+            {
+                string description = cmd.Value["*description"];
+                description = description.PadLeft(description.Length+3);
+                AddLine(cmd.Key + description);
+            }
+            else
+            {
+                AddLine(cmd.Key);
+            }
         }
     }
 
@@ -183,9 +195,16 @@ public class ConsoleHandler : MonoBehaviour
         AddLine("");
         AddLine("COMMAND:");
         AddLine($"{text}");
+        if(subCommands.ContainsKey("*description"))
+        {
+            AddLine("DESCRIPTION:");
+            AddLine(subCommands["*description"]);
+        }
         AddLine("PARAMETERS:");
         foreach (var subCommand in subCommands)
         {
+            if(subCommand.Key.Contains("*")) continue;
+
             if (subCommand.Value != "")
             {
                 AddLine($"{subCommand.Key}:{subCommand.Value}");
@@ -194,6 +213,12 @@ public class ConsoleHandler : MonoBehaviour
             {
                 AddLine($"{subCommand.Key}");
             }
+        }
+
+        if(subCommands.ContainsKey("*examples"))
+        {
+            AddLine("EXAMPLES:");
+            AddLines(subCommands["*examples"].Split('\n'));
         }
     }
 
@@ -348,6 +373,8 @@ public class ConsoleHandler : MonoBehaviour
         {
             descriptionList = descriptions.ToList<string>();
         }
+
+        if(substrings[substrings.Length - 1].Contains("*")) return false;
 
         int index = 0;
         foreach (string val in values)

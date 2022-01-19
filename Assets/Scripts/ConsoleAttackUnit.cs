@@ -21,10 +21,18 @@ public class ConsoleAttackUnit : ConsoleCommand
 
     public override void Initialize(Dictionary<string, string> subCommands)
     {
-        subCommands.Add("log", "1");
+        string examples = 
+        command + " tile-id:0 target-tile-id:1\n" +
+        command + " tile-id:0 target-tile-id:1|2|3\n" + 
+        command + " tile-id:0 cancel\n" +
+        command + " log:0 tile-id:0 target-tile-id:1";
+
+        subCommands.Add("*description","Command unit to attack another unit");
+        subCommands.Add("*examples", examples);
+        subCommands.Add("log", "0 or 1 default 1");
         subCommands.Add("tile-id", "0");
         subCommands.Add("tile-object", "0");
-        subCommands.Add("target-tile-id", "0|1");
+        subCommands.Add("target-tile-id", "0 or 0|1");
         subCommands.Add("target-tile-object", "1");
         subCommands.Add("cancel", "");
         subCommands.Add("help", "");
@@ -87,13 +95,13 @@ public class ConsoleAttackUnit : ConsoleCommand
                     unitInfo.merge = null;  
                     if(log)
                     {
-                        ConsoleHandler.init.AddLine("move-unit for command cancelled");    
-                        ConsoleHandler.init.AddCache("move-unit");                        
+                        ConsoleHandler.init.AddLine(command + " for command cancelled");    
+                        ConsoleHandler.init.AddCache(command);                        
                     }
                     return;
                 case "help":
                 default:
-                    ConsoleHandler.init.DisplaySubCommands("move-unit");
+                    ConsoleHandler.init.DisplaySubCommands(command);
                     return;
             }
         }

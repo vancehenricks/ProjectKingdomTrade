@@ -31,12 +31,24 @@ public class Destroy : ConsoleCommand
 
     public override void Initialize(Dictionary<string, string> subCommands)
     {
+        string examples = 
+        command + " tile-id:0\n" +
+        command + " tile-id:0 type:Unit\n" +
+        command + " < left click on a tile to destroy\n" +
+        command + " type:Unit amount:2 < destroy more than one tile at every left click\n" +
+        command + " type:Unit amount:2 execute-all < executes all in one go, upon left click on tile\n" + 
+        command + " cancel < applicable only if previous command has stated amount > 1\n" +
+        command + " auto-focus:0 < will focus back to console once command finish executing";
+
+        subCommands.Add("*description","Destroy selected tile");
+        subCommands.Add("*examples", examples);
+
         subCommands.Add("tile-id", "0");
         subCommands.Add("tile-object", "0");
         subCommands.Add("type", "Unit");
         subCommands.Add("amount", "1");
         //subCommands.Add("layer", "1");
-        subCommands.Add("auto-focus", "true");
+        subCommands.Add("auto-focus", "0 or 1 default 1");
         subCommands.Add("execute-all", "");
         subCommands.Add("cancel", "");
         subCommands.Add("help", "");
@@ -145,7 +157,10 @@ public class Destroy : ConsoleCommand
                 //    int.TryParse(subCommands[subCommand], out targetLayer);
                 //    break;
                 case "auto-focus":
-                    bool.TryParse(subCommands[subCommand], out autoFocus);
+                    if(subCommands[subCommand] == "0")
+                    {
+                        autoFocus = false;
+                    }
                     break;
                 case "execute-all":
                     executeAll = true;
@@ -162,11 +177,11 @@ public class Destroy : ConsoleCommand
                     tileInfo = (TileInfo)objects[index];
                     break;
                 case "cancel":
-                    ConsoleHandler.init.AddLine("destroy command cancelled");
+                    ConsoleHandler.init.AddLine(command + " command cancelled");
                     return;
                 case "help":
                 default:
-                    ConsoleHandler.init.DisplaySubCommands("destroy");
+                    ConsoleHandler.init.DisplaySubCommands(command);
                     return;
             }
         }

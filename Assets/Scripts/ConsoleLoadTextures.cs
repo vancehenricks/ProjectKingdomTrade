@@ -17,6 +17,7 @@ public class ConsoleLoadTextures : ConsoleCommand
 
     public override void Initialize(Dictionary<string, string> subCommands)
     {
+        subCommands.Add("*description","Load textures from Sprites directory");  
         //subCommands.Add("cancel", "");
         subCommands.Add("help", "");
     }
@@ -43,7 +44,7 @@ public class ConsoleLoadTextures : ConsoleCommand
                 //    return;
                 case "help":
                 default:
-                    ConsoleHandler.init.DisplaySubCommands("load-textures");
+                    ConsoleHandler.init.DisplaySubCommands(command);
                     return;
             }
         }

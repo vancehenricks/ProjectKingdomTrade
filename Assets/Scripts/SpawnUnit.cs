@@ -36,6 +36,12 @@ public class SpawnUnit : ConsoleCommand
 
     public override void Initialize(Dictionary<string, string> subCommands)
     {
+        string examples = 
+        command + " TODO...\n";
+
+        subCommands.Add("*description","Spawn unit in the selected tile");
+        subCommands.Add("*examples", examples);
+
         subCommands.Add("player-id", "0");
         subCommands.Add("player-object", "0");
         subCommands.Add("sub-type", "Worker");
@@ -45,7 +51,7 @@ public class SpawnUnit : ConsoleCommand
         subCommands.Add("color", "#ffffff");
         subCommands.Add("attack-distance", "1");
         subCommands.Add("units", "10");
-        subCommands.Add("auto-focus", "true");
+        subCommands.Add("auto-focus", "0 or 1 default 1");
         subCommands.Add("execute-all", "");
         subCommands.Add("cancel", "");
         subCommands.Add("help", "");
@@ -140,11 +146,11 @@ public class SpawnUnit : ConsoleCommand
                     int.TryParse(subCommands[subCommand], out units);
                     break;
                 case "cancel":
-                    ConsoleHandler.init.AddLine("spawn-unit command cancelled");
+                    ConsoleHandler.init.AddLine(command + " command cancelled");
                     return;
                 case "help":
                 default:
-                    ConsoleHandler.init.DisplaySubCommands("spawn-unit");
+                    ConsoleHandler.init.DisplaySubCommands(command);
                     return;
             }
         }

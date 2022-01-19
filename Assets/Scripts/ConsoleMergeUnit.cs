@@ -20,7 +20,16 @@ public class ConsoleMergeUnit : ConsoleCommand
 
     public override void Initialize(Dictionary<string, string> subCommands)
     {
-        subCommands.Add("log", "1");
+        string examples = 
+        command + " tile-id:0|1 < unit 1 will merge with unit 0\n" +
+        command + " tile-id:0|1|2 < unit 1 and unit 2 will merge with unit 0\n" +
+        command + " tile-id:0|1 cancel\n" +
+        command + " log:0 tile-id:0|1";
+
+        subCommands.Add("*description","Merge unit to another unit with the same sub-type");
+        subCommands.Add("*examples", examples);
+
+        subCommands.Add("log", "0 or 1 default 1");
         subCommands.Add("tile-id", "0|1");
         subCommands.Add("tile-object", "0"); 
         subCommands.Add("cancel", "");
@@ -94,13 +103,13 @@ public class ConsoleMergeUnit : ConsoleCommand
                     
                     if(log)
                     {
-                        ConsoleHandler.init.AddLine("move-unit for command cancelled");    
-                        ConsoleHandler.init.AddCache("move-unit");                        
+                        ConsoleHandler.init.AddLine(command + " for command cancelled");    
+                        ConsoleHandler.init.AddCache(command);                        
                     }
                     return;
                 case "help":
                 default:
-                    ConsoleHandler.init.DisplaySubCommands("move-unit");
+                    ConsoleHandler.init.DisplaySubCommands(command);
                     return;
             }
         }
