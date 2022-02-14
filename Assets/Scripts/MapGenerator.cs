@@ -75,7 +75,7 @@ public class MapGenerator : Pipeline
         return spawnChance;
     }
 
-    public TileInfo GetBaseTile(SortedList<float, TileInfo> baseTiles)
+    /*public TileInfo GetBaseTile(SortedList<float, TileInfo> baseTiles)
     {
         foreach (KeyValuePair<float, TileInfo> baseTile in baseTiles)
         {
@@ -112,5 +112,5 @@ public class MapGenerator : Pipeline
         }
 
         return foilageGroup;
-    }
+    }*/
 }

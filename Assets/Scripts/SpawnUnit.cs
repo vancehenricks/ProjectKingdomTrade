@@ -24,6 +24,8 @@ public class SpawnUnit : ConsoleCommand
     public PlayerInfo playerInfo;
     public bool noMouseRequired;
     public TileInfo tileInfo;
+    public UnitInfo baseUnitInfo;
+    public bool log;
 
     private bool fire1Clicked;
 
@@ -37,20 +39,30 @@ public class SpawnUnit : ConsoleCommand
     public override void Initialize(Dictionary<string, string> subCommands)
     {
         string examples = 
-        command + " TODO...\n";
+        command + " player-id:0 amount:10 < spawn a Worker tile under player 0 for every left click on a tile\n" +
+        command + " player-id:0 amount:10 execute-all < spawns all Worker tile in one go\n" +
+        command + " player-id:0 sub-type:Infantry\n" +
+        command + " player-id:0 amount:5 sub-type:Infantry tile-location:0,0\n" + 
+            "\t< spawns 5 unit of Infantry in given tile-location\n" +
+        command + " player-id:0 tile-id:0\n" +
+        command + " player-id:0 units:20 attack-distance:2 sub-type:Infantry tile-id:0\n" +
+            "\t< spawns an Infantry unit with modified properties\n";
 
         subCommands.Add("*description","Spawn unit in the selected tile");
         subCommands.Add("*examples", examples);
 
+        subCommands.Add("log", "0 or 1 default 1");
         subCommands.Add("player-id", "0");
         subCommands.Add("player-object", "0");
         subCommands.Add("sub-type", "Worker");
+        subCommands.Add("sub-type-object", "0");
         subCommands.Add("amount", "1");
-        subCommands.Add("tile-location", "0,0");
+        subCommands.Add("tile-location", "0,0");        
+        subCommands.Add("tile-id", "0");
         subCommands.Add("tile-object", "0");
         subCommands.Add("color", "#ffffff");
-        subCommands.Add("attack-distance", "1");
-        subCommands.Add("units", "10");
+        subCommands.Add("attack-distance", "default whatever sub-type is");
+        subCommands.Add("units", "default whatever sub-type is");
         subCommands.Add("auto-focus", "0 or 1 default 1");
         subCommands.Add("execute-all", "");
         subCommands.Add("cancel", "");
@@ -66,20 +78,23 @@ public class SpawnUnit : ConsoleCommand
             {
                 fire1Clicked = true;
                 //make the units random color
-                TileInfo tile = TileInfoRaycaster.init.GetTileInfoFromPos(Input.mousePosition);
-                if (tile != null)
+
+                if(noMouseRequired)
                 {
-                    Spawn(tile.transform.position);
+                    Spawn(tileInfo.transform.position);
+                }
+                else
+                {
+                    TileInfo tile = TileInfoRaycaster.init.GetTileInfoFromPos(Input.mousePosition);
+                    if (tile != null)
+                    {
+                        Spawn(tile.transform.position);
+                    }
                 }
             }
 
             yield return null;
         }
-    }
-
-    private void ExecuteCommand()
-    {
-        Spawn(tileInfo.transform.position);
     }
 
     public override void OnParsedConsoleEvent(Dictionary<string, string> subCommands, string[] arguments, params object[] objects)
@@ -93,13 +108,26 @@ public class SpawnUnit : ConsoleCommand
 
             switch (subCommand)
             {
+                case "log":
+                    if(subCommands[subCommand] == "0")
+                    {
+                        log = false;
+                    }
+                    break;
                 case "tile-object":
                     int.TryParse(subCommands[subCommand], out index);
                     tileInfo = objects[index] as TileInfo;
+                    noMouseRequired = true;
                 break;
                 case "player-object":
                     int.TryParse(subCommands[subCommand], out index);
                     playerInfo = objects[index] as PlayerInfo;
+                break;
+                case "tile-id":
+                    long tileId = 0;
+                    long.TryParse(subCommands[subCommand], out tileId);
+                    tileInfo = TileList.init.tileInfos[tileId];
+                    noMouseRequired = true;
                 break;
                 case "tile-location":
                     Vector2Int tileLocation = Tools.ParseLocation(subCommands[subCommand]);
@@ -127,6 +155,10 @@ public class SpawnUnit : ConsoleCommand
                         attackDistance = unitInfo.attackDistance;
                     }
                     break;
+                case "sub-type-object":
+                    int.TryParse(subCommands[subCommand], out index);
+                    baseUnitInfo = objects[index] as UnitInfo;
+                    break;
                 case "amount":
                     int.TryParse(subCommands[subCommand], out nMax);
                     break;
@@ -146,7 +178,10 @@ public class SpawnUnit : ConsoleCommand
                     int.TryParse(subCommands[subCommand], out units);
                     break;
                 case "cancel":
-                    ConsoleHandler.init.AddLine(command + " command cancelled");
+                    if(log)
+                    {
+                        ConsoleHandler.init.AddLine(command + " command cancelled");
+                    }
                     return;
                 case "help":
                 default:
@@ -154,22 +189,27 @@ public class SpawnUnit : ConsoleCommand
                     return;
             }
         }
-
-        if (noMouseRequired)
+        
+        if(!noMouseRequired)
         {
-            ExecuteCommand();
+            if(log)
+            {
+                ConsoleHandler.init.AddLine("Click a tile to spawn.");
+            }
         }
         else
         {
-            ConsoleHandler.init.AddLine("Click a tile to spawn.");
-            commandStream = StartCoroutine(CommandStream());
+            executeAll = true;
+            fire1Clicked = true;
         }
+
+        commandStream = StartCoroutine(CommandStream());
     }
 
     private void Spawn(Vector3 loc)
     {
-        GameObject baseTile = TileConfigHandler.init.baseUnits[subType].gameObject;
-        GameObject unit = Instantiate(TileConfigHandler.init.baseUnits[subType].gameObject, TileList.init.subGrids[Vector3Int.FloorToInt(loc)]);
+        GameObject baseTile = baseUnitInfo == null ? TileConfigHandler.init.baseUnits[subType].gameObject : baseUnitInfo.gameObject;
+        GameObject unit = Instantiate(baseTile, TileList.init.subGrids[Vector3Int.FloorToInt(loc)]);
         unit.name = baseTile.name;
         unit.transform.position = loc;
         UnitInfo unitInfo = unit.GetComponent<UnitInfo>();
@@ -180,7 +220,10 @@ public class SpawnUnit : ConsoleCommand
         unitInfo.unit = units;
         unitInfo.Initialize();
         unit.SetActive(true);
-        ConsoleHandler.init.AddLine(string.Format("Spawning unit [{0}/{1}].", nCount + 1, nMax));
+        if(log)
+        {
+            ConsoleHandler.init.AddLine(string.Format("Spawning unit [{0}/{1}].", nCount + 1, nMax));
+        }
 
         if (autoFocus)
         {
@@ -209,6 +252,7 @@ public class SpawnUnit : ConsoleCommand
         executeAll = false;
         fire1Clicked = false;
         tileInfo = null;
+        log = true;
 
         if (commandStream != null)
         {

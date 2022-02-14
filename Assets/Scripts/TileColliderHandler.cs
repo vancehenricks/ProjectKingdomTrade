@@ -90,8 +90,8 @@ public class TileColliderHandler : MonoBehaviour
                 {
                     foreach(string tileType in filter)
                     {
-                        if(!filterOut && (tileType == tile.tileType || tileType == tile.subType) ||
-                            filterOut && tileType != tile.tileType && tileType != tile.subType)
+                        if(!filterOut && tile.Contains(tileType) ||
+                            filterOut && !tile.Contains(tileType))
                         {
                             hitCount++;
                             baseInfos.Add(tile);

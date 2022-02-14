@@ -41,7 +41,9 @@ public class UnitInfo : TileInfo
     public float killChance;
     public float deathChance;
     public List<Walkable> nonWalkable;
-    public TileInfo standingTile
+    public List<string> unitSpawnable; 
+    public float spawnTime;     
+    public TileInfo standingTile      
     {
         get
         {

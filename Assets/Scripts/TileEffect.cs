@@ -30,6 +30,7 @@ public class TileEffect : MonoBehaviour
     public float summerTemp;
     public UnitWayPoint UnitWayPoint;
     public UnitDisplay unitDisplay;
+    public RecruitUnitHandler recruitUnitHandler;
 
     //public TileCollider tileCollider;
     //public int maxDaysBeforeRevert;

@@ -39,6 +39,7 @@ public class Tick : MonoBehaviour
     public long day { get; private set; }
     public long month { get; private set; }
     public long year { get; private set; }
+    public float timeDilation {get; private set; }
 
     public delegate void TickUpdate();
     public TickUpdate tickUpdate;
@@ -52,6 +53,7 @@ public class Tick : MonoBehaviour
 
     public void Initialize()
     {
+        timeDilation = 0.045f;
         tick = 5;
         speed = 1;
         day = 24;

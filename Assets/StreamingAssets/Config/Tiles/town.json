@@ -45,5 +45,16 @@
  ],
  "upgrades":
  [
+ ],
+ "spawnTime":0.0,
+ "unitSpawnable":
+ [
+  "Worker",
+  "Merchant",
+  "Infantry",
+  "Cavalry",
+  "Archer",
+  "Saboteur",
+  "Trebuchet"
  ]
 }

@@ -50,14 +50,18 @@ public class TileInfo : BaseInfo
     public bool selected;
     public float cloudDrag;
     public float dragAffectedByCloud;
+    //public float spawnTime;
     public List<string> options;
     public List<TileInfo> standingTiles;
     public List<Upgrade> upgrades;
+    public Dictionary<string,Queue<RecruitInfo>> recruitInfos;
+    //public List<string> spawnables;
     //public TileCollider tileCollider;
 
     protected virtual void Awake()
     {
         claimants = new HashSet<PlayerInfo>();
+        recruitInfos = new Dictionary<string,Queue<RecruitInfo>>();
     }
 
     public override void Initialize()

@@ -38,6 +38,22 @@ public class BaseInfo : MonoBehaviour, IEquatable<BaseInfo>
         return false;
     }
 
+    public bool Contains(string type)
+    {
+        return tileType == type || subType == type;
+    }
+
+    public bool IsSameType(BaseInfo tile)
+    {
+        if(tileType == tile.tileType &&
+        subType == tile.subType) 
+        {
+            return true;
+        }
+
+        return false;
+    }    
+
     public override int GetHashCode()
     {
         return tileId.GetHashCode();

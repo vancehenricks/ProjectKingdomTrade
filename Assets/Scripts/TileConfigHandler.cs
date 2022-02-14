@@ -106,6 +106,8 @@ public class TileConfigHandler : MonoBehaviour
             config.killChance = unitInfo.killChance;
             config.deathChance = unitInfo.deathChance;
             config.nonWalkable = unitInfo.nonWalkable.ToArray();
+            config.spawnTime = unitInfo.spawnTime;
+            config.unitSpawnable = unitInfo.unitSpawnable.ToArray();
         }
 
         config.unit = tileInfo.unit;
@@ -173,10 +175,16 @@ public class TileConfigHandler : MonoBehaviour
             unitInfo.attackDistance = config.attackDistance;
             unitInfo.killChance = config.killChance;
             unitInfo.deathChance = config.deathChance;
+            unitInfo.spawnTime = config.spawnTime;
 
             if (config.nonWalkable != null)
             {
                 unitInfo.nonWalkable = new List<Walkable>(config.nonWalkable);
+            }
+
+            if(config.unitSpawnable != null)
+            {
+                unitInfo.unitSpawnable = new List<string>(config.unitSpawnable);
             }
         }
 
@@ -244,4 +252,24 @@ public class TileConfigHandler : MonoBehaviour
 
         return tileInfo;
     }
+
+    public TileInfo Serialize(string name)
+    {
+        if(init.baseUnits.ContainsKey(name))
+        {
+            return init.baseUnits[name];
+        }
+
+        if(init.baseTiles.ContainsKey(name))
+        {
+            return init.baseTiles[name];
+        }
+
+        if(init.baseTowns.ContainsKey(name))
+        {
+            return init.baseTowns[name];
+        }
+
+        return null;
+    }    
 }

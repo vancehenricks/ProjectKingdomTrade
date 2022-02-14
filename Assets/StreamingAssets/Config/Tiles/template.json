@@ -65,5 +65,9 @@
    "unitReward":0,
    "maxUnitReward":0
   }
+ ],
+ "spawnTime":0.0,
+ "unitSpawnable":
+ [
  ]
 }

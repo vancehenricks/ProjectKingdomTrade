@@ -34,4 +34,6 @@ public struct TileConfig
     public float dragAffectedByCloud;
     public Walkable[] nonWalkable;
     public Upgrade[] upgrades;
+    public float spawnTime;
+    public string[] unitSpawnable;
 }

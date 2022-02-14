@@ -68,7 +68,7 @@ public class PathFindingHandler : MonoBehaviour
 
         if (arrivalTime > -1)
         {
-            arrivalTime -= 0.25f;
+            arrivalTime -= Tick.init.timeDilation;
             return;
         }
 

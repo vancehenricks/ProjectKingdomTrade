@@ -45,7 +45,7 @@ public class NonWalkableTiles : MonoBehaviour
 
         for (int i = 0; i < nonWalkable.Count;i++)
         {
-            if ((tile.tileType == nonWalkable[i].tile || tile.subType == nonWalkable[i].tile) && tile.localTemp >= nonWalkable[i].minTemperature &&
+            if (tile.Contains(nonWalkable[i].tile) && tile.localTemp >= nonWalkable[i].minTemperature &&
                 tile.localTemp <= nonWalkable[i].maxTemperature)
             {
                 isWalkable = false;
