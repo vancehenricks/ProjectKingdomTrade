@@ -30,5 +30,6 @@ public struct SettingsConfig
     public float maxZoomScale;
     public float maxZoomMultiplier;
     public int maxTimeSpeed;
+    public int[] recruitMultiplier;
 
 }

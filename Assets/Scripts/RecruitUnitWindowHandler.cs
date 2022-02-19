@@ -11,14 +11,13 @@ using UnityEngine.UI;
 
 public class RecruitUnitWindowHandler : MonoBehaviour
 {
+    public int[] multiplierArr = {1,5,10};
     public int multiplier;
     public Text multiplierText;
     public Text countText;
     public List<TileInfo> selectedTowns;
     public RecruitButton baseButton;
     public List<RecruitButton> buttons;
-
-    public string originalText;
 
     public void Initialize()
     {
@@ -46,11 +45,6 @@ public class RecruitUnitWindowHandler : MonoBehaviour
                 button.gameObject.SetActive(true);
                 buttons.Add(button);
             }
-        }
-
-        if(originalText.Length == 0)
-        {
-            originalText = countText.text;
         }
 
         countText.text = "(" + selectedTowns.Count + ")";
@@ -81,8 +75,11 @@ public class RecruitUnitWindowHandler : MonoBehaviour
                 Queue<RecruitInfo> recruits = new Queue<RecruitInfo>();
                 town.recruitInfos.Add(recruitInfo.baseInfo.subType, recruits);
             }
-
-            town.recruitInfos[recruitInfo.baseInfo.subType].Enqueue(recruitInfo);
+            
+            for(int i = 0;i < multiplierArr[multiplier];i++)
+            {
+                town.recruitInfos[recruitInfo.baseInfo.subType].Enqueue(recruitInfo);
+            }
         }    
     }
 
@@ -90,18 +87,36 @@ public class RecruitUnitWindowHandler : MonoBehaviour
     {
         foreach(TileInfo town in recruitInfo.towns)
         {
-            town.recruitInfos[recruitInfo.baseInfo.subType].Dequeue();
+            for(int i = 0;i < multiplierArr[multiplier];i++)
+            {
+                if(!town.recruitInfos.ContainsKey(recruitInfo.baseInfo.subType)) continue;
+                
+                if(town.recruitInfos[recruitInfo.baseInfo.subType].Count == 0) break;
+
+                town.recruitInfos[recruitInfo.baseInfo.subType].Dequeue();
+            }
         }
     }
 
     public void OnMultiply()
     {
+        if(++multiplier >= multiplierArr.Length)
+        {
+            multiplier = 0;
+        }
 
+        multiplierText.text = "X" + multiplierArr[multiplier];
     }
 
     public void OnCancelAll()
     {
-
+        foreach(TileInfo town in selectedTowns)
+        {
+            foreach(var queue in town.recruitInfos.Values)
+            {
+                queue.Clear();
+            }
+        }
     }
 
     private void OnDestory()

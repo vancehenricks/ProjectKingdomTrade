@@ -19,5 +19,11 @@
  "minZoomScale":-900.0,
  "maxZoomScale":-200.0,
  "maxZoomMultiplier":0.800000011920929,
- "maxTimeSpeed":3
+ "maxTimeSpeed":3,
+ "recruitMultiplier":
+ [
+  1,
+  5,
+  10
+ ]
 }
