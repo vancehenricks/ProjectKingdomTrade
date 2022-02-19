@@ -13,9 +13,12 @@ public class RecruitUnitWindowHandler : MonoBehaviour
 {
     public int multiplier;
     public Text multiplierText;
+    public Text countText;
     public List<TileInfo> selectedTowns;
     public RecruitButton baseButton;
     public List<RecruitButton> buttons;
+
+    public string originalText;
 
     public void Initialize()
     {
@@ -44,7 +47,19 @@ public class RecruitUnitWindowHandler : MonoBehaviour
                 buttons.Add(button);
             }
         }
+
+        if(originalText.Length == 0)
+        {
+            originalText = countText.text;
+        }
+
+        countText.text = "(" + selectedTowns.Count + ")";
     }
+
+    /*public void Unitialize()
+    {
+        countText.text = originalText;
+    }*/
 
     public void Cleanup()
     {

@@ -45,7 +45,7 @@
  "upgrades":
  [
  ],
- "spawnTime":0.0,
+ "spawnTime":100.0,
  "unitSpawnable":
  [
  ]

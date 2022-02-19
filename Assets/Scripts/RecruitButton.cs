@@ -6,6 +6,7 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -17,18 +18,25 @@ public class RecruitButton : MonoBehaviour, IPointerClickHandler
     //public Image border;
     public Image progress;
     public TextMeshProUGUI batch;
-    public TileInfo baseInfo;
+    public TextMeshProUGUI unit;
+    public UnitInfo baseInfo;
     public List<TileInfo> towns;
     public RecruitUnitWindowHandler recruitUnitWindowHandler;
-    private int _batch;
     //private readonly object recruitLock = new object();
+    
+    private void Start()
+    {
+        //Tick.init.tickUpdate += TickUpdate;
+    }
 
     public void Initialize(TileInfo _baseInfo, List<TileInfo> _towns)
     {
         name += "_" + _baseInfo.name;
-        baseInfo = _baseInfo;
+        baseInfo = _baseInfo as UnitInfo;
         towns = _towns;
         image.sprite = baseInfo.sprite;
+        unit.text = _baseInfo.unit + string.Empty;
+        batch.text = Count() + string.Empty;
     }
 
     public void OnPointerClick(PointerEventData pointerEventData)
@@ -48,8 +56,64 @@ public class RecruitButton : MonoBehaviour, IPointerClickHandler
         }
     }
 
-    public void SetProgress(float timeLeft, float originalTime)
+    private void FixedUpdate()
     {
-        progress.fillAmount = timeLeft/originalTime;
-    }  
+
+        int count = Count();
+        batch.text = string.Empty;
+
+        if(count > 0)
+        {
+            batch.text = Count() + string.Empty;
+        }
+        UpdateProgress();
+        /*foreach(var town in towns)
+        {
+            count += town.recruitInfos[baseInfo.subType].Count;
+        }*/
+    }
+
+    private void OnDestory()
+    {
+        //Tick.init.tickUpdate -= TickUpdate;
+    }
+
+    public float diff;
+
+    private void UpdateProgress()
+    {
+        float timeLeft = float.MaxValue;
+
+        foreach(var town in towns)
+        {
+            if(town.recruitInfos.ContainsKey(baseInfo.subType))
+            {
+                Queue<RecruitInfo> queue = town.recruitInfos[baseInfo.subType];
+                RecruitInfo recruitInfo = queue.Where((r) => r.timeLeft <= timeLeft).FirstOrDefault();
+
+                if(recruitInfo != null)
+                {
+                    timeLeft = recruitInfo.timeLeft;
+                }
+            }
+        }
+
+        diff = 1-(timeLeft/baseInfo.spawnTime);
+        progress.fillAmount = diff;
+    }
+
+    private int Count()
+    {
+        int count = 0;
+
+        foreach(var town in towns)
+        {
+            if(town.recruitInfos.ContainsKey(baseInfo.subType))
+            {
+                count += town.recruitInfos[baseInfo.subType].Count;
+            }
+        }
+
+        return count;
+    }
 }
