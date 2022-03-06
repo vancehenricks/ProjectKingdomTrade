@@ -18,8 +18,7 @@ public class MultiSelect : MonoBehaviour
         private set { _init = value; }
     }
 
-    public delegate void OnSelectedChange(HashSet<TileInfo> tiles);
-    public OnSelectedChange onSelectedChange;
+    public System.Action<HashSet<TileInfo>> onSelectedChange;
     public HashSet<TileInfo> selectedTiles;
     public HashSet<TileInfo> previousSelectedTiles;
     public bool shiftPressed;

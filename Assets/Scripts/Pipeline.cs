@@ -8,16 +8,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public delegate void ExecuteCommands();
-
 //Lowest value will execute first
 public class Pipeline : MonoBehaviour
 {
-    private SortedList<float, ExecuteCommands> commandList;
+    private SortedList<float, System.Action> commandList;
 
     protected virtual void Awake()
     {
-        commandList = new SortedList<float, ExecuteCommands>();
+        commandList = new SortedList<float, System.Action>();
     }
 
     protected void OnDestroy()
@@ -35,7 +33,7 @@ public class Pipeline : MonoBehaviour
         }
     }
 
-    public float Add(ExecuteCommands command, float priority)
+    public float Add(System.Action command, float priority)
     {
 
         while (true)
@@ -50,14 +48,14 @@ public class Pipeline : MonoBehaviour
             }
         }
 
-        commandList = new SortedList<float, ExecuteCommands>(commandList);
+        commandList = new SortedList<float, System.Action>(commandList);
         commandList.Add(priority, command);
         return priority;
     }
 
     public void Remove(float key)
     {
-        commandList = new SortedList<float, ExecuteCommands>(commandList);
+        commandList = new SortedList<float, System.Action>(commandList);
         commandList.Remove(key);
     }
 }

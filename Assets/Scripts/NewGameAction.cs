@@ -148,6 +148,7 @@ public class NewGameAction : MonoBehaviour
         zoomingWindow.Initialize();
         TileOcclusion.init.Initialize();
         PathFindingQueue.init.Initialize();
+        InfoTip.init.Initialize();
         //TimeWindowAction.init.Initialize();
         LoadingHandler.init.SetActive(false);
         openWindow.DoOpen();

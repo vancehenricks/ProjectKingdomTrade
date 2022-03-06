@@ -17,8 +17,7 @@ public class PathFindingHandler : MonoBehaviour
     public int wayPointIndex;
     public System.Action<TileInfo> wayPointReached;
     public System.Action<int, List<TileInfo>> destinationChanged;
-    public delegate bool IsWalkable(TileInfo tile);
-    public IsWalkable isWalkable;
+    public System.Func<TileInfo, bool> isWalkable;
     public List<TileInfo> generatedWayPoints;
     public int gwPointsIndex;
     public TileInfo tileDestination;

@@ -22,11 +22,8 @@ public class ShowMessage : MonoBehaviour
     public GameObject background;
 
     public bool response { get; private set; }
-
-    public delegate void ExecuteAction(bool response);
-    private ExecuteAction exeAction;
-
-    public ShowMessage SetMessage(string _title, string _message, string _confirm, Sprite _icon, ExecuteAction exe)
+    private System.Action<bool> exeAction;
+    public ShowMessage SetMessage(string _title, string _message, string _confirm, Sprite _icon, System.Action<bool> exe)
     {
         return SetMessage(_title, _message, _confirm, "", _icon, exe);
     }
@@ -36,7 +33,7 @@ public class ShowMessage : MonoBehaviour
         exeAction = null;
     }
 
-    public ShowMessage SetMessage(string _title, string _message, string _confirm, string _deny, Sprite _icon, ExecuteAction exe)
+    public ShowMessage SetMessage(string _title, string _message, string _confirm, string _deny, Sprite _icon, System.Action<bool> exe)
     {
         if (_deny != "")
         {

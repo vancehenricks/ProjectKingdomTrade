@@ -22,9 +22,7 @@ public class SyncSize : MonoBehaviour
 
     public RectTransform basedRect;
     public List<RectTransform> rectList;
-
-    public delegate void DelegateDoSync();
-    public DelegateDoSync doSync;
+    public System.Action doSync;
 
     private void Awake()
     {

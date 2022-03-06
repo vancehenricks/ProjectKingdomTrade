@@ -22,13 +22,9 @@ public class DragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         private set { _init = value; }
     }
 
-    public delegate void OverrideOnBeginDrag(PointerEventData eventData);
-    public delegate void OverrideOnDrag(PointerEventData eventData);
-    public delegate void OverrideOnEndDrag(PointerEventData eventData);
-
-    public OverrideOnBeginDrag overrideOnBeginDrag;
-    public OverrideOnDrag overrideOnDrag;
-    public OverrideOnEndDrag overrideOnEndDrag;
+    public System.Action<PointerEventData> overrideOnBeginDrag;
+    public System.Action<PointerEventData> overrideOnDrag;
+    public System.Action<PointerEventData> overrideOnEndDrag;
 
     private bool onBeginDrag, onDrag, onEndDrag;
     private PointerEventData pOnBeginDrag, pOnDrag, pOnEndDrag;

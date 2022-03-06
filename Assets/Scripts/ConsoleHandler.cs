@@ -25,9 +25,7 @@ public class ConsoleHandler : MonoBehaviour
     //public delegate void Initialize();
     //public static Initialize initialize;
 
-    public delegate void OnConsoleEvent(string command);
-    public OnConsoleEvent onConsoleEvent;
-
+    public System.Action<string> onConsoleEvent;
     public GameObject window;
     public InputFieldOverride baseConsole;
     public List<InputFieldOverride> consoles;

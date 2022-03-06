@@ -56,7 +56,7 @@ public class RecruitButton : MonoBehaviour, IPointerClickHandler
         }
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
 
         int count = Count();

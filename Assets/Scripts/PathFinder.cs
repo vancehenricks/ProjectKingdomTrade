@@ -16,7 +16,7 @@ public class PathFindValues
     public TileInfo currentPoint;
     public TileInfo finalPoint;
     public ConcurrentDictionary<string, List<TileInfo>> cache;
-    public PathFindingHandler.IsWalkable isWalkable;
+    public System.Func<TileInfo, bool> isWalkable;
     public System.Action<List<TileInfo>> onDoneCalculate;
 }
 

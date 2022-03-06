@@ -12,8 +12,6 @@ using UnityEngine;
 
 public class FoilageGenerator : MonoBehaviour
 {
-    public delegate List<T> LiveList<T>();
-
     private static FoilageGenerator _init;
 
     public static FoilageGenerator init
@@ -56,7 +54,7 @@ public class FoilageGenerator : MonoBehaviour
         }
     }
 
-    public void Generate(int spawnLayer, List<TileInfo> foilageTiles, List<TileInfo> replaceTiles, LiveList<TileInfo> checkDistance)
+    public void Generate(int spawnLayer, List<TileInfo> foilageTiles, List<TileInfo> replaceTiles, System.Func<List<TileInfo>> checkDistance)
     {
         Dictionary<string, SortedList<float, TileInfo>> foilageGroup = GetFoilageGroup(spawnLayer,foilageTiles);
 

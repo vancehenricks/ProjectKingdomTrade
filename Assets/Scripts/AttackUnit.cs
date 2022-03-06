@@ -26,7 +26,7 @@ public class AttackUnit : MoveUnit
         base.Start();
         _selectedTiles = new HashSet<TileInfo>();
         MultiSelect.init.onSelectedChange += OnSelectedChangeProxy;
-        ExecuteCommands command = OnSelectedChange;
+        System.Action command = OnSelectedChange;
         CommandPipeline.init.Add(command, 500);
     }
 

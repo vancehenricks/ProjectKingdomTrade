@@ -40,9 +40,7 @@ public class Tick : MonoBehaviour
     public long month { get; private set; }
     public long year { get; private set; }
     public float timeDilation {get; private set; }
-
-    public delegate void TickUpdate();
-    public TickUpdate tickUpdate;
+    public System.Action tickUpdate;
 
     private Coroutine startTick;
 

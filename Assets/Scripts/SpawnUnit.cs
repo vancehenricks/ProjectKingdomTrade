@@ -253,6 +253,8 @@ public class SpawnUnit : ConsoleCommand
         fire1Clicked = false;
         tileInfo = null;
         log = true;
+        baseUnitInfo = null;
+        noMouseRequired = false;
 
         if (commandStream != null)
         {
