@@ -110,18 +110,24 @@ public class TileOcclusion : MonoBehaviour
 
                 foreach (TileOcclusionValues tileValue in resultValueList)
                 {
-                    TileEffect tileEffect = TileList.init.generatedTiles[tileValue.tileLocation].tileEffect;
+                    TileInfo tileInfo;
+                    TileList.init.generatedTiles.TryGetValue(tileValue.tileLocation, out tileInfo);
 
-                    tileEffect.imageImage.enabled = tileValue.enabled;
+                    if(tileInfo == null) {
+                        Initialize();
+                        yield break;
+                    }
 
-                    if (tileEffect.borderImage != null)
+                    tileInfo.tileEffect.imageImage.enabled = tileValue.enabled;
+
+                    if (tileInfo.tileEffect.borderImage != null)
                     {
-                        tileEffect.borderImage.enabled = tileValue.enabled;
+                        tileInfo.tileEffect.borderImage.enabled = tileValue.enabled;
                     }
                     
-                    if (tileEffect.shadeImage != null)
+                    if (tileInfo.tileEffect.shadeImage != null)
                     {
-                        tileEffect.shadeImage.enabled = tileValue.enabled;
+                        tileInfo.tileEffect.shadeImage.enabled = tileValue.enabled;
                     }
                 }
 

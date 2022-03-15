@@ -81,6 +81,6 @@ public class TileInfoRaycaster : MonoBehaviour
             _tileInfos.AddRange(Tools.ConvertBaseToTileInfo(baseInfos));
         }, ray, filterOut, hits, true);
 
-        CDebug.Log(this, "_tileInfos.Count=" + _tileInfos.Count, LogType.Warning);  
+        CDebug.Log(this, "_tileInfos.Count=" + _tileInfos.Count);  
     }
 }

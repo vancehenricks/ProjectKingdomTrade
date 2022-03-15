@@ -93,6 +93,7 @@ public class TileInfo : BaseInfo
 
     public void Destroy()
     {
+        TileList.init.Remove(this);
         Destroy(gameObject);
     }
 
