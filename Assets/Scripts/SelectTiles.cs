@@ -16,6 +16,29 @@ public struct SelectTilesValue
 {
     public Vector2Int tileLocation;
     public string type;
+
+    public override int GetHashCode()
+    {
+        //https://stackoverflow.com/questions/1646807/quick-and-simple-hash-code-combinations
+
+        int hash = 17;
+        hash = 31 * hash + type.GetHashCode();
+        hash = 31 * hash + tileLocation.GetHashCode();
+        return hash;
+    }
+
+    public override bool Equals(object obj)
+    {
+        //https://docs.microsoft.com/en-us/dotnet/api/system.valuetype.equals?view=netframework-2.0
+
+        if(obj is SelectTilesValue)
+        {
+            SelectTilesValue other = (SelectTilesValue) obj;
+            return type == other.type && tileLocation == other.tileLocation;
+        }
+
+        return false;
+    }
 }
 
 public class SelectTiles : MonoBehaviour
