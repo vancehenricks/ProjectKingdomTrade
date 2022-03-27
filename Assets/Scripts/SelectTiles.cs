@@ -6,13 +6,14 @@
 
 
 using System.Collections;
+using System;
 using System.Linq;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public struct SelectTilesValue
+public struct SelectTilesValue : IEquatable<SelectTilesValue>
 {
     public Vector2Int tileLocation;
     public string type;
@@ -27,17 +28,14 @@ public struct SelectTilesValue
         return hash;
     }
 
+    public bool Equals(SelectTilesValue other)
+    {
+        return type == other.type && tileLocation == other.tileLocation;
+    }
+
     public override bool Equals(object obj)
     {
-        //https://docs.microsoft.com/en-us/dotnet/api/system.valuetype.equals?view=netframework-2.0
-
-        if(obj is SelectTilesValue)
-        {
-            SelectTilesValue other = (SelectTilesValue) obj;
-            return type == other.type && tileLocation == other.tileLocation;
-        }
-
-        return false;
+        return Equals(obj);
     }
 }
 
