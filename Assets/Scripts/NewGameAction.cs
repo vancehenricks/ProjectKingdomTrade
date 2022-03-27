@@ -147,6 +147,7 @@ public class NewGameAction : MonoBehaviour
         celestialCycle.Initialize();
         zoomingWindow.Initialize();
         TileOcclusion.init.Initialize();
+        UnitOcclusion.init.Initialize();
         PathFindingQueue.init.Initialize();
         InfoTip.init.Initialize();
         //TimeWindowAction.init.Initialize();

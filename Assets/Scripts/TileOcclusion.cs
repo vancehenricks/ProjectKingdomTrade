@@ -14,7 +14,7 @@ public struct TileOcclusionValues
 {
     public bool enabled;
     public Vector2Int tileLocation;
-    public Vector3 worldPos;
+    //public Vector3 worldPos;
     public OcclusionValue occlusion;
 }
 
@@ -33,9 +33,9 @@ public class TileOcclusion : MonoBehaviour
     private ParallelInstance<List<TileOcclusionValues>> parallelInstance;
     private Vector3 previousPos;
     private List<TileOcclusionValues> generatedTiles;
-    private List<TileOcclusionValues> resultValueList;
+    private List<TileOcclusionValues> result;
 
-    private Coroutine scan;
+    private Coroutine sync;
 
     private void Awake()
     {
@@ -45,22 +45,20 @@ public class TileOcclusion : MonoBehaviour
     public void Initialize()
     {
         parallelInstance = new ParallelInstance<List<TileOcclusionValues>>(Calculate,(
-            List<TileOcclusionValues> result, List<TileOcclusionValues> updated) => 
+            List<TileOcclusionValues> _result) => 
             {
-                generatedTiles = updated;
-                resultValueList = result;
+                result = _result;
             }
         );
 
-        generatedTiles = Convert(TileList.init.generatedTiles.Values.ToList<TileInfo>());
-        scan = StartCoroutine(Scan());
+        sync = StartCoroutine(Sync());
     }
 
     private void OnDestroy()
     {
-        if (scan != null)
+        if (sync != null)
         {
-            StopCoroutine(scan);
+            StopCoroutine(sync);
         }
     }
 
@@ -70,11 +68,13 @@ public class TileOcclusion : MonoBehaviour
 
         foreach(TileInfo tile in generatedTiles)
         {
-            TileOcclusionValues tileValue = new TileOcclusionValues();
-
-            tileValue.tileLocation = tile.tileLocation;
-            tileValue.enabled = tile.tileEffect.imageImage.enabled;
-            tileValue.worldPos = tile.transform.position;
+            TileOcclusionValues tileValue = new TileOcclusionValues()
+            {
+                tileLocation = tile.tileLocation,
+                enabled = tile.tileEffect.imageImage.enabled,
+                occlusion = new OcclusionValue(cm.WorldToScreenPoint(tile.transform.position),
+                new Vector2Int(cm.pixelWidth, cm.pixelHeight),overflow),
+            };
 
             tileValueList.Add(tileValue);
         }
@@ -83,40 +83,24 @@ public class TileOcclusion : MonoBehaviour
     }
 
 
-    private IEnumerator Scan()
+    private IEnumerator Sync()
     {
 
         while(true)
         {
             if (previousPos != cm.transform.position)
             {
-                for (int i = 0; i < generatedTiles.Count; i++)
-                {
-                    TileOcclusionValues tileOcclusionValues = generatedTiles[i];
-
-                    tileOcclusionValues.occlusion = new OcclusionValue(cm.WorldToScreenPoint(generatedTiles[i].worldPos),
-                     new Vector2Int(cm.pixelWidth, cm.pixelHeight),overflow);
-
-                    generatedTiles[i] = tileOcclusionValues;
-                }
+                generatedTiles = Convert(TileList.init.generatedTiles.Values.ToList<TileInfo>());
 
                 Task task = parallelInstance.Start(generatedTiles);
                 task.Wait();
-                
-                //while(!task.IsCompleted)
-                //{
-                //    yield return null;
-                //}  
 
-                foreach (TileOcclusionValues tileValue in resultValueList)
+                foreach (TileOcclusionValues tileValue in result)
                 {
                     TileInfo tileInfo;
                     TileList.init.generatedTiles.TryGetValue(tileValue.tileLocation, out tileInfo);
 
-                    if(tileInfo == null) {
-                        Initialize();
-                        yield break;
-                    }
+                    if(tileInfo == null) yield return null;
 
                     tileInfo.tileEffect.imageImage.enabled = tileValue.enabled;
 
@@ -139,23 +123,23 @@ public class TileOcclusion : MonoBehaviour
     }
 
     //seperate thread+
-    private void Calculate(System.Action<List<TileOcclusionValues>, List<TileOcclusionValues>> result, List<TileOcclusionValues> tileValueList)
+    private void Calculate(System.Action<List<TileOcclusionValues>> result, List<TileOcclusionValues> list)
     {
         List<TileOcclusionValues> newTileValueList = new List<TileOcclusionValues>();
 
-        for(int i = 0; i < tileValueList.Count;i++)
+        for(int i = 0; i < list.Count;i++)
         { 
-            TileOcclusionValues newValue = tileValueList[i];
-            newValue.enabled = Tools.IsWithinCameraView(tileValueList[i].occlusion);
+            TileOcclusionValues newValue = list[i];
+            newValue.enabled = Tools.IsWithinCameraView(list[i].occlusion);
 
-            if (newValue.enabled != tileValueList[i].enabled)
+            if (newValue.enabled != list[i].enabled)
             {
-                tileValueList[i] = newValue;
+                list[i] = newValue;
                 newTileValueList.Add(newValue);
             }
         }
 
-        result(newTileValueList, tileValueList);
+        result(newTileValueList);
     }
     //seperate thread-
 

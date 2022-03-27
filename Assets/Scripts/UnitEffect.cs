@@ -34,7 +34,7 @@ public class UnitEffect : TileEffect
     public UnitDirection unitDirection;
     public UnitWayPoint unitWayPoint;
     public NonWalkableTiles nonWalkableTiles;
-    public UnitOcclusion unitOcclusion;
+    //public UnitOcclusion unitOcclusion;
     public TileCollider territoryCollider;
 
     public override void Initialize()

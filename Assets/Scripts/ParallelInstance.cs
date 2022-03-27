@@ -11,27 +11,31 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Threading.Tasks;
 
+/// <summary>
+/// Helper class in creating task.
+/// </summary>
 public class ParallelInstance<T>
 {
     private Task task;
-    private System.Action<System.Action<T,T>,T> action2;
     private System.Action<System.Action<T>,T> action1;    
-    private System.Action<T,T> result2;
     private System.Action<T> result1;    
     private T obj;
 
-    public ParallelInstance(System.Action<System.Action<T,T>,T> _action, System.Action<T,T> _result)
-    {
-        action2 = _action;
-        result2 = _result;
-    }
-
+    ///<summary>
+    ///_action Callback containing business logic for the task.
+    ///_result Callback containing result of _action.
+    ///Note: Make sure to call _result callback inside _action.
+    ///</summary>
     public ParallelInstance(System.Action<System.Action<T>,T> _action, System.Action<T> _result)
     {
         result1 = _result;
         action1 = _action;
     }
 
+    ///<summary>
+    ///Sets _obj then call Start().
+    ///_obj Contains read-only value to generate result.
+    ///</summary>
     public virtual Task Start(T _obj)
     {
         obj = _obj;
@@ -47,6 +51,10 @@ public class ParallelInstance<T>
         return task;
     }
 
+    ///<summary>
+    ///Set _obj data then return task which you can call Start().
+    ///_obj Contains read-only value to generate result.
+    ///</summary>
     public Task Set(T _obj)
     {
         obj = _obj;
@@ -54,15 +62,8 @@ public class ParallelInstance<T>
         return task;
     }
 
-    public virtual void Calculate()
+    protected virtual void Calculate()
     {
-        if(action1 != null)
-        {
-            action1(result1, obj);
-        }
-        else
-        {
-            action2(result2, obj);
-        }
+        action1(result1, obj);
     }
 }

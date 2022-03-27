@@ -8,6 +8,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
+using System.Linq;
 
 public struct UnitOcclusionValues
 {
@@ -16,92 +17,143 @@ public struct UnitOcclusionValues
     public string parentName;
     public int getSiblingIndex;
     public int childCount;
+    public long tileId;
 }
 
 public class UnitOcclusion : MonoBehaviour
 {
-    public Camera cm;
-
-    private UnitInfo unitInfo;
-    private UnitEffect unitEffect;
-
-    public UnitOcclusionValues unitValues;
-    private ParallelInstance<UnitOcclusionValues> parallelInstance;
-
-    private Coroutine scan;
-
-    private void Start()
+    private static UnitOcclusion _init;
+    public static UnitOcclusion init
     {
-        unitInfo = GetComponent<UnitInfo>();
-        unitEffect = unitInfo.unitEffect;
+        get { return _init; }
+        private set { _init = value; }
+    }
 
-        parallelInstance = new ParallelInstance<UnitOcclusionValues>(Calculate,
-            (UnitOcclusionValues _result) => {
-            unitValues = _result;
-        });
+    private bool firstRun;
+    public Camera cm;
+    private List<UnitOcclusionValues> generatedTiles;
+    private List<UnitOcclusionValues> result;
+    private ParallelInstance<List<UnitOcclusionValues>> parallelInstance;
+    private Coroutine sync;
 
-        scan = StartCoroutine(Scan());
+    private void Awake()
+    {
+        init = this;
+    }
+
+    public void Initialize()
+    {
+        parallelInstance = new ParallelInstance<List<UnitOcclusionValues>>(Calculate,(
+            List<UnitOcclusionValues> _result) => 
+            {
+                result =_result;
+            }
+        );
+
+        //generatedTiles = Convert(TileList.init.generatedUnits.Values.ToList<TileInfo>());
+        sync = StartCoroutine(Sync());
+        firstRun = true;
     }
 
     private void OnDestroy()
     {
-        if (scan != null)
+        if (sync != null)
         {
-            StopCoroutine(scan);
+            StopCoroutine(sync);
         }
     }
 
-    //seperate thread+
-    private void Calculate(System.Action<UnitOcclusionValues> result, UnitOcclusionValues unitValues)
+    private List<UnitOcclusionValues> Convert(List<TileInfo> generatedTiles)
     {
+        List<UnitOcclusionValues> list = new List<UnitOcclusionValues>();
 
-        UnitOcclusionValues newUnitValues = unitValues;
-
-        if (Tools.IsWithinCameraView(unitValues.occlusion))
+        foreach(TileInfo tile in generatedTiles)
         {
-            
-            if (unitValues.getSiblingIndex == unitValues.childCount - 1)
+            UnitInfo unitInfo = tile as UnitInfo;
+            UnitOcclusionValues unitValues = new UnitOcclusionValues()
             {
-                newUnitValues.enabled = true;
+                occlusion = new OcclusionValue(cm.WorldToScreenPoint(tile.transform.position),
+                new Vector2Int(cm.pixelWidth, cm.pixelHeight), TileOcclusion.init.overflow),
+                getSiblingIndex = tile.transform.GetSiblingIndex(),
+                childCount = tile.transform.parent.childCount,
+                parentName = tile.transform.parent.name,
+                tileId = tile.tileId,
+                enabled = unitInfo.unitEffect.imageImage.enabled,
+            };
+
+
+            list.Add(unitValues);
+        }
+
+        return list;
+    }    
+
+    //seperate thread+
+    private void Calculate(System.Action<List<UnitOcclusionValues>> result, List<UnitOcclusionValues> list)
+    {
+        List<UnitOcclusionValues> newList = new List<UnitOcclusionValues>();
+
+        for(int i = 0;i < list.Count;i++)
+        {
+            UnitOcclusionValues newValue = list[i];
+            if (Tools.IsWithinCameraView(list[i].occlusion))
+            {
+                if (list[i].getSiblingIndex == list[i].childCount - 1)
+                {
+                    newValue.enabled = true;
+                }
+                else if (list[i].parentName != "Grid")
+                {        
+                    newValue.enabled = false;
+                }
             }
-            else if (unitValues.parentName != "Grid")
+            else 
             {
-                newUnitValues.enabled = false;
+                newValue.enabled = false;
+            }
+
+
+            if(newValue.enabled != list[i].enabled)
+            {
+                newList.Add(newValue);
             }
         }
-        else
-        {
-            newUnitValues.enabled = false;
-        }
 
-        result(newUnitValues);
-
+        result(newList);
     }
     //seperate thread-
 
-    private IEnumerator Scan()
+    private IEnumerator Sync()
     {
 
         while (true)
         {
-            unitValues.occlusion = new OcclusionValue(cm.WorldToScreenPoint(unitInfo.transform.position),
-             new Vector2Int(cm.pixelWidth, cm.pixelHeight), TileOcclusion.init.overflow);
-            unitValues.getSiblingIndex = transform.GetSiblingIndex();
-            unitValues.childCount = transform.parent.childCount;
-            unitValues.parentName = transform.parent.name;
-
             //CDebug.Log(nameof(UnitOcclusion), "transform.GetSiblingIndex()=" + unitValues.getSiblingIndex + 
             //"transform.parent.childCount=" + unitValues.childCount + "unitValues.enabled=" + unitValues.enabled, LogType.Warning);
+            
+            generatedTiles = Convert(TileList.init.generatedUnits.Values.ToList<TileInfo>());
 
-            Task task = parallelInstance.Start(unitValues);
-
+            Task task = parallelInstance.Start(generatedTiles);
             while(!task.IsCompleted)
             {
                 yield return null;
             }  
 
-            unitEffect.imageImage.enabled = unitValues.enabled;
-            unitEffect.shadeImage.enabled = unitValues.enabled;
+            foreach (UnitOcclusionValues unitValues in result)
+            {
+                TileInfo tileInfo;
+
+                TileList.init.generatedUnits.TryGetValue(unitValues.tileId, out tileInfo);
+
+                if(tileInfo == null) yield return null;
+
+                UnitInfo unitInfo = tileInfo as UnitInfo;
+
+                unitInfo.unitEffect.imageImage.enabled = unitValues.enabled;
+                unitInfo.unitEffect.shadeImage.enabled = unitValues.enabled;
+            }
+
+
             
             yield return null;
         }
