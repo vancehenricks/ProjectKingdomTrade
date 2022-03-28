@@ -21,12 +21,17 @@ public class RecruitButton : MonoBehaviour, IPointerClickHandler
     public TextMeshProUGUI unit;
     public UnitInfo baseInfo;
     public List<TileInfo> towns;
+    public Color normalColor;
+    public Color pressedColor;
+    public float fade;
     public RecruitUnitWindowHandler recruitUnitWindowHandler;
     //private readonly object recruitLock = new object();
+    private Button button;
     
     private void Start()
     {
         //Tick.init.tickUpdate += TickUpdate;
+        button = GetComponent<Button>();
     }
 
     public void Initialize(TileInfo _baseInfo, List<TileInfo> _towns)
@@ -41,19 +46,27 @@ public class RecruitButton : MonoBehaviour, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData pointerEventData)
     {
-
         if (pointerEventData.button == PointerEventData.InputButton.Right)
         {
             recruitUnitWindowHandler.Remove(new RecruitInfo(this));
-            CDebug.Log(this, "Right Clicked", LogType.Warning);
+            StartCoroutine(Transition());
+            //CDebug.Log(this, "Right Clicked", LogType.Warning);
             //Debug.Log("Right Clicked");
         }
-
-        if (pointerEventData.button == PointerEventData.InputButton.Left)
+        else if (pointerEventData.button == PointerEventData.InputButton.Left)
         {
             recruitUnitWindowHandler.Add(new RecruitInfo(this));
-            CDebug.Log(this, "Left Clicked", LogType.Warning);
+            StartCoroutine(Transition());
+            //CDebug.Log(this, "Left Clicked", LogType.Warning);
         }
+    }
+
+    private IEnumerator Transition()
+    {
+        image.color = pressedColor;
+        yield return new WaitForSeconds(fade);
+        image.color = normalColor;
+
     }
 
     private void Update()
