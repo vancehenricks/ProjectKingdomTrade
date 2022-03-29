@@ -70,6 +70,7 @@ public class UnitOcclusion : MonoBehaviour
         foreach(TileInfo tile in generatedTiles)
         {
             UnitInfo unitInfo = tile as UnitInfo;
+            if(unitInfo == null) continue;
             UnitOcclusionValues unitValues = new UnitOcclusionValues()
             {
                 occlusion = new OcclusionValue(cm.WorldToScreenPoint(tile.transform.position),
@@ -145,7 +146,7 @@ public class UnitOcclusion : MonoBehaviour
 
                 TileList.init.generatedUnits.TryGetValue(unitValues.tileId, out tileInfo);
 
-                if(tileInfo == null) yield return null;
+                if(tileInfo == null) continue;
 
                 UnitInfo unitInfo = tileInfo as UnitInfo;
 
