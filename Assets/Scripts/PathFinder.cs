@@ -20,6 +20,9 @@ public class PathFindValues
     public System.Action<List<TileInfo>> onDoneCalculate;
 }
 
+///<summary>
+///A* PathFinding Implementation
+///</summary>
 public class PathFinder
 {
     private PathFindValues pathFindValues;
@@ -41,7 +44,7 @@ public class PathFinder
     public void Calculate()
     {
         if (pathFindValues.currentPoint == null || pathFindValues.finalPoint == null) return;
-        
+
         List<TileInfo> generatedWayPoints = new List<TileInfo>();
         tempCache = RetrieveTileInfos(pathFindValues.currentPoint, pathFindValues.finalPoint);
 

@@ -4,6 +4,7 @@
  * Written by Vance Henricks Patual <vpatual@gmail.com>, May 2021
  */
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +19,7 @@ public struct TileOcclusionValues
     public OcclusionValue occlusion;
 }
 
-public class TileOcclusion : MonoBehaviour
+public class TileOcclusion : MonoBehaviour, IParallelContract<TileOcclusionValues, TileInfo>
 {
     private static TileOcclusion _init;
     public static TileOcclusion init
@@ -61,7 +62,7 @@ public class TileOcclusion : MonoBehaviour
         }
     }
 
-    private List<TileOcclusionValues> Convert(List<TileInfo> generatedTiles)
+    public List<TileOcclusionValues> Convert(List<TileInfo> generatedTiles)
     {
         List<TileOcclusionValues> tileValueList = new List<TileOcclusionValues>();
 
@@ -82,7 +83,7 @@ public class TileOcclusion : MonoBehaviour
     }
 
 
-    private IEnumerator Sync()
+    public IEnumerator Sync()
     {
 
         while(true)
@@ -120,7 +121,7 @@ public class TileOcclusion : MonoBehaviour
     }
 
     //seperate thread+
-    private void Calculate(System.Action<List<TileOcclusionValues>> result, List<TileOcclusionValues> list)
+    public void Calculate(System.Action<List<TileOcclusionValues>> result, List<TileOcclusionValues> list)
     {
         List<TileOcclusionValues> newTileValueList = new List<TileOcclusionValues>();
 
@@ -138,7 +139,6 @@ public class TileOcclusion : MonoBehaviour
 
         result(newTileValueList);
     }
-    //seperate thread-
 
 
 }

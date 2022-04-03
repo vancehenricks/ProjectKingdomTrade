@@ -20,7 +20,7 @@ public struct UnitOcclusionValues
     public long tileId;
 }
 
-public class UnitOcclusion : MonoBehaviour
+public class UnitOcclusion : MonoBehaviour, IParallelContract<UnitOcclusionValues, TileInfo>
 {
     private static UnitOcclusion _init;
     public static UnitOcclusion init
@@ -60,7 +60,7 @@ public class UnitOcclusion : MonoBehaviour
         }
     }
 
-    private List<UnitOcclusionValues> Convert(List<TileInfo> generatedTiles)
+    public List<UnitOcclusionValues> Convert(List<TileInfo> generatedTiles)
     {
         List<UnitOcclusionValues> list = new List<UnitOcclusionValues>();
 
@@ -87,7 +87,7 @@ public class UnitOcclusion : MonoBehaviour
     }    
 
     //seperate thread+
-    private void Calculate(System.Action<List<UnitOcclusionValues>> result, List<UnitOcclusionValues> list)
+    public void Calculate(System.Action<List<UnitOcclusionValues>> result, List<UnitOcclusionValues> list)
     {
         List<UnitOcclusionValues> newList = new List<UnitOcclusionValues>();
 
@@ -121,7 +121,7 @@ public class UnitOcclusion : MonoBehaviour
     }
     //seperate thread-
 
-    private IEnumerator Sync()
+    public IEnumerator Sync()
     {
 
         while (true)
