@@ -82,13 +82,11 @@ public class CloudActionHandler : MonoBehaviour, IParallelContract<CloudActionVa
                 liveTime = cloudAction.liveTime,
                 speedModifier = cloudAction.speedModifier,
                 tickSpeed = Tick.init.speed,
-                pos = new Vector3(transform.position.x, transform.position.y, CloudCycle.init.zLevel),
+                pos = new Vector3(cloudAction.transform.position.x, cloudAction.transform.position.y, CloudCycle.init.zLevel),
                 offsetDespawn = cloudAction.offsetDespawn,
-
                 posA = cloudAction.posA.transform.position,
                 posB = cloudAction.posB.transform.position,
-
-                occlusion = new OcclusionValue(cm.WorldToScreenPoint(transform.position), 
+                occlusion = new OcclusionValue(cm.WorldToScreenPoint(cloudAction.transform.position), 
                 new Vector2Int(cm.pixelWidth, cm.pixelHeight),
                     TileOcclusion.init.overflow),
             };
@@ -109,7 +107,7 @@ public class CloudActionHandler : MonoBehaviour, IParallelContract<CloudActionVa
             float diffXA = newCloud.pos.x - list[i].posA.x;
             float diffXB = newCloud.pos.x - list[i].posB.x;
 
-            newCloud.newPos = Vector3.MoveTowards(newCloud.pos, new Vector3( newCloud.posB.x, newCloud.pos.y, newCloud.pos.z), 
+            newCloud.newPos = Vector3.MoveTowards(newCloud.pos, new Vector3(newCloud.posB.x, newCloud.pos.y, newCloud.pos.z), 
                 (newCloud.tickSpeed * newCloud.speedModifier) * newCloud.deltaTime);
 
             newCloud.liveTimeCounter = newCloud.liveTimeCounter + (newCloud.tickSpeed * newCloud.deltaTime);

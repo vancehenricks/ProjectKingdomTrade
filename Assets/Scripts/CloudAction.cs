@@ -35,7 +35,6 @@ public class CloudAction : BaseInfo
     private void Start()
     {
         base.Initialize();
-        CloudCycle.init.clouds.Add(tileId, this);
 
         if (grid.rect.width > defaultWidth && influenceByGrid)
         {
@@ -45,6 +44,7 @@ public class CloudAction : BaseInfo
         liveTime = Random.Range(minLiveTime, maxLiveTime);
 
         StartCoroutine(FadeIn(0.1f));
+        CloudCycle.init.clouds.Add(tileId, this);        
     }
 
     public void Move(CloudActionValues cloudActionValues)
