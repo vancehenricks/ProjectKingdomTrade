@@ -32,5 +32,6 @@ public struct SettingsConfig
     public int maxTimeSpeed;
     public int[] recruitMultiplier;
     public int maxPathFindTask;
+    public int maxPathFindTick;
 
 }
