@@ -32,7 +32,6 @@ public class TileOcclusion : MonoBehaviour
     
     private ParallelInstance<List<TileOcclusionValues>> parallelInstance;
     private Vector3 previousPos;
-    private List<TileOcclusionValues> generatedTiles;
     private List<TileOcclusionValues> result;
 
     private Coroutine sync;
@@ -90,9 +89,7 @@ public class TileOcclusion : MonoBehaviour
         {
             if (previousPos != cm.transform.position)
             {
-                generatedTiles = Convert(TileList.init.generatedTiles.Values.ToList<TileInfo>());
-
-                Task task = parallelInstance.Start(generatedTiles);
+                Task task = parallelInstance.Start(Convert(TileList.init.generatedTiles.Values.ToList<TileInfo>()));
                 task.Wait();
 
                 foreach (TileOcclusionValues tileValue in result)

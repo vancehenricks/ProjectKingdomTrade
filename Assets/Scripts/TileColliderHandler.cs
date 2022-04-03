@@ -31,6 +31,9 @@ public class TileColliderHandlerValues
 
 }
 
+///<summary>
+///Custom Tile Collusion.<br/>
+///</summary>
 public class TileColliderHandler : MonoBehaviour
 {
     private static TileColliderHandler _init;
@@ -111,12 +114,27 @@ public class TileColliderHandler : MonoBehaviour
         return await Task.FromResult(baseInfos);
     }
     
+    ///<summary>
+    ///Start a task to check for collusion.<br/>
+    ///callback Called upon done with calculation and returns a list of BaseInfo tiles.<br/>
+    ///baseInfo Will not include in callback return.<br/>
+    ///bounds Use for checking hits in the TileColliderDictionary.<br/>
+    ///filter List of tiles to ignore or include in callback depending on filterOut.<br/>
+    ///maxHits Number of tiles to check before ending the task.<br/>
+    ///</summary>
     public void Cast(System.Action<List<BaseInfo>> callback, BaseInfo baseInfo, Bounds bounds, 
         List<string> filter = null, int maxHits = 1, bool filterOut = false)
     {
-        StartCoroutine(GetBaseInfosCoroutine(callback, null, bounds, new Ray(), false, filter, maxHits, filterOut));
+        StartCoroutine(GetBaseInfosCoroutine(callback, baseInfo, bounds, new Ray(), false, filter, maxHits, filterOut));
     }
 
+    ///<summary>
+    ///Start a task to check for collusion.<br/>
+    ///callback Called upon done with calculation and returns a list of BaseInfo tiles.<br/>
+    ///ray Use for checking hits in the TileColliderDictionary.<br/>
+    ///filter List of tiles to ignore or include in callback depending on filterOut.<br/>
+    ///maxHits Number of tiles to check before ending the task.<br/>
+    ///</summary>
     public void Cast(System.Action<List<BaseInfo>> callback, Ray ray, 
         List<string> filter = null, int maxHits = 1, bool filterOut = false)
     {
@@ -143,7 +161,7 @@ public class TileColliderHandler : MonoBehaviour
         callback(new List<BaseInfo>(task.Result));         
     }
 
-    public async Task<List<BaseInfo>> Cast(BaseInfo baseInfo, Bounds bounds, Ray ray, bool useRay, 
+    private async Task<List<BaseInfo>> Cast(BaseInfo baseInfo, Bounds bounds, Ray ray, bool useRay, 
         List<string> filter, int maxHits, bool filterOut)
     {
         Vector3 center = bounds.center;
@@ -162,6 +180,13 @@ public class TileColliderHandler : MonoBehaviour
     }
 
     //Naive approach could cause memory leak
+
+    ///<summary>
+    ///Attempts to add or replace current tile in the TileColliderDictionary.<br/>
+    ///tile BaseInfo to add.<br/>
+    ///previousBounds Previous location of the tile.<br/>
+    ///currentBounds The new location of the tile.<br/>
+    ///</summary>
     public void Add(BaseInfo tile, Bounds previousBounds, Bounds currentBounds)
     {
         Remove(tile, previousBounds);
@@ -169,6 +194,11 @@ public class TileColliderHandler : MonoBehaviour
         colliderHandlerValues.colliderValues[currentBounds].TryAdd(tile.tileId, tile);        
     }
 
+    ///<summary>
+    ///Attempts to remove existing tile in the TileColldierDictionary.<br/>
+    ///tile BaseInfo to remove.<br/>
+    ///previousBounds Location of the tile.<br/>
+    ///</summary>
     public void Remove(BaseInfo tile, Bounds previousBounds)
     {
         BaseInfo removedTile;

@@ -29,9 +29,7 @@ public class UnitOcclusion : MonoBehaviour
         private set { _init = value; }
     }
 
-    private bool firstRun;
     public Camera cm;
-    private List<UnitOcclusionValues> generatedTiles;
     private List<UnitOcclusionValues> result;
     private ParallelInstance<List<UnitOcclusionValues>> parallelInstance;
     private Coroutine sync;
@@ -52,7 +50,6 @@ public class UnitOcclusion : MonoBehaviour
 
         //generatedTiles = Convert(TileList.init.generatedUnits.Values.ToList<TileInfo>());
         sync = StartCoroutine(Sync());
-        firstRun = true;
     }
 
     private void OnDestroy()
@@ -132,9 +129,7 @@ public class UnitOcclusion : MonoBehaviour
             //CDebug.Log(nameof(UnitOcclusion), "transform.GetSiblingIndex()=" + unitValues.getSiblingIndex + 
             //"transform.parent.childCount=" + unitValues.childCount + "unitValues.enabled=" + unitValues.enabled, LogType.Warning);
             
-            generatedTiles = Convert(TileList.init.generatedUnits.Values.ToList<TileInfo>());
-
-            Task task = parallelInstance.Start(generatedTiles);
+            Task task = parallelInstance.Start(Convert(TileList.init.generatedUnits.Values.ToList<TileInfo>()));
             while(!task.IsCompleted)
             {
                 yield return null;

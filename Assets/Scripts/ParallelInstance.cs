@@ -23,8 +23,8 @@ public class ParallelInstance<T>
 
     ///<summary>
     ///_action Callback containing business logic for the task.<br/>
+    ///_action (_result, _obj Object from Set(_obj)).<br/>
     ///_result Callback containing result of _action.<br/>
-    ///Returns an instance of a task.<br/>
     ///Note: Make sure to call _result callback inside _action.<br/>
     ///</summary>
     public ParallelInstance(System.Action<System.Action<T>,T> _action, System.Action<T> _result)
@@ -40,13 +40,15 @@ public class ParallelInstance<T>
     ///</summary>
     public virtual Task Start(T _obj)
     {
-        obj = _obj;
-        task = new Task(Calculate);
+        task = Set(_obj);
         task.Start();
-
         return task;
     }
 
+    ///<summary>
+    ///Starts the task.
+    ///Note: Make sure to call Set(_obj) first.
+    ///</summary>
     public virtual Task Start()
     {
         task.Start();

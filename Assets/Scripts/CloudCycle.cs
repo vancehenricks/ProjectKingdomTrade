@@ -43,7 +43,7 @@ public class CloudCycle : MonoBehaviour
     public bool useGridInfluence;
     public int maxSpawn;
     public float zLevel;
-    public List<CloudAction> clouds;
+    public Dictionary<long, CloudAction> clouds;
     public KeyCode hideClouds;
     public bool hasSpawnDoubled;
     public bool visible;
@@ -62,6 +62,7 @@ public class CloudCycle : MonoBehaviour
 
     private void Awake()
     {
+        clouds = new Dictionary<long, CloudAction>();
         init = this;
     }
 
@@ -75,7 +76,7 @@ public class CloudCycle : MonoBehaviour
         if (InputOverride.init.GetKeyUp(hideClouds))
         {
             visible = !visible;
-            foreach (CloudAction cloud in clouds)
+            foreach (CloudAction cloud in clouds.Values)
             {
                 cloud.visible = visible;
             }
@@ -104,7 +105,6 @@ public class CloudCycle : MonoBehaviour
     public void Initialize()
     {
         Tick.init.tickUpdate += TickUpdate;
-        clouds = new List<CloudAction>();
 
         if (grid != null && useGridInfluence)
         {
@@ -161,7 +161,6 @@ public class CloudCycle : MonoBehaviour
             }
 
             tornado.transform.position = cloudAction1.transform.position;
-            clouds.Add(tornado);
             tornado.gameObject.SetActive(true);
             counter++;
         }
@@ -203,7 +202,6 @@ public class CloudCycle : MonoBehaviour
             cloud.transform.position = new Vector3(x, y, zLevel);
             cloud.posA = spawnable.posA;
             cloud.posB = spawnable.posB2;
-            clouds.Add(cloud);
             cloud.gameObject.SetActive(true);
             counter++;
 

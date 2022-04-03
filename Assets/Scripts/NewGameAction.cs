@@ -24,7 +24,6 @@ public class NewGameAction : MonoBehaviour
     public ResetCenter resetCenter;
     public OpenWindow openWindow;
     public CloseWindow closeWindow;
-    public CloudCycle cloudCycle;
     public CelestialCycle celestialCycle;
     public ZoomingWindow zoomingWindow;
     //public GameObject unitIndicatorBase;
@@ -143,7 +142,8 @@ public class NewGameAction : MonoBehaviour
         tick.Initialize();
         LoadingHandler.init.Set(1f, "[GENERATING-CLOUDS]");
         yield return new WaitForSeconds(0.5f);
-        cloudCycle.Initialize();
+        CloudCycle.init.Initialize();
+        CloudActionHandler.init.Initialize();
         celestialCycle.Initialize();
         zoomingWindow.Initialize();
         TileOcclusion.init.Initialize();
