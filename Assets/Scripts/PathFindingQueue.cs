@@ -9,18 +9,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
-[System.Serializable]
-public class PathFindingPipeline
-{
-    public Queue<PathFinder> pathFinder;
-    public Task task;
-
-    public PathFindingPipeline()
-    {
-        pathFinder = new Queue<PathFinder>();
-    }
-}
-
 public class PathFindingQueue : MonoBehaviour
 {
     private static PathFindingQueue _init;
@@ -31,11 +19,8 @@ public class PathFindingQueue : MonoBehaviour
     }
 
     //public int maxQueue;
-    public PathFindingPipeline pipeline;
-    public int tickCountMax;
-    public int taskCountMax;
-    private int taskCount;
-    private int tickCount;
+    public Queue<PathFinder> pathFinderQueue;
+
     private Coroutine scan;
 
     public void Initialize()
@@ -46,12 +31,7 @@ public class PathFindingQueue : MonoBehaviour
     private void Awake()
     {
         init = this;
-        pipeline = new PathFindingPipeline();
-    }
-
-    private void Start()
-    {
-        Tick.init.tickUpdate += TickUpdate;
+        pathFinderQueue = new Queue<PathFinder>();
     }
 
     private void OnDestroy()
@@ -60,58 +40,36 @@ public class PathFindingQueue : MonoBehaviour
         {
             StopCoroutine(scan);
         }
-        Tick.init.tickUpdate -= TickUpdate;
-    }
-
-    private void TickUpdate()
-    {
-        if(tickCount++ > tickCountMax)
-        {
-            tickCount = 0;
-        }
     }
 
     private IEnumerator Scan()
     {
         while (true)
         {
-            if(pipeline.pathFinder.Count == 0)
+            if(pathFinderQueue.Count == 0)
             {
                 yield return null;
                 continue;
             }
 
-            CDebug.Log(this, "PEEK pathFinders.Count=" + pipeline.pathFinder.Count, LogType.Warning);
-            pipeline.task = new Task(pipeline.pathFinder.Peek().Calculate);
-            pipeline.task.Start();
+            CDebug.Log(this, "PEEK pathFinders.Count=" + pathFinderQueue.Count, LogType.Warning);
+            Task task = new Task(pathFinderQueue.Dequeue().Calculate);
+            task.Start();
 
-            while(!pipeline.task.IsCompleted)
+            while(!task.IsCompleted)
             {
                 yield return null;
             }   
 
-            pipeline.pathFinder.Dequeue();
-            CDebug.Log(this, "DEQUEUE pathFinders.Count=" + pipeline.pathFinder.Count, LogType.Warning);
-            pipeline.task = null;
-            
-            if(++taskCount < tickCountMax)
-            {
-                yield return null;
-            }
-            else
-            {
-                taskCount = 0;
-                yield return new WaitUntil(() => {
-                    return tickCount >= tickCountMax; //delay for x ticks
-                });
-            }
+            //pipeline.pathFinder.Dequeue();
+            CDebug.Log(this, "DEQUEUE pathFinders.Count=" + pathFinderQueue.Count, LogType.Warning);
         }
     }
 
     public void Enqueue(PathFinder pathFinder)
     {
-        pipeline.pathFinder.Enqueue(pathFinder);
-        CDebug.Log(this, "ENQUEUE pathFinders.Count=" + pipeline.pathFinder.Count, LogType.Warning);
+        pathFinderQueue.Enqueue(pathFinder);
+        CDebug.Log(this, "ENQUEUE pathFinders.Count=" + pathFinderQueue.Count, LogType.Warning);
     }
 
 }

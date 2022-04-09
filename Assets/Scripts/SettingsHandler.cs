@@ -70,8 +70,6 @@ public class SettingsHandler : MonoBehaviour
         //PathFindingQueue.init.maxQueue = settingsConfig.maxPathFindingQueue;
         PathFindingCache.init.maxCache = settingsConfig.maxPathFindingCache;
         TileInfoRaycaster.init.maxHits = settingsConfig.maxHits;
-        PathFindingQueue.init.taskCountMax = settingsConfig.maxPathFindTask;
-        PathFindingQueue.init.tickCountMax = settingsConfig.maxPathFindTick;
 
         hideTerritory.key = (KeyCode)Enum.Parse(typeof(KeyCode), settingsConfig.hideTerritoryKey);
         cloudCycle.hideClouds = (KeyCode)Enum.Parse(typeof(KeyCode), settingsConfig.hideCloudsKey);
@@ -133,16 +131,6 @@ public class SettingsHandler : MonoBehaviour
         {
             settingsConfig.maxPathFindingCache = PathFindingCache.init.maxCache;
         }
-
-        if (settingsConfig.maxPathFindTask == 0)
-        {
-            settingsConfig.maxPathFindTask = PathFindingQueue.init.taskCountMax;
-        }        
-
-        if (settingsConfig.maxPathFindTick == 0)
-        {
-            settingsConfig.maxPathFindTick = PathFindingQueue.init.tickCountMax;
-        }        
 
         if (settingsConfig.maxHits == 0)
         {

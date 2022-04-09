@@ -11,6 +11,10 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
+
+///<summary>
+///Generate TileInfo from config files<br/>
+///</summary>
 public class TileConfigHandler : MonoBehaviour
 {
     public Dictionary<string, TileInfo> baseTiles;
@@ -24,15 +28,23 @@ public class TileConfigHandler : MonoBehaviour
         private set { _init = value; }
     }
 
-    public TileInfo baseTile;
-    public UnitInfo baseTown;
-    public UnitInfo baseUnit;
+    [SerializeField]
+    private TileInfo baseTile;
+
+    [SerializeField]
+    private UnitInfo baseTown;
+
+    [SerializeField]
+    private UnitInfo baseUnit;
 
     private void Awake()
     {
         init = this;
     }
 
+    ///<summary>
+    ///Load config files and convert to TileInfo.<br/>
+    ///</summary>
     public void Load()
     {
         baseTiles = new Dictionary<string, TileInfo>();
@@ -94,6 +106,10 @@ public class TileConfigHandler : MonoBehaviour
         }
     }
 
+    ///<summary>
+    ///Convert TileInfo to TileConfig<br/>
+    ///Returns TileConfig.<br/>
+    ///</summary>
     public TileConfig Convert(TileInfo tileInfo)
     {
         TileConfig config = new TileConfig();
@@ -150,7 +166,10 @@ public class TileConfigHandler : MonoBehaviour
         return config;
     }
 
-
+    ///<summary>
+    ///Convert TileConfig to TileInfo<br/>
+    ///Returns TileInfo.<br/>
+    ///</summary>
     public TileInfo Convert(TileConfig config)
     {
         UnityEngine.Object baseObj = baseTile;
@@ -253,6 +272,10 @@ public class TileConfigHandler : MonoBehaviour
         return tileInfo;
     }
 
+    ///<summary>
+    ///Returns the base tile of given sub-type.<br/>
+    ///Returns TileInfo.<br/>
+    ///</summary>
     public TileInfo Serialize(string name)
     {
         if(init.baseUnits.ContainsKey(name))
