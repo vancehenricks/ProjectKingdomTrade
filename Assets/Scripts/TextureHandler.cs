@@ -10,11 +10,14 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
+///<summary>
+///Handle Textures for tiles.<br/>
+///</summary>
 public class TextureHandler : MonoBehaviour
 {
     private static TextureHandler _init;
 
-    public Dictionary<string, Sprite> sprites;
+    private Dictionary<string, Sprite> sprites;
 
     public static TextureHandler init
     {
@@ -22,8 +25,9 @@ public class TextureHandler : MonoBehaviour
         private set { _init = value; }
     }
 
-    public List<Texture2D> _textures;
-    public Dictionary<string, Texture2D> textures;
+    [SerializeField]
+    private List<Texture2D> _textures;
+    private Dictionary<string, Texture2D> textures;
 
     private void Awake()
     {
@@ -65,6 +69,9 @@ public class TextureHandler : MonoBehaviour
         return sprite;
     }
 
+    ///<summary>
+    ///Load sprites in Sprites folder.<br/>
+    ///</summary>
     public void Load()
     {
         textures = new Dictionary<string, Texture2D>();
@@ -94,6 +101,11 @@ public class TextureHandler : MonoBehaviour
 
     }
 
+    ///<summary>
+    ///Retrieve sprite into cache
+    ///name Sprite file name e.g. tile_1.png or tile_1_9.png
+    ///Returns Sprite.<br/>
+    ///</summary>
     public Sprite GetSprite(string name)
     {
         if (name.Contains("_0.png"))
@@ -113,7 +125,12 @@ public class TextureHandler : MonoBehaviour
         }
     }
 
-    public Sprite GetOutline(Sprite _sprite)
+    ///<summary>
+    ///Generate a cutout of a Sprite.
+    ///_sprite Sprite to generate an outline.
+    ///Returns white cutout of a type Sprite.<br/>
+    ///</summary>
+    public Sprite GetCutOut(Sprite _sprite)
     {
         if (sprites.ContainsKey(_sprite.name + ".outline"))
         {

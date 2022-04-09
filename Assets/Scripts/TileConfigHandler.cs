@@ -17,8 +17,19 @@ using UnityEngine;
 ///</summary>
 public class TileConfigHandler : MonoBehaviour
 {
+    ///<summary>
+    ///Access using sub-type value.<br/>
+    ///</summary>
     public Dictionary<string, TileInfo> baseTiles;
+
+    ///<summary>
+    ///Access using sub-type value.<br/>
+    ///</summary>
     public Dictionary<string, TileInfo> baseUnits;
+
+    ///<summary>
+    ///Access using sub-type value.<br/>
+    ///</summary>
     public Dictionary<string, TileInfo> baseTowns;
 
     private static TileConfigHandler _init;

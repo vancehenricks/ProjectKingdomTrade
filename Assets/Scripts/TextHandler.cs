@@ -10,6 +10,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+///<summary>
+///Handle Text.<br/>
+///</summary>
 public class TextHandler : MonoBehaviour
 {
     private static TextHandler _init;
@@ -20,15 +23,19 @@ public class TextHandler : MonoBehaviour
         private set { _init = value; }
     }
 
-    public List<Text> texts;
+    private List<Text> texts;
     public Font font;
 
     private void Awake()
     {
-        init = this;
+        texts = new List<Text>();
         font = Resources.GetBuiltinResource<Font>("Arial.ttf");
+        init = this;
     }
 
+    ///<summary>
+    ///Load text on every object in the game.<br/>
+    ///</summary>
     public void Load()
     {
         texts.Clear();
@@ -43,6 +50,11 @@ public class TextHandler : MonoBehaviour
         }
     }
 
+    ///<summary>
+    ///Set game font.<br/>
+    ///_font Font to set.<br/>
+    ///Returns a true if it found a font installed in the system, otherwise return false.<br/>
+    ///</summary>
     public bool SetAsFont(string _font)
     {
         if (_font == "Arial") return false;
